@@ -1,0 +1,6 @@
+DIA 27 DE FEVEREIRO
+
+Giovanne:
+    - Criação do repositório GitHub
+    - Criação do projeto Next
+    - Instalação do Shadcn
