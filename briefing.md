@@ -15,15 +15,18 @@ O grupo vai desenvolver o **"FastAndon"** (ou "HelpDesk Industrial"). A ideia é
     - **A Lógica:** 1. Operador aperta o botão. O IoT envia um sinal (HTTP POST ou MQTT) para a API criando o chamado.
     2. O LED da máquina acende (indicando: "Chamado aberto, aguarde").
     3. Quando o mecânico finalizar o atendimento pelo celular, o back-end avisa o IoT para apagar o LED. Simples e extremamente visual.
+
 - **🌐 Web (Next.js - O Centro de Controle de Manutenção)**
     - **Painel de Chamados (Real-Time):** Uma tela (estilo Kanban ou Lista dinâmica) para ficar numa TV na sala de manutenção. Mostra: Máquina que chamou, Status (Aguardando / Em Atendimento), e um cronômetro rodando com o tempo de espera.
     - **Cadastros (CRUD):** *Máquinas*, *Setores*, *Técnicos de Manutenção* e *Causas Padrão de Falha* (ex: Elétrica, Mecânica, Falta de Peça).
     - **Indicadores e Relatórios:** O gestor precisa ver um ranking: Quais setores dão mais problema? Qual é o tempo médio de espera (MTTA - *Mean Time To Acknowledge*)? Qual o tempo médio de reparo (MTTR - *Mean Time To Repair*)?
+
 - **📱 Mobile (O App do Mecânico)**
     - **Notificação Ativa:** O celular do técnico toca/vibra (Push Notification) assim que o botão IoT é apertado.
     - **Fluxo de Atendimento (Obrigatório):** 1. O técnico abre o app e clica em **"Aceitar Chamado"** (isso para o relógio de "espera" e inicia o relógio de "atendimento" no painel Web).
     2. Ele vai até a máquina, faz o conserto e clica em **"Finalizar Chamado"**.
     3. O app o obriga a selecionar a **Causa** do problema e digitar uma breve observação antes de fechar de vez.
+
 - **🗄️ Banco de Dados (MySQL)**
     - **Gestão de Estados:** A tabela principal será a de `Chamados`. Ela precisa ter colunas cruciais para a métrica de tempo: `ID_Maquina`, `ID_Tecnico`, `Status`, `DataHora_Abertura` (criada pelo IoT), `DataHora_Aceite` (criada pelo Mobile), `DataHora_Fechamento` (criada pelo Mobile) e `Causa_ID`.
 
