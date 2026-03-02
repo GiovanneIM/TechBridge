@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "Use client"
 
 
@@ -103,6 +104,13 @@ export default function Home() {
 			</button> */}
 		</div>
 	);
+=======
+
+export default function Home() {
+
+  return (<>
+  </>);
+>>>>>>> 7bd3c04393ee8cf689dc20d05680a110f40df58a
 }
 
 
