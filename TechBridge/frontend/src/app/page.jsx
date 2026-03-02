@@ -27,9 +27,14 @@ export default function Home() {
 
 	return (
 		<div className="w-vw h-svh flex justify-center content-center flex-wrap">
-			<div className="w-full max-w-md h-fit">
+			<div className="absolute z-0 bottom-0">
+				<img
+					src="/TechBridge/Background2.svg"
+				/>
+			</div>
+			<div className="w-full max-w-md h-fit z-10 ">
 				<form>
-					<FieldGroup className="border p-4 rounded-md">
+					<FieldGroup className="border p-4 rounded-md bg-white">
 						<div className="w-full flex justify-center">
 							<Image
 								src="/TechBridge/TechBridgeText.svg"
@@ -46,7 +51,7 @@ export default function Home() {
 
 							<FieldGroup>
 								<Field>
-									<FieldLabel htmlFor="checkout-7j9-card-name-43j">
+									<FieldLabel htmlFor="emailLogin">
 										Email
 									</FieldLabel>
 									<Input
@@ -57,33 +62,16 @@ export default function Home() {
 								</Field>
 
 								<Field>
-									<FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+									<FieldLabel htmlFor="senhaLogin">
 										Senha
 									</FieldLabel>
 									<Input
 										id="senhaLogin"
 										placeholder="Senha"
+										type="password"
 										required
 									/>
 								</Field>
-
-								<Field className="max-w-sm">
-									<FieldLabel htmlFor="inline-end-input">Input</FieldLabel>
-									<InputGroup>
-										<InputGroupInput
-											id="inline-end-input"
-											type="password"
-											placeholder="Enter password"
-										/>
-										<InputGroupAddon align="inline-end">
-											<EyeOffIcon />
-										</InputGroupAddon>
-									</InputGroup>
-									<FieldDescription>Icon positioned at the end.</FieldDescription>
-								</Field>
-
-
-
 
 							</FieldGroup>
 						</FieldSet>
