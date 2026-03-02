@@ -1,65 +1,204 @@
+"use client"
+import * as React from "react"
+import Link from "next/link";
 import Image from "next/image";
 
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuContent,
+  NavigationMenuTrigger,
+  NavigationMenuLink,
+  NavigationMenuIndicator,
+  NavigationMenuViewport,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu"
+
+
+import {
+  NativeSelect,
+  NativeSelectOptGroup,
+  NativeSelectOption,
+} from "@/components/ui/native-select"
+
+import {
+  Button,
+  buttonVariants,
+} from "@/components/ui/button"
+
+import {
+  Menubar,
+  MenubarPortal,
+  MenubarMenu,
+  MenubarTrigger,
+  MenubarContent,
+  MenubarGroup,
+  MenubarSeparator,
+  MenubarLabel,
+  MenubarItem,
+  MenubarShortcut,
+  MenubarCheckboxItem,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSub,
+  MenubarSubTrigger,
+  MenubarSubContent,
+} from "@/components/ui/menubar"
+
 export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+  const [user, setUser] = React.useState("benoit")
+  const [theme, setTheme] = React.useState("system")
+
+  return (<>
+    <header>
+      <nav className="bg-white border-gray-200 shadow-sm mb-5 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+        <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+          <a href="/" className="flex items-center">
+            <img
+              src="/TechBridge/logo.svg"
+              className="mr-3 h-6 sm:h-9"
+              alt="TechBridge logo"
             />
-            Deploy Now
+            <span className="self-center flex text-xl font-semibold whitespace-nowrap dark:text-white">
+              Tech<p className="text-blue-700">Bridge</p>
+            </span>
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <div className="flex items-center gap-2 lg:order-2">
+            {/* Botão Tema */}
+            <Menubar className="w-auto">
+              <MenubarMenu>
+                <MenubarTrigger>Tema</MenubarTrigger>
+                <MenubarContent>
+                  <MenubarRadioGroup value={theme} onValueChange={setTheme}>
+                    <MenubarRadioItem value="light">Light</MenubarRadioItem>
+                    <MenubarRadioItem value="dark">Dark</MenubarRadioItem>
+                  </MenubarRadioGroup>
+                </MenubarContent>
+              </MenubarMenu>
+            </Menubar>
+
+            {/* Botão Login */}
+            <Button className={'bg-blue-700 w-auto lg:w-35'}>
+              Entrar
+            </Button>
+          </div>
+
+          <div
+            className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
+            id="mobile-menu-2"
           >
-            Documentation
-          </a>
+            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+              <li>
+                <NavigationMenu>
+                  <NavigationMenuList>
+                    <NavigationMenuItem>
+                      <NavigationMenuTrigger>Serviços de Manutenção</NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+                  </NavigationMenuList>
+                </NavigationMenu>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >
+                  Dashboard
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >
+                  Departamento
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >
+                  Suporte
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
-      </main>
-    </div>
-  );
+      </nav>
+    </header>
+
+
+
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <NavigationMenuLink>Link</NavigationMenuLink>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+
+    <Menubar className="w-72">
+      <MenubarMenu>
+        <MenubarTrigger>Profiles</MenubarTrigger>
+        <MenubarContent>
+          <MenubarRadioGroup value={user} onValueChange={setUser}>
+            <MenubarRadioItem value="andy">Andy</MenubarRadioItem>
+            <MenubarRadioItem value="benoit">Benoit</MenubarRadioItem>
+            <MenubarRadioItem value="luis">Luis</MenubarRadioItem>
+          </MenubarRadioGroup>
+          <MenubarSeparator />
+          <MenubarItem inset>Edit...</MenubarItem>
+          <MenubarItem inset>Add Profile...</MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger>Theme</MenubarTrigger>
+        <MenubarContent>
+          <MenubarRadioGroup value={theme} onValueChange={setTheme}>
+            <MenubarRadioItem value="light">Light</MenubarRadioItem>
+            <MenubarRadioItem value="dark">Dark</MenubarRadioItem>
+            <MenubarRadioItem value="system">System</MenubarRadioItem>
+          </MenubarRadioGroup>
+        </MenubarContent>
+      </MenubarMenu>
+    </Menubar>
+
+    <NativeSelect>
+      <NativeSelectOption value="">Select department</NativeSelectOption>
+      <NativeSelectOptGroup label="Engineering">
+        <NativeSelectOption value="frontend">Frontend</NativeSelectOption>
+        <NativeSelectOption value="backend">Backend</NativeSelectOption>
+        <NativeSelectOption value="devops">DevOps</NativeSelectOption>
+      </NativeSelectOptGroup>
+      <NativeSelectOptGroup label="Sales">
+        <NativeSelectOption value="sales-rep">Sales Rep</NativeSelectOption>
+        <NativeSelectOption value="account-manager">
+          Account Manager
+        </NativeSelectOption>
+        <NativeSelectOption value="sales-director">
+          Sales Director
+        </NativeSelectOption>
+      </NativeSelectOptGroup>
+      <NativeSelectOptGroup label="Operations">
+        <NativeSelectOption value="support">
+          Customer Support
+        </NativeSelectOption>
+        <NativeSelectOption value="product-manager">
+          Product Manager
+        </NativeSelectOption>
+        <NativeSelectOption value="ops-manager">
+          Operations Manager
+        </NativeSelectOption>
+      </NativeSelectOptGroup>
+    </NativeSelect>
+
+  </>);
 }
