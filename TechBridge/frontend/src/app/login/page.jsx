@@ -15,20 +15,27 @@ import {
 	FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-
+import { Separator } from "@/components/ui/separator";
 
 export default function Login() {
 	// const [isVisible, setIsVisible] = useState(false)
 
 	return (
-		<div className="w-vw h-svh flex justify-center content-center flex-wrap">
+		<div className="w-vw h-svh flex justify-center items-center flex-wrap">
 			{/* Background */}
 			<div className="absolute w-full z-0 bottom-0">
 				{/* <img
 					src="/TechBridge/Background2.svg"
 				/> */}
-				<svg class="wave" viewBox="0 0 1440 320">
-					<path fill="#5170ff" fill-opacity="1"
+
+				{/* <img
+					src="/TechBridge/Bridge.svg"
+					className="absolute bottom-0 left-1/2 -translate-x-1/2 h-180"
+				/> */}
+
+				{/* Ondas */}
+				<svg className="wave" viewBox="0 0 1440 320">
+					<path fill="#5170ff" fillOpacity="1"
 						d="M0,160 
 								C180,240 360,80 540,160 
 								C720,240 900,80 1080,160 
@@ -38,32 +45,31 @@ export default function Login() {
 					>
 					</path>
 				</svg>
-				{/* <img
-					src="/TechBridge/Bridge.svg"
-					className="absolute bottom-0 left-1/2 -translate-x-1/2 h-180"
-				/> */}
+
 			</div>
 
 			{/* Formulario */}
-			<div className="w-full max-w-md h-fit z-10 opacity-95">
+			<div className="w-full max-w-md h-fit z-10 opacity-95 border p-4 rounded-md bg-card">
+				{/* Logo */}
+				<div className="w-full flex justify-center">
+					<Link href="/" className="flex items-center">
+						<img
+							src="/TechBridge/Logo.svg"
+							className="mr-3 h-12"
+							alt="TechBridge logo"
+						/>
+						<p className="text-3xl font-genty">
+							Tech
+							<span className="text-techbridge">Bridge</span>
+						</p>
+					</Link>
+				</div>
+
+				<Separator className="my-4"/>
+
+				{/* Formulário de login */}
 				<form>
-					<FieldGroup className="border p-4 rounded-md bg-background">
-						<div className="w-full flex justify-center">
-							<Link href="/" className="flex items-center">
-								<img
-									src="/TechBridge/Logo.svg"
-									className="mr-3 h-12"
-									alt="TechBridge logo"
-								/>
-								<p className="text-3xl font-genty">
-									Tech
-									<span className="text-techbridge">Bridge</span>
-								</p>
-							</Link>
-						</div>
-
-						<FieldSeparator />
-
+					<FieldGroup className="">
 						<FieldSet>
 							<FieldLegend variant="" className="text-2xl">Login</FieldLegend>
 

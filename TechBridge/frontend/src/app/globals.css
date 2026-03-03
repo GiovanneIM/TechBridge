@@ -129,3 +129,31 @@
   --color-techbridge: #5170ff;
   --font-genty: var(--font-genty);
 }
+
+
+
+.wave path {
+  animation: waveAnim 6s infinite alternate ease-in-out;
+}
+
+@keyframes waveAnim {
+  0% {
+    d: path("M0,160 C180,240 360,80 540,160 C720,240 900,80 1080,160 C1260,240 1440,160 1440,160 L1440,320 L0,320 Z");
+  }
+  100% {
+    d: path("M0,140 C180,200 360,100 540,180 C720,260 900,100 1080,180 C1260,260 1440,140 1440,140 L1440,320 L0,320 Z");
+  }
+}
+
+@theme {
+  --animate-wiggle: wiggle 1s ease-in-out infinite;
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(-1deg);
+    }
+    50% {
+      transform: rotate(1deg);
+    }
+  }
+}
