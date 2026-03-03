@@ -2,6 +2,7 @@
 
 
 import Image from "next/image";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button"
 import {
@@ -14,34 +15,51 @@ import {
 	FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group"
-import { EyeOffIcon } from "lucide-react"
 
 
-export default function Home() {
+export default function Login() {
 	// const [isVisible, setIsVisible] = useState(false)
 
 	return (
 		<div className="w-vw h-svh flex justify-center content-center flex-wrap">
-			<div className="absolute z-0 bottom-0">
-				<img
+			{/* Background */}
+			<div className="absolute w-full z-0 bottom-0">
+				{/* <img
 					src="/TechBridge/Background2.svg"
-				/>
+				/> */}
+				<svg class="wave" viewBox="0 0 1440 320">
+					<path fill="#5170ff" fill-opacity="1"
+						d="M0,160 
+								C180,240 360,80 540,160 
+								C720,240 900,80 1080,160 
+								C1260,240 1440,160 1440,160 
+								L1440,320 L0,320 Z
+							"
+					>
+					</path>
+				</svg>
+				{/* <img
+					src="/TechBridge/Bridge.svg"
+					className="absolute bottom-0 left-1/2 -translate-x-1/2 h-180"
+				/> */}
 			</div>
-			<div className="w-full max-w-md h-fit z-10 ">
+
+			{/* Formulario */}
+			<div className="w-full max-w-md h-fit z-10 opacity-95">
 				<form>
-					<FieldGroup className="border p-4 rounded-md bg-white">
+					<FieldGroup className="border p-4 rounded-md bg-background">
 						<div className="w-full flex justify-center">
-							<Image
-								src="/TechBridge/TechBridgeText.svg"
-								width={240}
-								height={24}
-								alt="TechBridge"
-							/>
+							<Link href="/" className="flex items-center">
+								<img
+									src="/TechBridge/Logo.svg"
+									className="mr-3 h-12"
+									alt="TechBridge logo"
+								/>
+								<p className="text-3xl font-genty">
+									Tech
+									<span className="text-techbridge">Bridge</span>
+								</p>
+							</Link>
 						</div>
 
 						<FieldSeparator />
@@ -85,10 +103,6 @@ export default function Home() {
 					</FieldGroup>
 				</form>
 			</div>
-
-			{/* <button onClick={document.documentElement.classList.toggle('dark')}>
-				Alternar tema
-			</button> */}
 		</div>
 	);
 }

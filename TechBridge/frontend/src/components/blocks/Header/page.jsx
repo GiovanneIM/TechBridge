@@ -1,5 +1,9 @@
 "use client"
-import * as React from "react"
+
+import Image from "next/image"
+import Link from "next/link"
+
+import { useState, useEffect } from "react"
 
 import {
     NavigationMenu,
@@ -50,28 +54,46 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { TextAlignJustify } from "lucide-react"
+import { TextAlignJustify, Sun, Moon } from "lucide-react"
+
+
 
 
 export default function Header() {
 
-    const [user, setUser] = React.useState("benoit")
-    const [theme, setTheme] = React.useState("system")
+    const [user, setUser] = useState("benoit")
+    const [theme, setTheme] = useState("light");
+
+
+    // Controlando o tema
+    useEffect(() => {
+        const root = document.documentElement;
+
+        root.classList.remove("dark", "techbridge");
+
+        if (theme !== "light") {
+            root.classList.add(theme);
+        }
+    }, [theme]);
+
 
     return (<>
         <header>
             <nav className="bg-white border-gray-200 shadow-sm mb-5 px-15 py-2.5 dark:bg-gray-800">
                 <div className="flex flex-wrap justify-between items-center mx-auto ">
-                    <a href="/" className="flex items-center">
+                    {/* Logo */}
+                    <Link href="/" className="flex items-center">
                         <img
-                            src="/TechBridge/logo.svg"
+                            src="/TechBridge/Logo.svg"
                             className="mr-3 h-6 sm:h-9"
                             alt="TechBridge logo"
                         />
-                        <span className="self-center flex text-2xl font-semibold whitespace-nowrap dark:text-white">
-                            Tech<p className="text-blue-700">Bridge</p>
-                        </span>
-                    </a>
+                        <p className="self-center flex text-2xl whitespace-nowrap dark:text-white font-genty">
+                            Tech
+                            <span className="text-techbridge">Bridge</span>
+                        </p>
+                    </Link>
+
                     <div className="flex items-center gap-2 lg:order-2">
                         {/* BOTÃO MOBILE */}
                         <DropdownMenu>
@@ -112,17 +134,26 @@ export default function Header() {
                                 <MenubarTrigger>Tema</MenubarTrigger>
                                 <MenubarContent>
                                     <MenubarRadioGroup value={theme} onValueChange={setTheme}>
-                                        <MenubarRadioItem value="light">Light</MenubarRadioItem>
-                                        <MenubarRadioItem value="dark">Dark</MenubarRadioItem>
+                                        <MenubarRadioItem value="light">
+                                            <Sun /> Light
+                                        </MenubarRadioItem>
+                                        <MenubarRadioItem value="dark">
+                                            <Moon /> Dark
+                                        </MenubarRadioItem>
                                     </MenubarRadioGroup>
                                 </MenubarContent>
                             </MenubarMenu>
                         </Menubar>
 
                         {/* Botão Login */}
-                        <Button className={'bg-blue-700 w-35 text-md'}>
-                            Entrar
+                        <Button asChild className={'bg-techbridge text-white w-35 text-md'}>
+                            <Link
+                                href='/login'
+                            >
+                                Entrar
+                            </Link>
                         </Button>
+
                     </div>
 
                     <div

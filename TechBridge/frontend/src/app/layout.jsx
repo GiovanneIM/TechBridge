@@ -1,36 +1,43 @@
-import { Geist, Geist_Mono } from "next/font/google";
+// LAYOUT SEM HEADER E FOOTER
+
 import "./globals.css";
-import Header from "@/components/blocks/Header/page";
-import Footer from "@/components/blocks/Footer/page";
-import { icons } from "lucide-react";
+
+// Fontes
+import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local"
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+	variable: "--font-geist-sans",
+	subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+	variable: "--font-geist-mono",
+	subsets: ["latin"],
 });
 
+const gentySans = localFont({
+	src: "../fonts/GentySans-Regular.woff2",
+	variable: "--font-genty",
+	display: "swap",
+});
+
+// Icone da página
 export const metadata = {
-  title: "TechBridge",
- icons: {
-    icon: "/TechBridge/tb.svg",
-  },
+	title: "TechBridge",
+	icons: {
+		icon: "/TechBridge/tb.svg",
+	},
 };
 
 export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Header/>
-        {children}
-        <Footer/>
-      </body>
-    </html>
-  );
+	return (
+		<html lang="pt-br">
+			<body
+				className={`${geistSans.variable} ${geistMono.variable} ${gentySans.variable} antialiased`}
+			>
+				{children}
+			</body>
+		</html>
+	);
 }

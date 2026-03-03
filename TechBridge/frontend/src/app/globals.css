@@ -124,3 +124,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+@theme {
+  --color-techbridge: #5170ff;
+  --font-genty: var(--font-genty);
+}
