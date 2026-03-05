@@ -18,8 +18,8 @@ export default function Home() {
 					</p>
 
 					<div className="flex gap-3">
-						<Button className="bg-techbridge text-white hover:animate-wiggle hover:text-background">Entrar em contato</Button>
-						<Button className="bg-secondary text-foreground hover:animate-wiggle hover:text-background">Conheça nosso serviço</Button>
+						<Button className="bg-techbridge text-white cursor-pointer hover:animate-wiggle hover:text-background">Entrar em contato</Button>
+						<Button variant="outline" className="bg-secondary text-foreground cursor-pointer hover:bg-foreground hover:text-background hover:animate-wiggle">Conheça nosso serviço</Button>
 					</div>
 				</div>
 
@@ -47,9 +47,11 @@ export default function Home() {
 			</svg>
 
 			{/* Como funciona? */}
-			<div>
-				<p className="font-genty text-4xl text-background bg-techbridge">Como nosso seviço funciona?</p>
-				
+			<div className="text-background bg-techbridge">
+				<p className="font-genty text-4xl">Como nosso seviço funciona?</p>
+				<div>Operador pressiona botão</div>
+				<div>Sistema alerta Técnico</div>
+				<div>Técnico resolve</div>
 			</div>
 		</div>
 	);
