@@ -131,7 +131,7 @@ export default function Header() {
                         {/* Botão Tema */}
                         <Menubar className="w-auto text-md">
                             <MenubarMenu>
-                                <MenubarTrigger>Tema</MenubarTrigger>
+                                <MenubarTrigger className="cursor-pointer">Tema</MenubarTrigger>
                                 <MenubarContent>
                                     <MenubarRadioGroup value={theme} onValueChange={setTheme}>
                                         <MenubarRadioItem value="light">

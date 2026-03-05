@@ -1,0 +1,18 @@
+DIA 27 DE FEVEREIRO
+
+Giovanne:
+    - Criação do repositório GitHub
+    - Criação do projeto Next
+    - Instalação do Shadcn
+
+
+DIA 02 DE MARÇO
+
+Arthur:
+    - Criação do HEADER
+    - Criação do FOOTER
+
+Giovanne:
+    - Criação da logo
+    - Criação da Página de LOGIN
+    - Hero Section
