@@ -6,6 +6,13 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+    CardContent,
+} from "@/components/ui/card"
 
 import {
     InputGroup,
@@ -25,78 +32,91 @@ import {
 
 export default function Suporte() {
     return (<>
-        <div className="lg:grid grid-cols-2 mx-5 md:mx-20 lg:mx-10 xl:mx-50">
+        <div className="lg:grid grid-cols-2 gap-4 mx-5 md:mx-20 lg:mx-10 xl:mx-50">
 
             {/* Perguntas frequentes */}
-            <div>
-                <div className="font-bold text-2xl">Perguntas Frequentes</div>
-                <Accordion
-                    type="single"
-                    collapsible
-                    defaultValue="item-1"
-                    className="max-w-lg"
-                >
-                    {items.map((item) => (
-                        <AccordionItem key={item.value} value={item.value}>
-                            <AccordionTrigger>{item.trigger}</AccordionTrigger>
-                            <AccordionContent>{item.content}</AccordionContent>
-                        </AccordionItem>
-                    ))}
-                </Accordion>
-            </div>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Perguntas Frequentes</CardTitle>
+                    <CardDescription>
+                        Perguntas comuns feitas por nossos clientes
+                    </CardDescription>
+                </CardHeader>
+
+                <CardContent>
+                    <Accordion
+                        type="single" collapsible defaultValue="plans"
+                    >
+                        {items.map((item) => (
+                            <AccordionItem key={item.value} value={item.value} className="w-full">
+                                <AccordionTrigger>{item.trigger}</AccordionTrigger>
+                                <AccordionContent>{item.content}</AccordionContent>
+                            </AccordionItem>
+                        ))}
+                    </Accordion>
+                </CardContent>
+            </Card>
 
             <div></div>
 
             <div></div>
 
             {/* Solicitar suporte */}
-            <div>
-                <div className="font-bold text-3xl">Solicitar Suporte</div>
-                {/* Nome */}
-                <InputGroup>
-                    <InputGroupInput placeholder="Nome" />
-                    <InputGroupAddon>
-                        <SearchIcon />
-                    </InputGroupAddon>
-                </InputGroup>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Solicitar suporte</CardTitle>
+                    <CardDescription>
+                        Entre em contato para que possamos ajuda-lo
+                    </CardDescription>
+                </CardHeader>
 
-                {/* E-mail */}
-                <InputGroup>
-                    <InputGroupInput type="email" placeholder="E-mail" />
-                    <InputGroupAddon>
-                        <MailIcon />
-                    </InputGroupAddon>
-                </InputGroup>
+                <CardContent className="flex flex-col gap-4">
+                    {/* Nome */}
+                    <InputGroup>
+                        <InputGroupInput placeholder="Nome" />
+                        <InputGroupAddon>
+                            <SearchIcon />
+                        </InputGroupAddon>
+                    </InputGroup>
 
-                {/* Empresa */}
-                <InputGroup>
-                    <InputGroupInput placeholder="Empresa" />
-                    <InputGroupAddon>
-                        <Factory />
-                    </InputGroupAddon>
-                    <InputGroupAddon align="inline-end">
-                        <CheckIcon />
-                    </InputGroupAddon>
-                </InputGroup>
+                    {/* E-mail */}
+                    <InputGroup>
+                        <InputGroupInput type="email" placeholder="E-mail" />
+                        <InputGroupAddon>
+                            <MailIcon />
+                        </InputGroupAddon>
+                    </InputGroup>
 
-                {/* Comentário */}
-                <InputGroup>
-                    <InputGroupTextarea
-                        id="textarea-code-32"
-                        placeholder="Descreva o motivo do contato"
-                        className="min-h-50"
-                    />
+                    {/* Empresa */}
+                    <InputGroup>
+                        <InputGroupInput placeholder="Empresa" />
+                        <InputGroupAddon>
+                            <Factory />
+                        </InputGroupAddon>
+                        <InputGroupAddon align="inline-end">
+                            <CheckIcon />
+                        </InputGroupAddon>
+                    </InputGroup>
 
-                    <InputGroupAddon align="block-start" className="border-b flex justify-between flex-wrap">
-                        <InputGroupText className="font-mono font-medium">
-                            <MessageCircleMore />
-                            Comentário
-                        </InputGroupText>
+                    {/* Comentário */}
+                    <InputGroup>
+                        <InputGroupTextarea
+                            id="textarea-code-32"
+                            placeholder="Descreva o motivo do contato"
+                            className="min-h-50"
+                        />
 
-                        <InputGroupText>300 caracteres restantes</InputGroupText>
-                    </InputGroupAddon>
-                </InputGroup>
-            </div>
+                        <InputGroupAddon align="block-start" className="border-b flex justify-between flex-wrap">
+                            <InputGroupText className="font-mono font-medium">
+                                <MessageCircleMore />
+                                Comentário
+                            </InputGroupText>
+
+                            <InputGroupText>300 caracteres restantes</InputGroupText>
+                        </InputGroupAddon>
+                    </InputGroup>
+                </CardContent>
+            </Card>
 
         </div>
     </>)
