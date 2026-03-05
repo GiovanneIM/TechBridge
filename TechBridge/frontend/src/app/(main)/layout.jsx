@@ -1,4 +1,4 @@
-// LAYOUT COM HEADER E FOOTER
+// LAYOUT SECONDÁRIO - COM HEADER E FOOTER
 
 import "../globals.css";
 

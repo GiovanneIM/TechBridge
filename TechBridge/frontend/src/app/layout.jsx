@@ -1,4 +1,4 @@
-// LAYOUT SEM HEADER E FOOTER
+// LAYOUT RAIZ - SEM HEADER E FOOTER
 
 import "./globals.css";
 
