@@ -56,7 +56,6 @@ export default function Home() {
 			</svg>
 
 			{/* Como funciona? */}
-<<<<<<< HEAD
 			<div>
 				<p className="font-genty text-4xl text-background bg-techbridge">Como nosso seviço funciona?</p>
 
@@ -119,13 +118,6 @@ export default function Home() {
 						</CardHeader>
 					</Card>
 				</div>
-=======
-			<div className="text-background bg-techbridge">
-				<p className="font-genty text-4xl">Como nosso seviço funciona?</p>
-				<div>Operador pressiona botão</div>
-				<div>Sistema alerta Técnico</div>
-				<div>Técnico resolve</div>
->>>>>>> 3a856c4c76a3132ac2addd06a8c5a80d76c9ef51
 			</div>
 		</div>
 	);
