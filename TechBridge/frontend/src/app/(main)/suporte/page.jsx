@@ -25,7 +25,7 @@ import {
 
 export default function Suporte() {
     return (<>
-        <div className="grid grid-cols-2 mx-50">
+        <div className="lg:grid grid-cols-2 mx-5 md:mx-20 lg:mx-10 xl:mx-50">
 
             {/* Perguntas frequentes */}
             <div>
@@ -51,7 +51,7 @@ export default function Suporte() {
 
             {/* Solicitar suporte */}
             <div>
-                <div className="font-bold text-2xl">Solicitar Suporte</div>
+                <div className="font-bold text-3xl">Solicitar Suporte</div>
                 {/* Nome */}
                 <InputGroup>
                     <InputGroupInput placeholder="Nome" />
