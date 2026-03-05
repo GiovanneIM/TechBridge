@@ -103,7 +103,7 @@ export default function Header() {
                             <DropdownMenuContent>
                                 <DropdownMenuGroup>
                                     <DropdownMenuItem>Suporte</DropdownMenuItem>
-                                    <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                                    <DropdownMenuItem><Link href={'/dashboard'}>Dashboard</Link></DropdownMenuItem>
                                     <DropdownMenuSub>
                                         <DropdownMenuSubTrigger>Serviços de Manutenção</DropdownMenuSubTrigger>
                                         <DropdownMenuPortal>
@@ -178,7 +178,9 @@ export default function Header() {
                             </li>
                             <li>
                                 <Button variant="ghost" className={'text-md'}>
-                                    Dashboard
+                                    <Link href={'/dashboard'}>
+                                        Dashboard
+                                    </Link>
                                 </Button>
                             </li>
                             <li>
