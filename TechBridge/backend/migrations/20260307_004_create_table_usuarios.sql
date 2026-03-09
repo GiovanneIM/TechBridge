@@ -28,3 +28,15 @@ VALUES
 ('Admin Cliente', 'admcliente@email.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 'admin_client', 1),
 ('Tecnico Cliente', 'tecnico@email.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 'tecnico', 1)
 ;
+
+UPDATE usuarios 
+SET foto_perfil = 'https://images-news.now.com/newsimage/NewsImage/2025-02-07-15-22-5103GxLf4N.jpg'
+WHERE id = 1;
+
+UPDATE usuarios 
+SET foto_perfil = 'https://tse2.mm.bing.net/th/id/OIP.nzFhNGOabtBPZxm6pqLL3wHaHO?rs=1&pid=ImgDetMain&o=7&rm=3'
+WHERE id = 2;
+
+UPDATE usuarios 
+SET foto_perfil = 'https://i.pinimg.com/736x/2a/f1/12/2af1129122bc8118735dfaae9df21d10.jpg'
+WHERE id = 3;

@@ -55,13 +55,14 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { TextAlignJustify, Sun, Moon } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 
 
 
 export default function Header() {
 
-    const [user, setUser] = useState("benoit")
+    const [user, setUser] = useState(null)
     const [theme, setTheme] = useState("light");
 
 
@@ -76,137 +77,170 @@ export default function Header() {
         }
     }, [theme]);
 
+    // Verificando se há um usuário logado
+    useEffect(() => {
+        fetch('http://localhost:3000/api/auth/perfil', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            },
+        }).then(res => {
+            return res.json()
+        }).then(data => {
+            console.log(data);
+
+            if (data.sucesso) {
+                setUser(data.dados)
+            }
+            else {
+                setUser(null)
+            }
+        }).catch(err => {
+            setUser(null)
+        })
+    }, [])
+
 
     return (<>
-        <header>
-            <nav className="bg-white border-gray-200 shadow-sm mb-5 px-15 py-2.5 dark:bg-gray-800">
-                <div className="flex flex-wrap justify-between items-center mx-auto ">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center">
-                        <img
-                            src="/TechBridge/Logo.svg"
-                            className="mr-3 h-6 sm:h-9"
-                            alt="TechBridge logo"
-                        />
-                        <p className="self-center flex text-2xl whitespace-nowrap dark:text-white font-genty">
-                            Tech
-                            <span className="text-techbridge">Bridge</span>
-                        </p>
-                    </Link>
+        <div className="sticky top-0 z-1000 bg-white dark:bg-gray-800 border-gray-200 shadow-sm">
+            <header>
+                <nav className="mb-5 px-15 py-2.5">
+                    <div className="flex flex-wrap justify-between items-center mx-auto ">
+                        {/* Logo */}
+                        <Link href="/" className="flex items-center">
+                            <img
+                                src="/TechBridge/Logo.svg"
+                                className="mr-3 h-6 sm:h-9"
+                                alt="TechBridge logo"
+                            />
+                            <p className="self-center flex text-2xl whitespace-nowrap dark:text-white font-genty">
+                                Tech
+                                <span className="text-techbridge">Bridge</span>
+                            </p>
+                        </Link>
 
-                    <div className="flex items-center gap-2 lg:order-2">
-                        {/* BOTÃO MOBILE */}
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button className={'xl:hidden'} variant="outline"><TextAlignJustify /></Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuGroup>
-                                    <DropdownMenuItem>Suporte</DropdownMenuItem>
-                                    <DropdownMenuItem><Link href={'/dashboard'}>Dashboard</Link></DropdownMenuItem>
-                                    <DropdownMenuSub>
-                                        <DropdownMenuSubTrigger>Serviços de Manutenção</DropdownMenuSubTrigger>
-                                        <DropdownMenuPortal>
-                                            <DropdownMenuSubContent className={'w-auto'}>
-                                                <DropdownMenuItem>Manutenção de Máquina</DropdownMenuItem>
-                                                <DropdownMenuItem>Manutenção Preventiva</DropdownMenuItem>
-                                                <DropdownMenuItem>Reparo</DropdownMenuItem>
-                                            </DropdownMenuSubContent>
-                                        </DropdownMenuPortal>
-                                    </DropdownMenuSub>
-                                    <DropdownMenuSub>
-                                        <DropdownMenuSubTrigger>Departamento</DropdownMenuSubTrigger>
-                                        <DropdownMenuPortal>
-                                            <DropdownMenuSubContent>
-                                                <DropdownMenuItem>Ferramentaria</DropdownMenuItem>
-                                                <DropdownMenuItem>RH</DropdownMenuItem>
-                                                <DropdownMenuItem>Pintura</DropdownMenuItem>
-                                            </DropdownMenuSubContent>
-                                        </DropdownMenuPortal>
-                                    </DropdownMenuSub>
-                                </DropdownMenuGroup>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        {/* MOBILE */}
+                        <div className="flex items-center gap-2 lg:order-2">
+                            {/* Dropdown */}
+                            {user && <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button className={'xl:hidden'} variant="outline"><TextAlignJustify /></Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuGroup>
+                                        <DropdownMenuItem>Suporte</DropdownMenuItem>
+                                        <DropdownMenuItem><Link href={'/dashboard'}>Dashboard</Link></DropdownMenuItem>
+                                        <DropdownMenuSub>
+                                            <DropdownMenuSubTrigger>Serviços de Manutenção</DropdownMenuSubTrigger>
+                                            <DropdownMenuPortal>
+                                                <DropdownMenuSubContent className={'w-auto'}>
+                                                    <DropdownMenuItem>Manutenção de Máquina</DropdownMenuItem>
+                                                    <DropdownMenuItem>Manutenção Preventiva</DropdownMenuItem>
+                                                    <DropdownMenuItem>Reparo</DropdownMenuItem>
+                                                </DropdownMenuSubContent>
+                                            </DropdownMenuPortal>
+                                        </DropdownMenuSub>
+                                        <DropdownMenuSub>
+                                            <DropdownMenuSubTrigger>Departamento</DropdownMenuSubTrigger>
+                                            <DropdownMenuPortal>
+                                                <DropdownMenuSubContent>
+                                                    <DropdownMenuItem>Ferramentaria</DropdownMenuItem>
+                                                    <DropdownMenuItem>RH</DropdownMenuItem>
+                                                    <DropdownMenuItem>Pintura</DropdownMenuItem>
+                                                </DropdownMenuSubContent>
+                                            </DropdownMenuPortal>
+                                        </DropdownMenuSub>
+                                    </DropdownMenuGroup>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                            }
 
-                        {/* Botão Tema */}
-                        <Menubar className="w-auto text-md">
-                            <MenubarMenu>
-                                <MenubarTrigger className="cursor-pointer">Tema</MenubarTrigger>
-                                <MenubarContent>
-                                    <MenubarRadioGroup value={theme} onValueChange={setTheme}>
-                                        <MenubarRadioItem value="light">
-                                            <Sun /> Light
-                                        </MenubarRadioItem>
-                                        <MenubarRadioItem value="dark">
-                                            <Moon /> Dark
-                                        </MenubarRadioItem>
-                                    </MenubarRadioGroup>
-                                </MenubarContent>
-                            </MenubarMenu>
-                        </Menubar>
+                            <div>
+                                {theme === "dark" && <Button variant="outline" onClick={() => { setTheme("light") }}><Sun /></Button>}
+                                {theme === "light" && <Button variant="outline" onClick={() => { setTheme("dark") }}><Moon /></Button>}
+                            </div>
 
-                        {/* Botão Login */}
-                        <Button asChild className={'bg-techbridge text-white w-35 text-md'}>
-                            <Link
-                                href='/login'
-                            >
-                                Entrar
-                            </Link>
-                        </Button>
+                            {/* Botão Login */}
+                            {!user && <Button asChild className={'bg-techbridge text-white w-35 text-md'}>
+                                <Link
+                                    href='/login'
+                                >
+                                    Entrar
+                                </Link>
+                            </Button>
+                            }
 
+                            {/* Usuário */}
+                            {user && <div className="flex items-end">
+                                <div className="font-bold text-gray-500 text-lg">{user.nome}</div>
+                                <Avatar size="lg">
+                                    <AvatarImage src={user.foto_perfil} />
+                                    <AvatarFallback>CN</AvatarFallback>
+                                </Avatar>
+                            </div>
+                            }
+
+                        </div>
+
+                        {/* navegação DESKTOP */}
+                        {user && <div
+                            className="hidden justify-between items-center w-full xl:flex xl:w-auto lg:order-1"
+                            id="mobile-menu-2"
+                        >
+
+                            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+                                <li>
+                                    <NavigationMenu>
+                                        <NavigationMenuList>
+                                            <NavigationMenuItem>
+                                                <NavigationMenuTrigger className={'text-md'}>Serviços de Manutenção</NavigationMenuTrigger>
+                                                <NavigationMenuContent className={'w-57'}>
+                                                    <NavigationMenuLink>Manutenção de Máquina</NavigationMenuLink>
+                                                    <NavigationMenuLink>Manutenção Preventiva</NavigationMenuLink>
+                                                    <NavigationMenuLink>Reparo</NavigationMenuLink>
+                                                </NavigationMenuContent>
+                                            </NavigationMenuItem>
+                                        </NavigationMenuList>
+                                    </NavigationMenu>
+                                </li>
+
+                                <li>
+                                    <Button variant="ghost" className={'text-md'}>
+                                        <Link href={'/dashboard'}>
+                                            Dashboard
+                                        </Link>
+                                    </Button>
+                                </li>
+
+                                <li>
+                                    <NavigationMenu>
+                                        <NavigationMenuList>
+                                            <NavigationMenuItem>
+                                                <NavigationMenuTrigger className={'text-md'}>Departamento</NavigationMenuTrigger>
+                                                <NavigationMenuContent className={'w-39'}>
+                                                    <NavigationMenuLink>Ferramentaria</NavigationMenuLink>
+                                                    <NavigationMenuLink>RH</NavigationMenuLink>
+                                                    <NavigationMenuLink>Pintura</NavigationMenuLink>
+                                                </NavigationMenuContent>
+                                            </NavigationMenuItem>
+                                        </NavigationMenuList>
+                                    </NavigationMenu>
+                                </li>
+
+                                <li>
+                                    <Button variant="ghost" className={'text-md'}>
+                                        Suporte
+                                    </Button>
+                                </li>
+                            </ul>
+                        </div>
+                        }
                     </div>
+                </nav>
+            </header>
+        </div>
 
-                    <div
-                        className="hidden justify-between items-center w-full xl:flex xl:w-auto lg:order-1"
-                        id="mobile-menu-2"
-                    >
-
-                        <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-                            <li>
-                                <NavigationMenu>
-                                    <NavigationMenuList>
-                                        <NavigationMenuItem>
-                                            <NavigationMenuTrigger className={'text-md'}>Serviços de Manutenção</NavigationMenuTrigger>
-                                            <NavigationMenuContent className={'w-57'}>
-                                                <NavigationMenuLink>Manutenção de Máquina</NavigationMenuLink>
-                                                <NavigationMenuLink>Manutenção Preventiva</NavigationMenuLink>
-                                                <NavigationMenuLink>Reparo</NavigationMenuLink>
-                                            </NavigationMenuContent>
-                                        </NavigationMenuItem>
-                                    </NavigationMenuList>
-                                </NavigationMenu>
-                            </li>
-                            <li>
-                                <Button variant="ghost" className={'text-md'}>
-                                    <Link href={'/dashboard'}>
-                                        Dashboard
-                                    </Link>
-                                </Button>
-                            </li>
-                            <li>
-                                <NavigationMenu>
-                                    <NavigationMenuList>
-                                        <NavigationMenuItem>
-                                            <NavigationMenuTrigger className={'text-md'}>Departamento</NavigationMenuTrigger>
-                                            <NavigationMenuContent className={'w-39'}>
-                                                <NavigationMenuLink>Ferramentaria</NavigationMenuLink>
-                                                <NavigationMenuLink>RH</NavigationMenuLink>
-                                                <NavigationMenuLink>Pintura</NavigationMenuLink>
-                                            </NavigationMenuContent>
-                                        </NavigationMenuItem>
-                                    </NavigationMenuList>
-                                </NavigationMenu>
-                            </li>
-                            <li>
-                                <Button variant="ghost" className={'text-md'}>
-                                    Suporte
-                                </Button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
     </>);
 }
 
