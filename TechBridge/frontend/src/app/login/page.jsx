@@ -1,5 +1,8 @@
-"Use client"
+"use client"
 
+// PÁGINA DE LOGIN 
+
+import { useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -17,22 +20,55 @@ import {
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator";
 
+
+
 export default function Login() {
-	// const [isVisible, setIsVisible] = useState(false)
+	const [email, setEmail] = useState('')
+	const [senha, setSenha] = useState('')
+    const [erro, setErro] = useState('');
+
+	// FUNÇÃO PARA FAZER LOGIN
+	// Faz requisição à API enviando o email e a senha
+	function fazerLogin(e) {
+		// Impedindo envio padrão
+		e.preventDefault()
+
+		// Formando o body da rquisição
+		const dados = { email, senha }
+
+		// Fazendo a requisição
+		fetch('http://localhost:3000/api/auth/login', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(dados)
+		}).then(res => {   // Resposta da API
+			return res.json()
+		}).then(data => {   //  Dados da resposta
+			console.log(data);
+
+			// Se o login foi efetuado
+			if (data.sucesso) {
+				// Salvando o token de sessão no session storage
+				sessionStorage.setItem('token', data.dados.token)
+
+				// Redirecionando o usuário para a página inicial
+				window.location.href = `/dashboard`
+			}
+			// Se o login falhou
+			else {
+				setErro(data.mensagem)
+			}
+		}).catch(err => {
+			setErro('Erro ao solicitar login, tente novamente mais tarde.')
+		})
+	}
+
+
 
 	return (
 		<div className="w-vw h-svh flex justify-center items-center flex-wrap">
 			{/* Background */}
 			<div className="absolute w-full z-0 bottom-0">
-				{/* <img
-					src="/TechBridge/Background2.svg"
-				/> */}
-
-				{/* <img
-					src="/TechBridge/Bridge.svg"
-					className="absolute bottom-0 left-1/2 -translate-x-1/2 h-180"
-				/> */}
-
 				{/* Ondas */}
 				<svg className="wave" viewBox="0 0 1440 320">
 					<path fill="#5170ff" fillOpacity="1"
@@ -45,7 +81,6 @@ export default function Login() {
 					>
 					</path>
 				</svg>
-
 			</div>
 
 			{/* Formulario */}
@@ -65,10 +100,10 @@ export default function Login() {
 					</Link>
 				</div>
 
-				<Separator className="my-4"/>
+				<Separator className="my-4" />
 
 				{/* Formulário de login */}
-				<form>
+				<form onSubmit={fazerLogin}>
 					<FieldGroup className="">
 						<FieldSet>
 							<FieldLegend variant="" className="text-2xl">Login</FieldLegend>
@@ -81,7 +116,11 @@ export default function Login() {
 									<Input
 										id="emailLogin"
 										placeholder="E-mail"
+										type="email"
 										required
+
+										value={email}
+										onChange={(e) => setEmail(e.target.value)}
 									/>
 								</Field>
 
@@ -94,6 +133,9 @@ export default function Login() {
 										placeholder="Senha"
 										type="password"
 										required
+
+										value={senha}
+										onChange={(e) => setSenha(e.target.value)}
 									/>
 								</Field>
 
@@ -101,6 +143,9 @@ export default function Login() {
 						</FieldSet>
 
 						<FieldSeparator />
+
+						{erro && <div className="text-red-500 font-bold text-center">{erro}</div>}
+						
 
 						{/* Botão de Login */}
 						<Field orientation="horizontal" className="justify-center">
