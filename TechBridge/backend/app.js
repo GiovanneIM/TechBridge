@@ -13,6 +13,7 @@ import { azul, negrito, verde } from './utils/modificadoresDeSaida.js';
 import authRotas from './routes/authRotas.js';
 import criptografiaRotas from './routes/criptografiaRotas.js';
 import userRotas from './routes/userRotas.js';
+import chamadosRotas from './routes/chamadosRotas.js'
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
@@ -62,6 +63,7 @@ app.use(logMiddleware);
 app.use('/api/auth', authRotas);
 app.use('/api/criptografia', criptografiaRotas);
 app.use('/api/user', userRotas);
+app.use('/api/chamados', chamadosRotas);
 
 // Rota raiz
 app.get('/', (req, res) => {
