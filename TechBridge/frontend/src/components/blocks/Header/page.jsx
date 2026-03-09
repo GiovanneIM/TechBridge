@@ -55,13 +55,14 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { TextAlignJustify, Sun, Moon } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 
 
 
 export default function Header() {
 
-    const [user, setUser] = useState("benoit")
+    const [user, setUser] = useState(null)
     const [theme, setTheme] = useState("light");
 
 
@@ -75,6 +76,30 @@ export default function Header() {
             root.classList.add(theme);
         }
     }, [theme]);
+
+    // Verificando se há um usuário logado
+    useEffect(() => {
+        fetch('http://localhost:3000/api/auth/perfil', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            },
+        }).then(res => {
+            return res.json()
+        }).then(data => {
+            console.log(data);
+
+            if (data.sucesso) {
+                setUser(data.dados)
+            }
+            else {
+                setUser(null)
+            }
+        }).catch(err => {
+            setUser(null)
+        })
+    }, [])
 
 
     return (<>
@@ -94,9 +119,10 @@ export default function Header() {
                         </p>
                     </Link>
 
+                    {/* MOBILE */}
                     <div className="flex items-center gap-2 lg:order-2">
-                        {/* BOTÃO MOBILE */}
-                        <DropdownMenu>
+                        {/* Dropdown */}
+                        {user && <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button className={'xl:hidden'} variant="outline"><TextAlignJustify /></Button>
                             </DropdownMenuTrigger>
@@ -127,6 +153,7 @@ export default function Header() {
                                 </DropdownMenuGroup>
                             </DropdownMenuContent>
                         </DropdownMenu>
+                        }
 
                         {/* Botão Tema */}
                         <Menubar className="w-auto text-md">
@@ -146,17 +173,29 @@ export default function Header() {
                         </Menubar>
 
                         {/* Botão Login */}
-                        <Button asChild className={'bg-techbridge text-white w-35 text-md'}>
+                        {!user && <Button asChild className={'bg-techbridge text-white w-35 text-md'}>
                             <Link
                                 href='/login'
                             >
                                 Entrar
                             </Link>
                         </Button>
+                        }
+
+                        {/* Usuário */}
+                        {user && <div className="flex items-end">
+                            <div className="font-bold text-gray-500 text-lg">{user.nome}</div>
+                            <Avatar size="lg">
+                                <AvatarImage src={user.foto_perfil} />
+                                <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
+                        </div>
+                        }
 
                     </div>
 
-                    <div
+                    {/* navegação DESKTOP */}
+                    {user && <div
                         className="hidden justify-between items-center w-full xl:flex xl:w-auto lg:order-1"
                         id="mobile-menu-2"
                     >
@@ -176,6 +215,7 @@ export default function Header() {
                                     </NavigationMenuList>
                                 </NavigationMenu>
                             </li>
+
                             <li>
                                 <Button variant="ghost" className={'text-md'}>
                                     <Link href={'/dashboard'}>
@@ -183,6 +223,7 @@ export default function Header() {
                                     </Link>
                                 </Button>
                             </li>
+
                             <li>
                                 <NavigationMenu>
                                     <NavigationMenuList>
@@ -197,6 +238,7 @@ export default function Header() {
                                     </NavigationMenuList>
                                 </NavigationMenu>
                             </li>
+
                             <li>
                                 <Button variant="ghost" className={'text-md'}>
                                     Suporte
@@ -204,6 +246,7 @@ export default function Header() {
                             </li>
                         </ul>
                     </div>
+                    }
                 </div>
             </nav>
         </header>
