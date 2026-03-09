@@ -1,0 +1,45 @@
+import express from 'express';
+import UserController from '../controllers/UserController.js';
+import { authMiddleware, adminMiddleware } from '../middlewares/authMiddleware.js';
+import { handleUploadError, uploadImagens } from '../middlewares/uploadMiddleware.js';
+
+const router = express.Router();
+
+
+
+// Atualizar informações do usuário (Exceto senha e foto)
+router.patch('/info', authMiddleware, UserController.atualizarInformacoes);
+
+// Atualizar senha do usuário
+router.patch('/senha', authMiddleware, UserController.atualizarSenha);
+
+// Atualizar imagem de perfil do usuário
+router.patch('/imagem', authMiddleware, UserController.atualizarImagem);
+router.patch(
+    "/foto",
+    authMiddleware,
+    uploadImagens.single("foto"),
+    UserController.atualizarImagem
+);
+
+
+// Rotas OPTIONS para CORS (preflight requests)
+router.options('/login', (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.sendStatus(200);
+});
+
+router.options('/perfil', (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.sendStatus(200);
+});
+
+
+
+
+
+export default router;
