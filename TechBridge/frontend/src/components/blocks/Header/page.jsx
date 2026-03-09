@@ -120,9 +120,8 @@ export default function Header() {
                             </p>
                         </Link>
 
-                        {/* MOBILE */}
                         <div className="flex items-center gap-2 lg:order-2">
-                            {/* Dropdown */}
+                            {/* Dropdown MOBILE*/}
                             {user && <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button className={'xl:hidden'} variant="outline"><TextAlignJustify /></Button>
@@ -156,6 +155,17 @@ export default function Header() {
                             </DropdownMenu>
                             }
 
+                            {/* Usuário */}
+                            {user && <div className="flex items-center gap-2">
+                                <div className="font-bold text-gray-500 text-md">{user.nome}</div>
+                                <Avatar size="lg">
+                                    <AvatarImage src={user.foto_perfil} />
+                                    <AvatarFallback>CN</AvatarFallback>
+                                </Avatar>
+                            </div>
+                            }
+
+                            {/* Tema */}
                             <div>
                                 {theme === "dark" && <Button variant="outline" onClick={() => { setTheme("light") }}><Sun /></Button>}
                                 {theme === "light" && <Button variant="outline" onClick={() => { setTheme("dark") }}><Moon /></Button>}
@@ -171,15 +181,7 @@ export default function Header() {
                             </Button>
                             }
 
-                            {/* Usuário */}
-                            {user && <div className="flex items-end">
-                                <div className="font-bold text-gray-500 text-lg">{user.nome}</div>
-                                <Avatar size="lg">
-                                    <AvatarImage src={user.foto_perfil} />
-                                    <AvatarFallback>CN</AvatarFallback>
-                                </Avatar>
-                            </div>
-                            }
+
 
                         </div>
 
