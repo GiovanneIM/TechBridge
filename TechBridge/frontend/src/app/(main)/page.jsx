@@ -57,7 +57,7 @@ export default function Home() {
 
 			{/* Como funciona? */}
 			<div>
-				<p className="font-genty text-4xl text-background bg-techbridge">Como nosso seviço funciona?</p>
+				<p className="font-genty text-4xl text-foreground">Como nosso seviço funciona?</p>
 
 				<div className="flex my-3 justify-center gap-20">
 
@@ -151,7 +151,7 @@ export default function Home() {
 							className="h-10 w-auto"
 							viewBox="0 0 100 40"
 							fill="none"
-							xmlns="data:image/png;base64,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"
+							xmlns="http://www.w3.org/2000/svg"
 						>
 							<rect width={100} height={40} rx={6} className="fill-muted" />
 							<text
