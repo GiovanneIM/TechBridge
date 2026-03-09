@@ -97,9 +97,9 @@ import {
 
 const estados_cores = {
   "aberto" : "yellow-100",
-  "andamento" : "blue-50",
-  "concluido" : "green-50",
-  "cancelado" : "red-50"
+  "andamento" : "blue-100",
+  "concluido" : "green-100",
+  "cancelado" : "red-100"
 }
 
 export const schema = z.object({
