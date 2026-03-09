@@ -142,7 +142,7 @@ export default function Home() {
 						Junte-se a empresas líderes de mercado que já utilizam nossos serviços
 					</p>
 				</div>
-				<div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-6">
+				<div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
 					<a
 						href="#"
 						className="text-muted-foreground hover:text-foreground flex items-center justify-center transition-colors"
