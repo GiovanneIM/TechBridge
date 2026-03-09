@@ -14,7 +14,6 @@ router.patch('/info', authMiddleware, UserController.atualizarInformacoes);
 router.patch('/senha', authMiddleware, UserController.atualizarSenha);
 
 // Atualizar imagem de perfil do usuário
-router.patch('/imagem', authMiddleware, UserController.atualizarImagem);
 router.patch(
     "/foto",
     authMiddleware,
@@ -24,16 +23,16 @@ router.patch(
 
 
 // Rotas OPTIONS para CORS (preflight requests)
-router.options('/login', (req, res) => {
+router.options('/info', (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Methods', 'PATCH, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.sendStatus(200);
 });
 
-router.options('/perfil', (req, res) => {
+router.options('/senha', (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.header('Access-Control-Allow-Methods', 'PATCH, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.sendStatus(200);
 });
