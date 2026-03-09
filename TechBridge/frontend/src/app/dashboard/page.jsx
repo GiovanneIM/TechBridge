@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import { AppSidebar } from "@/components/app-sidebar"
 import { ChartAreaInteractive } from "@/components/chart-area-interactive"
 import { DataTable } from "@/components/data-table"
@@ -8,9 +11,30 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 
-import data from "./data.json"
-
 export default function Dashboard() {
+
+  const [chamados, setChamados] = useState([])
+
+  /* Carregando as equipes */
+  useEffect(() => {
+    async function carregarChamados() {
+      try {
+        const res = await fetch('http://localhost:3000/api/chamados');
+        const data = await res.json();
+
+        if (data.sucesso) {
+          setChamados(data.dados.chamados);
+        } else {
+          console.log(data.mensagem);
+        }
+      } catch (err) {
+        console.error('Erro ao carregar chamados:', err);
+      }
+    }
+
+    carregarChamados();
+  }, []);
+
   return (
     <SidebarProvider
       style={
@@ -30,7 +54,7 @@ export default function Dashboard() {
               <div className="px-4 lg:px-6">
                 <ChartAreaInteractive />
               </div>
-              <DataTable data={data} />
+              <DataTable data={chamados} />
             </div>
           </div>
         </div>

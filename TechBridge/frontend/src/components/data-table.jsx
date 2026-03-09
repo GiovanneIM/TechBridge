@@ -94,14 +94,19 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 
+
+const estados_cores = {
+  "aberto" : "yellow-100",
+  "andamento" : "blue-50",
+  "concluido" : "green-50",
+  "cancelado" : "red-50"
+}
+
 export const schema = z.object({
   id: z.number(),
-  header: z.string(),
-  type: z.string(),
-  status: z.string(),
-  target: z.string(),
-  limit: z.string(),
-  reviewer: z.string(),
+  estado: z.string(),
+  id_maquina: z.number(),
+  datahora_abertura: z.string(),
 })
 
 // Create a separate component for the drag handle
@@ -156,83 +161,59 @@ const columns = [
     enableHiding: false,
   },
   {
-    accessorKey: "header",
-    header: "Header",
+    accessorKey: "Id do Chamado",
+    header: "ID do Chamado",
     cell: ({ row }) => {
       return <TableCellViewer item={row.original} />;
     },
     enableHiding: false,
   },
   {
-    accessorKey: "type",
-    header: "Section Type",
+    accessorKey: "maquina",
+    header: "Máquina",
     cell: ({ row }) => (
       <div className="w-32">
         <Badge variant="outline" className="px-1.5 text-muted-foreground">
-          {row.original.type}
+          {row.original.maquina}
         </Badge>
       </div>
     ),
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "estado",
+    header: "Estado",
     cell: ({ row }) => (
-      <Badge variant="outline" className="px-1.5 text-muted-foreground">
-        {row.original.status === "Done" ? (
+      <Badge variant="outline" className={`px-1.5 text-muted-foreground bg-${estados_cores[row.original.estado]}`}>
+        {row.original.estado === "Done" ? (
           <IconCircleCheckFilled className="fill-green-500 dark:fill-green-400" />
         ) : (
           <IconLoader />
         )}
-        {row.original.status}
+        {row.original.estado}
       </Badge>
     ),
   },
   {
-    accessorKey: "target",
-    header: () => <div className="w-full text-right">Target</div>,
-    cell: ({ row }) => (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
-            loading: `Saving ${row.original.header}`,
-            success: "Done",
-            error: "Error",
-          })
-        }}>
-        <Label htmlFor={`${row.original.id}-target`} className="sr-only">
-          Target
-        </Label>
-        <Input
-          className="h-8 w-16 border-transparent bg-transparent text-right shadow-none hover:bg-input/30 focus-visible:border focus-visible:bg-background dark:bg-transparent dark:hover:bg-input/30 dark:focus-visible:bg-input/30"
-          defaultValue={row.original.target}
-          id={`${row.original.id}-target`} />
-      </form>
-    ),
-  },
-  {
-    accessorKey: "limit",
-    header: () => <div className="w-full text-right">Limit</div>,
-    cell: ({ row }) => (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
-            loading: `Saving ${row.original.header}`,
-            success: "Done",
-            error: "Error",
-          })
-        }}>
-        <Label htmlFor={`${row.original.id}-limit`} className="sr-only">
-          Limit
-        </Label>
-        <Input
-          className="h-8 w-16 border-transparent bg-transparent text-right shadow-none hover:bg-input/30 focus-visible:border focus-visible:bg-background dark:bg-transparent dark:hover:bg-input/30 dark:focus-visible:bg-input/30"
-          defaultValue={row.original.limit}
-          id={`${row.original.id}-limit`} />
-      </form>
-    ),
+    accessorKey: "datahora_abertura",
+    header: "Data Solicitação",
+    cell: ({ row }) => {
+      const data = new Date(row.original.datahora_abertura);
+
+      const formatada = data.toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+
+      return (
+        <Badge variant="none" className="bg-none">
+          {formatada}
+        </Badge>
+      );
+    },
   },
   {
     accessorKey: "reviewer",
@@ -321,7 +302,27 @@ function DraggableRow({
 export function DataTable({
   data: initialData
 }) {
-  const [data, setData] = React.useState(() => initialData)
+
+  const [data, setData] = React.useState([])
+
+  // Atualiza dados quando vierem da API
+  React.useEffect(() => {
+    if (!initialData) return
+
+    const mapped = initialData.map((item) => ({
+      id: item.id,
+      header: item.id,
+      maquina: `Máquina ${item.id_maquina}`,
+      estado: item.estado,
+      datahora_abertura: item.datahora_abertura,
+      reviewer: "Assign reviewer",
+      ...item
+    }))
+
+    setData(mapped)
+
+  }, [initialData])
+
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState({})
@@ -418,8 +419,8 @@ export function DataTable({
               {table
                 .getAllColumns()
                 .filter((column) =>
-                typeof column.accessorFn !== "undefined" &&
-                column.getCanHide())
+                  typeof column.accessorFn !== "undefined" &&
+                  column.getCanHide())
                 .map((column) => {
                   return (
                     <DropdownMenuCheckboxItem
@@ -664,14 +665,14 @@ function TableCellViewer({
           {/* Tabela Dashboard */}
           <form className="flex flex-col gap-4">
             <div className="flex flex-col gap-3">
-              <Label htmlFor="header">Header</Label>
-              <Input id="header" defaultValue={item.header} />
+              <Label htmlFor="id do chamado">Chamado</Label>
+              <Input id="id do chamado" defaultValue={item} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
-                <Label htmlFor="type">Type</Label>
-                <Select defaultValue={item.type}>
-                  <SelectTrigger id="type" className="w-full">
+                <Label htmlFor="maquina">Maquina</Label>
+                <Select defaultValue={item.maquina}>
+                  <SelectTrigger id="maquina" className="w-full">
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -695,9 +696,9 @@ function TableCellViewer({
                 </Select>
               </div>
               <div className="flex flex-col gap-3">
-                <Label htmlFor="status">Status</Label>
-                <Select defaultValue={item.status}>
-                  <SelectTrigger id="status" className="w-full">
+                <Label htmlFor="estado">Estado</Label>
+                <Select defaultValue={item.estado}>
+                  <SelectTrigger id="estado" className="w-full">
                     <SelectValue placeholder="Select a status" />
                   </SelectTrigger>
                   <SelectContent>
@@ -710,12 +711,8 @@ function TableCellViewer({
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
-                <Label htmlFor="target">Target</Label>
-                <Input id="target" defaultValue={item.target} />
-              </div>
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="limit">Limit</Label>
-                <Input id="limit" defaultValue={item.limit} />
+                <Label htmlFor="datahora_abertura">Data abertura</Label>
+                <Input id="datahora_abertura" defaultValue={item.datahora_abertura} />
               </div>
             </div>
             <div className="flex flex-col gap-3">
