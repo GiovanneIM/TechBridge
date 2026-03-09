@@ -33,3 +33,4 @@ CREATE TABLE chamados (
     FOREIGN KEY (id_causa) REFERENCES causas(id)
 ); 
 
+INSERT (id_maquina, estado) VALUES ();
