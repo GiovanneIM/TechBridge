@@ -8,7 +8,7 @@ USE TECHBRIDGE;
 
 
 -- Selecionando as tabelas do banco
-SELECT * FROM tipos_usuarios;
+-- SELECT * FROM tipos_usuarios;
 SELECT * FROM empresas;
 SELECT * FROM usuarios;
 SELECT * FROM setores;
