@@ -44,7 +44,7 @@ export default function Dashboard() {
         }
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar variant="inset"  className="bg-white dark:bg-gray-800 border-e border-gray-300 dark:border-gray-500"/>
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">

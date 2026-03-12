@@ -54,7 +54,7 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { TextAlignJustify, Sun, Moon } from "lucide-react"
+import { TextAlignJustify, Sun, Moon, Settings } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 
@@ -103,9 +103,9 @@ export default function Header() {
 
 
     return (<>
-        <div className="sticky top-0 z-1000 bg-white dark:bg-gray-800 border-gray-200 shadow-sm">
+        <div className="sticky top-0 z-1000 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
             <header>
-                <nav className="mb-5 px-15 py-2.5">
+                <nav className="px-15 py-2.5">
                     <div className="flex flex-wrap justify-between items-center mx-auto ">
                         {/* Logo */}
                         <Link href="/" className="flex items-center">
@@ -157,7 +157,7 @@ export default function Header() {
 
                             {/* Usuário */}
                             {user && <div className="flex items-center gap-2">
-                                <div className="font-bold text-gray-500 text-md">{user.nome}</div>
+                                <div className="font-bold text-gray-500 dark:text-gray-300 text-md">{user.nome}</div>
                                 <Avatar size="lg">
                                     <AvatarImage src={user.foto_perfil} />
                                     <AvatarFallback>CN</AvatarFallback>
@@ -171,8 +171,15 @@ export default function Header() {
                                 {theme === "light" && <Button variant="outline" onClick={() => { setTheme("dark") }}><Moon /></Button>}
                             </div>
 
+
+                            {/* Configurações */}
+                            {user && <div>
+                                <Button variant="outline" onClick={() => { setTheme("dark") }}><Settings /></Button>
+                            </div>
+                            }
+
                             {/* Botão Login */}
-                            {!user && <Button asChild className={'bg-techbridge text-white w-35 text-md'}>
+                            {!user && <Button asChild className={'bg-techbridge text-white w-35 font-bold text-md'}>
                                 <Link
                                     href='/login'
                                 >
@@ -192,20 +199,6 @@ export default function Header() {
                         >
 
                             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-                                <li>
-                                    <NavigationMenu>
-                                        <NavigationMenuList>
-                                            <NavigationMenuItem>
-                                                <NavigationMenuTrigger className={'text-md'}>Serviços de Manutenção</NavigationMenuTrigger>
-                                                <NavigationMenuContent className={'w-57'}>
-                                                    <NavigationMenuLink>Manutenção de Máquina</NavigationMenuLink>
-                                                    <NavigationMenuLink>Manutenção Preventiva</NavigationMenuLink>
-                                                    <NavigationMenuLink>Reparo</NavigationMenuLink>
-                                                </NavigationMenuContent>
-                                            </NavigationMenuItem>
-                                        </NavigationMenuList>
-                                    </NavigationMenu>
-                                </li>
 
                                 <li>
                                     <Button variant="ghost" className={'text-md'}>
@@ -219,8 +212,8 @@ export default function Header() {
                                     <NavigationMenu>
                                         <NavigationMenuList>
                                             <NavigationMenuItem>
-                                                <NavigationMenuTrigger className={'text-md'}>Departamento</NavigationMenuTrigger>
-                                                <NavigationMenuContent className={'w-39'}>
+                                                <NavigationMenuTrigger className={'text-md'}>Setores</NavigationMenuTrigger>
+                                                <NavigationMenuContent className={'w-57'}>
                                                     <NavigationMenuLink>Ferramentaria</NavigationMenuLink>
                                                     <NavigationMenuLink>RH</NavigationMenuLink>
                                                     <NavigationMenuLink>Pintura</NavigationMenuLink>
@@ -228,6 +221,14 @@ export default function Header() {
                                             </NavigationMenuItem>
                                         </NavigationMenuList>
                                     </NavigationMenu>
+                                </li>
+
+                                <li>
+                                    <Button variant="ghost" className={'text-md'}>
+                                        <Link href={'/dashboard'}>
+                                            Tecnicos
+                                        </Link>
+                                    </Button>
                                 </li>
 
                                 <li>
