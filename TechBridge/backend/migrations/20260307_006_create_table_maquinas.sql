@@ -10,13 +10,14 @@ USE TECHBRIDGE;
 -- Criando a tabela de maquinas
 CREATE TABLE maquinas (
 	id				INT				AUTO_INCREMENT PRIMARY KEY,
-    codigo			VARCHAR(50)		NOT NULL,
+    cod_maquina		VARCHAR(50)		NOT NULL, -- Codigo de identificação interna no setor
     descricao		VARCHAR(255)	NOT NULL,
     id_setor		INT				NOT NULL,
-    
+
     FOREIGN KEY (id_setor) REFERENCES setores(id),
-    
-    UNIQUE (codigo, id_setor)
+
+    -- Impede que um stor tenha duas maquinas com o mesmo código
+    UNIQUE (id_setor, cod_maquina)
 ); 
 
 
