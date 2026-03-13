@@ -10,11 +10,11 @@ USE TECHBRIDGE;
 -- Criando a tabela de empresas
 CREATE TABLE empresas (
     id 				INT 			AUTO_INCREMENT PRIMARY KEY,
-    cnpj			CHAR(14)		NOT NULL UNIQUE,
- 	razao_social	VARCHAR(200)	NOT NULL,
-    nome_fantasia	VARCHAR(150) 	NOT NULL,
-    data_criacao 	TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,
-    ativo 			BOOLEAN 		NOT NULL DEFAULT TRUE
+    cnpj			CHAR(14)		NOT NULL UNIQUE,				-- CNPJ da empresa
+ 	razao_social	VARCHAR(200)	NOT NULL,						-- Nome oficial da empresa
+    nome_fantasia	VARCHAR(150) 	NOT NULL,						-- Nome que a empresa usa popularmente
+    data_criacao 	TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que a empresa foi registrada
+    ativo 			BOOLEAN 		NOT NULL DEFAULT TRUE			-- Status do serviço à empresa (Ativo ou não)
 ); 
 
 
@@ -22,4 +22,5 @@ CREATE TABLE empresas (
 -- Inserindo empresa cliente de exemplo
 INSERT INTO empresas (cnpj, razao_social, nome_fantasia)
 VALUES 
-('12345678000190', 'Empresa Cliente 01', 'EC 01');
+	('12345678000190', 'Empresa Cliente 01', 'EC 01')
+;

@@ -41,7 +41,7 @@ CREATE TABLE chamados (
     FOREIGN KEY (id_causa) REFERENCES causas(id),
 
     -- Impede que seja criado um chamado com o mesmo código para a máquina
-    UNIQUE (cod_chamado, id_maquina)
+    UNIQUE (cod_chamado, id_maquina),
 
     -- Índices para melhorar consultas
     INDEX idx_chamados_empresa (id_empresa),
@@ -63,25 +63,25 @@ VALUES
 
 -- Atendendo chamados
 UPDATE chamados    
-WHERE id > 1
 SET 
     estado = 'andamento' AND
     id_tecnico = 1 AND
-    datahora_atendimento = DATE_ADD(NOW(), INTERVAL 1 HOURS);
+    datahora_atendimento = DATE_ADD(NOW(), INTERVAL 1 DAY_HOUR)
+WHERE id > 1;
 
 -- Concluindo chamados
 UPDATE chamados    
-WHERE id > 2
 SET 
     estado = 'concluido' AND
     id_causa = 1 AND
-    datahora_conclusao = DATE_ADD(NOW(), INTERVAL 2 HOURS ) AND
-    operador = "25170154";
+    datahora_conclusao = DATE_ADD(NOW(), INTERVAL 2 DAY_HOUR ) AND
+    operador = "25170154"
+WHERE id > 2;
 
 -- Cancelando chamados
 UPDATE chamados    
-WHERE id > 3
 SET 
     estado = 'cancelado' AND
     id_tecnico = 1 AND
-    datahora_conclusao = DATE_ADD(NOW(), INTERVAL 4 HOURS); 
+    datahora_conclusao = DATE_ADD(NOW(), INTERVAL 4 DAY_HOUR)
+WHERE id > 3;

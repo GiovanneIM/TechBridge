@@ -9,16 +9,16 @@ USE TECHBRIDGE;
 
 CREATE TABLE IF NOT EXISTS logs (
     id 					INT 				PRIMARY KEY AUTO_INCREMENT,
-    id_usuario 			INT,
-    rota 				VARCHAR(255) 		NOT NULL,
-    metodo 				VARCHAR(10) 		NOT NULL,
-    ip_address 			VARCHAR(45),
-    user_agent 			TEXT,
-    status_code 		INT,
-    tempo_resposta_ms	INT,
-    data_hora 			DATETIME 			DEFAULT CURRENT_TIMESTAMP,
-    dados_requisicao 	JSON,
-    dados_resposta 		JSON,
+    id_usuario 			INT,														-- ID do usuário que fez a requisição
+    rota 				VARCHAR(255) 		NOT NULL,								-- Rota pela qual a requisição foi feita
+    metodo 				VARCHAR(10) 		NOT NULL,								-- Método da requisição (GET, POST, PATCH ou PUT)
+    ip_address 			VARCHAR(45),												-- IP de onde a requisição veio
+    user_agent 			TEXT,														--
+    status_code 		INT,														-- Status da requisiçao (200, 201, 400, 404, 500 ...)
+    tempo_resposta_ms	INT,														-- Tempo entre o recebimento da requisição e a resposta
+    data_hora 			DATETIME 			DEFAULT CURRENT_TIMESTAMP,				-- Data e hora da requisição
+    dados_requisicao 	JSON,														-- Dados recebidos pela requisição
+    dados_resposta 		JSON,														-- Dados enviados como resposta
     
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE SET NULL
 );
