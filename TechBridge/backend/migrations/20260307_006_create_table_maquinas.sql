@@ -21,7 +21,8 @@ CREATE TABLE maquinas (
 ); 
 
 
--- Inserindo as maquinas base
+
+-- Inserindo maquinas de exemplo
 INSERT INTO maquinas (codigo, descricao, id_setor)
 VALUES 
 ('MK-1', 'Máquina 1 do setor 1', 1),

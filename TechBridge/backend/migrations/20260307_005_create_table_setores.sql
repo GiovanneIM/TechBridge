@@ -22,7 +22,8 @@ CREATE TABLE setores (
 ); 
 
 
--- Inserindo os usuarios base
+
+-- Inserindo setores de exemplo
 INSERT INTO setores (nome, descricao, id_empresa)
 VALUES 
 ('Pintura', '', 1),

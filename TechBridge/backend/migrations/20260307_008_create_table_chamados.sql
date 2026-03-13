@@ -17,7 +17,8 @@ CREATE TABLE chamados (
 
     -- Recebidos no momento da criação
     id_empresa              INT             NOT NULL,       -- ID da empresa 
-    id_maquina				INT			 	NOT NULL ,		-- ID da máquina para qual o chamado foi feito
+    id_maquina				INT			 	NOT NULL,		-- ID do setor
+    id_maquina				INT			 	NOT NULL,		-- ID da máquina para qual o chamado foi feito
     cod_chamado             INT             NOT NULL,       -- Código do chamado em relação à màquina para identificação do chamado internamente
     
     -- Recebidos no momento em que o chamado é aceito pelo técnico
@@ -34,6 +35,7 @@ CREATE TABLE chamados (
     
     -- Chaves estrangeiras
     FOREIGN KEY (id_empresa) REFERENCES empresas(id),
+    FOREIGN KEY (id_setor) REFERENCES setores(id),
     FOREIGN KEY (id_maquina) REFERENCES maquinas(id),
     FOREIGN KEY (id_tecnico) REFERENCES usuarios(id),
     FOREIGN KEY (id_causa) REFERENCES causas(id),
@@ -43,15 +45,43 @@ CREATE TABLE chamados (
 
     -- Índices para melhorar consultas
     INDEX idx_chamados_empresa (id_empresa),
+    INDEX idx_chamados_setor (id_setor),
     INDEX idx_chamados_maquina (id_maquina),
     INDEX idx_chamados_tecnico (id_tecnico),
     INDEX idx_chamados_estado (estado)
 );
 
 
-INSERT INTO maquinas (codigo, descricao, id_setor)
+
+-- Criando chamados
+INSERT INTO chamados (id_empresa, id_maquina, cod_chamado)
 VALUES 
-('MK-1', 'Máquina 1 do setor 1', 1),
-('MK-2', 'Máquina 2 do setor 1', 1),
-('MK-1', 'Máquina 1 do setor 2', 2)
-;
+(1, 1, 1),
+(1, 1, 2),
+(1, 2, 1),
+(1, 1, 3);
+
+-- Atendendo chamados
+UPDATE chamados    
+WHERE id > 1
+SET 
+    estado = 'andamento' AND
+    id_tecnico = 1 AND
+    datahora_atendimento = DATE_ADD(NOW(), INTERVAL 1 HOURS);
+
+-- Concluindo chamados
+UPDATE chamados    
+WHERE id > 2
+SET 
+    estado = 'concluido' AND
+    id_causa = 1 AND
+    datahora_conclusao = DATE_ADD(NOW(), INTERVAL 2 HOURS ) AND
+    operador = "25170154";
+
+-- Cancelando chamados
+UPDATE chamados    
+WHERE id > 3
+SET 
+    estado = 'cancelado' AND
+    id_tecnico = 1 AND
+    datahora_conclusao = DATE_ADD(NOW(), INTERVAL 4 HOURS); 

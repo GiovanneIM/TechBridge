@@ -18,7 +18,8 @@ CREATE TABLE empresas (
 ); 
 
 
--- Inserindo as empresas clientes base
+
+-- Inserindo empresa cliente de exemplo
 INSERT INTO empresas (cnpj, razao_social, nome_fantasia)
 VALUES 
 ('12345678000190', 'Empresa Cliente 01', 'EC 01');
