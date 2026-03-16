@@ -68,8 +68,8 @@ export default function Home() {
 			</svg>
 
 			{/* Como funciona? */}
-			<div>
-				<p className="font-genty text-4xl text-foreground">Como nosso seviço funciona?</p>
+			<div className="justify-center align-middle">
+				<p className="align-middle justify-center text-center font-genty text-4xl text-foreground">Como nossos serviços funcionam?</p>
 
 				<div className="flex my-3 justify-center gap-20">
 
@@ -83,11 +83,11 @@ export default function Home() {
 						/>
 						<CardHeader>
 							<CardAction>
-								<Badge variant="secondary">Featured</Badge>
+								<Badge variant="secondary">Novidade</Badge>
 							</CardAction>
 							<CardTitle className="text-techbridge font-extrabold text-2xl">Andon</CardTitle>
 							<CardDescription>
-								<ul>
+								<ul className="dark:text-gray-300">
 									<li>Transforme sua linha de produção com o Andon, um sistema visual inteligente que mostra o status das operações em tempo real.</li>
 									<li>Identifique falhas rapidamente e tenha total visibilidade do que acontece na linha.</li>
 									<li>Reduza paradas e aumente a eficiência com respostas imediatas da sua equipe.</li>
@@ -106,11 +106,11 @@ export default function Home() {
 						/>
 						<CardHeader>
 							<CardAction>
-								<Badge variant="secondary">Featured</Badge>
+								<Badge variant="secondary">Incluso</Badge>
 							</CardAction>
 							<CardTitle className="text-techbridge font-extrabold text-2xl">Alertas visuais e sonoros</CardTitle>
 							<CardDescription>
-								<ul>
+								<ul className="dark:text-gray-300">
 									<li>Receba notificações diretamente no celular sempre que houver qualquer ocorrência na operação.</li>
 									<li>Com alertas instantâneos, sua equipe reage mais rápido diante de qualquer problema.</li>
 									<li>Reduza o tempo de parada e mantenha o controle da operação de onde estiver.</li>
@@ -129,11 +129,11 @@ export default function Home() {
 						/>
 						<CardHeader>
 							<CardAction>
-								<Badge variant="secondary">Featured</Badge>
+								<Badge variant="secondary">Ferramentas</Badge>
 							</CardAction>
 							<CardTitle className="text-techbridge font-extrabold text-2xl">Sistemas personalizados</CardTitle>
 							<CardDescription className="mt-5">
-								<ul>
+								<ul className="dark:text-gray-300">
 									<li>Conte com sistemas personalizados desenvolvidos para atender exatamente às necessidades da sua operação.</li>
 									<li>Soluções sob medida que se adaptam aos seus processos e desafios específicos.</li>
 									<li>Aumente a eficiência e tenha tecnologia que evolui junto com o seu negócio.</li>
@@ -155,126 +155,46 @@ export default function Home() {
 					</p>
 				</div>
 				<div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
-					<a
-						href="#"
-						className="text-muted-foreground hover:text-foreground flex items-center justify-center transition-colors"
-					>
-						<svg
-							className="h-10 w-auto"
-							viewBox="0 0 100 40"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<rect width={100} height={40} rx={6} className="fill-muted" />
-							<text
-								x="50%"
-								y="50%"
-								dominantBaseline="middle"
-								textAnchor="middle"
-								className="fill-muted-foreground"
-								fontSize={12}
-							>
-								Logo 1
-							</text>
-						</svg>
-						<span className="sr-only">Company 1</span>
-					</a>
-					<a
-						href="#"
-						className="text-muted-foreground hover:text-foreground flex items-center justify-center transition-colors"
-					>
-						<svg
-							className="h-10 w-auto"
-							viewBox="0 0 100 40"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<rect width={100} height={40} rx={6} className="fill-muted" />
-							<text
-								x="50%"
-								y="50%"
-								dominantBaseline="middle"
-								textAnchor="middle"
-								className="fill-muted-foreground"
-								fontSize={12}
-							>
-								Logo 2
-							</text>
-						</svg>
-						<span className="sr-only">Company 2</span>
-					</a>
-					<a
-						href="#"
-						className="text-muted-foreground hover:text-foreground flex items-center justify-center transition-colors"
-					>
-						<svg
-							className="h-10 w-auto"
-							viewBox="0 0 100 40"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<rect width={100} height={40} rx={6} className="fill-muted" />
-							<text
-								x="50%"
-								y="50%"
-								dominantBaseline="middle"
-								textAnchor="middle"
-								className="fill-muted-foreground"
-								fontSize={12}
-							>
-								Logo 3
-							</text>
-						</svg>
-						<span className="sr-only">Company 3</span>
-					</a>
-					<a
-						href="#"
-						className="text-muted-foreground hover:text-foreground flex items-center justify-center transition-colors"
-					>
-						<svg
-							className="h-10 w-auto"
-							viewBox="0 0 100 40"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<rect width={100} height={40} rx={6} className="fill-muted" />
-							<text
-								x="50%"
-								y="50%"
-								dominantBaseline="middle"
-								textAnchor="middle"
-								className="fill-muted-foreground"
-								fontSize={12}
-							>
-								Logo 4
-							</text>
-						</svg>
-						<span className="sr-only">Company 4</span>
-					</a>
-					<a
-						href="#"
-						className="text-muted-foreground hover:text-foreground flex items-center justify-center transition-colors"
-					>
-						<svg
-							className="h-10 w-auto"
-							viewBox="0 0 100 40"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<rect width={100} height={40} rx={6} className="fill-muted" />
-							<text
-								x="50%"
-								y="50%"
-								dominantBaseline="middle"
-								textAnchor="middle"
-								className="fill-muted-foreground"
-								fontSize={12}
-							>
-								Logo 5
-							</text>
-						</svg>
-						<span className="sr-only">Company 5</span>
-					</a>
+					<div className="flex items-center justify-center">
+						<Image
+							src="/avulsos/cadillacSymbol.png"
+							alt="simbolo gm"
+							height={100}
+							width={100}
+						/>
+					</div>
+					<div className="flex items-center justify-center">
+						<Image
+							src="/avulsos/chevroletSymbol.png"
+							alt="simbolo gm"
+							height={100}
+							width={100}
+						/>
+					</div>
+					<div className="flex items-center justify-center">
+						<Image
+							src="/avulsos/gmSymbol.png"
+							alt="simbolo gm"
+							height={100}
+							width={100}
+						/>
+					</div>
+					<div className="flex items-center justify-center">
+						<Image
+							src="/avulsos/gmcSymbol.png"
+							alt="simbolo gm"
+							height={100}
+							width={100}
+						/>
+					</div>
+					<div className="flex items-center justify-center">
+						<Image
+							src="/avulsos/corvetteSymbol.png"
+							alt="simbolo gm"
+							height={100}
+							width={100}
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
