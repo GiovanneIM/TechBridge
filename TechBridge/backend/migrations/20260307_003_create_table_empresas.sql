@@ -10,6 +10,8 @@ USE TECHBRIDGE;
 -- Criando a tabela de empresas
 CREATE TABLE empresas (
     id 				INT 			AUTO_INCREMENT PRIMARY KEY,
+    
+    -- Atributos da empresa
     cnpj			CHAR(14)		NOT NULL UNIQUE,				-- CNPJ da empresa
  	razao_social	VARCHAR(200)	NOT NULL,						-- Nome oficial da empresa
     nome_fantasia	VARCHAR(150) 	NOT NULL,						-- Nome que a empresa usa popularmente

@@ -10,22 +10,30 @@ USE TECHBRIDGE;
 -- Criando a tabela de maquinas
 CREATE TABLE maquinas (
 	id				INT				AUTO_INCREMENT PRIMARY KEY,
-    cod_maquina		VARCHAR(50)		NOT NULL, -- Codigo de identificação interna no setor
-    descricao		VARCHAR(255)	NOT NULL,
-    id_setor		INT				NOT NULL,
+    
+    -- Atributos da máquina
+    cod_maquina		VARCHAR(50)		NOT NULL, 						-- Codigo de identificação (ID) interna no setor
+    nome 			VARCHAR(100) 	NOT NULL,						-- Nome da máquina
+    descricao		VARCHAR(255)	NOT NULL,						-- Descrição da máquina
+    foto 			VARCHAR(255),									-- Foto da máquina
+    ativo 			BOOLEAN 		DEFAULT TRUE,					-- Status da máquina (Ativa ou Inativa)
+    
+    -- Chaves estrangeiras
+    id_setor		INT				NOT NULL, 						-- ID do setor ao qual a máquina pertence
 
+	-- Referênciando as chaves estrangeiras
     FOREIGN KEY (id_setor) REFERENCES setores(id),
 
-    -- Impede que um stor tenha duas maquinas com o mesmo código
+    -- Impede que um setor tenha duas maquinas com o mesmo código
     UNIQUE (id_setor, cod_maquina)
 ); 
 
 
 
 -- Inserindo maquinas de exemplo
-INSERT INTO maquinas (codigo, descricao, id_setor)
+INSERT INTO maquinas (cod_maquina, nome, descricao, id_setor)
 VALUES 
-('MK-1', 'Máquina 1 do setor 1', 1),
-('MK-2', 'Máquina 2 do setor 1', 1),
-('MK-1', 'Máquina 1 do setor 2', 2)
+('MK-1', 'Máquina 1', 'Máquina 1 do setor 1', 1),
+('MK-2', 'Máquina 2', 'Máquina 2 do setor 1', 1),
+('MK-1', 'Máquina 1', 'Máquina 1 do setor 2', 2)
 ;

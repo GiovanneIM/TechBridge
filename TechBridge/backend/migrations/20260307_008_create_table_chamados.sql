@@ -6,18 +6,18 @@
 -- Mudando o banco atual para o banco TECHBRIDGE
 USE TECHBRIDGE;
 
-
+DROP TABLE if exists chamados;
 -- Criando a tabela de chamados
 CREATE TABLE chamados (
     -- Criados automaticamente no momento da criação
-	id						INT				AUTO_INCREMENT PRIMARY KEY, -- ID do chamado, identificador geral
+	id						INT				AUTO_INCREMENT PRIMARY KEY, 			-- ID do chamado, identificador geral
     estado					ENUM('aberto', 'andamento', 'concluido', 'cancelado') 
-                            NOT NULL DEFAULT 'aberto',                  -- Status para controle da situação do chamado
-    datahora_abertura		TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,	-- Data e hora em que o chamado é registrado
+                            NOT NULL DEFAULT 'aberto',                  			-- Status para controle da situação do chamado
+    datahora_abertura		TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,				-- Data e hora em que o chamado é registrado
 
     -- Recebidos no momento da criação
     id_empresa              INT             NOT NULL,       -- ID da empresa 
-    id_maquina				INT			 	NOT NULL,		-- ID do setor
+    id_setor				INT			 	NOT NULL,		-- ID do setor
     id_maquina				INT			 	NOT NULL,		-- ID da máquina para qual o chamado foi feito
     cod_chamado             INT             NOT NULL,       -- Código do chamado em relação à màquina para identificação do chamado internamente
     
@@ -54,34 +54,34 @@ CREATE TABLE chamados (
 
 
 -- Criando chamados
-INSERT INTO chamados (id_empresa, id_maquina, cod_chamado)
+INSERT INTO chamados (id_empresa, id_setor, id_maquina, cod_chamado)
 VALUES 
-(1, 1, 1),
-(1, 1, 2),
-(1, 2, 1),
-(1, 1, 3);
+(1, 1, 1, 1),
+(1, 1, 1, 2),
+(1, 1, 2, 1),
+(1, 1, 1, 3);
 
 -- Atendendo chamados
 UPDATE chamados    
 SET 
-    estado = 'andamento' AND
-    id_tecnico = 1 AND
+    estado = 'andamento',
+    id_tecnico = 1,
     datahora_atendimento = DATE_ADD(NOW(), INTERVAL 1 DAY_HOUR)
 WHERE id > 1;
 
 -- Concluindo chamados
 UPDATE chamados    
 SET 
-    estado = 'concluido' AND
-    id_causa = 1 AND
-    datahora_conclusao = DATE_ADD(NOW(), INTERVAL 2 DAY_HOUR ) AND
+    estado = 'concluido',
+    id_causa = 1,
+    datahora_conclusao = DATE_ADD(NOW(), INTERVAL 2 DAY_HOUR ),
     operador = "25170154"
 WHERE id > 2;
 
 -- Cancelando chamados
 UPDATE chamados    
 SET 
-    estado = 'cancelado' AND
-    id_tecnico = 1 AND
+    estado = 'cancelado',
+    id_tecnico = 1,
     datahora_conclusao = DATE_ADD(NOW(), INTERVAL 4 DAY_HOUR)
 WHERE id > 3;

@@ -10,11 +10,17 @@ USE TECHBRIDGE;
 -- Criando a tabela de causas
 CREATE TABLE causas (
 	id				INT				AUTO_INCREMENT PRIMARY KEY,
-    descricao		VARCHAR(100)	NOT NULL,
-    id_empresa		INT				NOT NULL,
     
+    -- Atributos da causa
+    descricao		VARCHAR(100)	NOT NULL,			-- Descrição do problema
+    
+    -- Chaves estrangeiras
+    id_empresa		INT				NOT NULL,			-- ID da empresa à qual a causa pertence
+    
+    -- Referênciando as chaves estrangeiras
     FOREIGN KEY (id_empresa) REFERENCES empresas(id),
     
+    -- Impede que uma empresa tenha duas causas com a mesma descrição
     UNIQUE (descricao, id_empresa)
 ); 
 
