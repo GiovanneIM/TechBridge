@@ -19,11 +19,11 @@ CREATE TABLE usuarios (
     ativo			BOOLEAN			DEFAULT TRUE,					-- Status do usuário (Conta ativa ou inativa)
     
     -- Chaves estrangeiras
-    tipo			INT				NOT NULL,						-- Tipo de usuário
+    tipo_usuario	INT				NOT NULL,						-- Tipo de usuário
     id_empresa		INT,											-- ID da empresa do usuário
     
     -- Referênciando as chaves estrangeiras
-    FOREIGN KEY (tipo) REFERENCES tipos_usuarios(id),
+    FOREIGN KEY (tipo_usuario) REFERENCES tipos_usuarios(id),
     FOREIGN KEY (id_empresa) REFERENCES empresas(id)
 ); 
 

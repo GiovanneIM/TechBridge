@@ -6,7 +6,6 @@ const authMiddleware = (req, res, next) => {
     try {
         // Verificar se o header Authorization existe
         const authHeader = req.headers.authorization;
-        
         if (!authHeader) {
             return res.status(401).json({ 
                 erro: 'Token de acesso não fornecido',
@@ -17,6 +16,7 @@ const authMiddleware = (req, res, next) => {
         // Extrair o token do header (formato: "Bearer TOKEN")
         const token = authHeader.split(' ')[1];
         
+        // Tokend não recebido
         if (!token) {
             return res.status(401).json({ 
                 erro: 'Token de acesso inválido',
@@ -36,13 +36,15 @@ const authMiddleware = (req, res, next) => {
 
         next();
     } catch (error) {
+        // Se o tempo de login acabou
         if (error.name === 'TokenExpiredError') {
             return res.status(401).json({ 
                 erro: 'Token expirado',
                 mensagem: 'Faça login novamente'
             });
         }
-        
+
+        // Se o token recebido é inválido
         if (error.name === 'JsonWebTokenError') {
             return res.status(401).json({ 
                 erro: 'Token inválido',
@@ -50,6 +52,7 @@ const authMiddleware = (req, res, next) => {
             });
         }
 
+        // Erro do servidor
         console.error('Erro no middleware de autenticação:', error);
         return res.status(500).json({ 
             erro: 'Erro interno do servidor',
@@ -60,7 +63,7 @@ const authMiddleware = (req, res, next) => {
 
 // Middleware para verificar se o usuário é administrador
 const adminMiddleware = (req, res, next) => {
-    if (req.usuario.tipo !== 'admin_techbridge') {
+    if (req.usuario.tipo !== 1) {
         return res.status(403).json({ 
             erro: 'Acesso negado',
             mensagem: 'Apenas administradores podem acessar este recurso'

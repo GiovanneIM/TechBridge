@@ -1,25 +1,15 @@
-import { create, read, update, deleteRecord, comparePassword, hashPassword, getConnection } from '../config/database.js';
+import { create, read, update, deleteRecord, comparePassword, hashPassword } from '../config/database.js';
 
 class ChamadosModel {
 
     //  LISTAR CHAMADOS
-    static async listarChamados() {
+    static async listarChamados(options) {
         try {
-            const connection = await getConnection();
+            // Fazendo a consulta
+            const chamados = await read("chamados", options);
 
-            try {
-                // Comando para obter as equipes
-                const sql = 'SELECT * FROM chamados ORDER BY id';
-
-                // Fazendo a consulta
-                const [chamados] = await connection.query(sql);
-
-                // Retornando as equipes
-                return { chamados };
-            } finally {
-                connection.release();
-            }
-
+            // Retornando os chamados
+            return { chamados };
         } catch (error) {
             console.error('Erro ao listar chamados:', error);
             throw error;

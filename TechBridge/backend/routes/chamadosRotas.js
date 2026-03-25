@@ -1,15 +1,16 @@
 import express from 'express';
 import ChamadosController from '../controllers/ChamadosController.js';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
 // Listar chamados
-router.get('/', ChamadosController.listarChamados)
+router.get('/', authMiddleware,ChamadosController.listarChamados)
 
-router.get('/:id', ChamadosController.listarChamado)
+router.get('/:id', authMiddleware, ChamadosController.listarChamado)
 
-router.post('/', ChamadosController.criarChamado)
+router.post('/', authMiddleware, ChamadosController.criarChamado)
 
-router.patch('/:id', ChamadosController.atualizarChamado)
+router.patch('/:id', authMiddleware, ChamadosController.atualizarChamado)
 
 export default router;

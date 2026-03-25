@@ -89,6 +89,8 @@ function Column({ columnId, title, tasks, children, isOver }) {
 
 // Componente principal do Kanban
 export default function Kanban() {
+
+  // Operações
   const [columns, setColumns] = useState({
     backlog: [
       { id: "1", title: "Integrate Stripe", description: "Compile competitor pages", priority: "High" },
@@ -102,10 +104,11 @@ export default function Kanban() {
     ],
   });
 
+  // Lista de colunas
   const columnList = [
-    { id: "backlog", title: "Backlog" },
-    { id: "progress", title: "In Progress" },
-    { id: "done", title: "Done" },
+    { id: "backlog", title: "Em espera" },
+    { id: "progress", title: "Em andamento" },
+    { id: "done", title: "Finalizados" },
   ];
 
   const [activeTask, setActiveTask] = useState(null);

@@ -26,36 +26,20 @@ async function getConnection() {
 }
 
 
-// READ - Função para ler registros (um ou múltiplos)
-async function read(table, where = null) {
-    const connection = await getConnection();
-
-    try {
-        let sql = `SELECT * FROM ${table}`;
-
-        if (where) {
-            sql += `WHERE ${where}`;
-        }
-
-        const [rows] = await connection.execute(sql);
-
-        return rows;
-    }
-    finally {
-        connection.release();
-    }
-}
-
-async function readCompleto(table, options = null) {
-    // table -> Nome da tabela a ser exibida
-    // options -> Objeto com as opções de busca 
-    // Ex: { 
-    // columns: ["id", "nome"], 
-    // where: { ativo: 1}, 
-    // like: {nome: "jo"}, 
-    // orderBy: "nome ASC", 
-    // limit: 10
-    // }
+// READ - Função para ler registros
+async function read(table, options = null) {
+    /*
+        • table → Nome da tabela a ser exibida
+        • options → Objeto com as opções de busca 
+        
+        Ex: read("usuarios", { 
+            columns: ["id", "nome"], 
+            where: { ativo: 1}, 
+            like: {nome: "jo"}, 
+            orderBy: "nome ASC", 
+            limit: 10
+        })
+    */
 
     // Criando conexão
     const connection = await getConnection();
@@ -128,10 +112,21 @@ async function readCompleto(table, options = null) {
     }
 }
 
-// INSERT - Função para inserir um novo registro
+
+// CREATE - Função para inserir um novo registro em uma tabela
 async function create(table, data) {
-    // table -> Nome da tabela na qual será realizada a inserção
-    // data -> Objeto com os dados a serem inseridos
+    /*
+        • table → Nome da tabela na qual será realizada a inserção
+        • data → Objeto com os dados a serem inseridos
+
+        Ex: create("usuarios", {
+            nome: "usuario teste",
+            email: "teste@email.com",
+            senha: "12345",
+            tipo_usuario: 2,
+            id_empresa: 3
+        })
+    */
 
     // Criando a conexão
     const connection = await getConnection();
@@ -157,6 +152,7 @@ async function create(table, data) {
         connection.release();
     }
 }
+
 
 // UPDATE - Função para atualizar um registro
 async function update(table, data, where) {
@@ -195,6 +191,7 @@ async function update(table, data, where) {
     }
 }
 
+
 // DELETE - Função para excluir um registro
 async function deleteRecord(table, where) {
     // Criando a conexão
@@ -227,6 +224,7 @@ async function deleteRecord(table, where) {
         connection.release();
     }
 }
+
 
 // Função para comparar senha com hash
 async function comparePassword(password, hash) {
