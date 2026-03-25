@@ -13,7 +13,8 @@ import { azul, negrito, verde } from './utils/modificadoresDeSaida.js';
 import authRotas from './routes/authRotas.js';
 import criptografiaRotas from './routes/criptografiaRotas.js';
 import userRotas from './routes/userRotas.js';
-import chamadosRotas from './routes/chamadosRotas.js'
+import chamadosRotas from './routes/chamadosRotas.js';
+import maquinasRotas from './routes/maquinasRotas.js'
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
@@ -64,6 +65,7 @@ app.use('/api/auth', authRotas);
 app.use('/api/criptografia', criptografiaRotas);
 app.use('/api/user', userRotas);
 app.use('/api/chamados', chamadosRotas);
+app.use('/api/maquinas', maquinasRotas);
 
 // Rota raiz
 app.get('/', (req, res) => {

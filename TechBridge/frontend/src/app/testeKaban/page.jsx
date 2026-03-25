@@ -106,9 +106,15 @@ export default function Kanban() {
 
   // Lista de colunas
   const columnList = [
+<<<<<<< HEAD
     { id: "backlog", title: "Em espera" },
     { id: "progress", title: "Em andamento" },
     { id: "done", title: "Finalizados" },
+=======
+    { id: "backlog", title: "Concluído" },
+    { id: "progress", title: "Em andamento" },
+    { id: "done", title: "Aberto" },
+>>>>>>> bd7f8f6d442432e19f2f7cdc2ff3cc2a13918508
   ];
 
   const [activeTask, setActiveTask] = useState(null);
@@ -172,7 +178,7 @@ export default function Kanban() {
 
   return (
     <div className="p-8 bg-muted/40 min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">Kanban Board</h1>
+      <h1 className="text-2xl font-bold mb-6">Dashboard Kaban para organização de tarefas do Técnico Cliente</h1>
 
       <DndContext
         sensors={sensors}
