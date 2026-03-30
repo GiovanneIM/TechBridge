@@ -10,8 +10,13 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Dashboard() {
+  const {token} = useAuth({
+    initialUser: null,
+    fetchOnMount: true
+  })
 
   const [chamados, setChamados] = useState([])
 
@@ -19,7 +24,16 @@ export default function Dashboard() {
   useEffect(() => {
     async function carregarChamados() {
       try {
-        const res = await fetch('http://localhost:3000/api/chamados');
+        console.log(token);
+        
+        const res = await fetch('http://localhost:3000/api/chamados/buscar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkB0Yi5jb20iLCJpYXQiOjE3NzQ4NzEwNzksImV4cCI6MTc3NDg3NDY3OX0.1XxC1CwzFURXk6BZ8cKPeG4qLt-0rzgyfG_9UQOdpU4`
+          },
+          body: '{}'
+        });
         const data = await res.json();
 
         if (data.sucesso) {

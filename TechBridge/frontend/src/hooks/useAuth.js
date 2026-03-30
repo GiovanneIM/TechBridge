@@ -11,6 +11,7 @@ export function useAuth({
 ) {
     // Estado com o usuário
     const [user, setUser] = useState(initialUser)
+    const [token, setToken] = useState(null)
 
     // Estado que indica se há uma requisição em andamento
     const [loading, setLoading] = useState({
@@ -50,6 +51,7 @@ export function useAuth({
 
                 // Atualizando o estado do usuário
                 setUser(data.dados.usuario)
+                setToken(data.dados.token)
             }
         } catch (err) {
             // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
@@ -115,8 +117,9 @@ export function useAuth({
         user,
         loading,
         error,
+        token,
         login,
         perfil,
-        logout
+        logout,
     };
 }

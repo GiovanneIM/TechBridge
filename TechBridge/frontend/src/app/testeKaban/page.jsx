@@ -22,45 +22,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
-// Componente do cartão de tarefa
-function TaskCard({ task, isDragging = false, hideWhenDragging = false }) {
+// ================= TASK CARD =================
+function TaskCard({ task, hideWhenDragging = false }) {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
-    isDragging: dragging,
+    isDragging,
   } = useSortable({ id: task.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition: transition || "transform 200ms ease, box-shadow 200ms ease",
-    zIndex: dragging ? 50 : "auto",
-    opacity: hideWhenDragging && dragging ? 0 : 1,
+    transition: transition || "transform 200ms ease",
+    opacity: hideWhenDragging && isDragging ? 0 : 1,
   };
-
-  const [chamados, setChamados] = useState([]);
-
-    /* Carregando as equipes */
-    useEffect(() => {
-        async function carregarChamados() {
-            try {
-                const res = await fetch('http://localhost:3000/api/chamados');
-                const data = await res.json();
-
-                if (data.sucesso) {
-                    setEquipes(data.dados.chamados);
-                } else {
-                    console.log(data.mensagem);
-                }
-            } catch (err) {
-                console.error('Erro ao carregar chamados:', err);
-            }
-        }
-
-        carregarChamados();
-    }, []);
 
   return (
     <Card
@@ -68,72 +45,51 @@ function TaskCard({ task, isDragging = false, hideWhenDragging = false }) {
       style={style}
       {...attributes}
       {...listeners}
-      className={`hover:shadow-md transition-all ${
-        dragging ? "scale-105 shadow-lg cursor-grabbing" : "cursor-grab"
-      }`}
+      className="cursor-grab hover:shadow-md"
     >
       <CardContent className="p-4 space-y-3">
         <div className="font-medium">{task.title}</div>
-        <p className="text-sm text-muted-foreground">{task.description}</p>
-        <div className="flex items-center justify-between">
-          <div className="flex -space-x-2">
-            <Avatar className="w-6 h-6">
-              <AvatarFallback>AB</AvatarFallback>
-            </Avatar>
-            <Avatar className="w-6 h-6">
-              <AvatarFallback>CD</AvatarFallback>
-            </Avatar>
-          </div>
-          <Badge variant="outline">{task.priority}</Badge>
+        <p className="text-sm text-muted-foreground">
+          {task.description}
+        </p>
+
+        <div className="flex justify-between items-center">
+          <Avatar className="w-6 h-6">
+            <AvatarFallback>TC</AvatarFallback>
+          </Avatar>
+          <Badge variant="outline">{task.status}</Badge>
         </div>
       </CardContent>
     </Card>
-
-                    
   );
 }
 
-// Componente de coluna droppable
-function Column({ columnId, title, tasks, children, isOver }) {
-  const { setNodeRef, isOver: droppableOver } = useDroppable({ id: columnId });
+// ================= COLUMN =================
+function Column({ columnId, title, tasks, children }) {
+  const { setNodeRef, isOver } = useDroppable({ id: columnId });
 
   return (
     <div
       ref={setNodeRef}
-      className={`w-80 p-2 bg-muted/10 rounded-md min-h-[150px] flex flex-col gap-4 ${
-        droppableOver ? "bg-blue-100" : ""
+      className={`w-80 p-2 rounded-md min-h-[150px] flex flex-col gap-4 ${
+        isOver ? "bg-blue-100" : "bg-muted/10"
       }`}
-      data-column={columnId}
     >
-      <div className="font-semibold mb-2">{title} ({tasks.length})</div>
+      <div className="font-semibold">
+        {title} ({tasks.length})
+      </div>
       {children}
     </div>
   );
 }
 
-// Componente principal do Kanban
+// ================= KANBAN =================
 export default function Kanban() {
-
-  // Operações
   const [columns, setColumns] = useState({
-    backlog: [
-      { id: "1", title: "Integrate Stripe", description: "Compile competitor pages", priority: "High" },
-      { id: "2", title: "Redesign homepage", description: "Improve visual design", priority: "Medium" },
-    ],
-    progress: [
-      { id: "3", title: "Database refactoring", description: "Optimize tables", priority: "Medium" },
-    ],
-    done: [
-      { id: "4", title: "CI/CD pipeline", description: "Automate deployments", priority: "High" },
-    ],
+    aberto: [],
+    andamento: [],
+    concluido: [],
   });
-
-  // Lista de colunas
-  const columnList = [
-    { id: "done", title: "Aberto" },
-    { id: "progress", title: "Em andamento" },
-    { id: "backlog", title: "Concluído" },
-  ];
 
   const [activeTask, setActiveTask] = useState(null);
 
@@ -141,13 +97,65 @@ export default function Kanban() {
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
-  // Função para encontrar a coluna de um item
+  // 🔥 CARREGAR CHAMADOS DO BACKEND
+  useEffect(() => {
+    async function carregarChamados() {
+      try {
+        const res = await fetch("http://localhost:3000/api/chamados");
+        const data = await res.json();
+
+        if (!data.sucesso) return;
+
+        const chamados = data.dados.chamados;
+
+        // 🧠 Transformar dados do banco para o Kanban
+        const novasColunas = {
+          aberto: [],
+          andamento: [],
+          concluido: [],
+        };
+
+        chamados.forEach((c) => {
+          const task = {
+            id: String(c.id),
+            title: c.titulo || "Sem título",
+            description: c.descricao_problema || "Sem descrição",
+            status: c.estado,
+          };
+
+          if (c.estado === "aberto") {
+            novasColunas.aberto.push(task);
+          } else if (c.estado === "andamento") {
+            novasColunas.andamento.push(task);
+          } else {
+            novasColunas.concluido.push(task);
+          }
+        });
+
+        setColumns(novasColunas);
+      } catch (err) {
+        console.error("Erro ao carregar chamados:", err);
+      }
+    }
+
+    carregarChamados();
+  }, []);
+
+  const columnList = [
+    { id: "aberto", title: "Aberto" },
+    { id: "andamento", title: "Em andamento" },
+    { id: "concluido", title: "Concluído" },
+  ];
+
   function findColumn(taskId) {
-    return Object.keys(columns).find(col => columns[col].some(t => t.id === taskId));
+    return Object.keys(columns).find((col) =>
+      columns[col].some((t) => t.id === taskId)
+    );
   }
 
   function handleDragStart(event) {
-    const task = columns[findColumn(event.active.id)].find(t => t.id === event.active.id);
+    const col = findColumn(event.active.id);
+    const task = columns[col].find((t) => t.id === event.active.id);
     setActiveTask(task);
   }
 
@@ -157,46 +165,42 @@ export default function Kanban() {
     if (!over) return;
 
     const activeCol = findColumn(active.id);
-    const overId = over.id;
+    const overCol = columns[over.id]
+      ? over.id
+      : findColumn(over.id);
 
-    // Caso o drop seja em uma coluna vazia (droppable)
-    if (columns[overId] && activeCol !== overId) {
-      const task = columns[activeCol].find(t => t.id === active.id);
-      setColumns(prev => ({
-        ...prev,
-        [activeCol]: prev[activeCol].filter(t => t.id !== active.id),
-        [overId]: [...prev[overId], task],
-      }));
-      return;
-    }
-
-    // Drop dentro da mesma coluna ou em outra coluna com items
-    const overCol = findColumn(over.id);
     if (!activeCol || !overCol) return;
 
-    const task = columns[activeCol].find(t => t.id === active.id);
+    const task = columns[activeCol].find((t) => t.id === active.id);
 
     if (activeCol === overCol) {
-      const oldIndex = columns[activeCol].findIndex(t => t.id === active.id);
-      const newIndex = columns[overCol].findIndex(t => t.id === over.id);
-      if (oldIndex !== newIndex) {
-        setColumns(prev => ({
-          ...prev,
-          [activeCol]: arrayMove(prev[activeCol], oldIndex, newIndex),
-        }));
-      }
-    } else {
-      setColumns(prev => ({
+      const oldIndex = columns[activeCol].findIndex(
+        (t) => t.id === active.id
+      );
+      const newIndex = columns[overCol].findIndex(
+        (t) => t.id === over.id
+      );
+
+      setColumns((prev) => ({
         ...prev,
-        [activeCol]: prev[activeCol].filter(t => t.id !== active.id),
+        [activeCol]: arrayMove(prev[activeCol], oldIndex, newIndex),
+      }));
+    } else {
+      setColumns((prev) => ({
+        ...prev,
+        [activeCol]: prev[activeCol].filter(
+          (t) => t.id !== active.id
+        ),
         [overCol]: [...prev[overCol], task],
       }));
     }
   }
 
   return (
-    <div className="p-8 bg-muted/40 min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">Dashboard Kaban para organização de tarefas do Técnico Cliente</h1>
+    <div className="p-8 min-h-screen bg-muted/40">
+      <h1 className="text-2xl font-bold mb-6">
+        Kanban de Chamados
+      </h1>
 
       <DndContext
         sensors={sensors}
@@ -205,24 +209,27 @@ export default function Kanban() {
         onDragEnd={handleDragEnd}
       >
         <div className="flex gap-6">
-          {columnList.map(col => (
-            <Column key={col.id} columnId={col.id} title={col.title} tasks={columns[col.id]}>
+          {columnList.map((col) => (
+            <Column
+              key={col.id}
+              columnId={col.id}
+              title={col.title}
+              tasks={columns[col.id]}
+            >
               <SortableContext
-                items={columns[col.id].map(t => t.id)}
+                items={columns[col.id].map((t) => t.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="flex flex-col gap-4">
-                  {columns[col.id].map(task => (
-                    <TaskCard key={task.id} task={task} hideWhenDragging />
-                  ))}
-                </div>
+                {columns[col.id].map((task) => (
+                  <TaskCard key={task.id} task={task} />
+                ))}
               </SortableContext>
             </Column>
           ))}
         </div>
 
         <DragOverlay>
-          {activeTask ? <TaskCard task={activeTask} isDragging /> : null}
+          {activeTask ? <TaskCard task={activeTask} /> : null}
         </DragOverlay>
       </DndContext>
     </div>
