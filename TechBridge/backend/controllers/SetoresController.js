@@ -23,8 +23,6 @@ class SetoresController {
         }
     }
 
-    /* GET /maquinas - Rota para listar as maquinas*/
-    static async listarSetores(req, res) { }
 
     /* POST /maquinas - Rota para criar uma maquina */
     static async criarSetor(req, res) { }

@@ -138,13 +138,13 @@ export default function Kanban() {
 					concluido: [],
 				};
 
-				chamados.forEach((chamado) => {
-					const maquina = maquinas.find(maquina => maquina.id === chamado.id_maquina);
+				chamados.forEach((c) => {
+					const maquina = maquinas.find(maquina => maquina.id === c.id_maquina);
 					const setor = setores.find(setor => setor.id === maquina.id_setor);
 
 					const task = {
 						id: String(c.id),
-						title: `{} ${maquina.cod_maquina} - ${chamado.cod_chamado}` || "Sem título",
+						title: `${setor.cod_setor} ${maquina.cod_maquina} - ${c.cod_chamado}` || "Sem título",
 						description: c.descricao_problema || "Sem descrição",
 						status: c.estado,
 					};
