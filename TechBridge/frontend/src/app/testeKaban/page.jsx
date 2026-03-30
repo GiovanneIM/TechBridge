@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   DndContext,
   closestCorners,
@@ -40,6 +40,28 @@ function TaskCard({ task, isDragging = false, hideWhenDragging = false }) {
     opacity: hideWhenDragging && dragging ? 0 : 1,
   };
 
+  const [chamados, setChamados] = useState([]);
+
+    /* Carregando as equipes */
+    useEffect(() => {
+        async function carregarChamados() {
+            try {
+                const res = await fetch('http://localhost:3000/api/chamados');
+                const data = await res.json();
+
+                if (data.sucesso) {
+                    setEquipes(data.dados.chamados);
+                } else {
+                    console.log(data.mensagem);
+                }
+            } catch (err) {
+                console.error('Erro ao carregar chamados:', err);
+            }
+        }
+
+        carregarChamados();
+    }, []);
+
   return (
     <Card
       ref={setNodeRef}
@@ -66,6 +88,8 @@ function TaskCard({ task, isDragging = false, hideWhenDragging = false }) {
         </div>
       </CardContent>
     </Card>
+
+                    
   );
 }
 
@@ -106,15 +130,9 @@ export default function Kanban() {
 
   // Lista de colunas
   const columnList = [
-<<<<<<< HEAD
-    { id: "backlog", title: "Em espera" },
-    { id: "progress", title: "Em andamento" },
-    { id: "done", title: "Finalizados" },
-=======
-    { id: "backlog", title: "Concluído" },
-    { id: "progress", title: "Em andamento" },
     { id: "done", title: "Aberto" },
->>>>>>> bd7f8f6d442432e19f2f7cdc2ff3cc2a13918508
+    { id: "progress", title: "Em andamento" },
+    { id: "backlog", title: "Concluído" },
   ];
 
   const [activeTask, setActiveTask] = useState(null);
