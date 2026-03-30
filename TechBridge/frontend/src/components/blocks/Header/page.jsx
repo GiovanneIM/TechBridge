@@ -15,12 +15,9 @@ import {
     NavigationMenuViewport,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
-
 import {
     Button,
-    buttonVariants,
 } from "@/components/ui/button"
-
 import {
     Menubar,
     MenubarPortal,
@@ -39,7 +36,6 @@ import {
     MenubarSubTrigger,
     MenubarSubContent,
 } from "@/components/ui/menubar"
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -52,8 +48,9 @@ import {
     DropdownMenuSubContent,
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
+    DropdownMenuLabel
 } from "@/components/ui/dropdown-menu"
-import { TextAlignJustify, Sun, Moon, Settings } from "lucide-react"
+import { TextAlignJustify, Sun, Moon, Settings, User } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useAuth } from "@/hooks/useAuth"
 
@@ -61,17 +58,31 @@ import { useAuth } from "@/hooks/useAuth"
 
 
 export default function Header() {
+    // Obtendo o usuário
+    // const {
+    //     user
+    // } = useAuth({
+    //     initialUser: null,
+    //     fetchOnMount: true
+    // })
+
     const {
         user
     } = useAuth({
-        initialUser: null,
-        fetchOnMount: true
+        initialUser: {
+            nome: 'Giovanne Isaac',
+            email: 'giovanne@gmail.com',
+            foto_perfil: 'https://images-news.now.com/newsimage/NewsImage/2025-02-07-15-22-5103GxLf4N.jpg',
+            ativo: true,
+            tipo_usuario: 1,
+            id_empresa: null
+        },
+        fetchOnMount: false
     })
-
-    const [theme, setTheme] = useState("light");
 
 
     // Controlando o tema
+    const [theme, setTheme] = useState("light");
     useEffect(() => {
         const root = document.documentElement;
 
@@ -82,13 +93,14 @@ export default function Header() {
         }
     }, [theme]);
 
+
     return (<>
         <div className="sticky top-0 z-1000 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
             <header>
-                <nav className="px-15 py-2.5">
-                    <div className="flex flex-wrap justify-between items-center mx-auto ">
-                        {/* Logo */}
-                        <Link href="/" className="flex items-center">
+                <nav className="px-4 lg:px-10 py-2.5">
+                    <div className="w-full flex flex-wrap justify-between items-center">
+                        {/* LOGO */}
+                        <Link href="/" className="flex items-center order-1 w-1/2 lg:w-auto">
                             <img
                                 src="/TechBridge/Logo.svg"
                                 className="mr-3 h-6 sm:h-9"
@@ -100,125 +112,153 @@ export default function Header() {
                             </p>
                         </Link>
 
-                        <div className="flex items-center gap-2 lg:order-2">
-                            {/* Dropdown MOBILE*/}
-                            {user && <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button className={'xl:hidden'} variant="outline"><TextAlignJustify /></Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <DropdownMenuGroup>
-                                        <DropdownMenuItem>Suporte</DropdownMenuItem>
-                                        <DropdownMenuItem><Link href={'/dashboard'}>Dashboard</Link></DropdownMenuItem>
-                                        <DropdownMenuSub>
-                                            <DropdownMenuSubTrigger>Serviços de Manutenção</DropdownMenuSubTrigger>
-                                            <DropdownMenuPortal>
-                                                <DropdownMenuSubContent className={'w-auto'}>
-                                                    <DropdownMenuItem>Manutenção de Máquina</DropdownMenuItem>
-                                                    <DropdownMenuItem>Manutenção Preventiva</DropdownMenuItem>
-                                                    <DropdownMenuItem>Reparo</DropdownMenuItem>
-                                                </DropdownMenuSubContent>
-                                            </DropdownMenuPortal>
-                                        </DropdownMenuSub>
-                                        <DropdownMenuSub>
-                                            <DropdownMenuSubTrigger>Departamento</DropdownMenuSubTrigger>
-                                            <DropdownMenuPortal>
-                                                <DropdownMenuSubContent>
-                                                    <DropdownMenuItem>Ferramentaria</DropdownMenuItem>
-                                                    <DropdownMenuItem>RH</DropdownMenuItem>
-                                                    <DropdownMenuItem>Pintura</DropdownMenuItem>
-                                                </DropdownMenuSubContent>
-                                            </DropdownMenuPortal>
-                                        </DropdownMenuSub>
-                                    </DropdownMenuGroup>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                            }
-
-                            {/* Usuário */}
-                            {user && <div className="flex items-center gap-2">
-                                <div className="font-bold text-gray-500 dark:text-gray-300 text-md">{user.nome}</div>
-                                <Avatar size="lg">
-                                    <AvatarImage src={user.foto_perfil} />
-                                    <AvatarFallback>CN</AvatarFallback>
-                                </Avatar>
-                            </div>
-                            }
-
-                            {/* Tema */}
+                        {/* Caso o usuário não esteja logado */}
+                        {!user && <div className="order-3">
+                            {/* Botão de Tema */}
                             <div>
-                                {theme === "dark" && <Button variant="outline" onClick={() => { setTheme("light") }}><Sun /></Button>}
-                                {theme === "light" && <Button variant="outline" onClick={() => { setTheme("dark") }}><Moon /></Button>}
+                                {theme === "dark" && <Button variant="outline" className="inline" onClick={() => { setTheme("light") }}><Sun /></Button>}
+                                {theme === "light" && <Button variant="outline" className="inline" onClick={() => { setTheme("dark") }}><Moon /></Button>}
                             </div>
-
-
-                            {/* Configurações */}
-                            {user && <div>
-                                <Button variant="outline" onClick={() => { setTheme("dark") }}><Settings /></Button>
-                            </div>
-                            }
 
                             {/* Botão Login */}
                             {!user && <Button asChild className={'bg-techbridge text-white w-35 font-bold text-md'}>
-                                <Link
-                                    href='/login'
-                                >
-                                    Entrar
-                                </Link>
+                                <Link href='/login'>Entrar</Link>
                             </Button>
                             }
+                        </div>}
 
+                        {/* Caso o usuário esteja logado */}
+                        {user && <>
+                            {/* Navegação */}
+                            <div className="order-3 lg:order-2 w-full lg:w-auto">
+                                {/* Navegação mobile */}
+                                <div className="flex items-center gap-2 sm:hidden">
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="outline"><TextAlignJustify /></Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <DropdownMenuGroup>
+                                                <DropdownMenuItem>Suporte</DropdownMenuItem>
+                                                <DropdownMenuItem><Link href={'/dashboard'}>Dashboard</Link></DropdownMenuItem>
+                                                <DropdownMenuSub>
+                                                    <DropdownMenuSubTrigger>Serviços de Manutenção</DropdownMenuSubTrigger>
+                                                    <DropdownMenuPortal>
+                                                        <DropdownMenuSubContent className={'w-auto'}>
+                                                            <DropdownMenuItem>Manutenção de Máquina</DropdownMenuItem>
+                                                            <DropdownMenuItem>Manutenção Preventiva</DropdownMenuItem>
+                                                            <DropdownMenuItem>Reparo</DropdownMenuItem>
+                                                        </DropdownMenuSubContent>
+                                                    </DropdownMenuPortal>
+                                                </DropdownMenuSub>
+                                                <DropdownMenuSub>
+                                                    <DropdownMenuSubTrigger>Departamento</DropdownMenuSubTrigger>
+                                                    <DropdownMenuPortal>
+                                                        <DropdownMenuSubContent>
+                                                            <DropdownMenuItem>Ferramentaria</DropdownMenuItem>
+                                                            <DropdownMenuItem>RH</DropdownMenuItem>
+                                                            <DropdownMenuItem>Pintura</DropdownMenuItem>
+                                                        </DropdownMenuSubContent>
+                                                    </DropdownMenuPortal>
+                                                </DropdownMenuSub>
+                                            </DropdownMenuGroup>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
 
+                                {/* Navegação Desktop */}
+                                <div className="hidden sm:flex justify-center items-center w-full lg:w-auto" id="mobile-menu-2">
+                                    <ul className="flex flex-row mt-4 lg:mt-0 font-medium lg:space-x-8 w-full lg:w-auto justify-between">
 
-                        </div>
+                                        <li>
+                                            <Button variant="ghost" className={'text-md'}>
+                                                <Link href={'/dashboard'}>
+                                                    Dashboard
+                                                </Link>
+                                            </Button>
+                                        </li>
 
-                        {/* navegação DESKTOP */}
-                        {user && <div
-                            className="hidden justify-between items-center w-full xl:flex xl:w-auto lg:order-1"
-                            id="mobile-menu-2"
-                        >
+                                        <li>
+                                            <NavigationMenu>
+                                                <NavigationMenuList>
+                                                    <NavigationMenuItem>
+                                                        <NavigationMenuTrigger className={'text-md'}>Setores</NavigationMenuTrigger>
+                                                        <NavigationMenuContent className={'w-57'}>
+                                                            <NavigationMenuLink>Ferramentaria</NavigationMenuLink>
+                                                            <NavigationMenuLink>RH</NavigationMenuLink>
+                                                            <NavigationMenuLink>Pintura</NavigationMenuLink>
+                                                        </NavigationMenuContent>
+                                                    </NavigationMenuItem>
+                                                </NavigationMenuList>
+                                            </NavigationMenu>
+                                        </li>
 
-                            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+                                        <li>
+                                            <Button variant="ghost" className={'text-md'}>
+                                                <Link href={'/dashboard'}>
+                                                    Tecnicos
+                                                </Link>
+                                            </Button>
+                                        </li>
 
-                                <li>
-                                    <Button variant="ghost" className={'text-md'}>
-                                        <Link href={'/dashboard'}>
-                                            Dashboard
-                                        </Link>
-                                    </Button>
-                                </li>
+                                        <li>
+                                            <Button variant="ghost" className={'text-md'}>
+                                                Suporte
+                                            </Button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
 
-                                <li>
-                                    <NavigationMenu>
-                                        <NavigationMenuList>
-                                            <NavigationMenuItem>
-                                                <NavigationMenuTrigger className={'text-md'}>Setores</NavigationMenuTrigger>
-                                                <NavigationMenuContent className={'w-57'}>
-                                                    <NavigationMenuLink>Ferramentaria</NavigationMenuLink>
-                                                    <NavigationMenuLink>RH</NavigationMenuLink>
-                                                    <NavigationMenuLink>Pintura</NavigationMenuLink>
-                                                </NavigationMenuContent>
-                                            </NavigationMenuItem>
-                                        </NavigationMenuList>
-                                    </NavigationMenu>
-                                </li>
+                            {/* Usuário e dropdown de tema e configurações */}
+                            <div className="flex items-center gap-4 w-1/2 lg:w-auto justify-end lg:justify-start  order-2 lg:order-3">
+                                {/* Usuário */}
+                                {user && <div className="flex items-center gap-2">
+                                    <div className="font-bold text-gray-500 dark:text-gray-300 text-md">{user.nome}</div>
 
-                                <li>
-                                    <Button variant="ghost" className={'text-md'}>
-                                        <Link href={'/dashboard'}>
-                                            Tecnicos
-                                        </Link>
-                                    </Button>
-                                </li>
+                                    <Avatar size="lg">
+                                        <AvatarImage src={user.foto_perfil} />
+                                        <AvatarFallback>CN</AvatarFallback>
+                                    </Avatar>
+                                </div>
+                                }
 
-                                <li>
-                                    <Button variant="ghost" className={'text-md'}>
-                                        Suporte
-                                    </Button>
-                                </li>
-                            </ul>
-                        </div>
-                        }
+                                {/* Tema e configurações */}
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline"><TextAlignJustify className="inline" /></Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="w-40" align="start">
+                                        <DropdownMenuGroup>
+                                            <DropdownMenuItem>
+                                                <User /> Perfil
+                                            </DropdownMenuItem>
+                                        </DropdownMenuGroup>
+
+                                        <DropdownMenuSeparator />
+
+                                        <DropdownMenuGroup>
+                                            <DropdownMenuLabel>Tema</DropdownMenuLabel>
+                                            <DropdownMenuItem onClick={() => { setTheme("light") }}>
+                                                <Sun /> Claro
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => { setTheme("dark") }}>
+                                                <Moon /> Escuro
+                                            </DropdownMenuItem>
+                                        </DropdownMenuGroup>
+
+                                        <DropdownMenuSeparator />
+
+                                        <DropdownMenuGroup>
+                                            <DropdownMenuItem>
+                                                <Settings />
+                                                Configurações
+                                            </DropdownMenuItem>
+                                        </DropdownMenuGroup>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+                        </>}
                     </div>
                 </nav>
             </header>
