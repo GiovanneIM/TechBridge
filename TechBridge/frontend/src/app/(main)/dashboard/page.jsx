@@ -17,15 +17,13 @@ export default function Dashboard() {
     initialUser: null,
     fetchOnMount: true
   })
-  
+
   const [chamados, setChamados] = useState([])
 
   /* Carregando as equipes */
   useEffect(() => {
     async function carregarChamados() {
       try {
-        console.log(token);
-
         const res = await fetch('http://localhost:3000/api/chamados/buscar', {
           method: 'POST',
           headers: {
@@ -64,9 +62,9 @@ export default function Dashboard() {
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              <SectionCards />
+              <SectionCards chamados={chamados}/>
               <div className="px-4 lg:px-6">
-                <ChartAreaInteractive />
+                <ChartAreaInteractive chamados={chamados}/>
               </div>
               <DataTable data={chamados} />
             </div>

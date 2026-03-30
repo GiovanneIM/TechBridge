@@ -33,7 +33,7 @@ import {
   ToggleGroupItem,
 } from "@/components/ui/toggle-group"
 
-export function ChartAreaInteractive() {
+export function ChartAreaInteractive({chamados}) {
   const isMobile = useIsMobile()
 
   const [timeRange, setTimeRange] = useState("90d")
@@ -48,20 +48,13 @@ export function ChartAreaInteractive() {
   useEffect(() => {
     async function carregarChamados() {
       try {
-        const res = await fetch("http://localhost:3000/api/chamados")
-        const data = await res.json()
-
-        if (!data.sucesso) return
-
-        const chamados = data.dados.chamados
-
         // 👇 Agrupar por data
         const agrupado = {}
 
         chamados.forEach((chamado) => {
           const dataAbertura = new Date(chamado.datahora_abertura)
             .toISOString()
-            .split("T")[0]
+            .split("T")[0];
 
           if (!agrupado[dataAbertura]) {
             agrupado[dataAbertura] = {
