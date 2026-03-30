@@ -5,12 +5,12 @@ import { useEffect, useState, useCallback } from 'react';
 const API_BASE_URL = 'http://localhost:3000/api/setores';
 
 export function useSetores({
-    initialSetors = [],
+    initialSetores = [],
     fetchOnMount = false
 } = {}
 ) {
     // Estado com as setores
-    const [setores, setSetores] = useState(initialMachines);
+    const [setores, setSetores] = useState(initialSetores);
 
     // Estado que indica se há uma requisição em andamento
     const [loading, setLoading] = useState({
@@ -22,7 +22,7 @@ export function useSetores({
         fetch: null,
     });
 
-    // Busca todas as maquinas
+    // Busca todas as setores
     const fetchSetores = useCallback(async () => {
         setLoading((prev) => ({ ...prev, fetch: true }));
         setError((prev) => ({ ...prev, fetch: null }));
@@ -39,7 +39,7 @@ export function useSetores({
                 setError((prev) => ({ ...prev, fetch: data.mensagem }))
             }
             else {
-                // Atualizando o estado das maquinas
+                // Atualizando o estado das setores
                 setSetores(data.dados.setores)
             }
 
@@ -55,13 +55,13 @@ export function useSetores({
 
     useEffect(() => {
         if (!fetchOnMount) return;
-        fetchMaquinas();
+        fetchSetores();
     }, [fetchOnMount]);
 
     return {
-        maquinas,
+        setores,
         loading,
         error,
-        refetchMaquinas: fetchMaquinas
+        refetchSetores: fetchSetores
     };
 }

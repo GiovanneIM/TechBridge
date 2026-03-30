@@ -55,13 +55,19 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { TextAlignJustify, Sun, Moon, Settings } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useAuth } from "@/hooks/useAuth"
 
 
 
 
 export default function Header() {
+    const {
+        user
+    } = useAuth({
+        initialUser: null,
+        fetchOnMount: true
+    })
 
-    const [user, setUser] = useState(null)
     const [theme, setTheme] = useState("light");
 
 
@@ -75,29 +81,6 @@ export default function Header() {
             root.classList.add(theme);
         }
     }, [theme]);
-
-    // Verificando se há um usuário logado
-    useEffect(() => {
-        fetch('http://localhost:3000/api/auth/perfil', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-            },
-        }).then(res => {
-            return res.json()
-        }).then(data => {
-            if (data.sucesso) {
-                setUser(data.dados)
-            }
-            else {
-                setUser(null)
-            }
-        }).catch(err => {
-            setUser(null)
-        })
-    }, [])
-
 
     return (<>
         <div className="sticky top-0 z-1000 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">

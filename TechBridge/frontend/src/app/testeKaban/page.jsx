@@ -110,7 +110,7 @@ export default function Kanban() {
 	})
 
 	const { setores } = useSetores({
-		initialSetors: [],
+		initialSetores: [],
 		fetchOnMount: true
 	})
 	console.log(setores);
@@ -138,12 +138,13 @@ export default function Kanban() {
 					concluido: [],
 				};
 
-				chamados.forEach((c) => {
-					const maquina = maquinas.find(maquina => maquina.id === c.id_maquina);
+				chamados.forEach((chamado) => {
+					const maquina = maquinas.find(maquina => maquina.id === chamado.id_maquina);
+					const setor = setores.find(setor => setor.id === maquina.id_setor);
 
 					const task = {
 						id: String(c.id),
-						title: `{} ${maquina.cod_maquina} - {}` || "Sem título",
+						title: `{} ${maquina.cod_maquina} - ${chamado.cod_chamado}` || "Sem título",
 						description: c.descricao_problema || "Sem descrição",
 						status: c.estado,
 					};
