@@ -2,15 +2,15 @@ import { useEffect, useState, useCallback } from 'react';
 
 
 // URL base da API
-const API_BASE_URL = 'http://localhost:3000/api/chamados';
+const API_BASE_URL = 'http://localhost:3000/api/setores';
 
-export function useChamados({
-    token,
-    initialChamado = []
+export function useSetores({
+    initialSetors = [],
+    fetchOnMount = false
 } = {}
 ) {
-    // Estado com os chamados
-    const [chamados, setChamados] = useState(initialChamado);
+    // Estado com as setores
+    const [setores, setSetores] = useState(initialMachines);
 
     // Estado que indica se há uma requisição em andamento
     const [loading, setLoading] = useState({
@@ -22,22 +22,14 @@ export function useChamados({
         fetch: null,
     });
 
-    const fetchChamados = useCallback(async () => {
+    // Busca todas as maquinas
+    const fetchSetores = useCallback(async () => {
         setLoading((prev) => ({ ...prev, fetch: true }));
         setError((prev) => ({ ...prev, fetch: null }));
 
         try {
-            if (!token) return;
-
             // Chamada à API
-            const response = await fetch(`${API_BASE_URL}/buscar`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: '{}'
-            });
+            const response = await fetch(API_BASE_URL);
 
             // Convertendo a resposta para json
             const data = await response.json();
@@ -47,24 +39,29 @@ export function useChamados({
                 setError((prev) => ({ ...prev, fetch: data.mensagem }))
             }
             else {
-                // Atualizando o estado dos chamados
-                setChamados(data.dados.chamados)
+                // Atualizando o estado das maquinas
+                setSetores(data.dados.setores)
             }
 
         } catch (err) {
             // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
-            setError((prev) => ({ ...prev, fetch: 'Erro ao buscar chamados, tente novamente mais tarde.' }))
+            setError((prev) => ({ ...prev, fetch: 'Erro ao buscar setores, tente novamente mais tarde.' }))
 
         } finally {
             // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, fetch: false }));
         }
-    }, [token]);
+    }, []);
+
+    useEffect(() => {
+        if (!fetchOnMount) return;
+        fetchMaquinas();
+    }, [fetchOnMount]);
 
     return {
-        chamados,
+        maquinas,
         loading,
         error,
-        refetchChamados: fetchChamados
+        refetchMaquinas: fetchMaquinas
     };
 }
