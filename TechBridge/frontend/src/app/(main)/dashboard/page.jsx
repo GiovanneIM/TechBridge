@@ -11,7 +11,7 @@ import {
 	SidebarProvider,
 } from "@/components/ui/sidebar"
 import { useAuth } from '@/hooks/useAuth';
-import { useChamados } from '@/hooks/useChamado';
+import { useChamados } from '@/hooks/useChamados';
 
 export default function Dashboard() {
 	const { token } = useAuth({
