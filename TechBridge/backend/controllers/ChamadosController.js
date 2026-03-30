@@ -26,8 +26,6 @@ class ChamadosController {
                     break;
 
             }
-
-            console.log(options);
             
 
             // Chamando o model para fazer a consulta

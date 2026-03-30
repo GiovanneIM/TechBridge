@@ -5,12 +5,14 @@ import { useEffect, useState, useCallback } from 'react';
 const API_BASE_URL = 'http://localhost:3000/api/auth';
 
 export function useAuth({
-    initialUser = {},
+    initialUser = null,
     fetchOnMount = true
 } = {}
 ) {
     // Estado com o usuário
     const [user, setUser] = useState(initialUser)
+    // Estado com o token de login
+    const [token, setToken] = useState('');
 
     // Estado que indica se há uma requisição em andamento
     const [loading, setLoading] = useState({
@@ -47,6 +49,7 @@ export function useAuth({
             else {
                 // Salvando o token de sessão no session storage
                 sessionStorage.setItem('token', data.dados.token)
+                setToken(data.dados.token)
 
                 // Atualizando o estado do usuário
                 setUser(data.dados.usuario)
@@ -66,12 +69,14 @@ export function useAuth({
         setError((prev) => ({ ...prev, perfil: null }));
 
         try {
+            if (!token) return;
+
             // Chamada à API
             const response = await fetch(`${API_BASE_URL}/perfil`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
 
@@ -96,22 +101,18 @@ export function useAuth({
             // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, perfil: false }));
         }
-    }, []);
+    }, [token]);
 
     const logout = () => {
         sessionStorage.removeItem('token');
-        setUser(null);
+        setToken(null);
     };
 
-    const token = () => {
-        const token = sessionStorage.getItem('token');
-        return token;
-    }
-
     useEffect(() => {
-        if (!fetchOnMount) return;
+        setToken(() => {return sessionStorage.getItem('token') || ''})
+        if (!fetchOnMount || !token) return;
         perfil();
-    }, [fetchOnMount, perfil]);
+    }, [fetchOnMount, perfil, token]);
 
 
 
@@ -122,6 +123,6 @@ export function useAuth({
         login,
         perfil,
         logout,
-        token,
+        token
     };
 }

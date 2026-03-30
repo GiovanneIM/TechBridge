@@ -21,6 +21,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useAuth } from "@/hooks/useAuth";
 
 // ================= TASK CARD =================
 function TaskCard({ task, hideWhenDragging = false }) {
@@ -71,9 +72,8 @@ function Column({ columnId, title, tasks, children }) {
   return (
     <div
       ref={setNodeRef}
-      className={`w-80 p-2 rounded-md min-h-[150px] flex flex-col gap-4 ${
-        isOver ? "bg-blue-100" : "bg-muted/10"
-      }`}
+      className={`w-80 p-2 rounded-md min-h-[150px] flex flex-col gap-4 ${isOver ? "bg-blue-100" : "bg-muted/10"
+        }`}
     >
       <div className="font-semibold">
         {title} ({tasks.length})
@@ -85,6 +85,11 @@ function Column({ columnId, title, tasks, children }) {
 
 // ================= KANBAN =================
 export default function Kanban() {
+  const {token} = useAuth({
+    initialUser: null,
+    fetchOnMount: true
+  })
+
   const [columns, setColumns] = useState({
     aberto: [],
     andamento: [],
@@ -101,7 +106,15 @@ export default function Kanban() {
   useEffect(() => {
     async function carregarChamados() {
       try {
-        const res = await fetch("http://localhost:3000/api/chamados");
+        const res = await fetch('http://localhost:3000/api/chamados/buscar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token()}`
+          },
+          body: '{}'
+        });
+
         const data = await res.json();
 
         if (!data.sucesso) return;
@@ -118,7 +131,7 @@ export default function Kanban() {
         chamados.forEach((c) => {
           const task = {
             id: String(c.id),
-            title: c.titulo || "Sem título",
+            title: `${c.causa}` || "Sem título",
             description: c.descricao_problema || "Sem descrição",
             status: c.estado,
           };
