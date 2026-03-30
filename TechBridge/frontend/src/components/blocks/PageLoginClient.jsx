@@ -32,7 +32,7 @@ export default function PageLoginClient() {
 		error,
 		login,
 	} = useAuth({
-		initialUser: {},
+		initialUser: null,
 		fetchOnMount: true
 	})
 
