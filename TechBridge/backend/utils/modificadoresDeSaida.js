@@ -10,7 +10,6 @@ export function amarelo(texto) {
     return `\u001b[\u001b[33m${texto}\u001b[m`;
 }
 
-
 export function azul(texto) {
     return `\u001b[34m${texto}\u001b[m`;
 }

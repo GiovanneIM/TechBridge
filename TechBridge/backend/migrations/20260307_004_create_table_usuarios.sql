@@ -29,7 +29,7 @@ CREATE TABLE usuarios (
 
 
 -- Inserindo os usuários de exemplo
-INSERT INTO usuarios (nome, email, senha, tipo, id_empresa)
+INSERT INTO usuarios (nome, email, senha, tipo_usuario, id_empresa)
 VALUES 
 	('Admin TechBridge', 'admin@tb.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 1, null),
 	('Admin Cliente', 'admcliente@email.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 2, 1),

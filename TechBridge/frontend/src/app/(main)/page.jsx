@@ -23,8 +23,7 @@ export default function Home() {
 					<p className="font-genty text-4xl">Bem vindo à Tech<span className="text-techbridge">Bridge</span></p>
 
 					<p className="text-xl text-gray-500 font-semibold mb-2">
-						Otimizamos o tempo e facilitamos a comunicação no ambiente industrial criando pontes entre pessoas
-					</p>
+						Otimizamos o tempo e facilitamos a comunicação no ambiente industrial criando pontes entre pessoas.					</p>
 
 					<div className="flex gap-3">
 						<Button className="bg-techbridge text-white cursor-pointer hover:animate-wiggle hover:text-background font-bold">Entrar em contato</Button>

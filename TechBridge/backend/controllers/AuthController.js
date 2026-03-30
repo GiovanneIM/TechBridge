@@ -66,7 +66,7 @@ class AuthController {
             // Respondendo com os dados do usuário
             res.status(200).json({
                 sucesso: true,
-                mensagem: 'Login realizado com sucesso',
+                mensagem: 'Login efetuado com sucesso',
                 dados: {
                     token,
                     usuario: {

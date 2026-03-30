@@ -5,7 +5,7 @@ import dotenv from 'dotenv';            // Variáveis de ambiente - Utilizado pa
 import path from 'path';                // 
 import { fileURLToPath } from 'url';    // 
 
-import { azul, negrito, verde } from './utils/modificadoresDeSaida.js';
+import { negrito, azul, verde, vermelho } from './utils/modificadoresDeSaida.js';
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
@@ -60,7 +60,6 @@ app.use(logMiddleware);
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // ATIVAR AS ROTAS
-
 app.use('/api/auth', authRotas);
 app.use('/api/criptografia', criptografiaRotas);
 app.use('/api/user', userRotas);
