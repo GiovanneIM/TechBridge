@@ -27,6 +27,9 @@ class ChamadosController {
 
             }
 
+            console.log(options);
+            
+
             // Chamando o model para fazer a consulta
             const resultado = await ChamadosModel.listarChamados(options);
 
