@@ -60,12 +60,12 @@ import { useAuth } from "@/hooks/useAuth"
 export default function Header() {
     // Obtendo o usuário
     const {
-        user
+        user,
+        token
     } = useAuth({
         initialUser: null,
         fetchOnMount: true
     })
-
 
     // Controlando o tema
     const [theme, setTheme] = useState("light");
@@ -84,7 +84,7 @@ export default function Header() {
         <div className="sticky top-0 z-1000 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
             <header>
                 <nav className="px-4 lg:px-10 py-2.5">
-                    <div className="w-full flex flex-wrap justify-between items-center">
+                    <div className="w-full flex flex-wrap justify-between items-center gap-y-4">
                         {/* LOGO */}
                         <Link href="/" className="flex items-center order-1 w-1/2 lg:w-auto">
                             <img
@@ -99,19 +99,21 @@ export default function Header() {
                         </Link>
 
                         {/* Caso o usuário não esteja logado */}
-                        {!user && <div className="order-3 flex gap-4">
-                            {/* Botão de Tema */}
-                            <div>
-                                {theme === "dark" && <Button variant="outline" className="inline" onClick={() => { setTheme("light") }}><Sun /></Button>}
-                                {theme === "light" && <Button variant="outline" className="inline" onClick={() => { setTheme("dark") }}><Moon /></Button>}
-                            </div>
+                        {!user && <>
+                            <div className="order-3 flex gap-4">
+                                {/* Botão de Tema */}
+                                <div>
+                                    {theme === "dark" && <Button variant="outline" className="inline" onClick={() => { setTheme("light") }}><Sun /></Button>}
+                                    {theme === "light" && <Button variant="outline" className="inline" onClick={() => { setTheme("dark") }}><Moon /></Button>}
+                                </div>
 
-                            {/* Botão Login */}
-                            {!user && <Button asChild className={'bg-techbridge text-white w-35 font-bold text-md'}>
-                                <Link href='/login'>Entrar</Link>
-                            </Button>
-                            }
-                        </div>}
+                                {/* Botão Login */}
+                                {!user && <Button asChild className={'bg-techbridge text-white w-35 font-bold text-md'}>
+                                    <Link href='/login'>Entrar</Link>
+                                </Button>
+                                }
+                            </div>
+                        </>}
 
                         {/* Caso o usuário esteja logado */}
                         {user && <>
@@ -249,7 +251,6 @@ export default function Header() {
                 </nav>
             </header>
         </div>
-
     </>);
 }
 
