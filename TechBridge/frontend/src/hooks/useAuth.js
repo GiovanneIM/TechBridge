@@ -18,6 +18,7 @@ export function useAuth({
     const [loading, setLoading] = useState({
         login: false,
         perfil: false,
+        logout: false
     });
 
     // Estado para armazenar mensagem de erro (se houver)
@@ -106,8 +107,14 @@ export function useAuth({
     }, [token]);
 
     const logout = () => {
-        sessionStorage.removeItem('token');
-        setToken(null);
+        setLoading((prev) => ({...prev, logout:true}));
+
+        setTimeout(() => {
+            sessionStorage.removeItem('token');
+            setUser(null);
+            setToken(null);
+            setLoading((prev) => ({...prev, logout:false}));
+        }, 2000);
     };
 
 
@@ -126,24 +133,13 @@ export function useAuth({
     }, [token, fetchOnMount, perfil]);
 
 
-
-
-
-    useEffect(() => {
-        console.log("TOKEN:", token);
-    }, [token]);
-
-    useEffect(() => {
-        console.log("USER:", user);
-    }, [user]);
-
     return {
         user,
+        token,
         loading,
         error,
         login,
         perfil,
         logout,
-        token
     };
 }
