@@ -1,5 +1,6 @@
 // LAYOUT RAIZ - SEM HEADER E FOOTER
 
+import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
 // Fontes
@@ -36,7 +37,9 @@ export default function RootLayout({ children }) {
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${gentySans.variable} antialiased`}
 			>
-				{children}
+				<AuthProvider>
+					{children}
+				</AuthProvider>
 			</body>
 		</html>
 	);

@@ -41,7 +41,7 @@ export const logMiddleware = async (req, res, next) => {
         
         // Salvar log de forma assíncrona (não bloquear a resposta)
         saveLog(finalLogData).catch(error => {
-            // console.error('Erro ao salvar log:', error);
+            console.error('Erro ao salvar log:', error);
         });
         
         return originalSend.call(this, data);
@@ -71,7 +71,7 @@ export const logMiddleware = async (req, res, next) => {
         
         // Salvar log de forma assíncrona (não bloquear a resposta)
         saveLog(finalLogData).catch(error => {
-            // console.error('Erro ao salvar log:', error);
+            console.error('Erro ao salvar log:', error);
         });
         
         return originalJson.call(this, data);
@@ -100,11 +100,11 @@ function sanitizeRequestBody(body) {
 // Função para salvar o log no banco de dados
 async function saveLog(logData) {
     try {
-        // console.log(logData);
+        console.log(logData);
         
         await create('logs', logData);
     } catch (error) {
-        // console.error('Erro ao inserir log no banco:', error);
+        console.error('Erro ao inserir log no banco:', error);
     }
 }
 
@@ -113,7 +113,7 @@ export const simpleLogMiddleware = (req, res, next) => {
     const timestamp = new Date().toISOString();
     const usuario = req.usuario ? `[${req.usuario.email}]` : '[Anônimo]';
     
-    // console.log(`${timestamp} - ${req.method} ${req.originalUrl} ${usuario} - IP: ${req.ip || 'N/A'}`);
+    console.log(`${timestamp} - ${req.method} ${req.originalUrl} ${usuario} - IP: ${req.ip || 'N/A'}`);
     
     next();
 };

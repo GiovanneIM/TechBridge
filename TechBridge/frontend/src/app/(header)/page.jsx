@@ -39,6 +39,7 @@ export default function Home() {
 					height={400}
 					alt="Logo TechBridge"
 					className="animate-wiggle hidden lg:block"
+					loading="eager"
 				/>
 
 				{/* Imagem menor */}
@@ -48,6 +49,7 @@ export default function Home() {
 					height={200}
 					alt="Logo TechBridge"
 					className="animate-wiggle lg:hidden"
+					loading="eager"
 				/>
 
 			</div>
@@ -59,9 +61,7 @@ export default function Home() {
 			<div className="justify-center align-middle">
 				<p className="align-middle justify-center text-center font-genty text-4xl text-foreground">Como nossos serviços funcionam?</p>
 
-				<div className="flex px-4 my-3 justify-center gap-20">
-					<Cards />
-				</div>
+				<Cards />
 			</div>
 
 			{/* Empresas que utlizam */}
@@ -185,29 +185,37 @@ function Cards() {
 	]
 
 	return (<>
-		<Card className="relative w-full max-w-sm pt-0">
-			<div className="absolute inset-0 z-30 aspect-video bg-techbridge/35" />
-			<img
-				src=""
-				alt="Event cover"
-				className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
-			/>
-			<CardHeader>
-				<CardAction>
-					<Badge variant="secondary"></Badge>
-				</CardAction>
-				<CardTitle className="text-techbridge font-extrabold text-2xl"></CardTitle>
-				<CardDescription>
+		<div className="flex px-4 my-3 justify-center gap-20">
+			{content.map((cont, i) => {
+				return (
+					<Card className="relative w-full max-w-sm pt-0" key={i}>
+						<div className="absolute inset-0 z-30 aspect-video bg-techbridge/35" />
+						<img
+							src={cont.image}
+							alt="Event cover"
+							className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
+						/>
+						<CardHeader>
+							<CardAction>
+								<Badge variant="secondary">{cont.badge}</Badge>
+							</CardAction>
+							<CardTitle className="text-techbridge font-extrabold text-2xl">
+								{cont.title}
+							</CardTitle>
+							<CardDescription>
 
-				</CardDescription>
-			</CardHeader>
-			<CardContent>
-				<ul className="dark:text-gray-300">
-					<li></li>
-					<li></li>
-					<li></li>
-				</ul>
-			</CardContent>
-		</Card>
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<ul className="dark:text-gray-300">
+								{cont.list.map((l, j) => {
+									return (<li key={j}>{l}</li>)
+								})}
+							</ul>
+						</CardContent>
+					</Card>
+				)
+			})}
+		</div>
 	</>)
 }

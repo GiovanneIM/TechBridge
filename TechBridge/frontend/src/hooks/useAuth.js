@@ -12,7 +12,7 @@ export function useAuth({
     // Estado com o usuário
     const [user, setUser] = useState(initialUser)
     // Estado com o token de login
-    const [token, setToken] = useState('');
+    const [token, setToken] = useState(null);
 
     // Estado que indica se há uma requisição em andamento
     const [loading, setLoading] = useState({
@@ -91,6 +91,8 @@ export function useAuth({
             else {
                 // Atualizando o estado do usuário
                 setUser(data.dados.usuario)
+                console.log(data.dados.usuario);
+
             }
 
         } catch (err) {
@@ -108,13 +110,32 @@ export function useAuth({
         setToken(null);
     };
 
+
+    // Obtendo o toke do sessionStorage
     useEffect(() => {
-        setToken(() => {return sessionStorage.getItem('token') || ''})
+        const storedToken = sessionStorage.getItem('token');
+        if (storedToken) {
+            setToken(storedToken);
+        }
+    }, []);
+
+    // Obtendo o perfil
+    useEffect(() => {
         if (!fetchOnMount || !token) return;
         perfil();
-    }, [fetchOnMount, perfil, token]);
+    }, [token, fetchOnMount, perfil]);
 
 
+
+
+
+    useEffect(() => {
+        console.log("TOKEN:", token);
+    }, [token]);
+
+    useEffect(() => {
+        console.log("USER:", user);
+    }, [user]);
 
     return {
         user,
