@@ -50,19 +50,32 @@ function TaskCard({ task, hideWhenDragging = false }) {
 			style={style}
 			{...attributes}
 			{...listeners}
-			className="cursor-grab hover:shadow-md"
+			className={`cursor-grab active:cursor-grabbing border border-border/50
+        bg-white/70 backdrop-blur-sm
+        hover:shadow-lg hover:-translate-y-1 transition-all duration-200`}
 		>
 			<CardContent className="p-4 space-y-3">
-				<div className="font-medium">{task.title}</div>
-				<p className="text-sm text-muted-foreground">
+				<div className="font-semibold text-sm text-gray-800">
+					{task.title}
+				</div>
+
+				<p className="text-xs text-muted-foreground line-clamp-2">
 					{task.description}
 				</p>
 
-				<div className="flex justify-between items-center">
-					<Avatar className="w-6 h-6">
-						<AvatarFallback>TC</AvatarFallback>
+				<div className="flex justify-between items-center pt-2">
+					<Avatar className="w-7 h-7">
+						<AvatarFallback className="text-[10px]">
+							TB
+						</AvatarFallback>
 					</Avatar>
-					<Badge variant="outline">{task.status}</Badge>
+
+					<Badge
+						variant="secondary"
+						className="text-[10px] px-2 py-0.5"
+					>
+						{task.status}
+					</Badge>
 				</div>
 			</CardContent>
 		</Card>
@@ -73,16 +86,33 @@ function TaskCard({ task, hideWhenDragging = false }) {
 function Column({ columnId, title, tasks, children }) {
 	const { setNodeRef, isOver } = useDroppable({ id: columnId });
 
+	const colors = {
+		aberto: "bg-blue-50 border-blue-200",
+		andamento: "bg-yellow-50 border-yellow-200",
+		concluido: "bg-green-50 border-green-200",
+		cancelado: "bg-red-50 border-red-200",
+	};
+
 	return (
 		<div
 			ref={setNodeRef}
-			className={`w-80 p-2 rounded-md min-h-[150px] flex flex-col gap-4 ${isOver ? "bg-blue-100" : "bg-muted/10"
-				}`}
+			className={`w-80 p-4 rounded-xl border transition-all
+      ${colors[columnId]}
+      ${isOver ? "ring-2 ring-blue-400 scale-[1.02]" : ""}
+      shadow-sm`}
 		>
-			<div className="font-semibold">
-				{title} ({tasks.length})
+			<div className="flex justify-between items-center mb-3">
+				<h2 className="font-semibold text-gray-700">
+					{title}
+				</h2>
+				<span className="text-xs bg-white px-2 py-1 rounded-md shadow-sm">
+					{tasks.length}
+				</span>
 			</div>
-			{children}
+
+			<div className="flex flex-col gap-3 min-h-[120px] max-h-[650px] overflow-y-auto rounded-xl">
+				{children}
+			</div>
 		</div>
 	);
 }
@@ -91,13 +121,13 @@ function Column({ columnId, title, tasks, children }) {
 export default function Kanban() {
 	const { token } = useAuth({
 		initialUser: null,
-		fetchOnMount: true
-	})
+		fetchOnMount: true,
+	});
 
 	const { chamados, refetchChamados } = useChamados({
 		token: token,
-		initialChamado: []
-	})
+		initialChamado: [],
+	});
 
 	useEffect(() => {
 		if (!token) return;
@@ -106,21 +136,19 @@ export default function Kanban() {
 
 	const { maquinas } = useMaquinas({
 		initialMachines: [],
-		fetchOnMount: true
-	})
+		fetchOnMount: true,
+	});
 
 	const { setores } = useSetores({
 		initialSetores: [],
-		fetchOnMount: true
-	})
-	console.log(setores);
-
-	// = = = = = = = = = = = = = = = = = = = = = = = = = =
+		fetchOnMount: true,
+	});
 
 	const [columns, setColumns] = useState({
 		aberto: [],
 		andamento: [],
 		concluido: [],
+		cancelado: [],
 	});
 
 	const [activeTask, setActiveTask] = useState(null);
@@ -130,47 +158,35 @@ export default function Kanban() {
 	);
 
 	useEffect(() => {
-		async function chamadosParaKanban() {
-			try {
-				const novasColunas = {
-					aberto: [],
-					andamento: [],
-					concluido: [],
-				};
+		const novasColunas = {
+			aberto: [],
+			andamento: [],
+			concluido: [],
+			cancelado: [],
+		};
 
-				chamados.forEach((c) => {
-					const maquina = maquinas.find(maquina => maquina.id === c.id_maquina);
-					const setor = setores.find(setor => setor.id === maquina.id_setor);
+		chamados.forEach((c) => {
+			const maquina = maquinas.find(m => m.id === c.id_maquina);
+			const setor = setores.find(s => s.id === maquina?.id_setor);
 
-					const task = {
-						id: String(c.id),
-						title: `${setor.cod_setor} ${maquina.cod_maquina} - ${c.cod_chamado}` || "Sem título",
-						description: c.descricao_problema || "Sem descrição",
-						status: c.estado,
-					};
+			const task = {
+				id: String(c.id),
+				title: `${setor?.cod_setor || "??"} ${maquina?.cod_maquina || "??"} - ${c.cod_chamado}`,
+				description: c.descricao_problema || "Sem descrição",
+				status: c.estado,
+			};
 
-					if (c.estado === "aberto") {
-						novasColunas.aberto.push(task);
-					} else if (c.estado === "andamento") {
-						novasColunas.andamento.push(task);
-					} else {
-						novasColunas.concluido.push(task);
-					}
-				});
+			novasColunas[c.estado]?.push(task);
+		});
 
-				setColumns(novasColunas);
-			} catch (err) {
-				console.error("Erro ao carregar chamados:", err);
-			}
-		}
-
-		chamadosParaKanban();
-	}, [chamados]);
+		setColumns(novasColunas);
+	}, [chamados, maquinas, setores]);
 
 	const columnList = [
 		{ id: "aberto", title: "Aberto" },
 		{ id: "andamento", title: "Em andamento" },
 		{ id: "concluido", title: "Concluído" },
+		{ id: "cancelado", title: "Cancelado" },
 	];
 
 	function findColumn(taskId) {
@@ -222,42 +238,68 @@ export default function Kanban() {
 		}
 	}
 
-	return (
-		<div className="p-8 min-h-screen bg-muted/40">
-			<h1 className="text-2xl font-bold mb-6">
-				Kanban de Chamados
-			</h1>
+	return (<>
+		<div className="relative min-h-screen bg-gradient-to-b from-white to-blue-50 overflow-hidden">
+			{/* Background (onda) */}
+			<div className="absolute inset-x-0 bottom-0 z-0 pointer-events-none">
+				<svg
+					className="w-full h-48 md:h-120"
+					viewBox="0 0 1440 320"
+					preserveAspectRatio="none"
+				>
+					<path
+						fill="#5170ff"
+						fillOpacity="1"
+						d="M0,160 
+					C180,240 360,80 540,160 
+					C720,240 900,80 1080,160 
+					C1260,240 1440,160 1440,160 
+					L1440,320 L0,320 Z"
+					/>
+				</svg>
+			</div>
 
-			<DndContext
-				sensors={sensors}
-				collisionDetection={closestCorners}
-				onDragStart={handleDragStart}
-				onDragEnd={handleDragEnd}
-			>
-				<div className="flex gap-6">
-					{columnList.map((col) => (
-						<Column
-							key={col.id}
-							columnId={col.id}
-							title={col.title}
-							tasks={columns[col.id]}
-						>
-							<SortableContext
-								items={columns[col.id].map((t) => t.id)}
-								strategy={verticalListSortingStrategy}
+			{/* Conteúdo */}
+			<div className="relative z-10 flex flex-col items-center py-8">
+				<h1 className="text-3xl font-bold mb-8 text-gray-800">
+					Kanban de Chamados
+				</h1>
+
+				<DndContext
+					sensors={sensors}
+					collisionDetection={closestCorners}
+					onDragStart={handleDragStart}
+					onDragEnd={handleDragEnd}
+				>
+					<div className="flex flex-col justify-center lg:flex-row gap-6 overflow-x-auto pb-8 w-full max-w-7xl">
+						{columnList.map((col) => (
+							<Column
+								key={col.id}
+								columnId={col.id}
+								title={col.title}
+								tasks={columns[col.id]}
 							>
-								{columns[col.id].map((task) => (
-									<TaskCard key={task.id} task={task} />
-								))}
-							</SortableContext>
-						</Column>
-					))}
-				</div>
+								<SortableContext
+									items={columns[col.id].map((t) => t.id)}
+									strategy={verticalListSortingStrategy}
+								>
+									{columns[col.id].map((task) => (
+										<TaskCard key={task.id} task={task} />
+									))}
+								</SortableContext>
+							</Column>
+						))}
+					</div>
 
-				<DragOverlay>
-					{activeTask ? <TaskCard task={activeTask} /> : null}
-				</DragOverlay>
-			</DndContext>
+					<DragOverlay>
+						{activeTask ? (
+							<div className="rotate-2 scale-105">
+								<TaskCard task={activeTask} />
+							</div>
+						) : null}
+					</DragOverlay>
+				</DndContext>
+			</div>
 		</div>
-	);
+	</>);
 }
