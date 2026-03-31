@@ -109,7 +109,7 @@ class AuthController {
             // Retornando os dados do usuário
             res.status(200).json({
                 sucesso: true,
-                dados: usuarioSemSenha
+                dados: { usuario: usuarioSemSenha }
             });
 
         } catch (error) {

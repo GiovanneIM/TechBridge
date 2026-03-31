@@ -10,17 +10,14 @@ import {
 	SidebarInset,
 	SidebarProvider,
 } from "@/components/ui/sidebar"
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/context/AuthContext';
 import { useChamados } from '@/hooks/useChamados';
 
 export default function PageDashboard({
     initialUser,
     initialChamados,
 }) {
-	const { token } = useAuth({
-		initialUser: null,
-		fetchOnMount: true
-	})
+	const { token } = useAuth()
 
 	const { chamados, refetchChamados } = useChamados({
 		token: token,

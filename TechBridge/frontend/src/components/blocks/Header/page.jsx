@@ -52,20 +52,13 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { TextAlignJustify, Sun, Moon, Settings, User } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useAuth } from "@/hooks/useAuth"
-
+import { useAuth } from "@/context/AuthContext"
 
 
 
 export default function Header() {
     // Obtendo o usuário
-    const {
-        user,
-        token
-    } = useAuth({
-        initialUser: null,
-        fetchOnMount: true
-    })
+    const { user, token, logout } = useAuth();
 
     // Controlando o tema
     const [theme, setTheme] = useState("light");
