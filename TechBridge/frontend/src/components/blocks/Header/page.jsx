@@ -59,25 +59,11 @@ import { useAuth } from "@/hooks/useAuth"
 
 export default function Header() {
     // Obtendo o usuário
-    // const {
-    //     user
-    // } = useAuth({
-    //     initialUser: null,
-    //     fetchOnMount: true
-    // })
-
     const {
         user
     } = useAuth({
-        initialUser: {
-            nome: 'Giovanne Isaac',
-            email: 'giovanne@gmail.com',
-            foto_perfil: 'https://images-news.now.com/newsimage/NewsImage/2025-02-07-15-22-5103GxLf4N.jpg',
-            ativo: true,
-            tipo_usuario: 1,
-            id_empresa: null
-        },
-        fetchOnMount: false
+        initialUser: null,
+        fetchOnMount: true
     })
 
 
