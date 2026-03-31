@@ -3,15 +3,14 @@
 // PÁGINA DE LOGIN 
 
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
-import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button"
 import {
 	Field,
-	FieldDescription,
 	FieldGroup,
 	FieldLabel,
 	FieldLegend,
@@ -25,21 +24,23 @@ import { Separator } from "@/components/ui/separator";
 
 
 export default function PageLoginClient() {
+	const router = useRouter()
 
+	// Obtendo o usuário e a função de login
 	const {
 		user,
 		loading,
 		error,
 		login,
-	} = useAuth({
-		initialUser: null,
-		fetchOnMount: true
-	})
+	} = useAuth()
 
-	if (user) { window.location.href = `/dashboard` }
+	// Se já houver um usuário logado, o direciona até a página dashboard
+	if (user) { router.push('/dashboard') }
 
+	// Controlando o estado dos inputs
 	const [email, setEmail] = useState('');
 	const [senha, setSenha] = useState('');
+
 
 	return (
 		<div className="w-vw h-svh flex justify-center items-center flex-wrap">
@@ -61,14 +62,16 @@ export default function PageLoginClient() {
 
 			{/* Formulario */}
 			<div className="w-full max-w-md h-fit z-10 opacity-95 border p-4 rounded-md bg-card">
-				{/* Logo */}
+
+				{/* Logo da TechBridge*/}
 				<div className="w-full flex justify-center">
-					<Link href="/" className="flex items-center">
+					<Link href="/" className="flex flex-col items-center gap-2">
 						<img
 							src="/TechBridge/Logo.svg"
 							className="mr-3 h-12"
 							alt="TechBridge logo"
 						/>
+
 						<p className="text-3xl font-genty">
 							Tech
 							<span className="text-techbridge">Bridge</span>
@@ -87,22 +90,23 @@ export default function PageLoginClient() {
 					try {
 						await login(dadosLogin);
 
-						router.
+						if (user) { router.push('/dashboard') }
 					} catch { }
 				}}>
 					<FieldGroup className="">
 						<FieldSet>
-							<FieldLegend variant="" className="text-2xl">Login</FieldLegend>
+							<FieldLegend variant="" className="text-2xl font-bold">Login</FieldLegend>
 
-							<FieldGroup>
+							<FieldGroup className="px-4">
 								<Field>
-									<FieldLabel htmlFor="emailLogin">
-										Email
+									<FieldLabel htmlFor="emailLogin" className="font-bold text-gray-500">
+										E-mail
 									</FieldLabel>
 									<Input
 										id="emailLogin"
 										placeholder="E-mail"
 										type="email"
+										disabled={loading.login}
 										required
 
 										value={email}
@@ -111,30 +115,36 @@ export default function PageLoginClient() {
 								</Field>
 
 								<Field>
-									<FieldLabel htmlFor="senhaLogin">
+									<FieldLabel htmlFor="senhaLogin" className="font-bold text-gray-500">
 										Senha
 									</FieldLabel>
 									<Input
 										id="senhaLogin"
 										placeholder="Senha"
 										type="password"
+										disabled={loading.login}
 										required
 
 										value={senha}
 										onChange={(e) => setSenha(e.target.value)}
 									/>
 								</Field>
-
 							</FieldGroup>
 						</FieldSet>
 
 						<FieldSeparator />
 
-						{error.login && <div className="text-red-500 font-bold text-center">{error.login}</div>}
+						{/* Mensagem de erro */}
+						{error.login && <p className="text-red-500 font-bold text-center">{error.login}</p>}
 
 						{/* Botão de Login */}
 						<Field orientation="horizontal" className="justify-center">
-							<Button type="submit" size="lg">Entrar</Button>
+							<Button
+								type="submit" size="lg" disabled={loading.login}
+								className="bg-techbridge text-white w-35 font-bold text-md"
+							>
+								Entrar
+							</Button>
 						</Field>
 					</FieldGroup>
 				</form>
