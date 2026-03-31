@@ -88,12 +88,12 @@ export default function Header() {
     const nav_active = "bg-techbridge text-white font-bold text-md";
 
     return (<>
-        <header className="sticky top-0 z-1000 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
-            <nav className="px-4 lg:px-10 py-2.5 w-full flex flex-wrap justify-between items-center gap-y-4">
+        <header className="block top-0 z-50 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
+            <nav className="px-4 lg:px-10 py-3 w-full flex flex-wrap justify-between items-center gap-y-4">
                 {/* LOGO */}
                 <Link
                     href={!user ? "/" : "/dashboard"}
-                    className="flex items-center order-1 w-1/2 lg:w-auto"
+                    className="flex items-center order-1 w-fit sm:w-1/2 lg:w-auto"
                 >
                     <img
                         src="/TechBridge/Logo.svg"
@@ -174,7 +174,7 @@ export default function Header() {
                                     <Button
                                         variant="ghost"
                                         className={`text-md 
-                                            ${pathname === "/dashboard" && nav_active}
+                                            ${pathname.startsWith("/dashboard") && nav_active}
                                         `}
                                         asChild
                                     >
@@ -208,8 +208,16 @@ export default function Header() {
                                 </li>
 
                                 <li>
-                                    <Button variant="ghost" className={'text-md'}>
-                                        Suporte
+                                    <Button
+                                        variant="ghost"
+                                        className={`text-md 
+                                            ${pathname.startsWith("/suporte") && nav_active}
+                                        `}
+                                        asChild
+                                    >
+                                        <Link href={'/suporte'}>
+                                            Suporte
+                                        </Link>
                                     </Button>
                                 </li>
                             </ul>
@@ -217,7 +225,7 @@ export default function Header() {
                     </div>
 
                     {/* Usuário e dropdown de tema e configurações */}
-                    <div className="flex items-center gap-4 w-1/2 lg:w-auto justify-end lg:justify-start  order-2 lg:order-3">
+                    <div className="flex items-center gap-4 w-full sm:w-1/2 lg:w-auto justify-end lg:justify-start order-2 lg:order-3">
                         {/* Usuário */}
                         {user && <div className="flex items-center gap-2">
                             <div className="font-bold text-gray-500 dark:text-gray-300 text-md">{user.nome}</div>
@@ -234,7 +242,8 @@ export default function Header() {
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline"><TextAlignJustify className="inline" /></Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-40" align="start">
+
+                            <DropdownMenuContent className="w-40 mt-4" align="start">
                                 <DropdownMenuGroup>
                                     <DropdownMenuItem>
                                         <User /> Perfil

@@ -19,10 +19,10 @@ import {
   IconUsers,
 } from "@tabler/icons-react"
 import { ListTree } from "lucide-react"
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavDocuments } from "@/components/Dashboard/nav-documents"
+import { NavMain } from "@/components/Dashboard/nav-main"
+import { NavSecondary } from "@/components/Dashboard/nav-secondary"
+import { NavUser } from "@/components/Dashboard/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -155,7 +155,9 @@ export function AppSidebar({
 }) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
+
+      {/* Header do sidebar */}
+      <SidebarHeader className="bg-white">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
@@ -167,11 +169,14 @@ export function AppSidebar({
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+
+      {/* Conteúdo do sidebar */}
+      <SidebarContent className="bg-white">
         <NavMain items={data.navMain} />
         <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
+      
     </Sidebar>
   );
 }

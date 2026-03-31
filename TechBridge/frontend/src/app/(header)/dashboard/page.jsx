@@ -1,4 +1,4 @@
-import PageDashboard from '@/components/blocks/PageDashboardClient';
+import PageDashboard from "@/components/blocks/PageDashboardClient"
 
 export default function Dashboard() {
 	return (

@@ -1,3 +1,5 @@
+"use client"
+
 // PÁGINA DE SUPORTE PARA O USUÁRIO
 
 import {
@@ -5,15 +7,14 @@ import {
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
 import {
     Card,
     CardHeader,
     CardTitle,
     CardDescription,
     CardContent,
-} from "@/components/ui/card"
-
+} from "@/components/ui/card";
 import {
     InputGroup,
     InputGroupAddon,
@@ -21,18 +22,22 @@ import {
     InputGroupButton,
     InputGroupText,
     InputGroupTextarea,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
     CheckIcon,
     MailIcon,
     SearchIcon,
     Factory,
     MessageCircleMore,
-} from "lucide-react"
+} from "lucide-react";
+import { useState } from "react";
 
 export default function Suporte() {
-    return (<>
-        <div className="lg:grid grid-cols-2 gap-4 mx-5 md:mx-20 lg:mx-10 xl:mx-50">
+
+    const [comentario, setComentario] = useState('')
+
+    return (
+        <div className="lg:grid grid-cols-2 gap-4 m-5 md:mx-20 lg:mx-10 xl:mx-50">
 
             {/* Perguntas frequentes */}
             <Card>
@@ -93,9 +98,6 @@ export default function Suporte() {
                         <InputGroupAddon>
                             <Factory />
                         </InputGroupAddon>
-                        <InputGroupAddon align="inline-end">
-                            <CheckIcon />
-                        </InputGroupAddon>
                     </InputGroup>
 
                     {/* Comentário */}
@@ -112,14 +114,14 @@ export default function Suporte() {
                                 Comentário
                             </InputGroupText>
 
-                            <InputGroupText>300 caracteres restantes</InputGroupText>
+                            <InputGroupText>{300 - comentario.lenght} caracteres restantes</InputGroupText>
                         </InputGroupAddon>
                     </InputGroup>
                 </CardContent>
             </Card>
 
         </div>
-    </>)
+    )
 }
 
 
