@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
 
@@ -60,6 +60,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default function Header() {
     const router = useRouter();
+    const pathname = usePathname();
 
     // Obtendo o usuário
     const { user, logout, loading } = useAuth();
@@ -84,11 +85,16 @@ export default function Header() {
         }, 2000);
     }
 
+    const nav_active = "bg-techbridge text-white font-bold text-md";
+
     return (<>
         <header className="sticky top-0 z-1000 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
             <nav className="px-4 lg:px-10 py-2.5 w-full flex flex-wrap justify-between items-center gap-y-4">
                 {/* LOGO */}
-                <Link href="/" className="flex items-center order-1 w-1/2 lg:w-auto">
+                <Link
+                    href={!user ? "/" : "/dashboard"}
+                    className="flex items-center order-1 w-1/2 lg:w-auto"
+                >
                     <img
                         src="/TechBridge/Logo.svg"
                         className="mr-3 h-6 sm:h-9"
@@ -127,10 +133,13 @@ export default function Header() {
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="outline"><TextAlignJustify /></Button>
                                 </DropdownMenuTrigger>
+
                                 <DropdownMenuContent>
                                     <DropdownMenuGroup>
                                         <DropdownMenuItem>Suporte</DropdownMenuItem>
+
                                         <DropdownMenuItem><Link href={'/dashboard'}>Dashboard</Link></DropdownMenuItem>
+
                                         <DropdownMenuSub>
                                             <DropdownMenuSubTrigger>Serviços de Manutenção</DropdownMenuSubTrigger>
                                             <DropdownMenuPortal>
@@ -141,6 +150,7 @@ export default function Header() {
                                                 </DropdownMenuSubContent>
                                             </DropdownMenuPortal>
                                         </DropdownMenuSub>
+
                                         <DropdownMenuSub>
                                             <DropdownMenuSubTrigger>Departamento</DropdownMenuSubTrigger>
                                             <DropdownMenuPortal>
@@ -161,7 +171,13 @@ export default function Header() {
                             <ul className="flex flex-row mt-4 lg:mt-0 font-medium lg:space-x-8 w-full lg:w-auto justify-between">
 
                                 <li>
-                                    <Button variant="ghost" className={'text-md'}>
+                                    <Button
+                                        variant="ghost"
+                                        className={`text-md 
+                                            ${pathname === "/dashboard" && nav_active}
+                                        `}
+                                        asChild
+                                    >
                                         <Link href={'/dashboard'}>
                                             Dashboard
                                         </Link>
