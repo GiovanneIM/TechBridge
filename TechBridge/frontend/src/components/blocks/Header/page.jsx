@@ -99,7 +99,7 @@ export default function Header() {
                         </Link>
 
                         {/* Caso o usuário não esteja logado */}
-                        {!user && <div className="order-3">
+                        {!user && <div className="order-3 flex gap-4">
                             {/* Botão de Tema */}
                             <div>
                                 {theme === "dark" && <Button variant="outline" className="inline" onClick={() => { setTheme("light") }}><Sun /></Button>}
