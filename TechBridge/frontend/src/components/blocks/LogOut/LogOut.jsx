@@ -9,8 +9,8 @@ export default function LogOut() {
     if (!loading.logout) return null;
 
     return (
-        <div className="fixed inset-0 bg-blue-50 z-[9999] flex flex-col items-center justify-center">
-            <div className="flex flex-col gap-4 bg-white rounded-full p-20 lg:p-40 shadow-xl">
+        <div className="fixed inset-0 bg-blue-50 z-9999 flex flex-col items-center justify-center">
+            <div className="flex flex-col gap-4 bg-white rounded-full p-100">
                 <Image
                     src="/TechBridge/Logo.svg"
                     width={200}
@@ -24,5 +24,7 @@ export default function LogOut() {
                 </div>
             </div>
         </div>
+
+
     );
 }

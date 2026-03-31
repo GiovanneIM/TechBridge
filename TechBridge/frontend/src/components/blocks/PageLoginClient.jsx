@@ -87,7 +87,7 @@ export default function PageLoginClient() {
 					try {
 						await login(dadosLogin);
 
-						window.location.href = `/dashboard`
+						router.
 					} catch { }
 				}}>
 					<FieldGroup className="">
