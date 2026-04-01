@@ -1,7 +1,36 @@
 import PageDashboard from "@/components/blocks/PageDashboardClient"
 
+import { cookies } from "next/headers"
+
+async function getChamados(token) {
+	try {
+		// Chamada à API
+		const response = await fetch(`http://localhost:3000/api/chamados/buscar`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				// 'Authorization': `Bearer ${token}`
+			},
+			body: '{}',
+			credentials:"include"
+		});
+
+		// Convertendo a resposta para json
+		const data = await response.json();
+
+		return data.dados.chamados;
+	} catch (err) {
+	}
+}
+
 export default async function Dashboard() {
+	const cookieStore = await cookies();
+	const token = cookieStore.get('token')?.value;
+
+	const chamados = await getChamados(token);
+	console.log(chamados);
+	
 	return (
-		<PageDashboard/>
+		<PageDashboard chamadosIniciais={chamados} />
 	)
 }

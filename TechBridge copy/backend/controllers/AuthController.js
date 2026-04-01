@@ -63,6 +63,14 @@ class AuthController {
                 { expiresIn: JWT_CONFIG.expiresIn }
             );
 
+            // Gerar cookie
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'lax',
+                maxAge: 1000 * 60 * 60 * 2
+            });
+
             // Respondendo com os dados do usuário
             res.status(200).json({
                 sucesso: true,
@@ -120,6 +128,16 @@ class AuthController {
                 mensagem: 'Não foi possível obter o perfil'
             });
         }
+    }
+
+    // POST /auth/logout - Rota para excluir o cookie e fazer logout
+    static async logout(req, res) {
+        res.clearCookie('token');
+
+        return res.status(200).json({
+            sucesso: true,
+            mensagem: 'Logout realizado com sucesso'
+        });
     }
 
 }

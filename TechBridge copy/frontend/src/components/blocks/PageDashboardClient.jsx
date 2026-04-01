@@ -13,14 +13,16 @@ import {
 import { useAuth } from '@/context/AuthContext';
 import { useChamados } from '@/hooks/useChamados';
 
-export default function PageDashboard() {
+export default function PageDashboard({
+	chamadosIniciais
+}) {
 	//Obtendo o token
 	const { token } = useAuth()
 
 	// Obtendo os chamados
 	const { chamados, refetchChamados } = useChamados({
 		token: token,
-		initialChamado: []
+		chamadosIniciais: chamadosIniciais
 	})
 
 	useEffect(() => {

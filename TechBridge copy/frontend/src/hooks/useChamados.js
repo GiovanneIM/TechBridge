@@ -6,11 +6,11 @@ const API_BASE_URL = 'http://localhost:3000/api/chamados';
 
 export function useChamados({
     token,
-    initialChamado = []
+    chamadosIniciais = []
 } = {}
 ) {
     // Estado com os chamados
-    const [chamados, setChamados] = useState(initialChamado);
+    const [chamados, setChamados] = useState(chamadosIniciais);
 
     // Estado que indica se há uma requisição em andamento
     const [loading, setLoading] = useState({

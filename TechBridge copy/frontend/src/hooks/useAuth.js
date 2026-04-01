@@ -11,8 +11,6 @@ export function useAuth({
 ) {
     // Estado com o usuário
     const [user, setUser] = useState(initialUser)
-    // Estado com o token de login
-    const [token, setToken] = useState(null);
 
     // Estado que indica se há uma requisição em andamento
     const [loading, setLoading] = useState({
@@ -37,7 +35,8 @@ export function useAuth({
             const response = await fetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dadosLogin)
+                body: JSON.stringify(dadosLogin),
+                credentials: 'include'
             });
 
             // Convertendo a resposta para json
@@ -48,10 +47,6 @@ export function useAuth({
                 setError((prev) => ({ ...prev, login: data.mensagem }))
             }
             else {
-                // Salvando o token de sessão no session storage
-                sessionStorage.setItem('token', data.dados.token)
-                setToken(data.dados.token)
-
                 // Atualizando o estado do usuário
                 setUser(data.dados.usuario)
             }
@@ -70,15 +65,13 @@ export function useAuth({
         setError((prev) => ({ ...prev, perfil: null }));
 
         try {
-            if (!token) return;
-
             // Chamada à API
             const response = await fetch(`${API_BASE_URL}/perfil`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
             });
 
             // Convertendo a resposta para json
@@ -104,37 +97,36 @@ export function useAuth({
             // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, perfil: false }));
         }
-    }, [token]);
+    }, []);
 
-    const logout = () => {
+    const logout = async () => {
         setLoading((prev) => ({ ...prev, logout: true }));
 
-        setTimeout(() => {
-            sessionStorage.removeItem('token');
+        try {
+            await fetch('/api/logout', {
+                method: 'POST',
+                credentials: 'include'
+            });
+
+            // Limpando estados locais
             setUser(null);
-            setToken(null);
+            
+        } catch (err) {
+            console.error(err);
+        } finally {
             setLoading((prev) => ({ ...prev, logout: false }));
-        }, 2000);
+        }
     };
 
 
-    // Obtendo o token do sessionStorage
-    useEffect(() => {
-        const storedToken = sessionStorage.getItem('token');
-        if (storedToken) {
-            setToken(storedToken);
-        }
-    }, []);
-
     // Obtendo o perfil
     useEffect(() => {
-        if (!fetchOnMount || !token) return;
+        if (!fetchOnMount) return;
         perfil();
-    }, [token, fetchOnMount, perfil]);
+    }, [fetchOnMount, perfil]);
 
     return {
         user,
-        token,
         loading,
         error,
         login,

@@ -4,30 +4,30 @@ import { JWT_CONFIG } from '../config/jwt.js';
 // Middleware de autenticação JWT
 const authMiddleware = (req, res, next) => {
     try {
-        // Verificar se o header Authorization existe
-        const authHeader = req.headers.authorization;
-        if (!authHeader) {
-            return res.status(401).json({ 
-                erro: 'Token de acesso não fornecido',
-                mensagem: 'É necessário fornecer um token de autenticação'
-            });
+        let token;
+
+        // 🔹 1. Tenta pegar do cookie
+        if (req.cookies && req.cookies.token) {
+            token = req.cookies.token;
         }
 
-        // Extrair o token do header (formato: "Bearer TOKEN")
-        const token = authHeader.split(' ')[1];
-        
-        // Tokend não recebido
+        // 🔹 2. Fallback: Authorization header
+        else if (req.headers.authorization) {
+            const authHeader = req.headers.authorization;
+            token = authHeader.split(' ')[1];
+        }
+
+        // ❌ Nenhum token encontrado
         if (!token) {
-            return res.status(401).json({ 
-                erro: 'Token de acesso inválido',
-                mensagem: 'Formato do token incorreto'
+            return res.status(401).json({
+                erro: 'Token não fornecido',
+                mensagem: 'É necessário autenticação'
             });
         }
 
-        // Verificar e decodificar o token
+        // 🔐 Verificar token
         const decoded = jwt.verify(token, JWT_CONFIG.secret);
-        
-        // Adicionar informações do usuário ao request
+
         req.usuario = {
             id: decoded.id,
             tipo: decoded.tipo,
@@ -35,28 +35,25 @@ const authMiddleware = (req, res, next) => {
         };
 
         next();
+
     } catch (error) {
-        // Se o tempo de login acabou
         if (error.name === 'TokenExpiredError') {
-            return res.status(401).json({ 
+            return res.status(401).json({
                 erro: 'Token expirado',
                 mensagem: 'Faça login novamente'
             });
         }
 
-        // Se o token recebido é inválido
         if (error.name === 'JsonWebTokenError') {
-            return res.status(401).json({ 
+            return res.status(401).json({
                 erro: 'Token inválido',
                 mensagem: 'Token de autenticação inválido'
             });
         }
 
-        // Erro do servidor
-        console.error('Erro no middleware de autenticação:', error);
-        return res.status(500).json({ 
-            erro: 'Erro interno do servidor',
-            mensagem: 'Erro ao processar autenticação'
+        console.error('Erro no middleware:', error);
+        return res.status(500).json({
+            erro: 'Erro interno do servidor'
         });
     }
 };

@@ -4,6 +4,7 @@ import helmet from 'helmet';            // Complemento de segurança, realiza tr
 import dotenv from 'dotenv';            // Variáveis de ambiente - Utilizado para as informações locais que não serão compartilhadas no GitHub
 import path from 'path';                // 
 import { fileURLToPath } from 'url';    // 
+import cookieParser from 'cookie-parser';
 
 import { negrito, azul, verde, vermelho } from './utils/modificadoresDeSaida.js';
 
@@ -42,7 +43,8 @@ app.use(helmet()); // Segurança HTTP headers
 
 // Configurar CORS para permitir que rotas OPTIONS específicas sejam processadas
 app.use(cors({
-    origin: '*',                                            // Permitindo acesso de qualquer endereço (Alterar para o endereço do Frontend)
+    origin: 'http://localhost:3001',                        // Permitindo acesso de qualquer endereço (Alterar para o endereço do Frontend)
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],   // Metódos permitidos
     allowedHeaders: ['Content-Type', 'Authorization'],      // Headers permmitidos
     preflightContinue: false,                               // Deixa as rotas OPTIONS específicas serem processadas
@@ -57,6 +59,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Middleware para log de requisições (salva no banco de dados)
 app.use(logMiddleware);
+
+
+app.use(cookieParser());
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
