@@ -50,7 +50,6 @@ export function useAuth({
             else {
                 // Salvando o token de sessão no session storage
                 sessionStorage.setItem('token', data.dados.token)
-                // document.cookie = `token=${data.dados.token}; path=/`;
                 setToken(data.dados.token)
 
                 // Atualizando o estado do usuário
@@ -122,7 +121,6 @@ export function useAuth({
     // Obtendo o token do sessionStorage
     useEffect(() => {
         const storedToken = sessionStorage.getItem('token');
-        // const storedToken = getCookie("token");
         if (storedToken) {
             setToken(storedToken);
         }
@@ -133,15 +131,6 @@ export function useAuth({
         if (!fetchOnMount || !token) return;
         perfil();
     }, [token, fetchOnMount, perfil]);
-
-    // function getCookie(name) {
-    //     const value = `; ${document.cookie}`;
-    //     const parts = value.split(`; ${name}=`);
-
-    //     if (parts.length === 2) {
-    //         return parts.pop().split(';').shift();
-    //     }
-    // }
 
     return {
         user,
