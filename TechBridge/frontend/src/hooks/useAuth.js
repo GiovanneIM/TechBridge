@@ -50,6 +50,7 @@ export function useAuth({
             else {
                 // Salvando o token de sessão no session storage
                 sessionStorage.setItem('token', data.dados.token)
+                // document.cookie = `token=${data.dados.token}; path=/`;
                 setToken(data.dados.token)
 
                 // Atualizando o estado do usuário
@@ -107,20 +108,21 @@ export function useAuth({
     }, [token]);
 
     const logout = () => {
-        setLoading((prev) => ({...prev, logout:true}));
+        setLoading((prev) => ({ ...prev, logout: true }));
 
         setTimeout(() => {
             sessionStorage.removeItem('token');
             setUser(null);
             setToken(null);
-            setLoading((prev) => ({...prev, logout:false}));
+            setLoading((prev) => ({ ...prev, logout: false }));
         }, 2000);
     };
 
 
-    // Obtendo o toke do sessionStorage
+    // Obtendo o token do sessionStorage
     useEffect(() => {
         const storedToken = sessionStorage.getItem('token');
+        // const storedToken = getCookie("token");
         if (storedToken) {
             setToken(storedToken);
         }
@@ -132,6 +134,14 @@ export function useAuth({
         perfil();
     }, [token, fetchOnMount, perfil]);
 
+    // function getCookie(name) {
+    //     const value = `; ${document.cookie}`;
+    //     const parts = value.split(`; ${name}=`);
+
+    //     if (parts.length === 2) {
+    //         return parts.pop().split(';').shift();
+    //     }
+    // }
 
     return {
         user,

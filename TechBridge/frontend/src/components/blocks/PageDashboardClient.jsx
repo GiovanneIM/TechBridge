@@ -29,7 +29,7 @@ export default function PageDashboard() {
 	}, [token, refetchChamados]);
 
 
-	return (
+	return (<div>
 		<SidebarProvider
 			style={
 				{
@@ -58,5 +58,5 @@ export default function PageDashboard() {
 			</SidebarInset>
 
 		</SidebarProvider>
-	)
+	</div>)
 }

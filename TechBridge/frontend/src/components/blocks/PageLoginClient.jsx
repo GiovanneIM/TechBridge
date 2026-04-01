@@ -2,7 +2,7 @@
 
 // PÁGINA DE LOGIN 
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
@@ -34,8 +34,12 @@ export default function PageLoginClient() {
 		login,
 	} = useAuth()
 
-	// Se já houver um usuário logado, o direciona até a página dashboard
-	if (user) { router.push('/dashboard') }
+	// Se houver um usuário logado, o redireciona até a página dashboard
+	useEffect(() => {
+		if (user) {
+			router.push('/dashboard');
+		}
+	}, [user, router]);
 
 	// Controlando o estado dos inputs
 	const [email, setEmail] = useState('');
@@ -89,8 +93,6 @@ export default function PageLoginClient() {
 
 					try {
 						await login(dadosLogin);
-
-						if (user) { router.push('/dashboard') }
 					} catch { }
 				}}>
 					<FieldGroup className="">

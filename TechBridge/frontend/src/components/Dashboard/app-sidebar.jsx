@@ -161,10 +161,6 @@ export function AppSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
-              <a href="#">
-                <ListTree className="size-5!" />
-                <span className="text-base font-semibold">Tech<span className="text-techbridge">Bridge</span></span>
-              </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

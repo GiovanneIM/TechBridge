@@ -140,6 +140,8 @@ export default function Header() {
 
                                         <DropdownMenuItem><Link href={'/dashboard'}>Dashboard</Link></DropdownMenuItem>
 
+                                        <DropdownMenuItem><Link href={'/kanban'}>Kanban</Link></DropdownMenuItem>
+
                                         <DropdownMenuSub>
                                             <DropdownMenuSubTrigger>Serviços de Manutenção</DropdownMenuSubTrigger>
                                             <DropdownMenuPortal>
@@ -172,14 +174,26 @@ export default function Header() {
 
                                 <li>
                                     <Button
-                                        variant="ghost"
+                                        variant="ghost" asChild
                                         className={`text-md 
                                             ${pathname.startsWith("/dashboard") && nav_active}
                                         `}
-                                        asChild
                                     >
                                         <Link href={'/dashboard'}>
                                             Dashboard
+                                        </Link>
+                                    </Button>
+                                </li>
+
+                                <li>
+                                    <Button
+                                        variant="ghost" asChild
+                                        className={`text-md 
+                                            ${pathname.startsWith("/kanban") && nav_active}
+                                        `}
+                                    >
+                                        <Link href={'/kanban'}>
+                                            Kanban
                                         </Link>
                                     </Button>
                                 </li>
