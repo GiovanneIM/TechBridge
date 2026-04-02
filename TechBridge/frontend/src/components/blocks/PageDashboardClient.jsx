@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { AppSidebar } from "@/components/dashboardShadcn/app-sidebar"
-import { ChartAreaInteractive } from "@/components/dashboardShadcn/chart-area-interactive"
-import { DataTable } from "@/components/dashboardShadcn/data-table"
-import { SectionCards } from "@/components/dashboardShadcn/section-cards"
-import { SiteHeader } from "@/components/dashboardShadcn/site-header"
+import { AppSidebar } from "@/components/Dashboard/app-sidebar"
+import { ChartAreaInteractive } from "@/components/Dashboard/chart-area-interactive"
+import { DataTable } from "@/components/Dashboard/data-table"
+import { SectionCards } from "@/components/Dashboard/section-cards"
+import { SiteHeader } from "@/components/Dashboard/site-header"
 import {
 	SidebarInset,
 	SidebarProvider,

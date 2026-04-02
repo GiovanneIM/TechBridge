@@ -5,12 +5,11 @@ import { useEffect, useState, useCallback } from 'react';
 const API_BASE_URL = 'http://localhost:3000/api/chamados';
 
 export function useChamados({
-    token,
-    initialChamado = []
+    chamadosIniciais = []
 } = {}
 ) {
     // Estado com os chamados
-    const [chamados, setChamados] = useState(initialChamado);
+    const [chamados, setChamados] = useState(chamadosIniciais);
 
     // Estado que indica se há uma requisição em andamento
     const [loading, setLoading] = useState({
@@ -22,21 +21,20 @@ export function useChamados({
         fetch: null,
     });
 
-    const fetchChamados = useCallback(async () => {
+    const fetchChamados = useCallback(async (options = {}) => {
         setLoading((prev) => ({ ...prev, fetch: true }));
         setError((prev) => ({ ...prev, fetch: null }));
 
         try {
-            if (!token) return;
 
             // Chamada à API
             const response = await fetch(`${API_BASE_URL}/buscar`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
                 },
-                body: '{}'
+                body: JSON.stringify({ "options": options }),
+                credentials: 'include'
             });
 
             // Convertendo a resposta para json
@@ -59,7 +57,7 @@ export function useChamados({
             // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, fetch: false }));
         }
-    }, [token]);
+    }, []);
 
     return {
         chamados,

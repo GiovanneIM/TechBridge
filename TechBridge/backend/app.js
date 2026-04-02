@@ -42,7 +42,8 @@ app.use(helmet()); // Segurança HTTP headers
 
 // Configurar CORS para permitir que rotas OPTIONS específicas sejam processadas
 app.use(cors({
-    origin: '*',                                            // Permitindo acesso de qualquer endereço (Alterar para o endereço do Frontend)
+    origin: 'http://localhost:3001',                        // Permitindo acesso de qualquer endereço (Alterar para o endereço do Frontend)
+    credentials: true,                                      // Permitindo receber cookies do navegador
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],   // Metódos permitidos
     allowedHeaders: ['Content-Type', 'Authorization'],      // Headers permmitidos
     preflightContinue: false,                               // Deixa as rotas OPTIONS específicas serem processadas
@@ -57,6 +58,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Middleware para log de requisições (salva no banco de dados)
 app.use(logMiddleware);
+
+// Middlewate para obter cookies
+app.use(cookieParser());
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 

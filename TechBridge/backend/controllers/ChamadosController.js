@@ -22,11 +22,15 @@ class ChamadosController {
                 // Se é um técnico, lista apenas os chamados que ele atendeu
                 case 3:
                     options.where.id_empresa = req.usuario.id_empresa;
-                    options.where.id_tecnico = req.usuario.id_usuario;
+                    options.where.id_tecnico = req.usuario.id;
                     break;
 
             }
+
+            console.log("--- Option ---");
+            console.log(options);
             
+
 
             // Chamando o model para fazer a consulta
             const resultado = await ChamadosModel.listarChamados(options);
@@ -124,8 +128,6 @@ class ChamadosController {
     */
     static async criarChamado(req, res) {
         const id_maquina = req.body.id_maquina;
-
-        
     }
 
     /* PATCH /chamados/:id - Rota para atualizar um chamado 

@@ -5,7 +5,7 @@ import { authMiddleware } from '../middlewares/authMiddleware.js';
 const router = express.Router();
 
 // Listar chamados
-router.post('/buscar', authMiddleware,ChamadosController.listarChamados)
+router.post('/buscar', authMiddleware, ChamadosController.listarChamados)
 
 router.get('/:id', authMiddleware, ChamadosController.listarChamado)
 
