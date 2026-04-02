@@ -80,7 +80,9 @@ export default function Header() {
     // Função de logout
     function fazerLogout() {
         logout()
+
         setTimeout(() => {
+            // Direcionando para a página inicial
             router.push("/");
         }, 2000);
     }
@@ -88,7 +90,7 @@ export default function Header() {
     const nav_active = "bg-techbridge text-white font-bold text-md";
 
     return (<>
-        <header className="block top-0 z-50 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
+        <header className="sticky top-0 z-50 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
             <nav className="px-4 lg:px-10 py-3 w-full flex flex-wrap justify-between items-center gap-y-4">
                 {/* LOGO */}
                 <Link

@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { AppSidebar } from "@/components/Dashboard/app-sidebar"
-import { ChartAreaInteractive } from "@/components/Dashboard/chart-area-interactive"
-import { DataTable } from "@/components/Dashboard/data-table"
-import { SectionCards } from "@/components/Dashboard/section-cards"
-import { SiteHeader } from "@/components/Dashboard/site-header"
+import { AppSidebar } from "@/components/dashboardShadcn/app-sidebar"
+import { ChartAreaInteractive } from "@/components/dashboardShadcn/chart-area-interactive"
+import { DataTable } from "@/components/dashboardShadcn/data-table"
+import { SectionCards } from "@/components/dashboardShadcn/section-cards"
+import { SiteHeader } from "@/components/dashboardShadcn/site-header"
 import {
 	SidebarInset,
 	SidebarProvider,
@@ -13,7 +13,7 @@ import {
 import { useAuth } from '@/context/AuthContext';
 import { useChamados } from '@/hooks/useChamados';
 
-export default function PageDashboard() {
+export default function PageDashboardClient() {
 	//Obtendo o token
 	const { token } = useAuth()
 
@@ -29,20 +29,20 @@ export default function PageDashboard() {
 	}, [token, refetchChamados]);
 
 
-	return (<div>
-		<SidebarProvider
+	return (<>
+		{/* <SidebarProvider
 			style={
 				{
 					"--sidebar-width": "calc(var(--spacing) * 72)",
 					"--header-height": "calc(var(--spacing) * 12)",
 				}
 			}
-		>
+		> */}
 			{/* Sidebar */}
-			<AppSidebar variant="inset" className="bg-white dark:bg-gray-800 border-e border-gray-300 dark:border-gray-500" />
+			{/* <AppSidebar variant="inset" className="bg-white dark:bg-gray-800 border-e border-gray-300 dark:border-gray-500"/> */}
 
 			{/* Conteúdo do dashboard */}
-			<SidebarInset>
+			{/* <SidebarInset>
 				<SiteHeader />
 				<div className="flex flex-1 flex-col">
 					<div className="@container/main flex flex-1 flex-col gap-2">
@@ -55,8 +55,8 @@ export default function PageDashboard() {
 						</div>
 					</div>
 				</div>
-			</SidebarInset>
+			</SidebarInset> */}
 
-		</SidebarProvider>
-	</div>)
+		{/* </SidebarProvider> */}
+	</>)
 }

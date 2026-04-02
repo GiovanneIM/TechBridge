@@ -113,7 +113,7 @@ export function useAuth({
             sessionStorage.removeItem('token');
             setUser(null);
             setToken(null);
-            setLoading((prev) => ({ ...prev, logout: false }));
+            // setLoading((prev) => ({ ...prev, logout: false }));
         }, 2000);
     };
 
@@ -140,5 +140,6 @@ export function useAuth({
         login,
         perfil,
         logout,
+        setLoading,
     };
 }
