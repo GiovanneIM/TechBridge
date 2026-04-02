@@ -63,7 +63,7 @@ export default function Header() {
     const pathname = usePathname();
 
     // Obtendo o usuário
-    const { user, logout, loading } = useAuth();
+    const { user, logout, loading, setLoading } = useAuth();
 
     // Controlando o tema
     const [theme, setTheme] = useState("light");
@@ -82,6 +82,7 @@ export default function Header() {
         logout()
         setTimeout(() => {
             router.push("/");
+            setLoading((prev) => ({...prev, logout: false}))
         }, 2000);
     }
 

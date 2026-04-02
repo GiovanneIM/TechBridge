@@ -43,7 +43,7 @@ CREATE TABLE chamados (
     -- Impede que seja criado um chamado com o mesmo código para a máquina
     UNIQUE (cod_chamado, id_maquina),
 
-    -- Índices para melhorar consultas
+    -- Índices para melhorar performance das consultas
     INDEX idx_chamados_empresa (id_empresa),
     INDEX idx_chamados_setor (id_setor),
     INDEX idx_chamados_maquina (id_maquina),
@@ -65,7 +65,7 @@ VALUES
 UPDATE chamados    
 SET 
     estado = 'andamento',
-    id_tecnico = 1,
+    id_tecnico = 3,
     datahora_atendimento = DATE_ADD(NOW(), INTERVAL 1 DAY_HOUR)
 WHERE id > 1;
 
@@ -82,6 +82,6 @@ WHERE id > 2;
 UPDATE chamados    
 SET 
     estado = 'cancelado',
-    id_tecnico = 1,
+    id_tecnico = 3,
     datahora_conclusao = DATE_ADD(NOW(), INTERVAL 4 DAY_HOUR)
 WHERE id > 3;

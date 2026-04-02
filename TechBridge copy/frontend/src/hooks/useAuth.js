@@ -26,6 +26,7 @@ export function useAuth({
     });
 
 
+    // Função para fazer login
     const login = useCallback(async (dadosLogin) => {
         setLoading((prev) => ({ ...prev, login: true }));
         setError((prev) => ({ ...prev, login: null }));
@@ -47,7 +48,7 @@ export function useAuth({
                 setError((prev) => ({ ...prev, login: data.mensagem }))
             }
             else {
-                // Atualizando o estado do usuário
+                // Atualizando o estado dos dados
                 setUser(data.dados.usuario)
             }
         } catch (err) {
@@ -60,6 +61,7 @@ export function useAuth({
         }
     }, []);
 
+    // Função para obter o perfil do usuário logado
     const perfil = useCallback(async () => {
         setLoading((prev) => ({ ...prev, perfil: true }));
         setError((prev) => ({ ...prev, perfil: null }));
@@ -68,9 +70,6 @@ export function useAuth({
             // Chamada à API
             const response = await fetch(`${API_BASE_URL}/perfil`, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
                 credentials: 'include'
             });
 
@@ -86,7 +85,6 @@ export function useAuth({
                 // Atualizando o estado do usuário
                 setUser(data.dados.usuario)
                 console.log(data.dados.usuario);
-
             }
 
         } catch (err) {
@@ -99,11 +97,12 @@ export function useAuth({
         }
     }, []);
 
+    // Função para fazer logout
     const logout = async () => {
         setLoading((prev) => ({ ...prev, logout: true }));
 
         try {
-            await fetch('/api/logout', {
+            await fetch(`${API_BASE_URL}/logout`, {
                 method: 'POST',
                 credentials: 'include'
             });
@@ -113,8 +112,6 @@ export function useAuth({
             
         } catch (err) {
             console.error(err);
-        } finally {
-            setLoading((prev) => ({ ...prev, logout: false }));
         }
     };
 
@@ -127,7 +124,9 @@ export function useAuth({
 
     return {
         user,
+        isAuthenticated: !!user,
         loading,
+        setLoading,
         error,
         login,
         perfil,

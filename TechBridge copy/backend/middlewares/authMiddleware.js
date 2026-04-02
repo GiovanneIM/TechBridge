@@ -6,18 +6,18 @@ const authMiddleware = (req, res, next) => {
     try {
         let token;
 
-        // 🔹 1. Tenta pegar do cookie
+        // Tenta pegar token do cookie
         if (req.cookies && req.cookies.token) {
             token = req.cookies.token;
         }
 
-        // 🔹 2. Fallback: Authorization header
+        // Se não encontrar no cookie, tenta pegar no header
         else if (req.headers.authorization) {
             const authHeader = req.headers.authorization;
             token = authHeader.split(' ')[1];
         }
 
-        // ❌ Nenhum token encontrado
+        // Nenhum token encontrado
         if (!token) {
             return res.status(401).json({
                 erro: 'Token não fornecido',
@@ -25,13 +25,14 @@ const authMiddleware = (req, res, next) => {
             });
         }
 
-        // 🔐 Verificar token
+        // Verificar token
         const decoded = jwt.verify(token, JWT_CONFIG.secret);
 
         req.usuario = {
             id: decoded.id,
-            tipo: decoded.tipo,
-            email: decoded.email
+            email: decoded.email,
+            tipo_usuario: decoded.tipo_usuario,
+            id_empresa: decoded.id_empresa
         };
 
         next();
@@ -61,7 +62,7 @@ const authMiddleware = (req, res, next) => {
 // Middleware para verificar se o usuário é administrador
 const adminMiddleware = (req, res, next) => {
     if (req.usuario.tipo !== 1) {
-        return res.status(403).json({ 
+        return res.status(403).json({
             erro: 'Acesso negado',
             mensagem: 'Apenas administradores podem acessar este recurso'
         });

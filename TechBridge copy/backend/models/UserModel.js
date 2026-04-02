@@ -56,7 +56,7 @@ class UserModel {
     // Buscar um usuário por ID
     static async buscarPorId(id) {
         try {
-            const rows = await read('usuarios', `id = ${id}`);
+            const rows = await read('usuarios', { where: { id } });
             return rows[0] || null;
         } catch (error) {
             console.error('Erro ao buscar usuário por ID:', error);
@@ -67,7 +67,7 @@ class UserModel {
     // Verificar se um e-mail está em uso por outro usuário
     static async emailEmUso(email, idUsuario) {
         try {
-            const rows = await read('usuarios', `email = '${email}' AND id != ${idUsuario}`);
+            const rows = await read('usuarios', { where: { email, id: `!= ${idUsuario}` } });
 
             return rows.length > 0;
         } catch (error) {
@@ -114,7 +114,7 @@ class UserModel {
     // Buscar usuário por email
     static async buscarPorEmail(email) {
         try {
-            const rows = await read('usuarios', `email = '${email}'`);
+            const rows = await read('usuarios', { where: { email } });
             return rows[0] || null;
         } catch (error) {
             console.error('Erro ao buscar usuário por email:', error);

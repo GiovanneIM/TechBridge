@@ -99,6 +99,10 @@ async function read(table, options = null) {
             sql += ` LIMIT ?`;
             values.push(options.limit);
         }
+        else {
+            sql += ` LIMIT ?`;
+            values.push(20);
+        }
 
         // Executando o comando
         const [rows] = await connection.execute(sql, values);

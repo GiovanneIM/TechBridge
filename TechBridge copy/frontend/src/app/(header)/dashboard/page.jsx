@@ -4,14 +4,13 @@ import { cookies } from "next/headers"
 
 async function getChamados(token) {
 	try {
-		// Chamada à API
 		const response = await fetch(`http://localhost:3000/api/chamados/buscar`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				// 'Authorization': `Bearer ${token}`
+				'Authorization': `Bearer ${token}`
 			},
-			body: '{}',
+			body: JSON.stringify({options: {limit: 25}}),
 			credentials:"include"
 		});
 
@@ -28,7 +27,6 @@ export default async function Dashboard() {
 	const token = cookieStore.get('token')?.value;
 
 	const chamados = await getChamados(token);
-	console.log(chamados);
 	
 	return (
 		<PageDashboard chamadosIniciais={chamados} />
