@@ -2,7 +2,7 @@
 
 import "../globals.css";
 
-import Header from "@/components/blocks/Header/page";
+import HeaderUser from "@/components/blocks/Header/HeaderUser";
 import Footer from "@/components/blocks/Footer/page";
 
 import {
@@ -13,13 +13,13 @@ import {
 } from "@/components/ui/sidebar"
 import CounteudoSidebar from "../sidebarContents";
 
-export default function RootLayout({ children }) {
+export default function UserLayout({ children }) {
 	return (
 		<div className="w-full">
 			<SidebarProvider>
 				<div className="flex flex-col min-h-screen w-full">
 					{/* Header */}
-					<Header />
+					<HeaderUser />
 
 					<div className="flex flex-1">
 						{/* Sidebar */}

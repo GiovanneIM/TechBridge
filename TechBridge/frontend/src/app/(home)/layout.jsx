@@ -1,13 +1,13 @@
-// LAYOUT SECONDÁRIO - COM HEADER
+// LAYOUT DA PÁGINA HOME - Header sem usuário
 
 import "../globals.css";
 
-import Header from "@/components/blocks/Header/page";
+import HeaderHome from "@/components/blocks/Header/HeaderHome";
 import Footer from "@/components/blocks/Footer/page";
 
-export default function RootLayout({ children }) {
+export default function HomeLayout({ children }) {
 	return (<>
-		<Header />
+		<HeaderHome/>
 		{children}
 		<Footer/>
 	</>);
