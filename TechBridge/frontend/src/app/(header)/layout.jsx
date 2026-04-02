@@ -11,6 +11,7 @@ import {
 	SidebarInset,
 	SidebarContent,
 } from "@/components/ui/sidebar"
+import CounteudoSidebar from "../sidebarContents";
 
 export default function RootLayout({ children }) {
 	return (
@@ -24,11 +25,7 @@ export default function RootLayout({ children }) {
 						{/* Sidebar */}
 						<Sidebar className="top-16 h-[calc(100vh-4rem)] border-r">
 							<SidebarContent>
-								<div className="p-4 space-y-2">
-									<div>Dashboard</div>
-									<div>Kanban</div>
-									<div>Suporte</div>
-								</div>
+								<CounteudoSidebar/>
 							</SidebarContent>
 						</Sidebar>
 
