@@ -272,7 +272,7 @@ export default function Kanban() {
 					onDragStart={handleDragStart}
 					onDragEnd={handleDragEnd}
 				>
-					<div className="flex items-start justify-center lg:flex-row gap-6 overflow-x-auto pb-8 w-full max-w-7xl">
+					<div className="flex flex-col items-start justify-center md:flex-row gap-6 overflow-x-auto pb-8 w-full max-w-7xl">
 						{columnList.map((col) => (
 							<Column
 								key={col.id}
