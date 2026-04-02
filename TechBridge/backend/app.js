@@ -4,6 +4,7 @@ import helmet from 'helmet';            // Complemento de segurança, realiza tr
 import dotenv from 'dotenv';            // Variáveis de ambiente - Utilizado para as informações locais que não serão compartilhadas no GitHub
 import path from 'path';                // 
 import { fileURLToPath } from 'url';    // 
+import cookieParser from 'cookie-parser';
 
 import { negrito, azul, verde, vermelho } from './utils/modificadoresDeSaida.js';
 
