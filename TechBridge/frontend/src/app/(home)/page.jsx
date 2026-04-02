@@ -12,9 +12,21 @@ import {
 import { Button } from "@/components/ui/button";
 
 import Image from "next/image";
-import Link from "next/link";
+
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText, InputGroupTextarea } from "@/components/ui/input-group";
+import { Factory, Mail, MessageCircle, User } from "lucide-react";
+
 
 export default function Home() {
+	const router = useRouter()
+	const { isAuthenticated } = useAuth()
+
+	if (isAuthenticated) { router.push('/dashboard') }
+
 	return (
 		<div className="w-full">
 			{/* Hero Section */}
@@ -23,10 +35,11 @@ export default function Home() {
 				<div className="w-full md:w-160 flex flex-col gap-2">
 					<p className="font-genty text-4xl">Bem vindo à Tech<span className="text-techbridge">Bridge</span></p>
 
-					<p className="text-xl text-gray-500 font-semibold mb-2">
-						Otimizamos o tempo e facilitamos a comunicação no ambiente industrial criando pontes entre pessoas.					</p>
+					<p className="text-xl font-genty text-muted-foreground mb-2">
+						Otimizamos o tempo e facilitamos a comunicação no ambiente industrial criando pontes entre pessoas.
+					</p>
 
-					<div className="flex gap-3">
+					<div className="flex flex-col sm:flex-row gap-3">
 						<Button className="bg-techbridge text-white cursor-pointer hover:animate-wiggle hover:text-background font-bold">Entrar em contato</Button>
 						<Button variant="outline" className="bg-secondary text-foreground cursor-pointer hover:bg-foreground hover:text-background hover:animate-wiggle font-bold">Conheça nosso serviço</Button>
 					</div>
@@ -59,63 +72,84 @@ export default function Home() {
 
 			{/* Como funciona? */}
 			<div className="justify-center align-middle">
-				<p className="align-middle justify-center text-center font-genty text-4xl text-foreground">Como nossos serviços funcionam?</p>
+				<p className="align-middle justify-center text-center font-genty text-3xl text-foreground">Como nossos serviços funcionam?</p>
 
 				<Cards />
 			</div>
 
 			{/* Empresas que utlizam */}
-			<div className="border-border border-b py-12">
+			<div className="py-12">
 				<div className="mb-8 text-center">
-					<h2 className="mb-2 text-lg font-semibold justify-center">
+					<p className="align-middle justify-center text-center font-genty text-3xl text-foreground">
 						Utilizado por empresas líderes
-					</h2>
-					<p className="text-muted-foreground text-sm">
+					</p>
+					<p className="font-genty text-muted-foreground text-sm mt-4 ">
 						Junte-se a empresas líderes de mercado que já utilizam nossos serviços
 					</p>
 				</div>
-				<div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
-					<div className="flex items-center justify-center">
-						<Image
-							src="/avulsos/cadillacSymbol.png"
-							alt="simbolo gm"
-							height={100}
-							width={100}
-						/>
-					</div>
-					<div className="flex items-center justify-center">
-						<Image
-							src="/avulsos/chevroletSymbol.png"
-							alt="simbolo gm"
-							height={100}
-							width={100}
-						/>
-					</div>
-					<div className="flex items-center justify-center">
-						<Image
-							src="/avulsos/gmSymbol.png"
-							alt="simbolo gm"
-							height={100}
-							width={100}
-						/>
-					</div>
-					<div className="flex items-center justify-center">
-						<Image
-							src="/avulsos/gmcSymbol.png"
-							alt="simbolo gm"
-							height={100}
-							width={100}
-						/>
-					</div>
-					<div className="flex items-center justify-center">
-						<Image
-							src="/avulsos/corvetteSymbol.png"
-							alt="simbolo gm"
-							height={100}
-							width={100}
-						/>
-					</div>
+
+				<CardsEmpresas />
+			</div>
+
+			{/* Entrar em contato */}
+			<div className="w-full py-12 flex flex-col items-center">
+				<div className="mb-8 text-center">
+					<p className="align-middle justify-center text-center font-genty text-3xl text-foreground">
+						Marque um atendimento
+					</p>
+					<p className="font-genty text-muted-foreground text-sm mt-4 ">
+						Entre em contato para marcar uma consulta com um representante e conhecer mais do nosso serviço
+					</p>
 				</div>
+
+				<Card className="w-full md:w-xl lg:w-xl xl:w-2xl py-5 px-4">
+					<FieldGroup className='flex items-center gap-4'>
+						<div className="w-full flex flex-col md:flex-row gap-4">
+							<Field className="md:w-1/2">
+								<FieldLabel className="font-genty text-muted-foreground">Nome</FieldLabel>
+								<InputGroup>
+									<InputGroupInput placeholder="Nome" />
+									<InputGroupAddon>
+										<User />
+									</InputGroupAddon>
+								</InputGroup>
+							</Field>
+
+							<Field className="md:w-1/2">
+								<FieldLabel className="font-genty text-muted-foreground">E-mail</FieldLabel>
+								<InputGroup>
+									<InputGroupInput placeholder="E-mail para contato" />
+									<InputGroupAddon>
+										<Mail />
+									</InputGroupAddon>
+								</InputGroup>
+							</Field>
+						</div>
+
+						<Field>
+							<FieldLabel className="font-genty text-muted-foreground">Empresa</FieldLabel>
+							<InputGroup className='w-1/2'>
+								<InputGroupInput placeholder="Empresa" />
+								<InputGroupAddon>
+									<Factory />
+								</InputGroupAddon>
+							</InputGroup>
+						</Field>
+
+						<Field>
+							<FieldLabel className="font-genty text-muted-foreground">Mensagem</FieldLabel>
+							<InputGroup>
+								<InputGroupTextarea
+									id="block-start-textarea"
+									placeholder="Estou entrando em contato para..."
+									className="font-mono text-sm"
+								/>
+							</InputGroup>
+						</Field>
+
+						<Button className="w-full md:w-sm bg-techbridge font-bold">Entrar em contato</Button>
+					</FieldGroup>
+				</Card>
 			</div>
 		</div>
 	);
@@ -155,7 +189,7 @@ function Cards() {
 		{
 			image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnvS1J7gjXPRpzo3kU3i99PWtvVkw7FZXiUw&s',
 			title: 'Andon',
-			badge: 'Novidade',
+			badge: 'Tecnologia',
 			list: [
 				'Transforme sua linha de produção com o Andon, um sistema visual inteligente que mostra o status das operações em tempo real.',
 				'Identifique falhas rapidamente e tenha total visibilidade do que acontece na linha.',
@@ -165,7 +199,7 @@ function Cards() {
 		{
 			image: 'https://i0.wp.com/lanoticia.com/wp-content/uploads/2023/10/telefono-alerta.jpg?fit=1200%2C800&ssl=1',
 			title: 'Alertas visuais e sonoros',
-			badge: 'Incluso',
+			badge: 'Comunicação',
 			list: [
 				'Receba notificações diretamente no celular sempre que houver qualquer ocorrência na operação.',
 				'Com alertas instantâneos, sua equipe reage mais rápido diante de qualquer problema.',
@@ -175,7 +209,7 @@ function Cards() {
 		{
 			image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVdjLEfniNWoxcgT6HXaRlxwcMNd61wHBepA&s',
 			title: 'Sistemas personalizados',
-			badge: 'Ferramentas',
+			badge: 'Facilitação',
 			list: [
 				'Conte com sistemas personalizados desenvolvidos para atender exatamente às necessidades da sua operação.',
 				'Soluções sob medida que se adaptam aos seus processos e desafios específicos.',
@@ -188,31 +222,71 @@ function Cards() {
 		<div className="w-full flex flex-wrap my-4 p-4 justify-center gap-20">
 			{content.map((cont, i) => {
 				return (
-					<Card className="relative w-full max-w-sm pt-0" key={i}>
-						<div className="absolute inset-0 z-30 aspect-video bg-techbridge/35" />
-						<img
-							src={cont.image}
-							alt="Event cover"
-							className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
-						/>
-						<CardHeader>
-							<CardAction>
-								<Badge variant="secondary">{cont.badge}</Badge>
-							</CardAction>
-							<CardTitle className="text-techbridge font-extrabold text-2xl">
-								{cont.title}
-							</CardTitle>
-							<CardDescription>
+					<Card className="relative w-full max-w-sm overflow-hidden pt-0 pb-4 gap-4" key={i}>
+						<div>
+							{/* Overlay sobre a imagem */}
+							<div className="absolute inset-0 z-30 aspect-video bg-techbridge/35" />
+							{/* Imagem */}
+							<img
+								src={cont.image}
+								alt="Event cover"
+								className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
+							/>
+						</div>
 
-							</CardDescription>
-						</CardHeader>
-						<CardContent>
-							<ul className="dark:text-gray-300">
-								{cont.list.map((l, j) => {
-									return (<li key={j}>{l}</li>)
-								})}
-							</ul>
-						</CardContent>
+						<div>
+							{/* Header do card */}
+							<CardHeader className="px-4">
+								<CardAction>
+									<Badge variant="secondary" className="font-genty">{cont.badge}</Badge>
+								</CardAction>
+
+								<CardTitle className="text-techbridge font-genty text-2xl ">
+									{cont.title}
+								</CardTitle>
+
+								<CardDescription>
+
+								</CardDescription>
+							</CardHeader>
+
+							{/* Conteúdo do card */}
+							<CardContent className="px-4">
+								<ul className="text-muted-foreground text-justify font-genty">
+									{cont.list.map((l, j) => {
+										return (<li key={j} className="mt-2">{l}</li>)
+									})}
+								</ul>
+							</CardContent>
+						</div>
+					</Card>
+				)
+			})}
+		</div>
+	</>)
+}
+
+function CardsEmpresas() {
+	const empresas = [
+		{ nome: 'Cadillac', logo: '/avulsos/cadillacSymbol.png' },
+		{ nome: 'Chevrolet ', logo: '/avulsos/chevroletSymbol.png' },
+		{ nome: 'General Motors', logo: '/avulsos/gmSymbol.png' },
+		{ nome: 'GMC', logo: '/avulsos/gmcSymbol.png' },
+		{ nome: 'Corvette', logo: '/avulsos/corvetteSymbol.png' }
+	]
+	return (<>
+		<div className="flex flex-wrap justify-center items-center gap-8">
+			{empresas.map((emp, i) => {
+				return (
+					<Card key={i}
+						className="flex items-center justify-center p-2"
+					>
+						<Image
+							src={emp.logo}
+							alt={emp.nome}
+							height={100}
+							width={100}
+						/>
 					</Card>
 				)
 			})}

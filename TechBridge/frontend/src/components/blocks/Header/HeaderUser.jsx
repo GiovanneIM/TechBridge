@@ -69,17 +69,7 @@ export default function HeaderUser() {
     // Obtendo o usuário
     const { user, isAuthenticated, logout, loading, setLoading } = useAuth();
 
-    // Controlando o tema
-    const [theme, setTheme] = useState("light");
-    useEffect(() => {
-        const root = document.documentElement;
-
-        root.classList.remove("dark", "techbridge");
-
-        if (theme !== "light") {
-            root.classList.add(theme);
-        }
-    }, [theme]);
+    
 
     // Função de logout
     function fazerLogout() {
@@ -111,7 +101,7 @@ export default function HeaderUser() {
 
                     {/* LOGO */}
                     <Link
-                        href={!user ? "/" : "/dashboard"}
+                        href="/dashboard"
                         className="hidden md:flex items-center order-1 w-fit sm:w-1/2 lg:w-auto"
                     >
                         <img

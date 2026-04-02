@@ -1,4 +1,4 @@
-// LAYOUT SECONDÁRIO - COM HEADER
+// LAYOUT PARA PÁGINAS COM USUÁRIO LOGADO - Com header e sidebar
 
 import "../globals.css";
 
@@ -11,7 +11,7 @@ import {
 	SidebarInset,
 	SidebarContent,
 } from "@/components/ui/sidebar"
-import CounteudoSidebar from "../sidebarContents";
+import CounteudoSidebar from "../../components/Sidebar/sidebarContents";
 
 export default function UserLayout({ children }) {
 	return (
