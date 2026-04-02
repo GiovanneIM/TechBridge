@@ -40,7 +40,7 @@ export default function PageDashboard({
 			}
 		>
 			{/* Sidebar */}
-			<AppSidebar variant="inset" className="bg-white dark:bg-gray-800 border-e border-gray-300 dark:border-gray-500" />
+			{/* <AppSidebar variant="inset" className="bg-white dark:bg-gray-800 border-e border-gray-300 dark:border-gray-500" /> */}
 
 			{/* Conteúdo do dashboard */}
 			<SidebarInset>

@@ -55,6 +55,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { TextAlignJustify, Sun, Moon, Settings, User, LogOut } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useSidebar } from "@/components/ui/sidebar"
 
 
 
@@ -62,8 +63,10 @@ export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
 
+    const { toggleSidebar } = useSidebar()
+
     // Obtendo o usuário
-    const { user, logout, loading, setLoading } = useAuth();
+    const { user, isAuthenticated, logout, loading, setLoading } = useAuth();
 
     // Controlando o tema
     const [theme, setTheme] = useState("light");
@@ -82,30 +85,46 @@ export default function Header() {
         logout()
         setTimeout(() => {
             router.push("/");
-            setLoading((prev) => ({...prev, logout: false}))
+            setLoading((prev) => ({ ...prev, logout: false }))
         }, 2000);
     }
 
     const nav_active = "bg-techbridge text-white font-bold text-md";
 
+    // if (loading.perfil) {
+    //     return (
+    //         <header className="h-16 flex items-center px-4 border-b">
+    //             <div className="animate-pulse h-6 w-40 bg-gray-300 rounded" />
+    //         </header>
+    //     );
+    // }
+
     return (<>
         <header className="block top-0 z-50 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
-            <nav className="px-4 lg:px-10 py-3 w-full flex flex-wrap justify-between items-center gap-y-4">
-                {/* LOGO */}
-                <Link
-                    href={!user ? "/" : "/dashboard"}
-                    className="flex items-center order-1 w-fit sm:w-1/2 lg:w-auto"
-                >
-                    <img
-                        src="/TechBridge/Logo.svg"
-                        className="mr-3 h-6 sm:h-9"
-                        alt="TechBridge logo"
-                    />
-                    <p className="self-center flex text-2xl whitespace-nowrap dark:text-white font-genty">
-                        Tech
-                        <span className="text-techbridge">Bridge</span>
-                    </p>
-                </Link>
+            <nav className="px-4 lg:pe-10 py-3 w-full flex flex-wrap justify-between items-center gap-y-4">
+
+                {/* Trigger da sidebar e logo */}
+                <div className="flex gap-4">
+                    <Button variant="ghost" className="border" onClick={toggleSidebar}>
+                        <TextAlignJustify />
+                    </Button>
+
+                    {/* LOGO */}
+                    <Link
+                        href={!user ? "/" : "/dashboard"}
+                        className="flex items-center order-1 w-fit sm:w-1/2 lg:w-auto"
+                    >
+                        <img
+                            src="/TechBridge/Logo.svg"
+                            className="mr-3 h-6 sm:h-9"
+                            alt="TechBridge logo"
+                        />
+                        <p className="self-center flex text-2xl whitespace-nowrap dark:text-white font-genty">
+                            Tech
+                            <span className="text-techbridge">Bridge</span>
+                        </p>
+                    </Link>
+                </div>
 
                 {/* Caso o usuário não esteja logado */}
                 {!user && <>
@@ -170,7 +189,7 @@ export default function Header() {
                         </div>
 
                         {/* Navegação Desktop */}
-                        <div className="hidden sm:flex justify-center items-center w-full lg:w-auto" id="mobile-menu-2">
+                        {/* <div className="hidden sm:flex justify-center items-center w-full lg:w-auto" id="mobile-menu-2">
                             <ul className="flex flex-row mt-4 lg:mt-0 font-medium lg:space-x-8 w-full lg:w-auto justify-between">
 
                                 <li>
@@ -236,7 +255,7 @@ export default function Header() {
                                     </Button>
                                 </li>
                             </ul>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Usuário e dropdown de tema e configurações */}
@@ -253,7 +272,7 @@ export default function Header() {
                         }
 
                         {/* Tema e configurações */}
-                        <DropdownMenu>
+                        {/* <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline"><TextAlignJustify className="inline" /></Button>
                             </DropdownMenuTrigger>
@@ -289,7 +308,7 @@ export default function Header() {
                                     </DropdownMenuItem>
                                 </DropdownMenuGroup>
                             </DropdownMenuContent>
-                        </DropdownMenu>
+                        </DropdownMenu> */}
                     </div>
                 </>}
             </nav>
