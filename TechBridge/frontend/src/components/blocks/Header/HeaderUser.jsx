@@ -59,7 +59,7 @@ import { useSidebar } from "@/components/ui/sidebar"
 
 
 
-export default function Header() {
+export default function HeaderUser() {
     const router = useRouter();
     const pathname = usePathname();
 
@@ -89,7 +89,6 @@ export default function Header() {
         }, 2000);
     }
 
-    const nav_active = "bg-techbridge text-white font-bold text-md";
 
     // if (loading.perfil) {
     //     return (
