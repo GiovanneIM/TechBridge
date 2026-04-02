@@ -10,10 +10,9 @@ const router = express.Router();
 router.post('/login', AuthController.login);
 
 // Rotas protegidas com autenticação (O usuário precisa estar logado)
-// O login é confirmado enviando "Bearer token" no header Authorization
 router.get('/perfil', authMiddleware, AuthController.obterPerfil);
 
-
+router.post('/logout', authMiddleware, AuthController.logout);
 
 
 

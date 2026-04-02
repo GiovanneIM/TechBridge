@@ -19,10 +19,10 @@ import {
   IconUsers,
 } from "@tabler/icons-react"
 import { ListTree } from "lucide-react"
-import { NavDocuments } from "@/components/dashboardShadcn/nav-documents"
-import { NavMain } from "@/components/dashboardShadcn/nav-main"
-import { NavSecondary } from "@/components/dashboardShadcn/nav-secondary"
-import { NavUser } from "@/components/dashboardShadcn/nav-user"
+import { NavDocuments } from "@/components/Dashboard/nav-documents"
+import { NavMain } from "@/components/Dashboard/nav-main"
+import { NavSecondary } from "@/components/Dashboard/nav-secondary"
+import { NavUser } from "@/components/Dashboard/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -154,10 +154,10 @@ export function AppSidebar({
   ...props
 }) {
   return (
-    <Sidebar collapsible="offcanvas"  {...props}>
+    <Sidebar collapsible="offcanvas" {...props}>
 
       {/* Header do sidebar */}
-      <SidebarHeader className="bg-white dark:bg-gray-800 border-e">
+      <SidebarHeader className="bg-white">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
@@ -167,7 +167,7 @@ export function AppSidebar({
       </SidebarHeader>
 
       {/* Conteúdo do sidebar */}
-      <SidebarContent className="bg-white dark:bg-gray-800 border-e">
+      <SidebarContent className="bg-white">
         <NavMain items={data.navMain} />
         <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />

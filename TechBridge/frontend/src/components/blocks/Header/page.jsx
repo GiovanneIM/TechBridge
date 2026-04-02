@@ -63,7 +63,7 @@ export default function Header() {
     const pathname = usePathname();
 
     // Obtendo o usuário
-    const { user, logout, loading } = useAuth();
+    const { user, logout, loading, setLoading } = useAuth();
 
     // Controlando o tema
     const [theme, setTheme] = useState("light");
@@ -80,17 +80,16 @@ export default function Header() {
     // Função de logout
     function fazerLogout() {
         logout()
-
         setTimeout(() => {
-            // Direcionando para a página inicial
             router.push("/");
+            setLoading((prev) => ({...prev, logout: false}))
         }, 2000);
     }
 
     const nav_active = "bg-techbridge text-white font-bold text-md";
 
     return (<>
-        <header className="sticky top-0 z-50 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
+        <header className="block top-0 z-50 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
             <nav className="px-4 lg:px-10 py-3 w-full flex flex-wrap justify-between items-center gap-y-4">
                 {/* LOGO */}
                 <Link

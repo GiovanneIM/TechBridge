@@ -10,8 +10,8 @@ async function getChamados(token) {
 				'Content-Type': 'application/json',
 				'Authorization': `Bearer ${token}`
 			},
-			body: JSON.stringify({options: {limit: 25}}),
-			credentials:"include"
+			body: JSON.stringify({ options: { limit: 25 } }),
+			credentials: "include"
 		});
 
 		// Convertendo a resposta para json
@@ -27,7 +27,7 @@ export default async function Dashboard() {
 	const token = cookieStore.get('token')?.value;
 
 	const chamados = await getChamados(token);
-	
+
 	return (
 		<PageDashboard chamadosIniciais={chamados} />
 	)

@@ -57,23 +57,31 @@ class AuthController {
                 {
                     id: usuario.id,
                     email: usuario.email,
-                    tipo: usuario.tipo
+                    tipo_usuario: usuario.tipo_usuario,
+                    id_empresa: usuario.id_empresa
                 },
                 JWT_CONFIG.secret,
                 { expiresIn: JWT_CONFIG.expiresIn }
             );
+
+            // Gerar cookie
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                maxAge: 1000 * 60 * 60 * 2
+            });
 
             // Respondendo com os dados do usuário
             res.status(200).json({
                 sucesso: true,
                 mensagem: 'Login efetuado com sucesso',
                 dados: {
-                    token,
                     usuario: {
                         id: usuario.id,
                         nome: usuario.nome,
                         email: usuario.email,
-                        tipo: usuario.tipo
+                        tipo_usuario: usuario.tipo_usuario
                     }
                 }
             });
@@ -120,6 +128,21 @@ class AuthController {
                 mensagem: 'Não foi possível obter o perfil'
             });
         }
+    }
+
+    // POST /auth/logout - Rota para excluir o cookie e fazer logout
+    static async logout(req, res) {
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+        });
+
+        return res.status(200).json({
+            sucesso: true,
+            mensagem: 'Logout realizado com sucesso',
+            dados: { logout: true }
+        });
     }
 
 }
