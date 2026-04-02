@@ -50,9 +50,9 @@ function TaskCard({ task, hideWhenDragging = false }) {
 			style={style}
 			{...attributes}
 			{...listeners}
-			className={`cursor-grab active:cursor-grabbing border border-border/50
-        bg-white/70 backdrop-blur-sm
-        hover:shadow-lg hover:-translate-y-1 transition-all duration-200`}
+			className="cursor-grab active:cursor-grabbing border border-border/50
+			bg-white/70 backdrop-blur-sm
+			hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
 		>
 			<CardContent className="p-4 space-y-3">
 				<div className="font-semibold text-sm text-gray-800">
@@ -96,10 +96,11 @@ function Column({ columnId, title, tasks, children }) {
 	return (
 		<div
 			ref={setNodeRef}
-			className={`w-80 p-4 rounded-xl border transition-all
-      ${colors[columnId]}
-      ${isOver ? "ring-2 ring-blue-400 scale-[1.02]" : ""}
-      shadow-sm`}
+			className={`w-80 mt-2 p-4 rounded-xl border transition-all
+			self-start
+			${colors[columnId]}
+			${isOver ? "ring-2 ring-blue-400 scale-[1.02]" : ""}
+			shadow-sm`}
 		>
 			<div className="flex justify-between items-center mb-3">
 				<h2 className="font-semibold text-gray-700">
@@ -110,7 +111,7 @@ function Column({ columnId, title, tasks, children }) {
 				</span>
 			</div>
 
-			<div className="flex flex-col gap-3 min-h-[120px] max-h-[650px] overflow-y-auto rounded-xl">
+			<div className="flex flex-col gap-3 min-h-[120px] max-h-[650px] overflow-y-auto">
 				{children}
 			</div>
 		</div>
@@ -238,8 +239,9 @@ export default function Kanban() {
 		}
 	}
 
-	return (<>
-		<div className="relative min-h-screen bg-gradient-to-b from-white to-blue-50 overflow-hidden">
+	return (
+		<div className="relative min-h-screen bg-linear-to-b from-white to-blue-50 overflow-hidden">
+
 			{/* Background (onda) */}
 			<div className="absolute inset-x-0 bottom-0 z-0 pointer-events-none">
 				<svg
@@ -259,9 +261,8 @@ export default function Kanban() {
 				</svg>
 			</div>
 
-			{/* Conteúdo */}
 			<div className="relative z-10 flex flex-col items-center py-8">
-				<h1 className="text-3xl font-bold mb-8 text-gray-800">
+				<h1 className="text-3xl font-bold pb-8 text-gray-800">
 					Kanban de Chamados
 				</h1>
 
@@ -271,7 +272,7 @@ export default function Kanban() {
 					onDragStart={handleDragStart}
 					onDragEnd={handleDragEnd}
 				>
-					<div className="flex flex-col justify-center lg:flex-row gap-6 overflow-x-auto pb-8 w-full max-w-7xl">
+					<div className="flex items-start justify-center lg:flex-row gap-6 overflow-x-auto pb-8 w-full max-w-7xl">
 						{columnList.map((col) => (
 							<Column
 								key={col.id}
@@ -301,5 +302,5 @@ export default function Kanban() {
 				</DndContext>
 			</div>
 		</div>
-	</>);
+	);
 }
