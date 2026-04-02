@@ -185,7 +185,7 @@ function Cards() {
 	]
 
 	return (<>
-		<div className="flex px-4 my-3 justify-center gap-20">
+		<div className="w-full flex flex-wrap my-4 p-4 justify-center gap-20">
 			{content.map((cont, i) => {
 				return (
 					<Card className="relative w-full max-w-sm pt-0" key={i}>

@@ -56,6 +56,7 @@ import {
 import { TextAlignJustify, Sun, Moon, Settings, User, LogOut } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useSidebar } from "@/components/ui/sidebar"
+import { Skeleton } from "@/components/ui/skeleton"
 
 
 
@@ -99,7 +100,7 @@ export default function HeaderUser() {
     // }
 
     return (<>
-        <header className="block top-0 z-50 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
+        <header className="sticky w-full top-0 z-50 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
             <nav className="px-4 lg:pe-10 py-3 w-full flex flex-wrap justify-between items-center gap-y-4">
 
                 {/* Trigger da sidebar e logo */}
@@ -111,7 +112,7 @@ export default function HeaderUser() {
                     {/* LOGO */}
                     <Link
                         href={!user ? "/" : "/dashboard"}
-                        className="flex items-center order-1 w-fit sm:w-1/2 lg:w-auto"
+                        className="hidden md:flex items-center order-1 w-fit sm:w-1/2 lg:w-auto"
                     >
                         <img
                             src="/TechBridge/Logo.svg"
@@ -127,141 +128,26 @@ export default function HeaderUser() {
 
                 {/* Caso o usuário não esteja logado */}
                 {!user && <>
-                    <div className="order-3 flex gap-4">
-                        {/* Botão de Tema */}
-                        <div>
-                            {theme === "dark" && <Button variant="outline" className="inline" onClick={() => { setTheme("light") }}><Sun /></Button>}
-                            {theme === "light" && <Button variant="outline" className="inline" onClick={() => { setTheme("dark") }}><Moon /></Button>}
+                    <div className="flex items-center gap-2">
+                        <div className="flex flex-col gap-2 items-end">
+                            <Skeleton className="h-4 w-[150px]" />
+                            <Skeleton className="h-4 w-[100px]" />
                         </div>
 
-                        {/* Botão Login */}
-                        {!user && <Button asChild className={'bg-techbridge text-white w-35 font-bold text-md'}>
-                            <Link href='/login'>Entrar</Link>
-                        </Button>
-                        }
+                        <Skeleton className="size-10 shrink-0 rounded-full" />
                     </div>
                 </>}
 
                 {/* Caso o usuário esteja logado */}
                 {user && <>
-                    {/* Navegação */}
-                    <div className="order-3 lg:order-2 w-full lg:w-auto">
-                        {/* Navegação mobile */}
-                        <div className="flex items-center gap-2 sm:hidden">
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="outline"><TextAlignJustify /></Button>
-                                </DropdownMenuTrigger>
-
-                                <DropdownMenuContent>
-                                    <DropdownMenuGroup>
-                                        <DropdownMenuItem>Suporte</DropdownMenuItem>
-
-                                        <DropdownMenuItem><Link href={'/dashboard'}>Dashboard</Link></DropdownMenuItem>
-
-                                        <DropdownMenuItem><Link href={'/kanban'}>Kanban</Link></DropdownMenuItem>
-
-                                        <DropdownMenuSub>
-                                            <DropdownMenuSubTrigger>Serviços de Manutenção</DropdownMenuSubTrigger>
-                                            <DropdownMenuPortal>
-                                                <DropdownMenuSubContent className={'w-auto'}>
-                                                    <DropdownMenuItem>Manutenção de Máquina</DropdownMenuItem>
-                                                    <DropdownMenuItem>Manutenção Preventiva</DropdownMenuItem>
-                                                    <DropdownMenuItem>Reparo</DropdownMenuItem>
-                                                </DropdownMenuSubContent>
-                                            </DropdownMenuPortal>
-                                        </DropdownMenuSub>
-
-                                        <DropdownMenuSub>
-                                            <DropdownMenuSubTrigger>Departamento</DropdownMenuSubTrigger>
-                                            <DropdownMenuPortal>
-                                                <DropdownMenuSubContent>
-                                                    <DropdownMenuItem>Ferramentaria</DropdownMenuItem>
-                                                    <DropdownMenuItem>RH</DropdownMenuItem>
-                                                    <DropdownMenuItem>Pintura</DropdownMenuItem>
-                                                </DropdownMenuSubContent>
-                                            </DropdownMenuPortal>
-                                        </DropdownMenuSub>
-                                    </DropdownMenuGroup>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
-
-                        {/* Navegação Desktop */}
-                        {/* <div className="hidden sm:flex justify-center items-center w-full lg:w-auto" id="mobile-menu-2">
-                            <ul className="flex flex-row mt-4 lg:mt-0 font-medium lg:space-x-8 w-full lg:w-auto justify-between">
-
-                                <li>
-                                    <Button
-                                        variant="ghost" asChild
-                                        className={`text-md 
-                                            ${pathname.startsWith("/dashboard") && nav_active}
-                                        `}
-                                    >
-                                        <Link href={'/dashboard'}>
-                                            Dashboard
-                                        </Link>
-                                    </Button>
-                                </li>
-
-                                <li>
-                                    <Button
-                                        variant="ghost" asChild
-                                        className={`text-md 
-                                            ${pathname.startsWith("/kanban") && nav_active}
-                                        `}
-                                    >
-                                        <Link href={'/kanban'}>
-                                            Kanban
-                                        </Link>
-                                    </Button>
-                                </li>
-
-                                <li>
-                                    <NavigationMenu>
-                                        <NavigationMenuList>
-                                            <NavigationMenuItem>
-                                                <NavigationMenuTrigger className={'text-md'}>Setores</NavigationMenuTrigger>
-                                                <NavigationMenuContent className={'w-57'}>
-                                                    <NavigationMenuLink>Ferramentaria</NavigationMenuLink>
-                                                    <NavigationMenuLink>RH</NavigationMenuLink>
-                                                    <NavigationMenuLink>Pintura</NavigationMenuLink>
-                                                </NavigationMenuContent>
-                                            </NavigationMenuItem>
-                                        </NavigationMenuList>
-                                    </NavigationMenu>
-                                </li>
-
-                                <li>
-                                    <Button variant="ghost" className={'text-md'}>
-                                        <Link href={'/dashboard'}>
-                                            Tecnicos
-                                        </Link>
-                                    </Button>
-                                </li>
-
-                                <li>
-                                    <Button
-                                        variant="ghost"
-                                        className={`text-md 
-                                            ${pathname.startsWith("/suporte") && nav_active}
-                                        `}
-                                        asChild
-                                    >
-                                        <Link href={'/suporte'}>
-                                            Suporte
-                                        </Link>
-                                    </Button>
-                                </li>
-                            </ul>
-                        </div> */}
-                    </div>
-
                     {/* Usuário e dropdown de tema e configurações */}
-                    <div className="flex items-center gap-4 w-full sm:w-1/2 lg:w-auto justify-end lg:justify-start order-2 lg:order-3">
+                    <div className="flex items-center gap-4 w-fit lg:w-auto justify-end lg:justify-start order-2 lg:order-3">
                         {/* Usuário */}
                         {user && <div className="flex items-center gap-2">
-                            <div className="font-bold text-gray-500 dark:text-gray-300 text-md">{user.nome}</div>
+                            <div className="flex flex-col items-end">
+                                <div className="font-bold text-gray-500 dark:text-gray-300 text-md">{user.nome}</div>
+                                <div className="font-bold text-gray-500 dark:text-gray-300 text-sm">{user.cargo}</div>
+                            </div>
 
                             <Avatar size="lg">
                                 <AvatarImage src={user.foto_perfil} />
@@ -311,7 +197,7 @@ export default function HeaderUser() {
                     </div>
                 </>}
             </nav>
-        </header>
+        </header >
     </>);
 }
 

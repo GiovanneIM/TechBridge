@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
 import { useState, useEffect } from "react"
 
 import {
@@ -9,8 +8,6 @@ import {
 } from "@/components/ui/button"
 
 import { Sun, Moon } from "lucide-react"
-
-
 
 export default function HeaderHome() {
 
@@ -27,7 +24,7 @@ export default function HeaderHome() {
     }, [theme]);
 
     return (<>
-        <header className="block top-0 z-50 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
+        <header className="sticky top-0 z-50 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
             <nav className="px-4 lg:px-10 py-3 w-full flex flex-wrap justify-between items-center gap-y-4">
 
                 <div className="flex gap-4">
