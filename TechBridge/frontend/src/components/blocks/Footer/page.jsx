@@ -7,7 +7,7 @@ export default function Footer() {
             <div className="container mx-auto px-4 md:px-6">
 
                 <div className="grid grid-cols-1 gap-15 py-12 md:grid-cols-4 md:py-16">
-                    
+
                     <div className="border-e">
                         <Link href="/">
                             <p className="text-3xl font-genty">Tech<span className="text-blue-700">Bridge</span></p>

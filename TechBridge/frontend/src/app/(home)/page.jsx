@@ -147,7 +147,7 @@ export default function Home() {
 							</InputGroup>
 						</Field>
 
-						<Button className="w-full md:w-sm bg-techbridge font-bold">Entrar em contato</Button>
+						<Button className="w-full md:w-sm bg-techbridge font-bold text-white">Entrar em contato</Button>
 					</FieldGroup>
 				</Card>
 			</div>

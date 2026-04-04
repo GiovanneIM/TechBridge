@@ -4,56 +4,12 @@ import Link from "next/link"
 import Image from "next/image"
 
 import { useRouter, usePathname } from "next/navigation"
-import { useState, useEffect } from "react"
 import { useAuth } from "@/context/AuthContext"
 
 import {
-    NavigationMenu,
-    NavigationMenuList,
-    NavigationMenuItem,
-    NavigationMenuContent,
-    NavigationMenuTrigger,
-    NavigationMenuLink,
-    NavigationMenuIndicator,
-    NavigationMenuViewport,
-    navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
-import {
     Button,
 } from "@/components/ui/button"
-import {
-    Menubar,
-    MenubarPortal,
-    MenubarMenu,
-    MenubarTrigger,
-    MenubarContent,
-    MenubarGroup,
-    MenubarSeparator,
-    MenubarLabel,
-    MenubarItem,
-    MenubarShortcut,
-    MenubarCheckboxItem,
-    MenubarRadioGroup,
-    MenubarRadioItem,
-    MenubarSub,
-    MenubarSubTrigger,
-    MenubarSubContent,
-} from "@/components/ui/menubar"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuPortal,
-    DropdownMenuSeparator,
-    DropdownMenuShortcut,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
-    DropdownMenuTrigger,
-    DropdownMenuLabel
-} from "@/components/ui/dropdown-menu"
-import { TextAlignJustify, Sun, Moon, Settings, User, LogOut } from "lucide-react"
+import { TextAlignJustify } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useSidebar } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -61,32 +17,19 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 
 export default function HeaderUser() {
-    const router = useRouter();
-    const pathname = usePathname();
-
     const { toggleSidebar } = useSidebar()
 
     // Obtendo o usuário
-    const { user, isAuthenticated, logout, loading, setLoading } = useAuth();
+    const { user } = useAuth();
 
-    
+    // Caso não haja um usuário logado
+    // if (!isAuthenticated) {
+    //     setLoading((prev) => ({ ...prev, auth: true }));
 
-    // Função de logout
-    function fazerLogout() {
-        logout()
-        setTimeout(() => {
-            router.push("/");
-            setLoading((prev) => ({ ...prev, logout: false }))
-        }, 2000);
-    }
-
-
-    // if (loading.perfil) {
-    //     return (
-    //         <header className="h-16 flex items-center px-4 border-b">
-    //             <div className="animate-pulse h-6 w-40 bg-gray-300 rounded" />
-    //         </header>
-    //     );
+    //     router.push("/")
+    //     setTimeout(() => {
+    //         router.push("/");
+    //     }, 1000);
     // }
 
     return (<>
@@ -120,7 +63,7 @@ export default function HeaderUser() {
                 {!user && <>
                     <div className="flex items-center gap-2">
                         <div className="flex flex-col gap-2 items-end">
-                            <Skeleton className="h-4 w-[150px]" />
+                            <Skeleton className="h-5 w-[150px]" />
                             <Skeleton className="h-4 w-[100px]" />
                         </div>
 
@@ -135,8 +78,8 @@ export default function HeaderUser() {
                         {/* Usuário */}
                         {user && <div className="flex items-center gap-2">
                             <div className="flex flex-col items-end">
-                                <div className="font-bold text-gray-500 dark:text-gray-300 text-md">{user.nome}</div>
-                                <div className="font-bold text-gray-500 dark:text-gray-300 text-sm">{user.cargo}</div>
+                                <div className="font-genty text-muted-foreground text-md">{user.nome}</div>
+                                <div className="font-bold text-muted-foreground text-sm">{user.cargo}</div>
                             </div>
 
                             <Avatar size="lg">
@@ -145,45 +88,6 @@ export default function HeaderUser() {
                             </Avatar>
                         </div>
                         }
-
-                        {/* Tema e configurações */}
-                        {/* <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline"><TextAlignJustify className="inline" /></Button>
-                            </DropdownMenuTrigger>
-
-                            <DropdownMenuContent className="w-40 mt-4" align="start">
-                                <DropdownMenuGroup>
-                                    <DropdownMenuItem>
-                                        <User /> Perfil
-                                    </DropdownMenuItem>
-                                </DropdownMenuGroup>
-
-                                <DropdownMenuSeparator />
-
-                                <DropdownMenuGroup>
-                                    <DropdownMenuLabel>Tema</DropdownMenuLabel>
-                                    <DropdownMenuItem onClick={() => { setTheme("light") }}>
-                                        <Sun /> Claro
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => { setTheme("dark") }}>
-                                        <Moon /> Escuro
-                                    </DropdownMenuItem>
-                                </DropdownMenuGroup>
-
-                                <DropdownMenuSeparator />
-
-                                <DropdownMenuGroup>
-                                    <DropdownMenuItem>
-                                        <Settings /> Configurações
-                                    </DropdownMenuItem>
-
-                                    <DropdownMenuItem className="text-[#ff0000]" onClick={fazerLogout}>
-                                        <LogOut color="#ff0000" /> Logout
-                                    </DropdownMenuItem>
-                                </DropdownMenuGroup>
-                            </DropdownMenuContent>
-                        </DropdownMenu> */}
                     </div>
                 </>}
             </nav>

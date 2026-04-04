@@ -12,12 +12,14 @@ export function useAuth({
     // Estado com o usuário
     const [user, setUser] = useState(initialUser)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [checkedAuth, setCheckedAuth] = useState(false);
 
     // Estado que indica se há uma requisição em andamento
     const [loading, setLoading] = useState({
         login: false,
         perfil: false,
-        logout: false
+        logout: false,
+        auth: false
     });
 
     // Estado para armazenar mensagem de erro (se houver)
@@ -25,7 +27,6 @@ export function useAuth({
         login: null,
         perfil: null,
     });
-
 
     // Função para fazer login
     const login = useCallback(async (dadosLogin) => {
@@ -96,6 +97,7 @@ export function useAuth({
         } finally {
             // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, perfil: false }));
+            setCheckedAuth(true);
         }
     }, []);
 
@@ -126,6 +128,7 @@ export function useAuth({
     return {
         user,
         isAuthenticated,
+        checkedAuth,
         loading,
         setLoading,
         error,

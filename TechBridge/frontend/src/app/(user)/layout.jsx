@@ -8,10 +8,10 @@ import Footer from "@/components/blocks/Footer/page";
 import {
 	SidebarProvider,
 	Sidebar,
-	SidebarInset,
 	SidebarContent,
 } from "@/components/ui/sidebar"
 import CounteudoSidebar from "../../components/Sidebar/sidebarContents";
+
 
 export default function UserLayout({ children }) {
 	return (
@@ -25,13 +25,14 @@ export default function UserLayout({ children }) {
 						{/* Sidebar */}
 						<Sidebar className="top-16 h-[calc(100vh-4rem)] border-r">
 							<SidebarContent>
-								<CounteudoSidebar/>
+								<CounteudoSidebar />
 							</SidebarContent>
 						</Sidebar>
 
 						{/* Conteúdo */}
 						<main className="flex-1">
 							{children}
+							<Footer />
 						</main>
 					</div>
 				</div>

@@ -6,20 +6,9 @@ import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation"
 import { useAuth } from "@/context/AuthContext";
 
+import { Moon, Settings, Sun, User, LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-    NavigationMenu,
-    NavigationMenuList,
-    NavigationMenuItem,
-    NavigationMenuContent,
-    NavigationMenuTrigger,
-    NavigationMenuLink,
-    NavigationMenuIndicator,
-    NavigationMenuViewport,
-    navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
-import { Moon, Settings, Sun, TextAlignJustify, User, LogOut } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 
@@ -27,7 +16,7 @@ export default function CounteudoSidebar() {
     const router = useRouter();
     const pathname = usePathname();
 
-    const { logout } = useAuth()
+    const { logout, setLoading } = useAuth()
 
     const [theme, setTheme] = useState("light");
 
@@ -37,11 +26,12 @@ export default function CounteudoSidebar() {
 
     // Função para fazer logout
     function fazerLogout() {
+        if (!confirm("Tem certeza que deseja sair?")) return;
+
         logout()
         setTimeout(() => {
             router.push("/");
-            setLoading((prev) => ({ ...prev, logout: false }))
-        }, 2000);
+        }, 1000);
     }
 
     // Controlando o tema
@@ -75,24 +65,25 @@ export default function CounteudoSidebar() {
                 </Link>
             </div>
 
-            <Separator className="md:hidden my-3" />
+            <Separator className="md:hidden my-2" />
 
-
-            <div className="flex flex-col px-2 gap-2">
-                <div className="flex gap-2">
-                    <User /> <p>Perfil</p>
+            {/* Perfil */}
+            <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2   text-md w-full hover:bg-techbridge/20 transition-all duration-200 active:scale-95 p-2 rounded">
+                    <User size={18} /> <p>Perfil</p>
                 </div>
             </div>
 
-            <Separator className="my-4" />
+            <Separator className="my-2" />
 
-            < div className="flex-1 flex flex-col w-full lg:w-auto gap-3">
+            {/* Navegação */}
+            < div className="flex-1 flex flex-col w-full lg:w-auto gap-2">
                 <div>
                     <Button
                         variant="ghost" asChild
-                        className={`text-md w-full
-                                            ${pathname.startsWith("/dashboard") && nav_active}
-                                        `}
+                        className={`text-md w-full hover:bg-techbridge/20 transition-all duration-200 active:scale-95
+                                        ${pathname.startsWith("/dashboard") && nav_active}
+                                    `}
                     >
                         <Link href={'/dashboard'}>
                             Dashboard
@@ -103,7 +94,7 @@ export default function CounteudoSidebar() {
                 <div>
                     <Button
                         variant="ghost" asChild
-                        className={`text-md w-full
+                        className={`text-md w-full hover:bg-techbridge/20 transition-all duration-200 active:scale-95
                                             ${pathname.startsWith("/kanban") && nav_active}
                                         `}
                     >
@@ -113,24 +104,27 @@ export default function CounteudoSidebar() {
                     </Button>
                 </div>
 
-                <div className="w-full">
-                    <NavigationMenu className="w-full max-w-full">
-                        <NavigationMenuList className="w-full max-w-full">
-                            <NavigationMenuItem className="w-full max-w-full">
-                                <NavigationMenuTrigger className={'w-full text-md'}>Setores</NavigationMenuTrigger>
-                                <NavigationMenuContent className={'w-57'}>
-                                    <NavigationMenuLink>Ferramentaria</NavigationMenuLink>
-                                    <NavigationMenuLink>RH</NavigationMenuLink>
-                                    <NavigationMenuLink>Pintura</NavigationMenuLink>
-                                </NavigationMenuContent>
-                            </NavigationMenuItem>
-                        </NavigationMenuList>
-                    </NavigationMenu>
+                <div>
+                    <Button
+                        variant="ghost" asChild
+                        className={`text-md w-full hover:bg-techbridge/20 transition-all duration-200 active:scale-95
+                                            ${pathname.startsWith("/setores") && nav_active}
+                                        `}
+                    >
+                        <Link href={'/setores'}>
+                            Setores
+                        </Link>
+                    </Button>
                 </div>
 
                 <div>
-                    <Button variant="ghost" className={'text-md w-full'}>
-                        <Link href={'/dashboard'}>
+                    <Button
+                        variant="ghost" asChild
+                        className={`text-md w-full hover:bg-techbridge/20 transition-all duration-200 active:scale-95
+                                            ${pathname.startsWith("/tecnicos") && nav_active}
+                                        `}
+                    >
+                        <Link href={'/tecnicos'}>
                             Tecnicos
                         </Link>
                     </Button>
@@ -139,7 +133,7 @@ export default function CounteudoSidebar() {
                 <div>
                     <Button
                         variant="ghost"
-                        className={`text-md w-full
+                        className={`text-md w-full hover:bg-techbridge/20 transition-all duration-200 active:scale-95
                                             ${pathname.startsWith("/suporte") && nav_active}
                                         `}
                         asChild
@@ -151,38 +145,51 @@ export default function CounteudoSidebar() {
                 </div>
             </div >
 
-            <Separator className="my-4" />
+            <Separator className="my-2" />
 
+            {/* Tema */}
             <div>
                 {/* <p className="text-muted-foreground font-genty">Tema</p> */}
-                <div className="flex flex-col px-2 gap-3">
-                    <div
-                        className="flex gap-2"
-                        onClick={() => { setTheme("light") }}
-                    >
-                        <Sun /> <p>Claro</p>
-                    </div>
-                    <div
-                        className="flex gap-2"
-                        onClick={() => { setTheme("dark") }}
-                    >
-                        <Moon /> <p>Escuro</p>
-                    </div>
+                <div className="flex flex-col gap-3">
+                    {theme === "dark"
+                        ? (
+                            <div
+                                className="flex items-center gap-2   text-md w-full hover:bg-techbridge/20 transition-all duration-200 active:scale-95 p-2 rounded"
+                                onClick={() => { setTheme("light") }}
+                            >
+                                <Sun size={18} /> <p>Claro</p>
+                            </div>
+                        )
+                        : (
+                            <div
+                                className="flex items-center gap-2   text-md w-full hover:bg-techbridge/20 transition-all duration-200 active:scale-95 p-2 rounded"
+                                onClick={() => { setTheme("dark") }}
+                            >
+                                <Moon size={18} /> <p>Escuro</p>
+                            </div>
+                        )
+                    }
+
+
                 </div>
             </div>
 
-            <Separator className="my-4" />
+            <Separator className="my-2" />
 
-            <div className="flex flex-col px-2 gap-3">
-                <div className="flex gap-2">
-                    <Settings /> Configurações
+            {/* Config e logout */}
+            <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2   text-md w-full hover:bg-techbridge/20 transition-all duration-200 active:scale-95 p-2 rounded">
+                    <Settings size={18} /> Configurações
                 </div>
 
                 <div
-                    className="text-[#ff0000] flex gap-2"
+                    className="
+                        text-destructive flex items-center gap-2  text-md w-full 
+                        hover:bg-techbridge/20 transition-all duration-200 active:scale-95 p-2 rounded
+                        "
                     onClick={fazerLogout}
                 >
-                    <LogOut color="#ff0000" /> Logout
+                    <LogOut size={18} /> Logout
                 </div>
             </div>
         </div>

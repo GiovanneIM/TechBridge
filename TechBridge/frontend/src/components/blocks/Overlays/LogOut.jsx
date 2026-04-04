@@ -22,9 +22,9 @@ export default function LogOut() {
 
     return (
         <div className="fixed inset-0 bg-blue-50 z-51 flex flex-col items-center justify-center">
-            <div className="relative flex flex-col justify-center items-center gap-10 bg-white rounded-full p-25 sm:p-30 md:p-75">
+            <div className="relative flex flex-col justify-center items-center gap-8">
                 <div className="relative w-fit h-fit">
-                    <Spinner className="text-techbridge absolute top-1/2 left-1/2 -translate-1/2 w-[175%] h-[175%] font-normal" />
+                    <div className="w-40 h-40 -z-10 bg-techbridge absolute top-1/2 left-1/2 -translate-1/2 rounded-full animate-ping"></div>
                     <Image
                         src="/TechBridge/Logo.svg"
                         width={200}

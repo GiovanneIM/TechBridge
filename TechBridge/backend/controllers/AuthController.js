@@ -2,6 +2,13 @@ import jwt from 'jsonwebtoken';
 import UsuarioModel from '../models/UserModel.js';
 import { JWT_CONFIG } from '../config/jwt.js';
 
+const tiposDeUsuario = {
+    '1': 'Admin TechBridge',
+    '2': 'Admin Cliente',
+    '3': 'Técnico',
+}
+
+
 // CONTROLLER PARA OPERAÇÕES DE AUTENTICAÇÃO
 
 class AuthController {
@@ -78,10 +85,8 @@ class AuthController {
                 mensagem: 'Login efetuado com sucesso',
                 dados: {
                     usuario: {
-                        id: usuario.id,
-                        nome: usuario.nome,
-                        email: usuario.email,
-                        tipo_usuario: usuario.tipo_usuario
+                        ...usuario,
+                        cargo: tiposDeUsuario[usuario.tipo_usuario]
                     }
                 }
             });
@@ -112,12 +117,17 @@ class AuthController {
             }
 
             // Remover senha dos dados retornados
-            const { senha, ...usuarioSemSenha } = usuario;
+            const { senha: _, ...usuarioSemSenha } = usuario;
 
             // Retornando os dados do usuário
             res.status(200).json({
                 sucesso: true,
-                dados: { usuario: usuarioSemSenha }
+                dados: {
+                    usuario: {
+                        ...usuarioSemSenha,
+                        cargo: tiposDeUsuario[usuario.tipo_usuario]
+                    }
+                }
             });
 
         } catch (error) {

@@ -7,8 +7,8 @@ import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local"
 
-import Image from "next/image";
-import LogOut from "@/components/blocks/LogOut/LogOut";
+import LogOut from "@/components/blocks/Overlays/LogOut";
+import NotAuthenticated from "@/components/blocks/Overlays/NotAuthentificated";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
 					`}
 			>
 				<AuthProvider>
-					<LogOut />
+					<LogOut/>
 					{children}
 				</AuthProvider>
 			</body>
