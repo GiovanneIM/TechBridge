@@ -64,7 +64,7 @@ export default function PageSuporte() {
                             {items.map((item) => (
                                 <AccordionItem key={item.value} value={item.value} className="w-full">
                                     <AccordionTrigger className={'p-4 font-bold text-sm shadow-sm hover:shadow-md mb-4'}>{item.trigger}</AccordionTrigger>
-                                    <AccordionContent>{item.content}</AccordionContent>
+                                    <AccordionContent className={'px-2'}>{item.content}</AccordionContent>
                                 </AccordionItem>
                             ))}
                         </Accordion>
@@ -74,9 +74,9 @@ export default function PageSuporte() {
                 {/* Perguntas frequentes */}
                 <Card className="w-full py-5 px-4">
                     <CardHeader className="m-0 p-0">
-                        <CardTitle className={'text-2xl font-genty font-normal'}>Perguntas Frequentes</CardTitle>
+                        <CardTitle className={'text-2xl font-genty font-normal'}>Central de Ajuda</CardTitle>
                         <CardDescription className={'text-muted-foreground text-md font-genty'}>
-                            Perguntas comuns feitas por nossos clientes
+                            Encontre orientações e saiba como resolver problemas de forma rápida e prática.
                         </CardDescription>
                     </CardHeader>
 
@@ -84,10 +84,10 @@ export default function PageSuporte() {
                         <Accordion
                             type="single" collapsible defaultValue="plans"
                         >
-                            {items.map((item) => (
+                            {items2.map((item) => (
                                 <AccordionItem key={item.value} value={item.value} className="w-full">
                                     <AccordionTrigger className={'p-4 font-bold text-sm shadow-sm hover:shadow-md mb-4'}>{item.trigger}</AccordionTrigger>
-                                    <AccordionContent>{item.content}</AccordionContent>
+                                    <AccordionContent className={'px-2'}>{item.content}</AccordionContent>
                                 </AccordionItem>
                             ))}
                         </Accordion>
@@ -187,25 +187,38 @@ export default function PageSuporte() {
 const items = [
     {
         value: "item-1",
-        trigger: "How do I reset my password?",
+        trigger: "Como altero minha senha?",
         content:
-            "Click on 'Forgot Password' on the login page, enter your email address, and we'll send you a link to reset your password. The link will expire in 24 hours.",
+            "Entre em contato com o administrador responsável pela sua área e solicite a recuperação da sua senha. Após isso, enviaremos um link para redefinição, que será válido por 24 horas.",
     },
     {
         value: "item-2",
-        trigger: "Can I change my subscription plan?",
+        trigger: "Problemas com seu acesso?",
         content:
-            "Yes, you can upgrade or downgrade your plan at any time from your account settings. Changes will be reflected in your next billing cycle.",
+            "Solicite suporte ao administrador responsável ou entre em contato conosco para que possamos orientá-lo na resolução do seu problema.",
     },
     {
         value: "item-3",
-        trigger: "What payment methods do you accept?",
+        trigger: "Como entro em contato com o suporte?",
         content:
-            "We accept all major credit cards, PayPal, and bank transfers. All payments are processed securely through our payment partners.",
+            "Você pode entrar em contato com nossa equipe de suporte pelos canais oficiais disponíveis na plataforma. Nossa equipe está pronta para ajudá-lo com qualquer dúvida ou problema.",
     },
 ]
 
-
+const items2 = [
+    {
+        value: "item-1",
+        trigger: "Seus dashboards estão sem dados?",
+        content:
+            "Caso seus dashboards estejam em branco, tente recarregar a página algumas vezes. Se os itens ainda não aparecerem, faça logout e entre novamente em sua conta. Caso o problema persista, entre em contato com o suporte.",
+    },
+    {
+        value: "item-2",
+        trigger: "Como alterar minha conta?",
+        content:
+            "Caso você já esteja logado em qualquer página do site, localize na barra lateral (sidebar) o botão vermelho “Logout”. Ao clicar nele e confirmar a ação, você será redirecionado para a página inicial, onde poderá realizar o login novamente.",
+    },
+]
 
 
 
