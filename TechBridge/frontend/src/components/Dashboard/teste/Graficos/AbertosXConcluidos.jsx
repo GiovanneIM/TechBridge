@@ -33,7 +33,7 @@ import {
 	ToggleGroupItem,
 } from "@/components/ui/toggle-group"
 
-export function AbertosXConcluidos({ chamados }) {
+export default function AbertosXConcluidos({ chamados }) {
 	const isMobile = useIsMobile()
 
 	const [timeRange, setTimeRange] = useState("90d")

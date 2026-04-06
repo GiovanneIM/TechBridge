@@ -8,8 +8,7 @@ import {
     CardContent
 } from "@/components/ui/card"
 
-export default function ChamadosCard({
-    totalChamados,
+export default function EstadosCards({
     chamadosPorEstados
 }) {
 

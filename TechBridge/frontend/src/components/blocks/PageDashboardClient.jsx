@@ -10,11 +10,12 @@ import { SectionCards } from "@/components/Dashboard/section-cards"
 import { Separator } from "@/components/ui/separator"
 import { Button } from '../ui/button';
 import { Grid2X2, RotateCw } from 'lucide-react';
-import { GraficoEstados } from '../Dashboard/teste/pieChart';
-import ChamadosCard from '../Dashboard/teste/ChamadosCard';
+
+import GraficoEstados from '../Dashboard/teste/Graficos/pieChart';
 import LinhaUm from '../Dashboard/teste/LinhaUm';
-import { LinhaEstados } from '../Dashboard/teste/LinhaEstados';
-import { AbertosXConcluidos } from '../Dashboard/teste/AbertosXConcluidos';
+import LinhaEstados from '../Dashboard/teste/Graficos/LinhaEstados';
+import AbertosXConcluidos from '../Dashboard/teste/Graficos/AbertosXConcluidos';
+import EstadosCards from '../Dashboard/teste/EstadosCards';
 
 export default function PageDashboard({
 	chamadosIniciais,
@@ -27,7 +28,8 @@ export default function PageDashboard({
 		error,
 		refetchChamados
 	} = useChamados({
-		chamadosIniciais: chamadosIniciais
+		chamadosIniciais: chamadosIniciais,
+		fetchOnMount: chamadosIniciais.length === 0
 	})
 
 	return (<div>
@@ -62,7 +64,7 @@ export default function PageDashboard({
 			</div>
 		</div>
 
-		{/* <div>{JSON.stringify(dashboard)}</div> */}
+		<div>{JSON.stringify(dashboard)}</div>
 
 		<Separator />
 
@@ -77,7 +79,7 @@ export default function PageDashboard({
 			<div className="flex-1 flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
 				{/* Chamados por estado */}
 				<div className='flex flex-col md:flex-row gap-4'>
-					<ChamadosCard totalChamados={dashboard.totalChamados} chamadosPorEstados={dashboard.porEstado} />
+					<EstadosCards totalChamados={dashboard.totalChamados} chamadosPorEstados={dashboard.porEstado} />
 					<GraficoEstados chamadosPorEstados={dashboard.porEstado} />
 				</div>
 			</div>
@@ -87,7 +89,7 @@ export default function PageDashboard({
 			<div className="flex-1 flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
 				<div className='flex flex-col md:flex-row gap-4'>
 					<LinhaEstados chamadosPorDia={dashboard.chamadosPorDia} />
-					
+
 				</div>
 			</div>
 
