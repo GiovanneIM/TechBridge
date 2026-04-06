@@ -67,7 +67,7 @@ export function GraficoLinha({
     })
 
     return (
-        <Card className="w-1/2">
+        <Card className="w-full md:w-1/2">
             <CardHeader>
                 <CardTitle>Chamados por dia</CardTitle>
                 <CardDescription>Fluxo diário de chamados: abertos, atendidos e concluídos</CardDescription>
