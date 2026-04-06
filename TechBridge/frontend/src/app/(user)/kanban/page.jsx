@@ -26,6 +26,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useChamados } from "@/hooks/useChamados";
 import { useMaquinas } from "@/hooks/useMaquina";
 import { useSetores } from "@/hooks/useSetores";
+import { RotateCw, SquareKanban } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 // ================= TASK CARD =================
 function TaskCard({ task, hideWhenDragging = false }) {
@@ -111,7 +113,7 @@ function Column({ columnId, title, tasks, children }) {
 				</span>
 			</div>
 
-			<div className="flex flex-col gap-3 min-h-[120px] max-h-[650px] overflow-y-auto">
+			<div className="flex flex-col gap-3 min-h-[120px] max-h-[650px] rounded-xl overflow-y-auto">
 				{children}
 			</div>
 		</div>
@@ -239,7 +241,35 @@ export default function Kanban() {
 		}
 	}
 
-	return (
+	return (<>
+		{/* Header do dashboard */}
+		<div
+			className="
+						flex h-12 shrink-0 items-center gap-2 border-b 
+						transition-[width,height] ease-linear 
+						group-has-data-[collapsible=icon]/sidebar-wrapper:h-12
+					"
+		>
+			<div className="w-full flex items-center justify-between gap-3 px-4 lg:px-6">
+				<div className='flex gap-1 lg:gap-2'>
+					<SquareKanban />
+
+					<h1 className="text-base font-genty">Kanban</h1>
+				</div>
+
+				{/* Botão para buscar os chamados novamente */}
+				<div className="flex items-center gap-2">
+					<Button
+						variant="ghost"
+						onClick={() => { refetchChamados() }}
+						className="flex items-center border text-muted-foreground"
+					>
+						<RotateCw />
+						<span className="hidden font-medium sm:inline">Recarregar chamados</span>
+					</Button>
+				</div>
+			</div>
+		</div>
 		<div className="relative min-h-screen bg-linear-to-b from-white to-blue-50 overflow-hidden">
 
 			{/* Background (onda) */}
@@ -262,9 +292,6 @@ export default function Kanban() {
 			</div>
 
 			<div className="relative z-10 flex flex-col items-center py-8">
-				<h1 className="text-3xl font-bold pb-8 text-gray-800">
-					Kanban de Chamados
-				</h1>
 
 				<DndContext
 					sensors={sensors}
@@ -302,5 +329,6 @@ export default function Kanban() {
 				</DndContext>
 			</div>
 		</div>
+	</>
 	);
 }
