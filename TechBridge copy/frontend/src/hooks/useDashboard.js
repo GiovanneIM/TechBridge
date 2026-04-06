@@ -13,7 +13,7 @@ export function useDashboard({
     const [dashboard, setDashboard] = useState(dashboardInicial);
 
     // Estado que indica se há uma requisição em andamento
-    const [loadingDashboard, setLoading] = useState(false);
+    const [loadingDashboard, setLoading] = useState(true);
 
     // Estado para armazenar mensagem de erro (se houver)
     const [errorDashboard, setError] = useState(null);
@@ -59,7 +59,7 @@ export function useDashboard({
 
     // Obtendo o dashboard
     useEffect(() => {
-        if (!fetchOnMount) return;
+        if (!fetchOnMount) setLoading(false);
         fetchDashboard();
     }, [fetchOnMount, fetchDashboard]);
 
