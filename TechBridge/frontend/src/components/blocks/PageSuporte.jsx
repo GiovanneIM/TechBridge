@@ -29,6 +29,7 @@ import { Separator } from "../ui/separator";
 
 export default function PageSuporte() {
     return (<>
+        {/* Header da página */}
         <div
             className="
                 flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] 

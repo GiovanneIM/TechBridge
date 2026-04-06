@@ -16,7 +16,7 @@ export default function PageChamados({
         refetchChamados
     } = useChamados({
         chamadosIniciais: chamadosIniciais,
-        fetchOnMount: chamadosIniciais.length === 0
+        fetchOnMount: chamadosIniciais?.length === 0
     })
 
     return (<div>
@@ -30,7 +30,7 @@ export default function PageChamados({
         >
             <div className="w-full flex items-center justify-between gap-3 px-4 lg:px-6">
                 <div className='flex gap-1 lg:gap-2'>
-                    <Siren />
+                    <Siren className="-ml-1" />
 
                     <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-6" />
 
