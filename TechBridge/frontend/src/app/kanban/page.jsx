@@ -28,6 +28,7 @@ import { useMaquinas } from "@/hooks/useMaquina";
 import { useSetores } from "@/hooks/useSetores";
 import { RotateCw, SquareKanban } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { conexaoKanban } from "@/hooks/conexaoKanban";
 
 // ================= TASK CARD =================
 function TaskCard({ task, hideWhenDragging = false }) {
@@ -122,30 +123,11 @@ function Column({ columnId, title, tasks, children }) {
 
 // ================= KANBAN =================
 export default function Kanban() {
-	const { token } = useAuth({
-		initialUser: null,
-		fetchOnMount: true,
+
+	const { chamados } = conexaoKanban({
+		conectOnMount: true
 	});
 
-	const { chamados, refetchChamados } = useChamados({
-		token: token,
-		initialChamado: [],
-	});
-
-	useEffect(() => {
-		if (!token) return;
-		refetchChamados();
-	}, [token, refetchChamados]);
-
-	const { maquinas } = useMaquinas({
-		initialMachines: [],
-		fetchOnMount: true,
-	});
-
-	const { setores } = useSetores({
-		initialSetores: [],
-		fetchOnMount: true,
-	});
 
 	const [columns, setColumns] = useState({
 		aberto: [],
@@ -169,12 +151,10 @@ export default function Kanban() {
 		};
 
 		chamados.forEach((c) => {
-			const maquina = maquinas.find(m => m.id === c.id_maquina);
-			const setor = setores.find(s => s.id === maquina?.id_setor);
 
 			const task = {
 				id: String(c.id),
-				title: `${setor?.cod_setor || "??"} ${maquina?.cod_maquina || "??"} - ${c.cod_chamado}`,
+				title: `${"??"} ${"??"} - ${c.cod_chamado}`,
 				description: c.descricao_problema || "Sem descrição",
 				status: c.estado,
 			};
@@ -183,7 +163,7 @@ export default function Kanban() {
 		});
 
 		setColumns(novasColunas);
-	}, [chamados, maquinas, setores]);
+	}, [chamados]);
 
 	const columnList = [
 		{ id: "aberto", title: "Aberto" },
