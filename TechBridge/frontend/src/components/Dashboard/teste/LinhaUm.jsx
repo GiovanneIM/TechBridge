@@ -13,7 +13,6 @@ export default function LinhaUm({ dashboard }) {
         let segundos, minutos, horas;
 
         segundos = tempoSegundos ?? 0;
-        console.log(segundos);
         
 
         if (segundos >= 3600) {
