@@ -4,21 +4,17 @@ import { useState, useEffect } from 'react';
 import { useChamados } from '@/hooks/useChamados';
 
 
-import { AppSidebar } from "@/components/Dashboard/app-sidebar"
 import { ChartAreaInteractive } from "@/components/Dashboard/chart-area-interactive"
 import { DataTable } from "@/components/Dashboard/data-table"
 import { SectionCards } from "@/components/Dashboard/section-cards"
-import {
-	SidebarInset,
-	SidebarProvider,
-} from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Button } from '../ui/button';
 import { Grid2X2, RotateCw } from 'lucide-react';
 import { GraficoEstados } from '../Dashboard/teste/pieChart';
 import ChamadosCard from '../Dashboard/teste/ChamadosCard';
 import LinhaUm from '../Dashboard/teste/LinhaUm';
-import { GraficoLinha } from '../Dashboard/teste/GraficoLinha';
+import { LinhaEstados } from '../Dashboard/teste/LinhaEstados';
+import { AbertosXConcluidos } from '../Dashboard/teste/AbertosXConcluidos';
 
 export default function PageDashboard({
 	chamadosIniciais,
@@ -89,7 +85,10 @@ export default function PageDashboard({
 			<Separator />
 
 			<div className="flex-1 flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
-				<GraficoLinha chamadosPorDia={dashboard.chamadosPorDia} />
+				<div className='flex flex-col md:flex-row gap-4'>
+					<LinhaEstados chamadosPorDia={dashboard.chamadosPorDia} />
+					
+				</div>
 			</div>
 
 			<Separator />

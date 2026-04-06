@@ -43,7 +43,7 @@ const chartConfig = {
     },
 }
 
-export function GraficoLinha({
+export function LinhaEstados({
     chamadosPorDia
 }) {
 

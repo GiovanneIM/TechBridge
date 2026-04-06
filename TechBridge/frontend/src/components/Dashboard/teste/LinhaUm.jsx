@@ -39,7 +39,7 @@ export default function LinhaUm({ dashboard }) {
             <Card className="flex justify-between py-4 gap-0">
                 <CardHeader>
                     <CardTitle className="font-bold text-md h-12">
-                        Total de chamadas
+                        Total de chamados
                     </CardTitle>
                 </CardHeader>
 
