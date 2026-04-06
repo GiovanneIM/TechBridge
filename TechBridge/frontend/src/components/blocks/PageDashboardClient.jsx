@@ -64,9 +64,9 @@ export default function PageDashboard({
 			</div>
 		</div>
 
-		<div>{JSON.stringify(dashboard)}</div>
+		{/* <div>{JSON.stringify(dashboard)}</div> */}
 
-		<Separator />
+		{/* <Separator /> */}
 
 		{/* Conteúdo do dashboard */}
 		{!loading.fetch && <>
