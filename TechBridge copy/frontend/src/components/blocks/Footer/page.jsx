@@ -1,19 +1,23 @@
+import Link from "next/link";
+
 export default function Footer() {
 
     return (<>
-
         <footer className="bg-background w-full border-t shadow-sm">
             <div className="container mx-auto px-4 md:px-6">
-                
+
                 <div className="grid grid-cols-1 gap-15 py-12 md:grid-cols-4 md:py-16">
-                    <div className="md:col-span-1">
-                        <a href="#" className="flex items-center space-x-2">
-                            <span className="text-xl flex font-bold">Tech<p className="text-blue-700">Bridge</p></span>
-                        </a>
-                        <p className="text-muted-foreground mt-4 text-sm">
-                            Melhorando a cada dia a manutenção da sua empresa.
+
+                    <div className="border-e">
+                        <Link href="/">
+                            <p className="text-3xl font-genty">Tech<span className="text-blue-700">Bridge</span></p>
+                        </Link>
+
+                        <p className="text-muted-foreground mt-4 text-md">
+                            Criando pontes e facilitando seu trabalho.
                         </p>
                     </div>
+
                     <div>
                         <h3 className="font-medium">Departamentos</h3>
                         <ul className="mt-4 space-y-2">

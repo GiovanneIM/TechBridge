@@ -1,4 +1,4 @@
-import { create, read, update, deleteRecord, comparePassword, hashPassword } from '../config/database.js';
+import { create, read, update, deleteRecord, dadosDashboard, comparePassword, hashPassword } from '../config/database.js';
 
 class ChamadosModel {
 
@@ -12,6 +12,43 @@ class ChamadosModel {
             return { chamados };
         } catch (error) {
             console.error('Erro ao listar chamados:', error);
+            throw error;
+        }
+    }
+
+    //  BUSCAR UM CHAMADO ESPECÍFICO
+    static async listarChamados(id) {
+        try {
+            // Fazendo a consulta
+            const chamados = await read("chamados", {where: {id}});
+
+            // Retornando os chamados
+            return { chamados };
+        } catch (error) {
+            console.error('Erro ao listar chamados:', error);
+            throw error;
+        }
+    }
+
+    //  CRIAR UM CHAMADO
+    static async criarChamados(chamado) {
+        try {
+            // Fazendo a consulta
+            const id = await create("chamados", chamado);
+            return id;
+        } catch (error) {
+            console.error('Erro ao listar chamados:', error);
+            throw error;
+        }
+    }
+
+    static async obterDashboard(options) {
+        try {
+            const dashboard = await dadosDashboard()
+
+            return dashboard;
+        } catch (error) {
+            console.error('Erro ao obter dados para dashboard:', error)
             throw error;
         }
     }

@@ -23,7 +23,7 @@ import { Separator } from "@/components/ui/separator";
 
 
 
-export default function PageLoginClient() {
+export default function PageLogin() {
 	const router = useRouter()
 
 	// Obtendo o usuário e a função de login

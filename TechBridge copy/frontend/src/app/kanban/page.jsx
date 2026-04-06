@@ -26,6 +26,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { useChamados } from "@/hooks/useChamados";
 import { useMaquinas } from "@/hooks/useMaquina";
 import { useSetores } from "@/hooks/useSetores";
+import { RotateCw, SquareKanban } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { conexaoKanban } from "@/hooks/conexaoKanban";
 
 // ================= TASK CARD =================
 function TaskCard({ task, hideWhenDragging = false }) {
@@ -50,9 +53,9 @@ function TaskCard({ task, hideWhenDragging = false }) {
 			style={style}
 			{...attributes}
 			{...listeners}
-			className={`cursor-grab active:cursor-grabbing border border-border/50
-        bg-white/70 backdrop-blur-sm
-        hover:shadow-lg hover:-translate-y-1 transition-all duration-200`}
+			className="cursor-grab active:cursor-grabbing border border-border/50
+			bg-white/70 backdrop-blur-sm
+			hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
 		>
 			<CardContent className="p-4 space-y-3">
 				<div className="font-semibold text-sm text-gray-800">
@@ -96,10 +99,11 @@ function Column({ columnId, title, tasks, children }) {
 	return (
 		<div
 			ref={setNodeRef}
-			className={`w-80 p-4 rounded-xl border transition-all
-      ${colors[columnId]}
-      ${isOver ? "ring-2 ring-blue-400 scale-[1.02]" : ""}
-      shadow-sm`}
+			className={`w-80 mt-2 p-4 rounded-xl border transition-all
+			self-start
+			${colors[columnId]}
+			${isOver ? "ring-2 ring-blue-400 scale-[1.02]" : ""}
+			shadow-sm`}
 		>
 			<div className="flex justify-between items-center mb-3">
 				<h2 className="font-semibold text-gray-700">
@@ -110,7 +114,7 @@ function Column({ columnId, title, tasks, children }) {
 				</span>
 			</div>
 
-			<div className="flex flex-col gap-3 min-h-[120px] max-h-[650px] overflow-y-auto rounded-xl">
+			<div className="flex flex-col gap-3 min-h-[120px] max-h-[650px] rounded-xl overflow-y-auto">
 				{children}
 			</div>
 		</div>
@@ -119,30 +123,11 @@ function Column({ columnId, title, tasks, children }) {
 
 // ================= KANBAN =================
 export default function Kanban() {
-	const { token } = useAuth({
-		initialUser: null,
-		fetchOnMount: true,
+
+	const { chamados } = conexaoKanban({
+		conectOnMount: true
 	});
 
-	const { chamados, refetchChamados } = useChamados({
-		token: token,
-		initialChamado: [],
-	});
-
-	useEffect(() => {
-		if (!token) return;
-		refetchChamados();
-	}, [token, refetchChamados]);
-
-	const { maquinas } = useMaquinas({
-		initialMachines: [],
-		fetchOnMount: true,
-	});
-
-	const { setores } = useSetores({
-		initialSetores: [],
-		fetchOnMount: true,
-	});
 
 	const [columns, setColumns] = useState({
 		aberto: [],
@@ -166,12 +151,10 @@ export default function Kanban() {
 		};
 
 		chamados.forEach((c) => {
-			const maquina = maquinas.find(m => m.id === c.id_maquina);
-			const setor = setores.find(s => s.id === maquina?.id_setor);
 
 			const task = {
 				id: String(c.id),
-				title: `${setor?.cod_setor || "??"} ${maquina?.cod_maquina || "??"} - ${c.cod_chamado}`,
+				title: `${"??"} ${"??"} - ${c.cod_chamado}`,
 				description: c.descricao_problema || "Sem descrição",
 				status: c.estado,
 			};
@@ -180,7 +163,7 @@ export default function Kanban() {
 		});
 
 		setColumns(novasColunas);
-	}, [chamados, maquinas, setores]);
+	}, [chamados]);
 
 	const columnList = [
 		{ id: "aberto", title: "Aberto" },
@@ -239,7 +222,36 @@ export default function Kanban() {
 	}
 
 	return (<>
-		<div className="relative min-h-screen bg-gradient-to-b from-white to-blue-50 overflow-hidden">
+		{/* Header do dashboard */}
+		<div
+			className="
+						flex h-12 shrink-0 items-center gap-2 border-b 
+						transition-[width,height] ease-linear 
+						group-has-data-[collapsible=icon]/sidebar-wrapper:h-12
+					"
+		>
+			<div className="w-full flex items-center justify-between gap-3 px-4 lg:px-6">
+				<div className='flex gap-1 lg:gap-2'>
+					<SquareKanban />
+
+					<h1 className="text-base font-genty">Kanban</h1>
+				</div>
+
+				{/* Botão para buscar os chamados novamente */}
+				<div className="flex items-center gap-2">
+					<Button
+						variant="ghost"
+						onClick={() => { refetchChamados() }}
+						className="flex items-center border text-muted-foreground"
+					>
+						<RotateCw />
+						<span className="hidden font-medium sm:inline">Recarregar chamados</span>
+					</Button>
+				</div>
+			</div>
+		</div>
+		<div className="relative min-h-screen bg-linear-to-b from-white to-blue-50 overflow-hidden">
+
 			{/* Background (onda) */}
 			<div className="absolute inset-x-0 bottom-0 z-0 pointer-events-none">
 				<svg
@@ -259,11 +271,7 @@ export default function Kanban() {
 				</svg>
 			</div>
 
-			{/* Conteúdo */}
 			<div className="relative z-10 flex flex-col items-center py-8">
-				<h1 className="text-3xl font-bold mb-8 text-gray-800">
-					Kanban de Chamados
-				</h1>
 
 				<DndContext
 					sensors={sensors}
@@ -271,7 +279,7 @@ export default function Kanban() {
 					onDragStart={handleDragStart}
 					onDragEnd={handleDragEnd}
 				>
-					<div className="flex flex-col justify-center lg:flex-row gap-6 overflow-x-auto pb-8 w-full max-w-7xl">
+					<div className="flex flex-col items-start justify-center md:flex-row gap-6 overflow-x-auto pb-8 w-full max-w-7xl">
 						{columnList.map((col) => (
 							<Column
 								key={col.id}
@@ -301,5 +309,6 @@ export default function Kanban() {
 				</DndContext>
 			</div>
 		</div>
-	</>);
+	</>
+	);
 }

@@ -17,7 +17,7 @@ import userRotas from './routes/userRotas.js';
 import chamadosRotas from './routes/chamadosRotas.js';
 import maquinasRotas from './routes/maquinasRotas.js';
 import setoresRotas from './routes/setoresRotas.js'
-
+import kanbanRotas from './routes/kanbanRotas.js'
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // IMPORTAR MIDDLEWARES
@@ -44,7 +44,7 @@ app.use(helmet()); // Segurança HTTP headers
 // Configurar CORS para permitir que rotas OPTIONS específicas sejam processadas
 app.use(cors({
     origin: 'http://localhost:3001',                        // Permitindo acesso de qualquer endereço (Alterar para o endereço do Frontend)
-    credentials: true,
+    credentials: true,                                      // Permitindo receber cookies do navegador
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],   // Metódos permitidos
     allowedHeaders: ['Content-Type', 'Authorization'],      // Headers permmitidos
     preflightContinue: false,                               // Deixa as rotas OPTIONS específicas serem processadas
@@ -63,6 +63,12 @@ app.use(logMiddleware);
 // Middlewate para obter cookies
 app.use(cookieParser());
 
+// Middleware para simular atraso em TODAS as requisições
+// app.use(async (req, res, next) => {
+//   await new Promise((resolve) => setTimeout(resolve, 3000));
+//   next();
+// });
+
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // ATIVAR AS ROTAS
@@ -72,6 +78,7 @@ app.use('/api/user', userRotas);
 app.use('/api/chamados', chamadosRotas);
 app.use('/api/maquinas', maquinasRotas);
 app.use('/api/setores', setoresRotas);
+app.use('/api/kanban', kanbanRotas);
 
 // Rota raiz
 app.get('/', (req, res) => {

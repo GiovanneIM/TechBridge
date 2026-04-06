@@ -5,7 +5,8 @@ import { useEffect, useState, useCallback } from 'react';
 const API_BASE_URL = 'http://localhost:3000/api/chamados';
 
 export function useChamados({
-    chamadosIniciais = []
+    chamadosIniciais = [],
+    fetchOnMount = true
 } = {}
 ) {
     // Estado com os chamados
@@ -26,7 +27,6 @@ export function useChamados({
         setError((prev) => ({ ...prev, fetch: null }));
 
         try {
-
             // Chamada à API
             const response = await fetch(`${API_BASE_URL}/buscar`, {
                 method: 'POST',
@@ -58,6 +58,12 @@ export function useChamados({
             setLoading((prev) => ({ ...prev, fetch: false }));
         }
     }, []);
+
+    // Obtendo o perfil
+    useEffect(() => {
+        if (!fetchOnMount) return;
+        fetchChamados();
+    }, [fetchOnMount]);
 
     return {
         chamados,
