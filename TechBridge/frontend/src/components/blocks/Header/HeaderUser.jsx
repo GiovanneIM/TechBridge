@@ -22,16 +22,6 @@ export default function HeaderUser() {
     // Obtendo o usuário
     const { user } = useAuth();
 
-    // Caso não haja um usuário logado
-    // if (!isAuthenticated) {
-    //     setLoading((prev) => ({ ...prev, auth: true }));
-
-    //     router.push("/")
-    //     setTimeout(() => {
-    //         router.push("/");
-    //     }, 1000);
-    // }
-
     return (<>
         <header className="sticky w-full top-0 z-50 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
             <nav className="px-4 lg:pe-10 py-3 w-full flex flex-wrap justify-between items-center gap-y-4">
@@ -76,10 +66,10 @@ export default function HeaderUser() {
                     {/* Usuário e dropdown de tema e configurações */}
                     <div className="flex items-center gap-4 w-fit lg:w-auto justify-end lg:justify-start order-2 lg:order-3">
                         {/* Usuário */}
-                        {user && <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2">
                             <div className="flex flex-col items-end">
-                                <div className="font-genty text-muted-foreground text-md">{user.nome}</div>
-                                <div className="font-bold text-muted-foreground text-sm">{user.cargo}</div>
+                                <div className="font-genty text-foreground text-md">{user.nome}</div>
+                                <div className="font-genty text-muted-foreground text-sm">{user.cargo}</div>
                             </div>
 
                             <Avatar size="lg">
@@ -87,7 +77,6 @@ export default function HeaderUser() {
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                         </div>
-                        }
                     </div>
                 </>}
             </nav>

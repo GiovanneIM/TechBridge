@@ -33,9 +33,13 @@ async function read(table, options = null) {
         • options → Objeto com as opções de busca 
         
         Ex: read("usuarios", { 
-            columns: ["id", "nome"], 
+            columns: ["id", "nome n"],
+            join: [
+                {type: "INNER", table: "tipoUsuario tu", on: "tu.id = n.id_tipoUsuario"}
+            ] 
             where: { ativo: 1}, 
             like: {nome: "jo"}, 
+            groupBy: ['tu.descricao']
             orderBy: "nome ASC", 
             limit: 10
         })
@@ -58,16 +62,32 @@ async function read(table, options = null) {
 
         sql += ` FROM ${table}`;
 
+        // JOIN
+        if (options?.join && Array.isArray(options.join)) {
+            for (const j of options.join) {
+                if (!j.type || !j.table || !j.on) continue;
+
+                sql += ` ${j.type.toUpperCase()} JOIN ${j.table} ON ${j.on}`;
+            }
+        }
+
         // WHERE
         if (options.where && Object.keys(options.where).length > 0) {
             const conditions = [];
 
             for (const [key, value] of Object.entries(options.where)) {
-                if (Array.isArray(value)) {
+                if (value === null) {
+                    conditions.push(`${key} IS NULL`);
+                }
+                else if (value === 'NOT_NULL') {
+                    conditions.push(`${key} IS NOT NULL`);
+                }
+                else if (Array.isArray(value)) {
                     const placeholders = value.map(() => "?").join(", ");
                     conditions.push(`${key} IN (${placeholders})`);
                     values.push(...value);
-                } else {
+                }
+                else {
                     conditions.push(`${key} = ?`);
                     values.push(value);
                 }
@@ -89,9 +109,22 @@ async function read(table, options = null) {
             sql += conditions.join(" AND ");
         }
 
+        // GROUP BY
+        if (options?.groupBy) {
+            if (Array.isArray(options.groupBy)) {
+                sql += ` GROUP BY ${options.groupBy.join(', ')}`;
+            } else {
+                sql += ` GROUP BY ${options.groupBy}`;
+            }
+        }
+
         // ORDER BY
         if (options.orderBy) {
-            sql += ` ORDER BY ${options.orderBy}`;
+            if (Array.isArray(options.orderBy)) {
+                sql += ` ORDER BY ${options.orderBy.join(', ')}`;
+            } else {
+                sql += ` ORDER BY ${options.orderBy}`;
+            }
         }
 
         // LIMIT
@@ -246,11 +279,127 @@ async function hashPassword(password) {
     }
 }
 
+// Obter chamados por dia
+async function obterPorDia() {
+    // Criando conexão
+    const connection = await getConnection();
+
+    try {
+        let sql = `
+            SELECT data,
+                SUM(abertos) as abertos,
+                SUM(atendidos) as atendidos,
+                SUM(concluidos) as concluidos
+            FROM (
+                SELECT DATE(datahora_abertura) as data, COUNT(*) as abertos, 0 as atendidos, 0 as concluidos
+                FROM chamados
+                GROUP BY DATE(datahora_abertura)
+
+                UNION ALL
+
+                SELECT DATE(datahora_atendimento), 0, COUNT(*), 0
+                FROM chamados
+                WHERE datahora_atendimento IS NOT NULL
+                GROUP BY DATE(datahora_atendimento)
+
+                UNION ALL
+
+                SELECT DATE(datahora_conclusao), 0, 0, COUNT(*)
+                FROM chamados
+                WHERE datahora_conclusao IS NOT NULL
+                GROUP BY DATE(datahora_conclusao)
+            ) as dados
+            GROUP BY data
+            ORDER BY data;
+        `
+        const values = []
+
+        // Executando o comando
+        const [rows] = await connection.execute(sql, values);
+
+        // Retornando as linhas obtidas
+        return rows;
+
+    } finally {
+        // Encerrando conexão
+        connection.release();
+    }
+}
+
+async function dadosDashboard(id_empresa) {
+
+    // TOTAL DE CHAMADOS
+    const totalChamados = (
+        await read('chamados', {
+            columns: ['COUNT(*) AS total']
+        })
+    )[0]?.total ?? 0;
+
+    // TOTAL POR ESTADO
+    const porEstado = (
+        await read('chamados', {
+            columns: ['estado', 'COUNT(*) AS total'],
+            groupBy: ['estado']
+        })
+    )
+    const porEstadoMap = Object.fromEntries(
+        porEstado.map(item => [item.estado, item.total])
+    );
+
+    // TOTAL POR SETOR
+    const porSetor = (
+        await read('setores s', {
+            columns: ['s.nome', 'COUNT(c.id) AS total'],
+            join: [{
+                type: "LEFT",
+                table: "chamados c",
+                on: "s.id = c.id_setor"
+            }],
+            groupBy: ['s.nome']
+        })
+    )
+
+    // TEMPO MÉDIO DE ESPERA
+    const tempMedioEspera = (
+        await read('chamados', {
+            columns: ['AVG( TIMESTAMPDIFF(SECOND, datahora_abertura, datahora_atendimento) ) AS tempo_medio_espera'],
+            where: {
+                datahora_atendimento: 'NOT_NULL'
+            }
+        })
+    )[0]?.tempo_medio_espera ?? 0;
+
+    // TEMPO MÉDIO DE ESPERA
+    const tempMedioAtendimento = (
+        await read('chamados', {
+            columns: ['AVG( TIMESTAMPDIFF(SECOND, datahora_atendimento, datahora_conclusao) ) AS tempo_medio_atendimento'],
+            where: {
+                datahora_atendimento: 'NOT_NULL'
+            }
+        })
+    )[0]?.tempo_medio_atendimento ?? 0;
+
+    // CHAMADOS POR DIA
+    const chamadosPorDia = (
+        await obterPorDia()
+    )
+
+    return {
+        totalChamados,
+        porEstado: porEstadoMap,
+        porSetor,
+        tempMedioEspera,
+        tempMedioAtendimento,
+        chamadosPorDia,
+    }
+}
+
 export {
     create,
     read,
     update,
     deleteRecord,
+    dadosDashboard,
     comparePassword,
     hashPassword,
     getConnection

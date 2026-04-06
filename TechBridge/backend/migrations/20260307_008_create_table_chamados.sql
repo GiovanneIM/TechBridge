@@ -11,7 +11,7 @@ DROP TABLE if exists chamados;
 CREATE TABLE chamados (
     -- Criados automaticamente no momento da criação
 	id						INT				AUTO_INCREMENT PRIMARY KEY, 			-- ID do chamado, identificador geral
-    estado					ENUM('aberto', 'andamento', 'concluido', 'cancelado') 
+    estado					ENUM('aberto', 'andamento', 'concluido') 
                             NOT NULL DEFAULT 'aberto',                  			-- Status para controle da situação do chamado
     datahora_abertura		TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,				-- Data e hora em que o chamado é registrado
 
@@ -54,12 +54,21 @@ CREATE TABLE chamados (
 
 
 -- Criando chamados
+INSERT INTO chamados (datahora_abertura, id_empresa, id_setor, id_maquina, cod_chamado)
+VALUES 
+(DATE_SUB(NOW(), INTERVAL 1 DAY), 1, 1, 1, 1),
+(DATE_SUB(NOW(), INTERVAL 1 DAY), 1, 1, 1, 2),
+(DATE_SUB(NOW(), INTERVAL 1 DAY), 1, 1, 2, 1);
+
 INSERT INTO chamados (id_empresa, id_setor, id_maquina, cod_chamado)
 VALUES 
-(1, 1, 1, 1),
-(1, 1, 1, 2),
-(1, 1, 2, 1),
-(1, 1, 1, 3);
+(1, 1, 1, 3),
+(1, 1, 1, 4),
+(1, 1, 2, 2);
+
+INSERT INTO chamados (datahora_abertura, id_empresa, id_setor, id_maquina, cod_chamado)
+VALUES 
+(DATE_SUB(NOW(), INTERVAL 10 DAY), 1, 1, 1, 7);
 
 -- Atendendo chamados
 UPDATE chamados    
@@ -67,7 +76,7 @@ SET
     estado = 'andamento',
     id_tecnico = 3,
     datahora_atendimento = DATE_ADD(NOW(), INTERVAL 1 DAY_HOUR)
-WHERE id > 1;
+WHERE id % 3 > 1 OR id % 3 = 0 ;
 
 -- Concluindo chamados
 UPDATE chamados    
@@ -76,12 +85,4 @@ SET
     id_causa = 1,
     datahora_conclusao = DATE_ADD(NOW(), INTERVAL 2 DAY_HOUR ),
     operador = "25170154"
-WHERE id > 2;
-
--- Cancelando chamados
-UPDATE chamados    
-SET 
-    estado = 'cancelado',
-    id_tecnico = 3,
-    datahora_conclusao = DATE_ADD(NOW(), INTERVAL 4 DAY_HOUR)
-WHERE id > 3;
+WHERE id % 3 > 2 OR id % 3 = 0 ;

@@ -29,7 +29,7 @@ class ChamadosController {
 
             console.log("--- Option ---");
             console.log(options);
-            
+
 
 
             // Chamando o model para fazer a consulta
@@ -135,6 +135,31 @@ class ChamadosController {
             ► id_chamado
     */
     static async atualizarChamado(req, res) {
+    }
+
+    static async obterDashboard(req, res) {
+        const intervalo = req.params
+
+        // const dashboard = {
+        //     "totalChamados": 0,
+        //     "chamadosPorStatus": {
+        //         "aberto": 0,
+        //         "andamento": 0,
+        //         "concluido": 0,
+        //         "cancelado": 0
+        //     },
+        //     "tempoMedioEspera": 0,
+        //     "tempoMedioReparo": 0,
+        // }
+
+        const dashboard = await ChamadosModel.obterDashboard()
+
+        return res.status(200).json({
+            sucesso: true,
+            dados: {
+                dashboard
+            }
+        })
     }
 
 }

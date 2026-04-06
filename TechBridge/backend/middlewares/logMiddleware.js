@@ -62,11 +62,11 @@ export const logMiddleware = async (req, res, next) => {
         
         // Capturar dados da resposta (limitado para evitar logs muito grandes)
         if (res.statusCode >= 400) {
-            finalLogData.dados_resposta = {
+            finalLogData.dados_resposta = JSON.stringify({
                 error: true,
                 status: res.statusCode,
                 message: typeof data === 'object' ? JSON.stringify(data).substring(0, 500) : data
-            };
+            });
         }
         
         // Salvar log de forma assíncrona (não bloquear a resposta)
@@ -100,13 +100,36 @@ function sanitizeRequestBody(body) {
 // Função para salvar o log no banco de dados
 async function saveLog(logData) {
     try {
-        console.log(logData);
+        // console.log(logData);
+        const normalized = normalizeLogData(logData);
+        console.log(normalized);
         
-        await create('logs', logData);
+        await create('logs', normalized);
     } catch (error) {
         console.error('Erro ao inserir log no banco:', error);
     }
 }
+
+function normalizeLogData(data) {
+    return {
+        rota: data.rota || null,
+        metodo: data.metodo || null,
+        ip_address: data.ip_address || null,
+        user_agent: data.user_agent || null,
+        dados_requisicao: data.dados_requisicao 
+            ? JSON.stringify(data.dados_requisicao) 
+            : null,
+        status_code: data.status_code ?? null,
+        tempo_resposta_ms: data.tempo_resposta_ms ?? null,
+        id_usuario: data.id_usuario ?? null,
+        dados_resposta: data.dados_resposta
+            ? (typeof data.dados_resposta === 'string'
+                ? data.dados_resposta
+                : JSON.stringify(data.dados_resposta))
+            : null
+    };
+}
+
 
 // Middleware para logs simples (apenas console)
 export const simpleLogMiddleware = (req, res, next) => {

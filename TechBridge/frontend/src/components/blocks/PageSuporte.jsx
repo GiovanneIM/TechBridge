@@ -2,6 +2,8 @@
 
 // PÁGINA DE SUPORTE PARA O USUÁRIO
 
+import { CircleQuestionMark, Mail, User } from "lucide-react";
+
 import {
     Accordion,
     AccordionContent,
@@ -19,17 +21,29 @@ import {
     InputGroup,
     InputGroupAddon,
     InputGroupInput,
-    InputGroupButton,
-    InputGroupText,
     InputGroupTextarea,
 } from "@/components/ui/input-group";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Mail, User } from "lucide-react";
+import { Separator } from "../ui/separator";
 
 export default function PageSuporte() {
-    return (
+    return (<>
+        <div
+            className="
+                flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] 
+                ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12
+            "
+        >
+            <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
+                <CircleQuestionMark className="-ml-1" />
+
+                <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-6" />
+
+                <h1 className="text-base font-genty">Suporte</h1>
+            </div>
+        </div>
+
         <div className="w-full flex flex-col xl:flex-row justify-center items-center xl:items-stretch gap-4 mb-12 mt-4 px-2 sm:px-4">
 
             <div className="w-full xl:w-1/2 flex flex-col gap-4">
@@ -162,7 +176,7 @@ export default function PageSuporte() {
             </div>
 
         </div>
-    )
+    </>)
 }
 
 

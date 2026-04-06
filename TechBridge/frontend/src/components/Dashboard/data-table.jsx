@@ -295,7 +295,6 @@ export function DataTable({ data: initialData }) {
       modifiers={[restrictToVerticalAxis]}
       onDragEnd={handleDragEnd}
     >
-      <div className="px-4 lg:px-6">
       <div className="w-full overflow-x-auto rounded-lg border">
         <Table className="min-w-[900px]">
           <TableHeader className="text-xs font-semibold text-muted-foreground">
@@ -321,7 +320,6 @@ export function DataTable({ data: initialData }) {
             </SortableContext>
           </TableBody>
         </Table>
-      </div>
       </div>
     </DndContext>
   )

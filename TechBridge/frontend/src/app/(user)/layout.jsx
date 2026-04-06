@@ -23,14 +23,14 @@ export default function UserLayout({ children }) {
 
 					<div className="flex flex-1">
 						{/* Sidebar */}
-						<Sidebar className="top-16 h-[calc(100vh-4rem)] border-r">
+						<Sidebar className="top-16 h-[calc(100vh-4rem)] border-none">
 							<SidebarContent>
 								<CounteudoSidebar />
 							</SidebarContent>
 						</Sidebar>
 
 						{/* Conteúdo */}
-						<main className="flex-1">
+						<main className="flex-1 border-e border-x">
 							{children}
 							<Footer />
 						</main>
