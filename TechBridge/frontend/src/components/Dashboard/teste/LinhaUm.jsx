@@ -12,18 +12,18 @@ export default function LinhaUm({ dashboard }) {
     function formatarTempo(tempoSegundos) {
         let segundos, minutos, horas;
 
-        segundos = tempoSegundos;
+        segundos = tempoSegundos ?? 0;
+        
 
-        if (segundos > 3600) {
-            horas = (segundos / 3600).toFixed(0);
-            minutos = ((segundos % 3600) / 60).toFixed(0);
+        if (segundos >= 3600) {
+            horas = Math.floor(segundos / 3600);
+            minutos = Math.floor((segundos % 3600) / 60);
             return `${horas}h ${minutos} min`
         }
 
         if (segundos > 60) {
-            minutos = (segundos / 60).toFixed(0)
-            segundos = (segundos % 60).toFixed(0)
-            return `${horas}h ${minutos} min`
+            minutos = Math.floor(segundos / 60)
+            return `${minutos} min`
         }
     }
 
@@ -39,7 +39,7 @@ export default function LinhaUm({ dashboard }) {
             <Card className="flex justify-between py-4 gap-0">
                 <CardHeader>
                     <CardTitle className="font-bold text-md h-12">
-                        Total de chamadas
+                        Total de chamados
                     </CardTitle>
                 </CardHeader>
 

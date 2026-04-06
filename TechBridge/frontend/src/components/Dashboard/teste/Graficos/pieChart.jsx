@@ -31,7 +31,7 @@ const chartConfig = {
     }
 }
 
-export function GraficoEstados({
+export default function GraficoEstados({
     chamadosPorEstados
 }) {
     // Construindo array com os dados do gráfico

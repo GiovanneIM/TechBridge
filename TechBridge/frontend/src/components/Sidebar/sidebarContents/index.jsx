@@ -108,6 +108,20 @@ export default function CounteudoSidebar() {
                     <Button
                         variant="ghost" asChild
                         className={`text-md w-full hover:bg-techbridge/20 transition-all duration-200 active:scale-95
+                                            ${pathname.startsWith("/chamados") && nav_active}
+                                        `}
+                    >
+                        <Link href={'/chamados'}>
+                            Chamados
+                        </Link>
+                    </Button>
+                </div>
+
+
+                <div>
+                    <Button
+                        variant="ghost" asChild
+                        className={`text-md w-full hover:bg-techbridge/20 transition-all duration-200 active:scale-95
                                             ${pathname.startsWith("/setores") && nav_active}
                                         `}
                     >

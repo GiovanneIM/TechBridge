@@ -8,8 +8,7 @@ import {
     CardContent
 } from "@/components/ui/card"
 
-export default function ChamadosCard({
-    totalChamados,
+export default function EstadosCards({
     chamadosPorEstados
 }) {
 
@@ -42,7 +41,7 @@ export default function ChamadosCard({
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {chamadosPorEstados.andamento}
+                    {chamadosPorEstados.andamento ?? 0}
                 </CardContent>
             </Card>
 
@@ -56,7 +55,7 @@ export default function ChamadosCard({
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {chamadosPorEstados.concluido}
+                    {chamadosPorEstados.concluido ?? 0}
                 </CardContent>
             </Card>
         </div>
