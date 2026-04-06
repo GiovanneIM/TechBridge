@@ -70,6 +70,10 @@ INSERT INTO chamados (datahora_abertura, id_empresa, id_setor, id_maquina, cod_c
 VALUES 
 (DATE_SUB(NOW(), INTERVAL 10 DAY), 1, 1, 1, 7);
 
+INSERT INTO chamados (datahora_abertura, id_empresa, id_setor, id_maquina, cod_chamado)
+VALUES 
+(DATE_SUB(NOW(), INTERVAL 10 DAY), 1, 1, 1, 6);
+
 -- Atendendo chamados
 UPDATE chamados    
 SET 
