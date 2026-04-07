@@ -17,7 +17,7 @@ import userRotas from './routes/userRotas.js';
 import chamadosRotas from './routes/chamadosRotas.js';
 import maquinasRotas from './routes/maquinasRotas.js';
 import setoresRotas from './routes/setoresRotas.js'
-
+import kanbanRotas from './routes/kanbanRotas.js'
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // IMPORTAR MIDDLEWARES
@@ -78,6 +78,7 @@ app.use('/api/user', userRotas);
 app.use('/api/chamados', chamadosRotas);
 app.use('/api/maquinas', maquinasRotas);
 app.use('/api/setores', setoresRotas);
+app.use('/api/kanban', kanbanRotas);
 
 // Rota raiz
 app.get('/', (req, res) => {

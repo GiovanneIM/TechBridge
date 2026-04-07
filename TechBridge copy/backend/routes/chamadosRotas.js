@@ -13,4 +13,7 @@ router.post('/', authMiddleware, ChamadosController.criarChamado)
 
 router.patch('/:id', authMiddleware, ChamadosController.atualizarChamado)
 
+// Obter dados para o dashboard
+router.post('/dashboard', authMiddleware, ChamadosController.obterDashboard)
+
 export default router;
