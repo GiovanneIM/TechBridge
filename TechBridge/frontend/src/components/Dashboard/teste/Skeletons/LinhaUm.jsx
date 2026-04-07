@@ -1,32 +1,11 @@
 import {
     Card,
-    CardAction,
-    CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
     CardContent
 } from "@/components/ui/card"
 
-export default function LinhaUm({ dashboard, loading }) {
-    function formatarTempo(tempoSegundos) {
-        let segundos, minutos, horas;
-
-        segundos = tempoSegundos ?? 0;
-
-
-        if (segundos >= 3600) {
-            horas = Math.floor(segundos / 3600);
-            minutos = Math.floor((segundos % 3600) / 60);
-            return `${horas}h ${minutos} min`
-        }
-
-        if (segundos > 60) {
-            minutos = Math.floor(segundos / 60)
-            return `${minutos} min`
-        }
-    }
-
+export default function SkeletonLinhaUm() {
     return (<>
         <div
             className="
@@ -44,9 +23,7 @@ export default function LinhaUm({ dashboard, loading }) {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {loading
-                        ? <div className="animate-pulse bg-muted h-12 rounded-xl" />
-                        : dashboard.totalChamados}
+                    <div className="animate-pulse bg-muted h-12 rounded-xl" />
                 </CardContent>
             </Card>
 
@@ -59,9 +36,7 @@ export default function LinhaUm({ dashboard, loading }) {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {loading
-                        ? <div className="animate-pulse bg-muted h-12 rounded-xl" />
-                        : formatarTempo(dashboard.tempMedioEspera)}
+                    <div className="animate-pulse bg-muted h-12 rounded-xl" />
                 </CardContent>
             </Card>
 
@@ -73,9 +48,7 @@ export default function LinhaUm({ dashboard, loading }) {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {loading
-                        ? <div className="animate-pulse bg-muted h-12 rounded-xl" />
-                        : formatarTempo(dashboard.tempMedioAtendimento)}
+                    <div className="animate-pulse bg-muted h-12 rounded-xl" />
                 </CardContent>
             </Card>
 
@@ -87,9 +60,7 @@ export default function LinhaUm({ dashboard, loading }) {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {loading
-                        ? <div className="animate-pulse bg-muted h-12 rounded-xl" />
-                        : formatarTempo(dashboard.tempMedioAtendimento)}
+                    <div className="animate-pulse bg-muted h-12 rounded-xl" />
                 </CardContent>
             </Card>
         </div>

@@ -19,7 +19,7 @@ export default function PageChamados({
         fetchOnMount: chamadosIniciais?.length === 0
     })
 
-    return (<div>
+    return (<div className='flex-1 flex flex-col'>
         {/* Header da página */}
         <div
             className="

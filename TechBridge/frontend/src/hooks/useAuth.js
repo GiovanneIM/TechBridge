@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { apiFetch } from '@/lib/api';
 
 
 // URL base da API
@@ -35,11 +36,12 @@ export function useAuth({
 
         try {
             // Chamada à API
-            const response = await fetch(`${API_BASE_URL}/login`, {
+            const response = await apiFetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dadosLogin),
-                credentials: 'include'
+                credentials: 'include',
+                ignoreAuthError: true
             });
 
             // Convertendo a resposta para json
@@ -56,7 +58,12 @@ export function useAuth({
             }
         } catch (err) {
             // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
-            setError((prev) => ({ ...prev, login: 'Erro ao solicitar login, tente novamente mais tarde.' }))
+            if (err.message === 'Sessão expirada') return;
+
+            setError((prev) => ({
+                ...prev,
+                login: 'Erro ao solicitar login, tente novamente mais tarde.'
+            }));
 
         } finally {
             // Independente de sucesso ou erro, o loading termina aqui
@@ -71,7 +78,7 @@ export function useAuth({
 
         try {
             // Chamada à API
-            const response = await fetch(`${API_BASE_URL}/perfil`, {
+            const response = await apiFetch(`${API_BASE_URL}/perfil`, {
                 method: 'GET',
                 credentials: 'include'
             });
@@ -106,7 +113,7 @@ export function useAuth({
         setLoading((prev) => ({ ...prev, logout: true }));
 
         try {
-            await fetch(`${API_BASE_URL}/logout`, {
+            await apiFetch(`${API_BASE_URL}/logout`, {
                 method: 'POST',
                 credentials: 'include'
             });
