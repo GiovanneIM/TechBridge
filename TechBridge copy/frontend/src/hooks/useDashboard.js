@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { apiFetch } from '@/lib/api';
 
 
 // URL base da API
@@ -13,7 +14,7 @@ export function useDashboard({
     const [dashboard, setDashboard] = useState(dashboardInicial);
 
     // Estado que indica se há uma requisição em andamento
-    const [loadingDashboard, setLoading] = useState(true);
+    const [loadingDashboard, setLoading] = useState(fetchOnMount);
 
     // Estado para armazenar mensagem de erro (se houver)
     const [errorDashboard, setError] = useState(null);
@@ -25,21 +26,27 @@ export function useDashboard({
 
         try {
             // Chamada à API
-            const response = await fetch(`${API_BASE_URL}`, {
+            const response = await apiFetch(`${API_BASE_URL}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ "options": options }),
                 credentials: 'include'
+                
             });
 
             // Convertendo a resposta para json
             const data = await response.json();
 
+            console.log(data);
+            
+
             // Se a resposta veio com status de erro
             if (!data.sucesso) {
                 setError(data.mensagem)
+                console.log(data.mensagem);
+                
             }
             else {
                 // Atualizando o estado dos chamados
@@ -47,9 +54,9 @@ export function useDashboard({
             }
 
         } catch (err) {
-            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
-            setError('Erro ao buscar dashboard, tente novamente mais tarde.')
+            if (err.message === 'Sessão expirada') return;
 
+            setError('Erro ao buscar dashboard, tente novamente mais tarde.');
         } finally {
             // Independente de sucesso ou erro, o loading termina aqui
             setLoading(false);
@@ -59,7 +66,11 @@ export function useDashboard({
 
     // Obtendo o dashboard
     useEffect(() => {
-        if (!fetchOnMount) setLoading(false);
+        if (!fetchOnMount) {
+            setLoading(false);
+            return;
+        }
+
         fetchDashboard();
     }, [fetchOnMount, fetchDashboard]);
 

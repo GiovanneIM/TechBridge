@@ -35,5 +35,7 @@ export default function LogOut() {
                 </div>
             </div>
         </div>
+
+
     );
 }

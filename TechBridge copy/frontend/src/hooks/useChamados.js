@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-
+import { apiFetch } from '@/lib/api';
 
 // URL base da API
 const API_BASE_URL = 'http://localhost:3000/api/chamados';
@@ -28,7 +28,7 @@ export function useChamados({
 
         try {
             // Chamada à API
-            const response = await fetch(`${API_BASE_URL}/buscar`, {
+            const response = await apiFetch(`${API_BASE_URL}/buscar`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

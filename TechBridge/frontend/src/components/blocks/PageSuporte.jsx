@@ -221,6 +221,3 @@ const items2 = [
             "Caso você já esteja logado em qualquer página do site, localize na barra lateral (sidebar) o botão vermelho “Logout”. Ao clicar nele e confirmar a ação, você será redirecionado para a página inicial, onde poderá realizar o login novamente.",
     },
 ]
-
-
-

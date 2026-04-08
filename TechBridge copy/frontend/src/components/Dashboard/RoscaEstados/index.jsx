@@ -31,7 +31,7 @@ const chartConfig = {
     }
 }
 
-export default function GraficoEstados({
+export default function RoscaEstados({
     chamadosPorEstados
 }) {
     // Construindo array com os dados do gráfico
@@ -47,8 +47,8 @@ export default function GraficoEstados({
     return (
         <Card className="flex flex-col w-full md:w-1/2" >
             <CardHeader className="items-center pb-0" >
-                <CardTitle>Distribuição de chamados </CardTitle>
-                < CardDescription >Distribuição de chamados por estado</CardDescription>
+                <CardTitle>Distribuição de chamados por estado </CardTitle>
+                {/* <CardDescription>Distribuição de chamados por estado</CardDescription> */}
             </CardHeader>
             < CardContent className="flex-1 pb-0" >
                 <ChartContainer

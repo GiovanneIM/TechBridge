@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
+import { KeyRound, Mail } from "lucide-react";
 
 
 
@@ -97,39 +99,49 @@ export default function PageLogin() {
 				}}>
 					<FieldGroup className="">
 						<FieldSet>
-							<FieldLegend variant="" className="text-2xl font-bold">Login</FieldLegend>
+							<FieldLegend variant="" className="text-2xl font-genty">Login</FieldLegend>
 
 							<FieldGroup className="px-4">
-								<Field>
-									<FieldLabel htmlFor="emailLogin" className="font-bold text-gray-500">
+								<Field >
+									<FieldLabel htmlFor="emailLogin" className="font-genty text-muted-foreground">
 										E-mail
 									</FieldLabel>
-									<Input
-										id="emailLogin"
-										placeholder="E-mail"
-										type="email"
-										disabled={loading.login}
-										required
+									<InputGroup className='w-1/2'>
+										<InputGroupInput
+											id="emailLogin"
+											placeholder="E-mail"
+											type="email"
+											disabled={loading.login}
+											required
 
-										value={email}
-										onChange={(e) => setEmail(e.target.value)}
-									/>
+											value={email}
+											onChange={(e) => setEmail(e.target.value)}
+										/>
+										<InputGroupAddon>
+											<Mail />
+										</InputGroupAddon>
+									</InputGroup>
 								</Field>
 
 								<Field>
-									<FieldLabel htmlFor="senhaLogin" className="font-bold text-gray-500">
+									<FieldLabel htmlFor="senhaLogin" className="font-genty text-muted-foreground">
 										Senha
 									</FieldLabel>
-									<Input
-										id="senhaLogin"
-										placeholder="Senha"
-										type="password"
-										disabled={loading.login}
-										required
+									<InputGroup className='w-1/2'>
+										<InputGroupInput
+											id="senhaLogin"
+											placeholder="Senha"
+											type="password"
+											disabled={loading.login}
+											required
 
-										value={senha}
-										onChange={(e) => setSenha(e.target.value)}
-									/>
+											value={senha}
+											onChange={(e) => setSenha(e.target.value)}
+										/>
+										<InputGroupAddon>
+											<KeyRound />
+										</InputGroupAddon>
+									</InputGroup>
 								</Field>
 							</FieldGroup>
 						</FieldSet>

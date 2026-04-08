@@ -47,10 +47,10 @@ export default function LinhaEstados({
     chamadosPorDia
 }) {
 
-    const chartData = chamadosPorDia ? chamadosPorDia.map((item, index, arr) => {
+    const chartData = chamadosPorDia.map((item, index, arr) => {
         const abertos = Number(item.abertos)
         const concluidos = Number(item.concluidos)
-
+        
         const prev = arr[index - 1]
 
         const prevBacklog = prev?.backlog || 0
@@ -64,7 +64,7 @@ export default function LinhaEstados({
             concluidos,
             sobrecarga,
         }
-    }) : {}
+    })
 
     return (
         <Card className="w-full md:w-1/2">

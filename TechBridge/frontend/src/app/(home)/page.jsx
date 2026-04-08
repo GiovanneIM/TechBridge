@@ -1,5 +1,13 @@
 "use client"
 
+import { useAuth } from "@/context/AuthContext";
+
+import { useRouter } from "next/navigation";
+import { useRef } from "react";
+
+import Image from "next/image";
+
+
 import { Badge } from "@/components/ui/badge";
 import {
 	Card,
@@ -10,19 +18,16 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
-import Image from "next/image";
-
-import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText, InputGroupTextarea } from "@/components/ui/input-group";
-import { Factory, Mail, MessageCircle, User } from "lucide-react";
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupTextarea } from "@/components/ui/input-group";
+import { Factory, Mail, User } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 
 export default function Home() {
 	const router = useRouter()
+	const formRef = useRef(null)
+	const comoRef = useRef(null)
 	const { isAuthenticated } = useAuth()
 
 	if (isAuthenticated) { router.push('/dashboard') }
@@ -40,8 +45,18 @@ export default function Home() {
 					</p>
 
 					<div className="flex flex-col sm:flex-row gap-3">
-						<Button className="bg-techbridge text-white cursor-pointer hover:animate-wiggle hover:text-background font-bold">Entrar em contato</Button>
-						<Button variant="outline" className="bg-secondary text-foreground cursor-pointer hover:bg-foreground hover:text-background hover:animate-wiggle font-bold">Conheça nosso serviço</Button>
+						<Button
+							size="lg" className="bg-techbridge text-white cursor-pointer hover:animate-wiggle hover:text-background font-bold"
+							onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth' })}
+						>
+							Entrar em contato
+						</Button>
+						<Button
+							variant="outline" size="lg" className="bg-secondary text-foreground cursor-pointer hover:bg-foreground hover:text-background hover:animate-wiggle font-bold"
+							onClick={() => comoRef.current?.scrollIntoView({ behavior: 'smooth' })}
+						>
+							Conheça nosso serviço
+						</Button>
 					</div>
 				</div>
 
@@ -71,8 +86,8 @@ export default function Home() {
 			<Onda />
 
 			{/* Como funciona? */}
-			<div className="justify-center align-middle">
-				<p className="align-middle justify-center text-center font-genty text-3xl text-foreground">Como nossos serviços funcionam?</p>
+			<div className="justify-center align-middle" ref={comoRef}>
+				<p className="align-middle justify-center text-center font-genty text-3xl text-foreground">Como nosso serviço funciona?</p>
 
 				<Cards />
 			</div>
@@ -91,8 +106,10 @@ export default function Home() {
 				<CardsEmpresas />
 			</div>
 
+			<Separator />
+
 			{/* Entrar em contato */}
-			<div className="w-full py-12 flex flex-col items-center">
+			<div className="w-full py-12 flex flex-col items-center" ref={formRef}>
 				<div className="mb-8 text-center">
 					<p className="align-middle justify-center text-center font-genty text-3xl text-foreground">
 						Marque um atendimento
@@ -203,7 +220,7 @@ function Cards() {
 			list: [
 				'Receba notificações diretamente no celular sempre que houver qualquer ocorrência na operação.',
 				'Com alertas instantâneos, sua equipe reage mais rápido diante de qualquer problema.',
-				'Reduza o tempo de parada e mantenha o controle da operação de onde estiver.</li>'
+				'Reduza o tempo de parada e mantenha o controle da operação de onde estiver.'
 			]
 		},
 		{
@@ -244,17 +261,13 @@ function Cards() {
 								<CardTitle className="text-techbridge font-genty text-2xl ">
 									{cont.title}
 								</CardTitle>
-
-								<CardDescription>
-
-								</CardDescription>
 							</CardHeader>
 
 							{/* Conteúdo do card */}
 							<CardContent className="px-4">
-								<ul className="text-muted-foreground text-justify font-genty">
+								<ul className="text-muted-foreground text-justify font-genty text-sm">
 									{cont.list.map((l, j) => {
-										return (<li key={j} className="mt-2">{l}</li>)
+										return (<li key={j} className="mt-3">{l}</li>)
 									})}
 								</ul>
 							</CardContent>

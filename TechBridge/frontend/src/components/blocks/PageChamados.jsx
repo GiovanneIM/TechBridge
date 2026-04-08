@@ -1,7 +1,7 @@
 "use client"
 
 import { RotateCw, Siren } from "lucide-react";
-import { DataTable } from "../Dashboard/data-table";
+import { DataTable } from "../Dashboard/aaa/data-table";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { useChamados } from "@/hooks/useChamados";

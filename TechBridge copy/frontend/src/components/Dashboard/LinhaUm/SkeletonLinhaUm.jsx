@@ -1,32 +1,12 @@
 import {
     Card,
-    CardAction,
-    CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
     CardContent
 } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 
-export default function LinhaUm({ dashboard }) {
-    function formatarTempo(tempoSegundos) {
-        let segundos, minutos, horas;
-
-        segundos = tempoSegundos ?? 0;
-        
-
-        if (segundos >= 3600) {
-            horas = Math.floor(segundos / 3600);
-            minutos = Math.floor((segundos % 3600) / 60);
-            return `${horas}h ${minutos} min`
-        }
-
-        if (segundos > 60) {
-            minutos = Math.floor(segundos / 60)
-            return `${minutos} min`
-        }
-    }
-
+export default function SkeletonLinhaUm() {
     return (<>
         <div
             className="
@@ -44,7 +24,7 @@ export default function LinhaUm({ dashboard }) {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {dashboard.totalChamados}
+                    <Skeleton className="h-12" />
                 </CardContent>
             </Card>
 
@@ -57,7 +37,7 @@ export default function LinhaUm({ dashboard }) {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {formatarTempo(dashboard.tempMedioEspera)}
+                    <Skeleton className="h-12" />
                 </CardContent>
             </Card>
 
@@ -69,7 +49,7 @@ export default function LinhaUm({ dashboard }) {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {formatarTempo(dashboard.tempMedioAtendimento)}
+                    <Skeleton className="h-12" />
                 </CardContent>
             </Card>
 
@@ -81,7 +61,7 @@ export default function LinhaUm({ dashboard }) {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {formatarTempo(dashboard.tempMedioAtendimento)}
+                    <Skeleton className="h-12" />
                 </CardContent>
             </Card>
         </div>

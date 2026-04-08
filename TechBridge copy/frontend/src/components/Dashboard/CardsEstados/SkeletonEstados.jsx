@@ -1,17 +1,12 @@
 import {
     Card,
-    CardAction,
-    CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
     CardContent
 } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 
-export default function EstadosCards({
-    chamadosPorEstados
-}) {
-
+export default function SkeletonEstados() {
     return (
         <div className="
             w-full md:w-1/2 h-fit gap-4 
@@ -27,7 +22,7 @@ export default function EstadosCards({
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {chamadosPorEstados.aberto ?? 0}
+                    <Skeleton className="h-12" />
                 </CardContent>
             </Card>
 
@@ -41,7 +36,7 @@ export default function EstadosCards({
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {chamadosPorEstados.andamento ?? 0}
+                    <Skeleton className="h-12" />
                 </CardContent>
             </Card>
 
@@ -55,7 +50,7 @@ export default function EstadosCards({
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {chamadosPorEstados.concluido ?? 0}
+                    <Skeleton className="h-12" />
                 </CardContent>
             </Card>
         </div>

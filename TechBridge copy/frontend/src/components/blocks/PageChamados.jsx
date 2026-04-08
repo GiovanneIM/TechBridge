@@ -1,7 +1,7 @@
 "use client"
 
 import { RotateCw, Siren } from "lucide-react";
-import { DataTable } from "../Dashboard/data-table";
+import { DataTable } from "../Dashboard/aaa/data-table";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { useChamados } from "@/hooks/useChamados";
@@ -19,7 +19,7 @@ export default function PageChamados({
         fetchOnMount: chamadosIniciais?.length === 0
     })
 
-    return (<div>
+    return (<div className='flex-1 flex flex-col'>
         {/* Header da página */}
         <div
             className="

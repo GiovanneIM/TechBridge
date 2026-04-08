@@ -19,9 +19,9 @@ import {
   IconUsers,
 } from "@tabler/icons-react"
 import { ListTree } from "lucide-react"
-import { NavDocuments } from "@/components/Dashboard/nav-documents"
-import { NavMain } from "@/components/Dashboard/nav-main"
-import { NavSecondary } from "@/components/Dashboard/nav-secondary"
+import { NavDocuments } from "@/components/Dashboard/aaa/nav-documents"
+import { NavMain } from "@/components/Dashboard/aaa/nav-main"
+import { NavSecondary } from "@/components/Dashboard/aaa/nav-secondary"
 import { NavUser } from "@/components/Dashboard/nav-user"
 import {
   Sidebar,

@@ -1,25 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useChamados } from '@/hooks/useChamados';
 import { useDashboard } from '@/hooks/useDashboard';
 
-import { ChartAreaInteractive } from "@/components/Dashboard/chart-area-interactive"
-import { DataTable } from "@/components/Dashboard/data-table"
-import { SectionCards } from "@/components/Dashboard/section-cards"
+import { ChartAreaInteractive } from "@/components/Dashboard/aaa/chart-area-interactive"
+import { DataTable } from "@/components/Dashboard/aaa/data-table"
+import { SectionCards } from "@/components/Dashboard/aaa/section-cards"
 import { Separator } from "@/components/ui/separator"
-import { Button } from '../ui/button';
-import { Grid2x2, Grid2X2, RotateCw } from 'lucide-react';
+import { Grid2X2, RotateCw } from 'lucide-react';
 
+import HeaderPage from './Header/HeaderPage';
 import LoadingPage from './HolderPages/LoadingPage';
 import ErrorPage from './HolderPages/ErrorPage';
-import GraficoEstados from '../Dashboard/teste/Graficos/pieChart';
-import LinhaUm from '../Dashboard/teste/LinhaUm';
-import LinhaEstados from '../Dashboard/teste/Graficos/LinhaEstados';
-import EstadosCards from '../Dashboard/teste/EstadosCards';
-import HeaderPage from './Header/HeaderPage';
-import SkeletonLinhaUm from '../Dashboard/teste/Skeletons/LinhaUm';
-import SkeletonEstadosCards from '../Dashboard/teste/Skeletons/EstadosCards';
+import DashboardContent from '../Dashboard/DashboardContent';
+import DashboardSkeleton from '../Dashboard/DashboardSkeleton';
 
 export default function PageDashboard({
 	chamadosIniciais,
@@ -50,196 +44,73 @@ export default function PageDashboard({
 	// Verificando se a página está sendo carregada pela primeira vez
 	const isFirstLoad = loadingDashboard && Object.keys(dashboard ?? {}).length === 0;
 
-	// Holder de loading
+	// Conteúdo da página
+	let content;
+
+	// Se estiver sendo carregada pela 1ª vez
 	if (isFirstLoad) {
-		return <LoadingPage loadingTitle="Carregando dashboard" loadingSubtitle={["Aguarde alguns segundos"]} />
-	}
-
-	// Holder de erro
-	if (errorDashboard) {
-		return <ErrorPage errorTitle={"Erro ao carregar dashboard"} errorSubtitle={["Houve um erro ao carregar seu dashboard", "por favor recarregue a página para tentar novamente"]} />
-	}
-
-	if (loadingDashboard) {
-		return (
-			<div className='flex-1 flex flex-col'>
-				{/* Header da página */}
-				<div
-					className="
-						flex h-12 shrink-0 items-center gap-2 border-b 
-						transition-[width,height] ease-linear 
-						group-has-data-[collapsible=icon]/sidebar-wrapper:h-12
-					"
-				>
-					<div className="w-full flex items-center justify-between gap-3 px-4 lg:px-6">
-						<div className='flex gap-1 lg:gap-2'>
-							<Grid2x2 className="-ml-1" />
-
-							<Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-6" />
-
-							<h1 className="text-base font-genty">Dashboard</h1>
-						</div>
-
-						{/* Botão para buscar os chamados novamente */}
-						<div className="flex items-center gap-2">
-							<Button
-								variant="ghost"
-								onClick={() => { refetchDashboard() }}
-								className="flex items-center border text-muted-foreground"
-							>
-								<RotateCw />
-								<span className="hidden font-medium sm:inline">Recarregar chamados</span>
-							</Button>
-						</div>
-					</div>
-				</div>
-
-				<HeaderPage
-					icon={<Grid2X2 />} title={"Dashboard"}
-					buttonAction={refetchDashboard} buttonIcon={<RotateCw />} buttonText={"Recarregar Dashboard"}
-				/>
-
-				{/* Dados carregados sem erro */}
-				{!errorDashboard && dashboard && <>
-
-					{/* <div>{JSON.stringify(dashboard)}</div> */}
-
-					{/* <Separator /> */}
-
-					{/* Conteúdo do dashboard */}
-					<div className="flex-1 flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
-						<SkeletonLinhaUm />
-					</div>
-
-					<Separator />
-
-					<div className="flex-1 flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
-						{/* Chamados por estado */}
-						<div className='flex flex-col md:flex-row gap-4'>
-							<SkeletonEstadosCards />
-							<GraficoEstados chamadosPorEstados={dashboard.porEstado} />
-						</div>
-					</div>
-
-					<Separator />
-
-					<div className="flex-1 flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
-						<div className='flex flex-col md:flex-row gap-4'>
-							<LinhaEstados chamadosPorDia={dashboard.chamadosPorDia} />
-
-						</div>
-					</div>
-
-					<Separator />
-
-
-					<div className="flex flex-1 flex-col">
-						<div className="@container/main flex flex-1 flex-col gap-2">
-							<div className="flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
-
-								<SectionCards chamados={chamados} />
-
-
-								<ChartAreaInteractive chamados={chamados} />
-
-
-								<DataTable data={chamados} />
-							</div>
-						</div>
-					</div>
-				</>}
-			</div >
+		content = (
+			<LoadingPage
+				loadingTitle="Carregando dashboard"
+				loadingSubtitle={["Aguarde alguns segundos"]}
+			/>
 		)
 	}
 
+	// Se houve erro ao carregar
+	else if (errorDashboard) {
+		content = (
+			<ErrorPage
+				errorTitle={"Erro ao carregar dashboard"}
+				errorSubtitle={[
+					"Houve um erro ao carregar seu dashboard",
+					"por favor recarregue a página para tentar novamente"
+				]}
+			/>
+		)
+	}
+
+	// Se estiver recarregando os dados
+	else if (loadingDashboard) {
+		content = (
+			<DashboardSkeleton dashboard={dashboard} chamados={chamados} />
+		)
+	}
+
+	// Dados carregados e sem erro
+	else {
+		content = (
+			<DashboardContent dashboard={dashboard} chamados={chamados} />
+		)
+	}
+
+	content = (
+		<DashboardSkeleton dashboard={dashboard} chamados={chamados} />
+	)
+
 	return (
-		<div className='flex-1 flex flex-col'>
+		<div className="flex-1 flex flex-col">
 			{/* Header da página */}
-			{/* <div
-				className="
-						flex h-12 shrink-0 items-center gap-2 border-b 
-						transition-[width,height] ease-linear 
-						group-has-data-[collapsible=icon]/sidebar-wrapper:h-12
-					"
-			>
-				<div className="w-full flex items-center justify-between gap-3 px-4 lg:px-6">
-					<div className='flex gap-1 lg:gap-2'>
-						<Grid2X2 className="-ml-1" />
-
-						<Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-6" />
-
-						<h1 className="text-base font-genty">Dashboard</h1>
-					</div>
-					
-					<div className="flex items-center gap-2">
-						<Button
-							variant="ghost"
-							onClick={() => { refetchDashboard() }}
-							className="flex items-center border text-muted-foreground"
-						>
-							<RotateCw />
-							<span className="hidden font-medium sm:inline">Recarregar chamados</span>
-						</Button>
-					</div>
-				</div>
-			</div> */}
-
 			<HeaderPage
-				icon={<Grid2X2 className='-ml-1' />} title={"Dashboard"}
-				buttonAction={refetchDashboard} buttonIcon={<RotateCw />} buttonText={"Recarregar Dashboard"}
+				icon={<Grid2X2 />}
+				title="Dashboard"
+				actions={[
+					loadingDashboard
+						? {
+							icon: <RotateCw />,
+							text: "Carregando",
+							disabled: true,
+						}
+						: {
+							icon: <RotateCw />,
+							text: "Recarregar Dashboard",
+							onClick: refetchDashboard,
+						},
+				]}
 			/>
 
-			{/* Dados carregados sem erro */}
-			{!errorDashboard && dashboard && <>
+			{content}
+		</div>
+	);
 
-				{/* <div>{JSON.stringify(dashboard)}</div> */}
-
-				{/* <Separator /> */}
-
-				{/* Conteúdo do dashboard */}
-				<div className="flex-1 flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
-					<LinhaUm dashboard={dashboard} loading={loadingDashboard} />
-				</div>
-
-				{!loadingDashboard && <>
-					<Separator />
-
-					<div className="flex-1 flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
-						{/* Chamados por estado */}
-						<div className='flex flex-col md:flex-row gap-4'>
-							<EstadosCards totalChamados={dashboard.totalChamados} chamadosPorEstados={dashboard.porEstado} />
-							<GraficoEstados chamadosPorEstados={dashboard.porEstado} />
-						</div>
-					</div>
-
-					<Separator />
-
-					<div className="flex-1 flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
-						<div className='flex flex-col md:flex-row gap-4'>
-							<LinhaEstados chamadosPorDia={dashboard.chamadosPorDia} />
-
-						</div>
-					</div>
-
-					<Separator />
-
-
-					<div className="flex flex-1 flex-col">
-						<div className="@container/main flex flex-1 flex-col gap-2">
-							<div className="flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
-
-								<SectionCards chamados={chamados} />
-
-
-								<ChartAreaInteractive chamados={chamados} />
-
-
-								<DataTable data={chamados} />
-							</div>
-						</div>
-					</div>
-				</>}
-			</>}
-		</div >
-	)
 }

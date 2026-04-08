@@ -24,8 +24,10 @@ async function getChamados(token) {
 export default async function Chamados() {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
-
+    
+    // const chamados = await getChamados(token);
     const chamados = await getChamados(token);
+
 
     return (
         <PageChamados chamados={chamados}/>

@@ -4,6 +4,7 @@ import {
     CardTitle,
     CardContent
 } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function SkeletonLinhaUm() {
     return (<>
@@ -23,7 +24,7 @@ export default function SkeletonLinhaUm() {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    <div className="animate-pulse bg-muted h-12 rounded-xl" />
+                    <Skeleton className="h-12" />
                 </CardContent>
             </Card>
 
@@ -36,7 +37,7 @@ export default function SkeletonLinhaUm() {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    <div className="animate-pulse bg-muted h-12 rounded-xl" />
+                    <Skeleton className="h-12" />
                 </CardContent>
             </Card>
 
@@ -48,7 +49,7 @@ export default function SkeletonLinhaUm() {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    <div className="animate-pulse bg-muted h-12 rounded-xl" />
+                    <Skeleton className="h-12" />
                 </CardContent>
             </Card>
 
@@ -60,7 +61,7 @@ export default function SkeletonLinhaUm() {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    <div className="animate-pulse bg-muted h-12 rounded-xl" />
+                    <Skeleton className="h-12" />
                 </CardContent>
             </Card>
         </div>
