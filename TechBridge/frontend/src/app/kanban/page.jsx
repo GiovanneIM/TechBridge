@@ -1,34 +1,12 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import {
-	DndContext,
-	closestCorners,
-	PointerSensor,
-	useSensor,
-	useSensors,
-	DragOverlay,
-	useDroppable,
-} from "@dnd-kit/core";
-import {
-	SortableContext,
-	arrayMove,
-	verticalListSortingStrategy,
-	useSortable,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { conexaoKanban } from "@/hooks/conexaoKanban";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
-import { useAuth } from "@/hooks/useAuth";
-import { useChamados } from "@/hooks/useChamados";
-import { useMaquinas } from "@/hooks/useMaquina";
-import { useSetores } from "@/hooks/useSetores";
-import { RotateCw, SquareKanban } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { conexaoKanban } from "@/hooks/conexaoKanban";
 
 // ================= TASK CARD =================
 function TaskCard({ task, hideWhenDragging = false }) {
@@ -87,22 +65,17 @@ function TaskCard({ task, hideWhenDragging = false }) {
 
 // ================= COLUMN =================
 function Column({ columnId, title, tasks, children }) {
-	const { setNodeRef, isOver } = useDroppable({ id: columnId });
-
 	const colors = {
-		aberto: "bg-blue-50 border-blue-200",
-		andamento: "bg-yellow-50 border-yellow-200",
-		concluido: "bg-green-50 border-green-200",
-		cancelado: "bg-red-50 border-red-200",
+		aberto: "bg-(--color-aberto)/30 border-(--color-aberto)",
+		andamento: "bg-(--color-andamento)/30 border-(--color-andamento)",
+		fechado: "bg-muted-foreground/30 border-muted-foreground",
 	};
 
 	return (
 		<div
-			ref={setNodeRef}
 			className={`w-80 mt-2 p-4 rounded-xl border transition-all
 			self-start
 			${colors[columnId]}
-			${isOver ? "ring-2 ring-blue-400 scale-[1.02]" : ""}
 			shadow-sm`}
 		>
 			<div className="flex justify-between items-center mb-3">
@@ -136,12 +109,6 @@ export default function Kanban() {
 		cancelado: [],
 	});
 
-	const [activeTask, setActiveTask] = useState(null);
-
-	const sensors = useSensors(
-		useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
-	);
-
 	useEffect(() => {
 		const novasColunas = {
 			aberto: [],
@@ -165,92 +132,9 @@ export default function Kanban() {
 		setColumns(novasColunas);
 	}, [chamados]);
 
-	const columnList = [
-		{ id: "aberto", title: "Aberto" },
-		{ id: "andamento", title: "Em andamento" },
-		{ id: "concluido", title: "Concluído" },
-		{ id: "cancelado", title: "Cancelado" },
-	];
-
-	function findColumn(taskId) {
-		return Object.keys(columns).find((col) =>
-			columns[col].some((t) => t.id === taskId)
-		);
-	}
-
-	function handleDragStart(event) {
-		const col = findColumn(event.active.id);
-		const task = columns[col].find((t) => t.id === event.active.id);
-		setActiveTask(task);
-	}
-
-	function handleDragEnd(event) {
-		const { active, over } = event;
-		setActiveTask(null);
-		if (!over) return;
-
-		const activeCol = findColumn(active.id);
-		const overCol = columns[over.id]
-			? over.id
-			: findColumn(over.id);
-
-		if (!activeCol || !overCol) return;
-
-		const task = columns[activeCol].find((t) => t.id === active.id);
-
-		if (activeCol === overCol) {
-			const oldIndex = columns[activeCol].findIndex(
-				(t) => t.id === active.id
-			);
-			const newIndex = columns[overCol].findIndex(
-				(t) => t.id === over.id
-			);
-
-			setColumns((prev) => ({
-				...prev,
-				[activeCol]: arrayMove(prev[activeCol], oldIndex, newIndex),
-			}));
-		} else {
-			setColumns((prev) => ({
-				...prev,
-				[activeCol]: prev[activeCol].filter(
-					(t) => t.id !== active.id
-				),
-				[overCol]: [...prev[overCol], task],
-			}));
-		}
-	}
 
 	return (<>
-		{/* Header do dashboard */}
-		<div
-			className="
-						flex h-12 shrink-0 items-center gap-2 border-b 
-						transition-[width,height] ease-linear 
-						group-has-data-[collapsible=icon]/sidebar-wrapper:h-12
-					"
-		>
-			<div className="w-full flex items-center justify-between gap-3 px-4 lg:px-6">
-				<div className='flex gap-1 lg:gap-2'>
-					<SquareKanban />
-
-					<h1 className="text-base font-genty">Kanban</h1>
-				</div>
-
-				{/* Botão para buscar os chamados novamente */}
-				<div className="flex items-center gap-2">
-					<Button
-						variant="ghost"
-						onClick={() => { refetchChamados() }}
-						className="flex items-center border text-muted-foreground"
-					>
-						<RotateCw />
-						<span className="hidden font-medium sm:inline">Recarregar chamados</span>
-					</Button>
-				</div>
-			</div>
-		</div>
-		<div className="relative min-h-screen bg-linear-to-b from-white to-blue-50 overflow-hidden">
+		<div className="relative flex-1 flex min-h-screen bg-linear-to-b from-white to-blue-50 overflow-hidden">
 
 			{/* Background (onda) */}
 			<div className="absolute inset-x-0 bottom-0 z-0 pointer-events-none">
@@ -271,42 +155,204 @@ export default function Kanban() {
 				</svg>
 			</div>
 
-			<div className="relative z-10 flex flex-col items-center py-8">
-
-				<DndContext
-					sensors={sensors}
-					collisionDetection={closestCorners}
-					onDragStart={handleDragStart}
-					onDragEnd={handleDragEnd}
+			{/* Kanban */}
+			<div className="flex-1 flex flex-row gap-6 p-6 z-10">
+				{/* Coluna EM ABERTO */}
+				<div
+					className={`w-1/3 h-full p-4 rounded self-start shadow-sm 
+							bg-(--color-aberto)/30 border border-(--color-aberto)
+						`}
 				>
-					<div className="flex flex-col items-start justify-center md:flex-row gap-6 overflow-x-auto pb-8 w-full max-w-7xl">
-						{columnList.map((col) => (
-							<Column
-								key={col.id}
-								columnId={col.id}
-								title={col.title}
-								tasks={columns[col.id]}
-							>
-								<SortableContext
-									items={columns[col.id].map((t) => t.id)}
-									strategy={verticalListSortingStrategy}
-								>
-									{columns[col.id].map((task) => (
-										<TaskCard key={task.id} task={task} />
-									))}
-								</SortableContext>
-							</Column>
-						))}
+					{/* Titulo e quantidade */}
+					<div className="flex justify-between items-center mb-3">
+						<p className="text-gray-700 font-genty text-4xl">
+							CHAMADOS EM ABERTO
+						</p>
+						<span className="text-xs bg-white px-2 py-1 rounded-md shadow-sm">
+							{/* {tasks.length} */}
+						</span>
 					</div>
 
-					<DragOverlay>
-						{activeTask ? (
-							<div className="rotate-2 scale-105">
-								<TaskCard task={activeTask} />
-							</div>
-						) : null}
-					</DragOverlay>
-				</DndContext>
+					<div className="flex flex-col gap-3 min-h-[120px] max-h-[650px] rounded-xl overflow-y-auto">
+
+						<Card className="relative overflow-hidden py-4 gap-0">
+							<div className="absolute left-0 top-0 h-full w-2 bg-(--color-aberto)" />
+
+							<CardHeader>
+								<CardTitle className="font-bold">
+									(codSetor) - (codMaquina) - (codChamado)
+								</CardTitle>
+							</CardHeader>
+
+							<CardContent>
+								<div className="w-full grid grid-cols-2 gap-4 my-4">
+									<div>
+										<p className="font-bold uppercase">Setor:</p>
+										<p>Ferramentaria</p>
+									</div>
+
+									<div>
+										<p className="font-bold uppercase">Máquina:</p>
+										<p >Prensa Hidráulica</p>
+									</div>
+								</div>
+
+								<div className="font-bold grid grid-cols-3">
+									<div>Aberto há 2h</div>
+									<div></div>
+									<div></div>
+								</div>
+							</CardContent>
+						</Card>
+
+					</div>
+				</div>
+
+				{/* Coluna EM ABERTO */}
+				<div
+					className={`w-1/3 h-full p-4 rounded self-start shadow-sm 
+							bg-(--color-andamento)/30 border border-(--color-andamento)
+						`}
+				>
+					{/* Titulo e quantidade */}
+					<div className="flex justify-between items-center mb-3">
+						<p className="text-gray-700 font-genty text-4xl">
+							CHAMADOS EM ANDAMENTO
+						</p>
+						<span className="text-xs bg-white px-2 py-1 rounded-md shadow-sm">
+							{/* {tasks.length} */}
+						</span>
+					</div>
+
+					<div className="flex flex-col gap-3 min-h-[120px] max-h-[650px] rounded-xl overflow-y-auto">
+
+						<Card className="relative overflow-hidden py-4 gap-0">
+							<div className="absolute left-0 top-0 h-full w-2 bg-(--color-andamento)" />
+
+							<CardHeader>
+								<CardTitle className="font-bold">
+									(codSetor) - (codMaquina) - (codChamado)
+								</CardTitle>
+							</CardHeader>
+
+							<CardContent>
+								<div className="w-full grid grid-cols-2 gap-4 my-4">
+									<div>
+										<p className="font-bold uppercase">Setor:</p>
+										<p>Ferramentaria</p>
+									</div>
+
+									<div>
+										<p className="font-bold uppercase">Máquina:</p>
+										<p >Prensa Hidráulica</p>
+									</div>
+
+									<div>
+										<p className="font-bold uppercase">Técnico:</p>
+										<p>João Pedro Silva</p>
+									</div>
+								</div>
+
+								<div className="font-bold grid grid-cols-3">
+									<div>Aberto há 2h</div>
+									<div>Atendido há 1h</div>
+									<div></div>
+								</div>
+							</CardContent>
+						</Card>
+
+					</div>
+				</div>
+
+				{/* Coluna FECHADOS */}
+				<div
+					className={`w-1/3 h-full p-4 rounded self-start shadow-sm 
+							bg-muted-foreground/30 border border-muted-foreground
+						`}
+				>
+					{/* Titulo e quantidade */}
+					<div className="flex justify-between items-center mb-3">
+						<p className="text-gray-700 font-genty text-4xl">
+							CHAMADOS FECHADOS
+						</p>
+						<span className="text-xs bg-white px-2 py-1 rounded-md shadow-sm">
+							{/* {tasks.length} */}
+						</span>
+					</div>
+
+					<div className="flex flex-col gap-3 min-h-[120px] max-h-[650px] rounded-xl overflow-y-auto">
+						<Card className="relative overflow-hidden py-4 gap-0 text-sm">
+							<div className="absolute left-0 top-0 h-full w-2 bg-(--color-cancelado)" />
+
+							<CardHeader>
+								<CardTitle className="font-bold">
+									(codSetor) - (codMaquina) - (codChamado)
+								</CardTitle>
+							</CardHeader>
+
+							<CardContent>
+								<div className="w-full grid grid-cols-2 gap-4 my-4">
+									<div>
+										<p className="font-bold uppercase">Setor:</p>
+										<p>Ferramentaria</p>
+									</div>
+
+									<div>
+										<p className="font-bold uppercase">Máquina:</p>
+										<p >Prensa Hidráulica</p>
+									</div>
+
+									<div>
+										<p className="font-bold uppercase">Técnico:</p>
+										<p>João Pedro Silva</p>
+									</div>
+								</div>
+
+								<div className="font-bold grid grid-cols-3">
+									<div>Aberto há 2h</div>
+									<div>Atendido há 1h</div>
+									<div>Fechado há 30min</div>
+								</div>
+							</CardContent>
+						</Card>
+
+						<Card className="relative overflow-hidden py-4 gap-0 text-sm">
+							<div className="absolute left-0 top-0 h-full w-2 bg-(--color-concluido)" />
+							
+							<CardHeader>
+								<CardTitle className="font-bold">
+									(codSetor) - (codMaquina) - (codChamado)
+								</CardTitle>
+							</CardHeader>
+
+							<CardContent>
+								<div className="w-full grid grid-cols-2 gap-4 my-4">
+									<div>
+										<p className="font-bold uppercase">Setor:</p>
+										<p>Ferramentaria</p>
+									</div>
+
+									<div>
+										<p className="font-bold uppercase">Máquina:</p>
+										<p >Prensa Hidráulica</p>
+									</div>
+
+									<div>
+										<p className="font-bold uppercase">Técnico:</p>
+										<p>João Pedro Silva</p>
+									</div>
+								</div>
+
+								<div className="font-bold grid grid-cols-3">
+									<div>Aberto há 2h</div>
+									<div>Atendido há 1h</div>
+									<div>Fechado há 30min</div>
+								</div>
+							</CardContent>
+						</Card>
+
+					</div>
+				</div>
 			</div>
 		</div>
 	</>

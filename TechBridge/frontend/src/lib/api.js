@@ -4,7 +4,7 @@ import { API_URL } from "./utils";
 export async function apiFetch(endpoint, options = {}) {
     const { ignoreAuthError, ...fetchOptions } = options;
 
-    const url = API_URL + endpoint
+    const url = API_URL + endpoint;
 
     const response = await fetch(url, {
         ...fetchOptions,
