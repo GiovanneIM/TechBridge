@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { apiFetch } from '@/lib/api';
+import { API_URL } from '@/lib/utils';
 
-const API_BASE_URL = 'http://localhost:3000/api/kanban';
+const API_BASE_URL = API_URL + '/kanban';
 
 export function conexaoKanban({ conectOnMount = true }) {
     const [chamados, setChamados] = useState([]);
@@ -9,6 +10,7 @@ export function conexaoKanban({ conectOnMount = true }) {
     useEffect(() => {
         if (!conectOnMount) return;
 
+        // Fazendo requisição á API
         fetch(`${API_BASE_URL}/chamados`)
             .then(res => res.json())
             .then(data => setChamados(data.dados.chamados));
