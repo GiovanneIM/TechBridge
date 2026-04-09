@@ -72,13 +72,13 @@ app.use(cookieParser());
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // ATIVAR AS ROTAS
-app.use('/api/auth', authRotas);
-app.use('/api/criptografia', criptografiaRotas);
-app.use('/api/user', userRotas);
-app.use('/api/chamados', chamadosRotas);
-app.use('/api/maquinas', maquinasRotas);
-app.use('/api/setores', setoresRotas);
-app.use('/api/kanban', kanbanRotas);
+app.use('/techbridge/auth', authRotas);
+app.use('/techbridge/criptografia', criptografiaRotas);
+app.use('/techbridge/user', userRotas);
+app.use('/techbridge/chamados', chamadosRotas);
+app.use('/techbridge/maquinas', maquinasRotas);
+app.use('/techbridge/setores', setoresRotas);
+app.use('/techbridge/kanban', kanbanRotas);
 
 // Rota raiz
 app.get('/', (req, res) => {
@@ -87,21 +87,21 @@ app.get('/', (req, res) => {
         mensagem: 'API de Produtos - Sistema de Gestão',
         versao: '1.0.0',
         rotas: {
-            autenticacao: '/api/auth',
-            produtos: '/api/produtos',
-            criptografia: '/api/criptografia'
+            autenticacao: '/techbridge/auth',
+            produtos: '/techbridge/produtos',
+            criptografia: '/techbridge/criptografia'
         },
         documentacao: {
-            login: 'POST /api/auth/login',
-            registrar: 'POST /api/auth/registrar',
-            perfil: 'GET /api/auth/perfil',
-            listarProdutos: 'GET /api/produtos',
-            buscarProduto: 'GET /api/produtos/:id',
-            criarProduto: 'POST /api/produtos',
-            atualizarProduto: 'PUT /api/produtos/:id',
-            excluirProduto: 'DELETE /api/produtos/:id',
-            infoCriptografia: 'GET /api/criptografia/info',
-            cadastrarUsuario: 'POST /api/criptografia/cadastrar-usuario'
+            login: 'POST /techbridge/auth/login',
+            registrar: 'POST /techbridge/auth/registrar',
+            perfil: 'GET /techbridge/auth/perfil',
+            listarProdutos: 'GET /techbridge/produtos',
+            buscarProduto: 'GET /techbridge/produtos/:id',
+            criarProduto: 'POST /techbridge/produtos',
+            atualizarProduto: 'PUT /techbridge/produtos/:id',
+            excluirProduto: 'DELETE /techbridge/produtos/:id',
+            infoCriptografia: 'GET /techbridge/criptografia/info',
+            cadastrarUsuario: 'POST /techbridge/criptografia/cadastrar-usuario'
         }
     });
 });

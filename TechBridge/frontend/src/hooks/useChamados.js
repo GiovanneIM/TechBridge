@@ -2,7 +2,8 @@ import { useEffect, useState, useCallback } from 'react';
 import { apiFetch } from '@/lib/api';
 
 // URL base da API
-const API_BASE_URL = 'http://localhost:3000/api/chamados';
+// const API_BASE_URL = 'http://localhost:3000/api/chamados';
+const API_BASE_URL = '/chamados';
 
 export function useChamados({
     chamadosIniciais = [],
