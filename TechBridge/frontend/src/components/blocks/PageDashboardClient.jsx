@@ -84,9 +84,9 @@ export default function PageDashboard({
 		)
 	}
 
-	content = (
-		<DashboardSkeleton dashboard={dashboard} chamados={chamados} />
-	)
+	// content = (
+	// 	<DashboardSkeleton dashboard={dashboard} chamados={chamados} />
+	// )
 
 	return (
 		<div className="flex-1 flex flex-col">
@@ -104,7 +104,7 @@ export default function PageDashboard({
 						: {
 							icon: <RotateCw />,
 							text: "Recarregar Dashboard",
-							onClick: refetchDashboard,
+							onClick: () => { refetchDashboard() },
 						},
 				]}
 			/>

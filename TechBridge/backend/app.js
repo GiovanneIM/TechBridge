@@ -64,10 +64,10 @@ app.use(logMiddleware);
 app.use(cookieParser());
 
 // Middleware para simular atraso em TODAS as requisições
-app.use(async (req, res, next) => {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-  next();
-});
+// app.use(async (req, res, next) => {
+//   await new Promise((resolve) => setTimeout(resolve, 3000));
+//   next();
+// });
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 

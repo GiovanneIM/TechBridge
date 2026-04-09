@@ -44,9 +44,7 @@ export default function LinhaUm({ dashboard, loading }) {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {loading
-                        ? <div className="animate-pulse bg-muted h-12 rounded-xl" />
-                        : dashboard.totalChamados}
+                    {dashboard.totalChamados}
                 </CardContent>
             </Card>
 
@@ -59,9 +57,7 @@ export default function LinhaUm({ dashboard, loading }) {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {loading
-                        ? <div className="animate-pulse bg-muted h-12 rounded-xl" />
-                        : formatarTempo(dashboard.tempMedioEspera)}
+                    {formatarTempo(dashboard.tempMedioEspera)}
                 </CardContent>
             </Card>
 
@@ -73,9 +69,7 @@ export default function LinhaUm({ dashboard, loading }) {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {loading
-                        ? <div className="animate-pulse bg-muted h-12 rounded-xl" />
-                        : formatarTempo(dashboard.tempMedioAtendimento)}
+                    {formatarTempo(dashboard.tempMedioAtendimento)}
                 </CardContent>
             </Card>
 
@@ -87,9 +81,7 @@ export default function LinhaUm({ dashboard, loading }) {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {loading
-                        ? <div className="animate-pulse bg-muted h-12 rounded-xl" />
-                        : formatarTempo(dashboard.tempMedioAtendimento)}
+                    {formatarTempo(dashboard.tempMedioAtendimento)}
                 </CardContent>
             </Card>
         </div>

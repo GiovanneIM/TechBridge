@@ -11,8 +11,8 @@ export default function PageChamados({
 }) {
     const {
         chamados,
-        loading,
-        error,
+        loadingChamados,
+        errorChamados,
         refetchChamados
     } = useChamados({
         chamadosIniciais: chamadosIniciais,
@@ -41,7 +41,7 @@ export default function PageChamados({
                 <div className="flex items-center gap-2">
                     <Button
                         variant="ghost"
-                        onClick={() => { refetchChamados() }}
+                        onClick={() => { refetchChamados({}) }}
                         className="flex items-center border text-muted-foreground"
                     >
                         <RotateCw />
@@ -51,7 +51,7 @@ export default function PageChamados({
             </div>
         </div>
 
-        {/* <p>{JSON.stringify(chamados)}</p> */}
+        <p>{JSON.stringify(chamados)}</p>
 
         <div className="flex-1 flex flex-col gap-4 md:gap-6 p-4 lg:px-6  md:py-6">
             <DataTable data={chamados} />

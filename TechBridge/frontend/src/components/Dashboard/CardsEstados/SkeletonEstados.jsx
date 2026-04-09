@@ -22,7 +22,7 @@ export default function SkeletonEstados() {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    <Skeleton className="h-12" />
+                    <Skeleton className="h-9" />
                 </CardContent>
             </Card>
 
@@ -36,7 +36,7 @@ export default function SkeletonEstados() {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    <Skeleton className="h-12" />
+                    <Skeleton className="h-9" />
                 </CardContent>
             </Card>
 
@@ -50,7 +50,7 @@ export default function SkeletonEstados() {
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    <Skeleton className="h-12" />
+                    <Skeleton className="h-9" />
                 </CardContent>
             </Card>
         </div>

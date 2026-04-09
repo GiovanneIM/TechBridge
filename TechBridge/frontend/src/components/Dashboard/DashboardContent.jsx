@@ -13,7 +13,7 @@ export default function DashboardContent({ dashboard, chamados }) {
     return (<>
         {/* Linha um */}
         <div className="flex-1 flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
-            <LinhaUm dashboard={dashboard} loading={loadingDashboard} />
+            <LinhaUm dashboard={dashboard} />
         </div>
 
         <Separator />

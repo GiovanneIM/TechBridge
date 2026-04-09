@@ -13,12 +13,12 @@ export function useChamados({
     const [chamados, setChamados] = useState(chamadosIniciais);
 
     // Estado que indica se há uma requisição em andamento
-    const [loading, setLoading] = useState({
+    const [loadingChamados, setLoading] = useState({
         fetch: false,
     });
 
     // Estado para armazenar mensagem de erro (se houver)
-    const [error, setError] = useState({
+    const [errorChamados, setError] = useState({
         fetch: null,
     });
 
@@ -67,8 +67,8 @@ export function useChamados({
 
     return {
         chamados,
-        loading,
-        error,
+        loadingChamados,
+        errorChamados,
         refetchChamados: fetchChamados
     };
 }
