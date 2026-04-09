@@ -17,7 +17,7 @@ class ChamadosModel {
     }
 
     //  BUSCAR UM CHAMADO ESPECÍFICO
-    static async listarChamados(id) {
+    static async listarChamado(id) {
         try {
             // Fazendo a consulta
             const chamados = await read("chamados", {where: {id}});

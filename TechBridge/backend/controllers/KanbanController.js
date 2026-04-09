@@ -46,7 +46,7 @@ class KanbanController {
 
     // GET /kanban/chamados
     static async obterChamados(req, res) {
-        const options = res.options || {};
+        const options = {};
         const resultado = await ChamadosModel.listarChamados(options);
 
         // Respondendo a requisição com os chamados

@@ -4,7 +4,7 @@ import KanbanController from '../controllers/KanbanController.js';
 const router = express.Router();
 
 // Atualizar informações do usuário (Exceto senha e foto)
-router.get('/', KanbanController.conectar);
+router.get("/", KanbanController.conectar);
 
 // Listar chamados
 router.get("/chamados", KanbanController.obterChamados);
