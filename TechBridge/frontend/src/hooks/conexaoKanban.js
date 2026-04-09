@@ -29,11 +29,11 @@ export function conexaoKanban({ conectOnMount = true }) {
             if (data.tipo === "STATUS_ATUALIZADO") {
                 console.log(data);
 
-                // setChamados(prev =>
-                //     prev.map(c =>
-                //         c.id === data.chamado.id ? data.chamado : c
-                //     )
-                // );
+                setChamados(prev =>
+                    prev.map(c =>
+                        c.id === data.chamado.id ? data.chamado : c
+                    )
+                );
             }
         };
 
