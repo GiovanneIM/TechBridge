@@ -22,9 +22,8 @@ export function conexaoKanban({ conectOnMount = true }) {
             console.log("Evento recebido:", data);
 
             if (data.tipo === "NOVO_CHAMADO") {
-                // setChamados(prev => [...prev, data.chamado]);
+                setChamados(prev => [...prev, data.chamado]);
                 console.log(data);
-
             }
 
             if (data.tipo === "STATUS_ATUALIZADO") {

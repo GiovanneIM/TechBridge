@@ -9,9 +9,9 @@ router.post('/buscar', authMiddleware, ChamadosController.listarChamados)
 
 router.get('/:id', authMiddleware, ChamadosController.listarChamado)
 
-router.post('/', authMiddleware, ChamadosController.criarChamado)
+router.post('/', ChamadosController.criarChamado)
 
-router.patch('/:id', authMiddleware, ChamadosController.atualizarChamado)
+router.patch('/:id', ChamadosController.atualizarChamado)
 
 // Obter dados para o dashboard
 router.post('/dashboard', authMiddleware, ChamadosController.obterDashboard)

@@ -69,3 +69,5 @@ FROM (
 GROUP BY data
 ORDER BY data;
     
+    
+delete from chamados where cod_chamado = 999;

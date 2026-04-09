@@ -21,9 +21,10 @@ class ChamadosModel {
         try {
             // Fazendo a consulta
             const chamados = await read("chamados", {where: {id}});
-
-            // Retornando os chamados
-            return { chamados };
+            const chamado = chamados[0]
+            
+            // Retornando o chamado
+            return chamado || null;
         } catch (error) {
             console.error('Erro ao listar chamados:', error);
             throw error;

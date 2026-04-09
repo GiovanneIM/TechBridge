@@ -130,13 +130,28 @@ class ChamadosController {
         const id_maquina = req.body.id_maquina;
         const cod_chamado = req.body.cod_chamado;
 
-        const id = ChamadosModel.criarChamados({
+        const id = await ChamadosModel.criarChamados({
             id_empresa, id_setor, id_maquina, cod_chamado
         })
 
-        if (id) {
-            notificarKanban()
+        if (!id) {
+            return res.status(400).json({
+                erro: "Não foi possível criar o chamado"
+            });
         }
+
+        const chamado = await ChamadosModel.listarChamado(id);
+
+        // Notifica o Kanban (SSE ou WebSocket)
+        notificarKanban({
+            tipo: "NOVO_CHAMADO",
+            chamado
+        });
+
+        return res.status(201).json({
+            mensagem: "Chamado criado com sucesso",
+            chamado
+        });
     }
 
     /* PATCH /chamados/:id - Rota para atualizar um chamado 
