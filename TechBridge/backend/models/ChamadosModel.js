@@ -1,4 +1,4 @@
-import { create, read, update, deleteRecord, dadosDashboard, comparePassword, hashPassword } from '../config/database.js';
+import { create, read, update, deleteRecord, dadosDashboard, dadosPainelChamados, comparePassword, hashPassword } from '../config/database.js';
 
 class ChamadosModel {
 
@@ -50,6 +50,20 @@ class ChamadosModel {
             return dashboard;
         } catch (error) {
             console.error('Erro ao obter dados para dashboard:', error)
+            throw error;
+        }
+    }
+
+    //  OBTER DADOS DO PAINEL DE CHAMADOS
+    static async painelChamados(options) {
+        try {
+            // Fazendo a consulta
+            const painel = await dadosPainelChamados(options);
+
+            // Retornando os chamados para o painel
+            return painel;
+        } catch (error) {
+            console.error('Erro ao listar chamados:', error);
             throw error;
         }
     }

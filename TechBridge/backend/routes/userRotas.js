@@ -21,6 +21,9 @@ router.patch(
     UserController.atualizarImagem
 );
 
+// Obter tecnicos
+router.get("/tecnicos", authMiddleware, UserController.listarTecnicos)
+
 
 // Rotas OPTIONS para CORS (preflight requests)
 router.options('/info', (req, res) => {

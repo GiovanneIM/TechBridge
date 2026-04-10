@@ -68,6 +68,23 @@ FROM (
 ) as dados
 GROUP BY data
 ORDER BY data;
+
+SELECT *
+FROM chamados c
+INNER JOIN setores s on s.id = c.id_setor
+INNER JOIN maquinas m on m.id = c.id_maquina
+INNER JOIN usuarios u on u.id = c.id_tecnico;
+
+SELECT 
+	c.estado, 
+	TIMESTAMPDIFF(MINUTE, datahora_abertura, NOW()) as temp_espera,
+    s.nome as nome_setor,
+    m.nome as nome_maquina,
+    u.nome as nome_tecnico
+FROM chamados c
+INNER JOIN setores s on s.id = c.id_setor
+INNER JOIN maquinas m on m.id = c.id_maquina
+LEFT JOIN usuarios u on u.id = c.id_tecnico;
     
     
-delete from chamados where cod_chamado = 999;
+delete from chamados;

@@ -98,8 +98,8 @@ export default function CounteudoSidebar() {
                                             ${pathname.startsWith("/kanban") && nav_active}
                                         `}
                     >
-                        <Link href={'/kanban'}>
-                            Kanban
+                        <Link href={'/painelControle'}>
+                            Painel de Controle
                         </Link>
                     </Button>
                 </div>

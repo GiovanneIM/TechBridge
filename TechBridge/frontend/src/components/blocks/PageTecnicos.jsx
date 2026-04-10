@@ -1,29 +1,25 @@
+"use client"
+
 import { UserCog2 } from "lucide-react"
 import { Separator } from "../ui/separator"
+import { CardTecnico } from "../card/cardTecnicos/page"
+import { useUsers } from "@/hooks/useUsers"
 
 export default function PageTecnicos({
-    tecnicosIniciais
+    tecnicosIniciais = []
 }) {
+    const {tecnicos} = useUsers({
+        tecnicosIniciais,
+        fetchOnMount: tecnicosIniciais.length === 0
+    })
+
     return (
-        <div className='flex-1 flex flex-col'>
-            {/* Header da página */}
-            <div
-                className="
-						flex h-12 shrink-0 items-center gap-2 border-b 
-						transition-[width,height] ease-linear 
-						group-has-data-[collapsible=icon]/sidebar-wrapper:h-12
-					"
-            >
-                <div className="w-full flex items-center justify-between gap-3 px-4 lg:px-6">
-                    <div className='flex gap-1 lg:gap-2'>
-                        <UserCog2 className="-ml-1" />
-
-                        <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-6" />
-
-                        <h1 className="text-base font-genty">Tecnicos</h1>
-                    </div>
-                </div>
+        <>
+            <div className="grid grid-cols-5 w-full h-50 py-5 px-5 gap-5">
+                {tecnicos.map((t, i) => (
+                    <CardTecnico key={i} nome={t.nome} empresa={t.id_empresa} imagem={t.foto_perfil} email={t.email}></CardTecnico>
+                ))}
             </div>
-        </div>
+        </>
     )
 }
