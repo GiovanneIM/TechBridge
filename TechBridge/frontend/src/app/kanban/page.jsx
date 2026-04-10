@@ -354,41 +354,71 @@ export default function Kanban() {
 				</div>
 			</div> */}
 
-			<div className="flex-1 flex gap-6 p-6 z-10 bg-muted-foreground/90 border-bg-muted m-4 rounded">
-				<Table className="font-genty">
-					<TableCaption>A list of your recent invoices.</TableCaption>
+			<div className="flex-1 flex gap-6 p-6 z-10 bg-black/85 border-bg-muted m-4 rounded">
+				<Table className="font-genty text-2xl text-secondary">
 					<TableHeader>
 						<TableRow>
-							<TableHead className="w-[100px]">IDENTIFICADOR</TableHead>
-							<TableHead>STATUS</TableHead>
-							<TableHead>Method</TableHead>
-							<TableHead className="text-right">Amount</TableHead>
+							<TableHead className="w-10 text-center"></TableHead>
+							{/* <TableHead className="text-secondary">IDENTIFICADOR</TableHead> */}
+							<TableHead className="text-secondary">SETOR</TableHead>
+							<TableHead className="text-secondary">MAQUINA</TableHead>
+							<TableHead className="text-secondary">TEMPO EM ESPERA</TableHead>
+							<TableHead className="text-secondary">TECNICO</TableHead>
+							<TableHead className="text-secondary text-right w-[150px] overflow-x-hidden">STATUS</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						<TableRow>
-							<TableCell className="font-medium">### - ### - ###</TableCell>
-							<TableCell className="text-(--color-aberto)">AGUARDANDO</TableCell>
-							<TableCell>Credit Card</TableCell>
-							<TableCell className="text-right">$250.00</TableCell>
+						<TableRow className="h-16">
+							<TableCell><div className="w-6 h-6 rounded-full bg-(--color-aberto)" /></TableCell>
+							{/* <TableCell className="font-medium">### - ### - ###</TableCell> */}
+							<TableCell>Ferramentaria</TableCell>
+							<TableCell>Máquina de solda</TableCell>
+							<TableCell>00:30</TableCell>
+							<TableCell></TableCell>
+							<TableCell className="text-right text-secondary-foreground">
+								<span className="px-3 py-1 rounded-full bg-(--color-aberto)">
+									AGUARDANDO
+								</span>
+							</TableCell>
 						</TableRow>
-						<TableRow>
-							<TableCell className="font-medium">### - ### - ###</TableCell>
-							<TableCell className="text-(--color-andamento)">EM ANDAMENTO</TableCell>
-							<TableCell>Credit Card</TableCell>
-							<TableCell className="text-right">$250.00</TableCell>
+						<TableRow className="h-16">
+							<TableCell><div className="w-6 h-6 rounded-full bg-(--color-andamento)" /></TableCell>
+							{/* <TableCell className="font-medium">### - ### - ###</TableCell> */}
+							<TableCell>Pintura</TableCell>
+							<TableCell>Balança</TableCell>
+							<TableCell>00:15</TableCell>
+							<TableCell>João de Souza Silva</TableCell>
+							<TableCell className="text-right text-secondary-foreground">
+								<span className="px-3 py-1 rounded-full bg-(--color-andamento)">
+									EM ANDAMENTO
+								</span>
+							</TableCell>
 						</TableRow>
-						<TableRow>
-							<TableCell className="font-medium">### - ### - ###</TableCell>
-							<TableCell className="text-(--color-cancelado)">CANCELADO</TableCell>
-							<TableCell>Credit Card</TableCell>
-							<TableCell className="text-right">$250.00</TableCell>
+						<TableRow className="h-16">
+							<TableCell><div className="w-6 h-6 rounded-full bg-(--color-cancelado)" /></TableCell>
+							{/* <TableCell className="font-medium">### - ### - ###</TableCell> */}
+							<TableCell>Pintura</TableCell>
+							<TableCell>Mixer de tintas</TableCell>
+							<TableCell>01:30</TableCell>
+							<TableCell>Maria Julia Nogueira</TableCell>
+							<TableCell className="text-right text-secondary-foreground">
+								<span className="px-3 py-1 rounded-full bg-(--color-cancelado)">
+									CANCELADO
+								</span>
+							</TableCell>
 						</TableRow>
-						<TableRow>
-							<TableCell className="font-medium">### - ### - ###</TableCell>
-							<TableCell className="text-(--color-concluido)">CONCLUÍDO</TableCell>
-							<TableCell>Credit Card</TableCell>
-							<TableCell className="text-right">$250.00</TableCell>
+						<TableRow className="h-16">
+							<TableCell><div className="w-6 h-6 rounded-full bg-(--color-concluido)" /></TableCell>
+							{/* <TableCell className="font-medium">### - ### - ###</TableCell> */}
+							<TableCell>Ferramentaria</TableCell>
+							<TableCell>Máquina de solda</TableCell>
+							<TableCell>00:20</TableCell>
+							<TableCell>Dwayne The Rock</TableCell>
+							<TableCell className="text-right text-secondary-foreground">
+								<span className="px-3 py-1 rounded-full bg-(--color-concluido)">
+									CONCLUÍDO
+								</span>
+							</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>
