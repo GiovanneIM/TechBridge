@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { apiFetch } from '@/lib/api';
+import { API_URL } from '@/lib/utils';
 
 // URL base da API
 // const API_BASE_URL = 'http://localhost:3000/api/setores';
@@ -30,7 +31,7 @@ export function useSetores({
 
         try {
             // Chamada à API
-            const response = await fetch(API_BASE_URL);
+            const response = await apiFetch(API_BASE_URL + '/buscar');
 
             // Convertendo a resposta para json
             const data = await response.json();

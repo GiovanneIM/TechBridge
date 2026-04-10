@@ -1,10 +1,32 @@
+"use client";
+
 import { BriefcaseBusiness, Network, PaintRoller, Warehouse, Wrench } from "lucide-react"
 import { Separator } from "../ui/separator"
 import { spawnDynamicRequests } from "next/dist/client/components/router-reducer/ppr-navigations"
+import { useSetores } from "@/hooks/useSetores"
 
 export default function PageSetores({
-    setoresIniciais
+    setoresIniciais = []
 }) {
+
+    const {
+        setores,
+        loadingSetores,
+        errorSetores,
+        refetchSetores
+    } = useSetores({
+        setoresIniciais: setoresIniciais,
+        fetchOnMount: setoresIniciais?.length === 0
+    })
+
+    const icones = {
+        "Wrench": <Wrench className="h-20 w-20 text-white" />,
+        "PaintRoller": <PaintRoller className="h-20 w-20 text-white" />,
+        "BriefcaseBusiness": <BriefcaseBusiness className="h-15 w-20 text-white" />,
+        "Network": <Network className="h-20 w-20 text-white" />
+    }
+
+
     return (
         <div className='flex-1 flex flex-col'>
             {/* Header da página */}
@@ -26,32 +48,35 @@ export default function PageSetores({
                 </div>
             </div>
 
-            <div className="flex flex-row gap-3 items-center justify-center p-5">
-                {/* Card dos setores */}
+            {/* Cards dos setores */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-10">
                 {setores.map((setor, i) => (
-                    <div key={i} data-slot="card" className="hover:-translate-y-1 transition-all flex flex-col rounded-xl border bg-card py-10 text-card-foreground shadow-sm relative w-full max-w-sm overflow-hidden pt-0 pb-4 gap-4">
-                        <div>
-                            <div>{setor.icone}</div>
-                        </div>
-                        <div>
-                            <div data-slot="card-header" className="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 px-4">
-                                <div data-slot="card-action" className="col-start-2 row-span-2 row-start-1 self-start justify-self-end">
-                                    <span data-slot="badge" data-variant="secondary" className="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&amp;&gt;svg]:pointer-events-none [&amp;&gt;svg]:size-3 bg-secondary text-secondary-foreground dark:bg-techbridge text-center font-genty">
-                                        {setor.span}</span>
-                                </div>
-                                <div data-slot="card-title" className="font-semibold text-techbridge font-genty text-2xl dark:text-gray-300">
+                    <div key={i} className="rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all hover:-translate-y-1 bg-white">
+                        {/* HEADER COLORIDO */}
+                        <div className={`p-6 flex flex-col gap-4 text-white
+                            ${setor.cor}`}
+                        >
+                            {/* Ícone */}
+                            <div className="text-4xl opacity-90">
+                                {icones[setor.icone]}
+                            </div>
+
+                                {/* Título */}
+                                <div className="text-3xl justify-between flex font-bold pb-4">
                                     {setor.nome}
+
+                                    {/* Badge */}
+                                    {setor.descricao && (
+                                        <span className="self-end bg-white/20 text-xs px-3 py-1 rounded-full">
+                                            {setor.descricao}
+                                        </span>
+                                    )}
                                 </div>
-                                <div data-slot="card-description" className="text-sm text-muted-foreground">
-                                </div>
-                            </div>
-                            <div data-slot="card-content" className="px-4">
-                                <ul className="text-muted-foreground text-justify font-genty">
-                                    <li className="mt-2"></li>
-                                    <li className="mt-2"></li>
-                                    <li className="mt-2"></li>
-                                </ul>
-                            </div>
+                        </div>
+
+                        {/* CONTEÚDO */}
+                        <div className="p-5 text-gray-600 text-2xl">
+                            {setor.nome}
                         </div>
                     </div>
                 ))}
@@ -59,30 +84,3 @@ export default function PageSetores({
         </div>
     )
 }
-
-const setores = [
-    {
-        value: "setor-1",
-        nome: "Ferramentaria",
-        icone: <Wrench className="text-techbridge h-15 w-20 pt-4 dark:text-gray-300" />,
-        span: "Ferramental"
-    },
-    {
-        value: "setor-2",
-        nome: "RH",
-        icone: <BriefcaseBusiness className="text-techbridge h-15 w-20 pt-4 dark:text-gray-300" />,
-        span: " Gestão de pessoas"
-    },
-    {
-        value: "setor-3",
-        nome: "Pintura",
-        icone: <PaintRoller className="text-techbridge h-15 w-20 pt-4 dark:text-gray-300" />,
-        span: "Acabamento"
-    },
-    {
-        value: "setor-4",
-        nome: "GA",
-        icone: <Network className="text-techbridge h-15 w-20 pt-4 dark:text-gray-300" />,
-        span: "Logística"
-    },
-]
