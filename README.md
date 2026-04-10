@@ -65,4 +65,4 @@ Após executar as migrations, você terá os seguintes usuários:
 Este projeto está sob a licença GPLV3. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
-**Desenvolvido para o curso de Desenvolvimento de Sistemas - 3MD-GM**
+<p align="center"><b>Desenvolvido para o curso de Desenvolvimento de Sistemas - 3MD-GM</b></p>
