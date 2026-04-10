@@ -1,9 +1,17 @@
+"use client"
+
 import { UserCog2 } from "lucide-react"
 import { Separator } from "../ui/separator"
+import { useUsers } from "@/hooks/useUsers"
 
 export default function PageTecnicos({
-    tecnicosIniciais
+    tecnicosIniciais = []
 }) {
+    const {tecnicos} = useUsers({
+        tecnicosIniciais,
+        fetchOnMount: tecnicosIniciais.length === 0
+    })
+
     return (
         <div className='flex-1 flex flex-col'>
             {/* Header da página */}
