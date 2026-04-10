@@ -16,18 +16,18 @@ export function CardTecnico({nome, empresa, email, imagem}) {
             <div className="absolute inset-0 z-30 aspect-video" />
             <div className="flex justify-center py-5">
                 <img
-                    src="https://avatar.vercel.sh/shadcn1"
+                    src={imagem}
                     alt="Event cover"
                     className="relative z-20 w-20 h-20 md:w-32 md:h-32 object-cover rounded-full"
                 />
             </div>
             <CardHeader>
-                <CardTitle>{"Nome"}</CardTitle>
+                <CardTitle>{nome}</CardTitle>
                 <CardDescription>
-                    {"Empresa"}
+                    {empresa}
                 </CardDescription>
                 <CardDescription>
-                    {"Email"}
+                    {email}
                 </CardDescription>
             </CardHeader>
         </Card>
