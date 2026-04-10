@@ -1,13 +1,13 @@
 import express from 'express';
-import KanbanController from '../controllers/KanbanController.js';
+import PainelController from '../controllers/PainelController.js';
 
 const router = express.Router();
 
 // Atualizar informações do usuário (Exceto senha e foto)
-router.get("/", KanbanController.conectar);
+router.get("/", PainelController.conectar);
 
 // Listar chamados
-router.get("/chamados", KanbanController.obterChamados);
+router.get("/chamados", PainelController.obterChamados);
 
 // Rotas OPTIONS para CORS (preflight requests)
 router.options('/', (req, res) => {

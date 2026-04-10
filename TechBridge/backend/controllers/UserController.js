@@ -1,4 +1,4 @@
-import UserModel from '../models/UserModel.js';
+import UserModel from "../models/UserModel.js";
 
 // CONTROLLER PARA OPERAÇÕES DE USUÁRIOS
 
@@ -202,164 +202,45 @@ class UserController {
     }
 
 
-
-    // ACREDITO QUE ESSA ROTA NÃO SERÁ NECESSÁRIA
-    // POST /auth/registrar - Registrar novo usuário
-    static async registrar(req, res) {
-        try {
-            const { nome, email, senha, tipo } = req.body;
-
-            // Verificando se o nome foi enviado
-            if (!nome || nome.trim() === '') {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Nome obrigatório',
-                    mensagem: 'O nome é obrigatório'
-                });
-            }
-
-            // Verificando se o email foi enviado
-            if (!email || email.trim() === '') {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Email obrigatório',
-                    mensagem: 'O email é obrigatório'
-                });
-            }
-
-            // Verificando se a senha foi enviada
-            if (!senha || senha.trim() === '') {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Senha obrigatória',
-                    mensagem: 'A senha é obrigatória'
-                });
-            }
-
-            // Validando o nome
-            if (nome.length < 2) {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Nome muito curto',
-                    mensagem: 'O nome deve ter pelo menos 2 caracteres'
-                });
-            }
-
-            if (nome.length > 100) {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Nome muito longo',
-                    mensagem: 'O nome deve ter no máximo 100 caracteres'
-                });
-            }
-
-            // Validação básica de formato de email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Email inválido',
-                    mensagem: 'Formato de email inválido'
-                });
-            }
-
-            if (email.length > 255) {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'E-mail muito longo',
-                    mensagem: 'O E-mail deve ter no máximo 255 caracteres'
-                });
-            }
-
-            // Validando a senha
-            if (senha.length < 6) {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Senha muito curta',
-                    mensagem: 'A senha deve ter pelo menos 6 caracteres'
-                });
-            }
-
-            // Verificar se o email já existe
-            const usuarioExistente = await UsuarioModel.buscarPorEmail(email);
-            if (usuarioExistente) {
-                return res.status(409).json({
-                    sucesso: false,
-                    erro: 'Email já cadastrado',
-                    mensagem: 'Este email já está sendo usado por outro usuário'
-                });
-            }
-
-            // Preparar dados do usuário
-            const dadosUsuario = {
-                nome: nome.trim(),
-                email: email.trim().toLowerCase(),
-                senha: senha,
-                tipo: tipo
-            };
-
-            // Criar usuário
-            const usuarioId = await UsuarioModel.criar(dadosUsuario);
-
-            res.status(201).json({
-                sucesso: true,
-                mensagem: 'Usuário registrado com sucesso',
-                dados: {
-                    id: usuarioId,
-                    nome: dadosUsuario.nome,
-                    email: dadosUsuario.email,
-                    tipo: dadosUsuario.tipo
-                }
-            });
-        } catch (error) {
-            console.error('Erro ao registrar usuário:', error);
-            res.status(500).json({
-                sucesso: false,
-                erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível registrar o usuário'
-            });
-        }
-    }
-
-    // GET /usuarios - Listar todos os usuários (apenas admin, com paginação)
-    static async listarUsuarios(req, res) {
+    // GET /tecnicos - Listar todos os tecnicos da empresa (apenas gerente cliente, com paginação)
+    static async listarTecnicos(req, res) {
         try {
             // Obter parâmetros de paginação da query string
-            const pagina = parseInt(req.query.pagina) || 1;
-            const limite = parseInt(req.query.limite) || 10;
+            // const pagina = parseInt(req.query.pagina) || 1;
+            // const limite = parseInt(req.query.limite) || 10;
 
-            // Validações
-            if (pagina < 1) {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Página inválida',
-                    mensagem: 'A página deve ser um número maior que zero'
-                });
-            }
+            // // Validações
+            // if (pagina < 1) {
+            //     return res.status(400).json({
+            //         sucesso: false,
+            //         erro: 'Página inválida',
+            //         mensagem: 'A página deve ser um número maior que zero'
+            //     });
+            // }
 
-            const limiteMaximo = parseInt(process.env.PAGINACAO_LIMITE_MAXIMO) || 100;
-            if (limite < 1 || limite > limiteMaximo) {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Limite inválido',
-                    mensagem: `O limite deve ser um número entre 1 e ${limiteMaximo}`
-                });
-            }
-
-            const resultado = await UsuarioModel.listarTodos(pagina, limite);
+            // const limiteMaximo = parseInt(process.env.PAGINACAO_LIMITE_MAXIMO) || 100;
+            // if (limite < 1 || limite > limiteMaximo) {
+            //     return res.status(400).json({
+            //         sucesso: false,
+            //         erro: 'Limite inválido',
+            //         mensagem: `O limite deve ser um número entre 1 e ${limiteMaximo}`
+            //     });
+            // }
+            const id_empresa = req.usuario.id_empresa
+            const tecnicos = await UserModel.listarTecnicos(id_empresa);
 
             // Remover senha de todos os usuários
-            const usuariosSemSenha = resultado.usuarios.map(({ senha, ...usuario }) => usuario);
+            const tecnicosSemSenha = tecnicos.map(({ senha, ...tecnico }) => tecnico);
 
             res.status(200).json({
                 sucesso: true,
-                dados: usuariosSemSenha,
-                paginacao: {
-                    pagina: resultado.pagina,
-                    limite: resultado.limite,
-                    total: resultado.total,
-                    totalPaginas: resultado.totalPaginas
-                }
+                dados: {tecnicos : tecnicosSemSenha},
+                // paginacao: {
+                //     pagina: resultado.pagina,
+                //     limite: resultado.limite,
+                //     total: resultado.total,
+                //     totalPaginas: resultado.totalPaginas
+                // }
             });
         } catch (error) {
             console.error('Erro ao listar usuários:', error);

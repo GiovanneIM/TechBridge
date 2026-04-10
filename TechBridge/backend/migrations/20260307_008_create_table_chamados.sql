@@ -80,7 +80,7 @@ SET
     estado = 'andamento',
     id_tecnico = 3,
     datahora_atendimento = DATE_ADD(NOW(), INTERVAL 1 DAY_HOUR)
-WHERE id % 3 > 1 OR id % 3 = 0 ;
+WHERE id % 4 > 1 OR id % 4 = 0 ;
 
 -- Concluindo chamados
 UPDATE chamados    
@@ -89,4 +89,4 @@ SET
     id_causa = 1,
     datahora_conclusao = DATE_ADD(NOW(), INTERVAL 2 DAY_HOUR ),
     operador = "25170154"
-WHERE id % 3 > 2 OR id % 3 = 0 ;
+WHERE id % 4 > 2 OR id % 4 = 0 ;

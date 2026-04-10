@@ -79,30 +79,11 @@ class UserModel {
 
 
     // Listar todos os usuários (com paginação)
-    static async listarTodos(pagina = 1, limite = 10) {
+    static async listarTecnicos(id_empresa) {
         try {
-            const offset = (pagina - 1) * limite;
+            const tecnicos = await read("usuarios", {where: {id_empresa, tipo_usuario: 3}})
 
-            // Buscar usuários com paginação (usando prepared statements para segurança)
-            const connection = await getConnection();
-            try {
-                const sql = 'SELECT * FROM usuarios ORDER BY id DESC LIMIT ? OFFSET ?';
-                const [usuarios] = await connection.query(sql, [limite, offset]);
-
-                // Contar total de registros
-                const [totalResult] = await connection.execute('SELECT COUNT(*) as total FROM usuarios');
-                const total = totalResult[0].total;
-
-                return {
-                    usuarios,
-                    total,
-                    pagina,
-                    limite,
-                    totalPaginas: Math.ceil(total / limite)
-                };
-            } finally {
-                connection.release();
-            }
+            return tecnicos
         } catch (error) {
             console.error('Erro ao listar usuários:', error);
             throw error;

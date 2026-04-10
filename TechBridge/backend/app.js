@@ -16,8 +16,8 @@ import criptografiaRotas from './routes/criptografiaRotas.js';
 import userRotas from './routes/userRotas.js';
 import chamadosRotas from './routes/chamadosRotas.js';
 import maquinasRotas from './routes/maquinasRotas.js';
-import setoresRotas from './routes/setoresRotas.js'
-import kanbanRotas from './routes/kanbanRotas.js'
+import setoresRotas from './routes/setoresRotas.js';
+import painelRotas from './routes/painelRotas.js';
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // IMPORTAR MIDDLEWARES
@@ -78,7 +78,7 @@ app.use('/techbridge/user', userRotas);
 app.use('/techbridge/chamados', chamadosRotas);
 app.use('/techbridge/maquinas', maquinasRotas);
 app.use('/techbridge/setores', setoresRotas);
-app.use('/techbridge/kanban', kanbanRotas);
+app.use('/techbridge/painel', painelRotas);
 
 // Rota raiz
 app.get('/', (req, res) => {

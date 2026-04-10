@@ -242,7 +242,7 @@ function Cards() {
 					<Card className="relative w-full max-w-sm overflow-hidden pt-0 pb-4 gap-4" key={i}>
 						<div>
 							{/* Overlay sobre a imagem */}
-							<div className="absolute inset-0 z-30 aspect-video bg-techbridge/35" />
+							<div className="absolute inset-0 z-30 aspect-video bg-techbridge/35 dark:bg-techbridge/35" />
 							{/* Imagem */}
 							<img
 								src={cont.image}
