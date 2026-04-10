@@ -1,0 +1,48 @@
+import { useEffect, useState } from 'react';
+import { apiFetch } from '@/lib/api';
+
+const API_BASE_URL = 'http://localhost:3000/api/kanban';
+
+export function conexaoKanban({ conectOnMount = true }) {
+    const [chamados, setChamados] = useState([]);
+
+    useEffect(() => {
+        if (!conectOnMount) return;
+
+        // 🔹 1. Carrega inicial
+        fetch(`${API_BASE_URL}/chamados`)
+            .then(res => res.json())
+            .then(data => setChamados(data.dados.chamados));
+
+        // 🔹 2. Abre conexão SSE
+        const eventSource = new EventSource(API_BASE_URL);
+
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            console.log("Evento recebido:", data);
+
+            if (data.tipo === "NOVO_CHAMADO") {
+                setChamados(prev => [...prev, data.chamado]);
+            }
+
+            if (data.tipo === "STATUS_ATUALIZADO") {
+                setChamados(prev =>
+                    prev.map(c =>
+                        c.id === data.chamado.id ? data.chamado : c
+                    )
+                );
+            }
+        };
+
+        eventSource.onerror = (err) => {
+            console.error("Erro SSE:", err);
+        };
+
+        return () => {
+            eventSource.close();
+        };
+    }, [conectOnMount]);
+
+    return { chamados };
+}

@@ -10,17 +10,24 @@ class ChamadosController {
     */
     static async listarChamados(req, res) {
         try {
+            // Opções da consulta
             const options = req.body.options || {};
             options.where = options.where || {};
 
+            // Paginação
+            options.limit = Math.min(Number(options.limit ?? 15), 100);
+            options.page = Math.max(Number(options.page ?? 1), 1);
+            options.offset = (options.page - 1) * options.limit;
+
+
             // Limitando os chamados de acordo com o tipo de usuário
             switch (req.usuario.tipo_usuario) {
-                // Se é um ADM Cliente, lista apenas os chamados da empresa dele
+                // ADM Cliente: lista apenas os chamados da empresa dele
                 case 2:
                     options.where.id_empresa = req.usuario.id_empresa;
                     break;
 
-                // Se é um técnico, lista apenas os chamados que ele atendeu
+                // Técnico: lista apenas os chamados que ele atendeu
                 case 3:
                     options.where.id_empresa = req.usuario.id_empresa;
                     options.where.id_tecnico = req.usuario.id;
@@ -28,18 +35,19 @@ class ChamadosController {
 
             }
 
-            console.log("--- Option ---");
-            console.log(options);
-
-
-
-            // Chamando o model para fazer a consulta
+            // Fazendo a consulta
             const resultado = await ChamadosModel.listarChamados(options);
 
-            // Respondendo a requisição com os chamados
+            // Resposta com sucesso
             res.status(200).json({
                 sucesso: true,
-                dados: { chamados: resultado.chamados }
+                dados: {
+                    chamados: resultado.chamados,
+                    total: resultado.total,
+                    totalPaginas: resultado.numPaginas,
+                    paginaAtual: options.page,
+                    limite: options.limit,
+                }
             });
 
         } catch (error) {

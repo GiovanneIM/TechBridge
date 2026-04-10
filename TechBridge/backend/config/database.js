@@ -28,21 +28,22 @@ async function getConnection() {
 
 
 // READ - Função para ler registros
-async function read(table, options = null) {
+async function read(table, options = {}) {
     /*
         • table → Nome da tabela a ser exibida
         • options → Objeto com as opções de busca 
         
-        Ex: read("usuarios", { 
-            columns: ["id", "nome n"],
+        Ex: read("usuarios u", { 
+            columns: ["u.id", "u.nome", "tu.descricao as cargo"],
             join: [
-                {type: "INNER", table: "tipoUsuario tu", on: "tu.id = n.id_tipoUsuario"}
+                {type: "INNER", table: "tipoUsuario tu", on: "tu.id = u.id_tipoUsuario"}
             ] 
             where: { ativo: 1}, 
             like: {nome: "jo"}, 
-            groupBy: ['tu.descricao']
-            orderBy: "nome ASC", 
-            limit: 10
+            groupBy: ["tu.descricao"]
+            orderBy: "n.nome ASC", 
+            limit: 10,
+            offset: 20
         })
     */
 
@@ -129,10 +130,18 @@ async function read(table, options = null) {
         }
 
         // LIMIT
-        if (options.limit) {
+        if (options.limit !== undefined) {
             sql += ` LIMIT ?`;
             values.push(options.limit);
         }
+
+
+        // OFFSET
+        if (options.offset !== undefined) {
+            sql += ` OFFSET ?`;
+            values.push(options.offset);
+        }
+
 
         // Executando o comando
         const [rows] = await connection.execute(sql, values);
@@ -169,8 +178,12 @@ async function create(table, data) {
         // Obtendo o nome das colunas
         const columns = Object.keys(data).join(', ');
 
+        // Criando placeholder para os valores
+        const placeholders = Array(Object.keys(data).length)
+            .fill('?')
+            .join(', ');
+
         // Criando o comando
-        const placeholders = Array(Object.keys(data).length).fill('?').join(', ');
         const sql = `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`;
 
         // Obtendo os valores do registro
@@ -179,7 +192,7 @@ async function create(table, data) {
         // Executando o comando
         const [result] = await connection.execute(sql, values);
 
-        // Retornando o novo registro
+        // Retornando o id do novo registro
         return result.insertId;
     } finally {
         // Encerrando a conexão
@@ -280,6 +293,8 @@ async function hashPassword(password) {
     }
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 // Obter chamados por dia
 async function obterPorDia() {
     // Criando conexão
@@ -327,6 +342,7 @@ async function obterPorDia() {
     }
 }
 
+// Obter dados para o dashboard
 async function dadosDashboard(id_empresa) {
 
     // TOTAL DE CHAMADOS
@@ -396,19 +412,6 @@ async function dadosDashboard(id_empresa) {
 }
 
 async function dadosPainelChamados(params) {
-    const sql = `
-        SELECT
-            c.estado, 
-            TIMESTAMPDIFF(MINUTE, datahora_abertura, NOW()) as temp_espera,
-            s.nome as nome_setor,
-            m.nome as nome_maquina,
-            u.nome as nome_tecnico
-        FROM chamados c
-        INNER JOIN setores s on s.id = c.id_setor
-        INNER JOIN maquinas m on m.id = c.id_maquina
-        INNER JOIN usuarios u on u.id = c.id_tecnico;
-    `
-
     const painel = await read("chamados c", {
         columns: [
             "c.estado",
@@ -434,9 +437,10 @@ export {
     read,
     update,
     deleteRecord,
-    dadosDashboard,
-    dadosPainelChamados,
     comparePassword,
     hashPassword,
-    getConnection
+    getConnection,
+    
+    dadosDashboard,
+    dadosPainelChamados,
 };

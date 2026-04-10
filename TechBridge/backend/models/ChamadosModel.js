@@ -8,8 +8,24 @@ class ChamadosModel {
             // Fazendo a consulta
             const chamados = await read("chamados", options);
 
-            // Retornando os chamados
-            return { chamados };
+            // Obtendo o número total de chamados
+            const total = (
+                await read("chamados", {
+                    where: options.where,
+                    columns: ["COUNT(*) AS total"]
+                })
+            )[0]?.total ?? 0
+
+            // Calculando o número total de páginas
+            const numPaginas = Math.ceil(total / options.limit);
+
+
+            return {
+                chamados,
+                total,
+                numPaginas
+            };
+
         } catch (error) {
             console.error('Erro ao listar chamados:', error);
             throw error;
@@ -20,9 +36,9 @@ class ChamadosModel {
     static async listarChamado(id) {
         try {
             // Fazendo a consulta
-            const chamados = await read("chamados", {where: {id}});
+            const chamados = await read("chamados", { where: { id } });
             const chamado = chamados[0]
-            
+
             // Retornando o chamado
             return chamado || null;
         } catch (error) {

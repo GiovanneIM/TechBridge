@@ -1,10 +1,10 @@
-import express from 'express';          // 
-import cors from 'cors';                // Controla quais domínios podem acessar a API
-import helmet from 'helmet';            // Complemento de segurança, realiza tratativas de seguranças nas requisições HTTP
-import dotenv from 'dotenv';            // Variáveis de ambiente - Utilizado para as informações locais que não serão compartilhadas no GitHub
-import path from 'path';                // 
-import { fileURLToPath } from 'url';    // 
-import cookieParser from 'cookie-parser';
+import express from 'express';              // 
+import cors from 'cors';                    // Controla quais domínios podem acessar a API
+import helmet from 'helmet';                // Complemento de segurança, realiza tratativas de seguranças nas requisições HTTP
+import dotenv from 'dotenv';                // Variáveis de ambiente - Utilizado para as informações locais que não serão compartilhadas no GitHub
+import path from 'path';                    // 
+import { fileURLToPath } from 'url';        // 
+import cookieParser from 'cookie-parser';   // Permite interpretar cookies das requições
 
 import { negrito, azul, verde, vermelho } from './utils/modificadoresDeSaida.js';
 
@@ -18,6 +18,7 @@ import chamadosRotas from './routes/chamadosRotas.js';
 import maquinasRotas from './routes/maquinasRotas.js';
 import setoresRotas from './routes/setoresRotas.js';
 import painelRotas from './routes/painelRotas.js';
+
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // IMPORTAR MIDDLEWARES
@@ -43,7 +44,7 @@ app.use(helmet()); // Segurança HTTP headers
 
 // Configurar CORS para permitir que rotas OPTIONS específicas sejam processadas
 app.use(cors({
-    origin: 'http://localhost:3001',                        // Permitindo acesso de qualquer endereço (Alterar para o endereço do Frontend)
+    origin: 'http://localhost:3001',                        // Permitindo acesso do Frontend
     credentials: true,                                      // Permitindo receber cookies do navegador
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],   // Metódos permitidos
     allowedHeaders: ['Content-Type', 'Authorization'],      // Headers permmitidos
@@ -93,7 +94,6 @@ app.get('/', (req, res) => {
         },
         documentacao: {
             login: 'POST /techbridge/auth/login',
-            registrar: 'POST /techbridge/auth/registrar',
             perfil: 'GET /techbridge/auth/perfil',
             listarProdutos: 'GET /techbridge/produtos',
             buscarProduto: 'GET /techbridge/produtos/:id',
