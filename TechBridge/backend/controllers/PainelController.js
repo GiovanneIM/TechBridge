@@ -11,10 +11,10 @@ function enviarEvento(data) {
 }
 
 // CONTROLLER PARA OPERAÇÕES DE AUTENTICAÇÃO
-class KanbanController {
+class PainelController {
 
 
-    // GET /kanban - Rota para fazer login
+    // GET /painel - Rota para fazer login
     static async conectar(req, res) {
         try {
             res.setHeader("Access-Control-Allow-Origin", "*");
@@ -44,15 +44,16 @@ class KanbanController {
         }
     }
 
-    // GET /kanban/chamados
+    // GET /painel/chamados
     static async obterChamados(req, res) {
         const options = {};
-        const resultado = await ChamadosModel.listarChamados(options);
-
+        const painel = await ChamadosModel.painelChamados(options);
+        console.log(painel);
+        
         // Respondendo a requisição com os chamados
         res.status(200).json({
             sucesso: true,
-            dados: { chamados: resultado.chamados }
+            dados: { painel }
         });
 
     }
@@ -64,5 +65,5 @@ export function notificarKanban(data) {
     enviarEvento(data);
 }
 
-export default KanbanController;
+export default PainelController;
 

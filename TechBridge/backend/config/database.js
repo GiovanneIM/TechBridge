@@ -3,6 +3,7 @@
 import mysql from 'mysql2/promise';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
+import { join } from 'path';
 
 // Carregando variáveis do arquivo .env
 dotenv.config();
@@ -394,12 +395,47 @@ async function dadosDashboard(id_empresa) {
     }
 }
 
+async function dadosPainelChamados(params) {
+    const sql = `
+        SELECT
+            c.estado, 
+            TIMESTAMPDIFF(MINUTE, datahora_abertura, NOW()) as temp_espera,
+            s.nome as nome_setor,
+            m.nome as nome_maquina,
+            u.nome as nome_tecnico
+        FROM chamados c
+        INNER JOIN setores s on s.id = c.id_setor
+        INNER JOIN maquinas m on m.id = c.id_maquina
+        INNER JOIN usuarios u on u.id = c.id_tecnico;
+    `
+
+    const painel = await read("chamados c", {
+        columns: [
+            "c.estado",
+            "TIMESTAMPDIFF(MINUTE, datahora_abertura, NOW()) as temp_espera",
+            "s.nome as nome_setor",
+            "m.nome as nome_maquina",
+            "u.nome as nome_tecnico"
+        ],
+        join: [
+            { type: "INNER", table: "setores s", on: "s.id = c.id_setor" },
+            { type: "INNER", table: "maquinas m", on: "m.id = c.id_maquina" },
+            { type: "LEFT", table: "usuarios u", on: "u.id = c.id_tecnico" }
+        ]
+    })
+
+
+    return painel;
+}
+
+
 export {
     create,
     read,
     update,
     deleteRecord,
     dadosDashboard,
+    dadosPainelChamados,
     comparePassword,
     hashPassword,
     getConnection

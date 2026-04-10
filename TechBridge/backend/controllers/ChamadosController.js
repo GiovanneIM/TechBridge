@@ -1,5 +1,5 @@
 import ChamadosModel from "../models/ChamadosModel.js";
-import { notificarKanban } from "./KanbanController.js";
+import { notificarKanban } from "./PainelController.js";
 
 class ChamadosController {
 
