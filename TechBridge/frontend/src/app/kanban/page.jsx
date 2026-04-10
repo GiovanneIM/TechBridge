@@ -6,7 +6,15 @@ import { conexaoKanban } from "@/hooks/conexaoKanban";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-
+import {
+	Table,
+	TableBody,
+	TableCaption,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table"
 
 // ================= TASK CARD =================
 function TaskCard({ task, hideWhenDragging = false }) {
@@ -156,20 +164,17 @@ export default function Kanban() {
 			</div>
 
 			{/* Kanban */}
-			<div className="flex-1 flex flex-row gap-6 p-6 z-10">
-				{/* Coluna EM ABERTO */}
+			{/* <div className="flex-1 flex flex-row gap-6 p-6 z-10">
 				<div
 					className={`w-1/3 h-full p-4 rounded self-start shadow-sm 
 							bg-(--color-aberto)/30 border border-(--color-aberto)
 						`}
 				>
-					{/* Titulo e quantidade */}
 					<div className="flex justify-between items-center mb-3">
 						<p className="text-gray-700 font-genty text-4xl">
 							CHAMADOS EM ABERTO
 						</p>
 						<span className="text-xs bg-white px-2 py-1 rounded-md shadow-sm">
-							{/* {tasks.length} */}
 						</span>
 					</div>
 
@@ -208,19 +213,16 @@ export default function Kanban() {
 					</div>
 				</div>
 
-				{/* Coluna EM ABERTO */}
 				<div
 					className={`w-1/3 h-full p-4 rounded self-start shadow-sm 
 							bg-(--color-andamento)/30 border border-(--color-andamento)
 						`}
 				>
-					{/* Titulo e quantidade */}
 					<div className="flex justify-between items-center mb-3">
 						<p className="text-gray-700 font-genty text-4xl">
 							CHAMADOS EM ANDAMENTO
 						</p>
 						<span className="text-xs bg-white px-2 py-1 rounded-md shadow-sm">
-							{/* {tasks.length} */}
 						</span>
 					</div>
 
@@ -264,19 +266,16 @@ export default function Kanban() {
 					</div>
 				</div>
 
-				{/* Coluna FECHADOS */}
 				<div
 					className={`w-1/3 h-full p-4 rounded self-start shadow-sm 
 							bg-muted-foreground/30 border border-muted-foreground
 						`}
 				>
-					{/* Titulo e quantidade */}
 					<div className="flex justify-between items-center mb-3">
 						<p className="text-gray-700 font-genty text-4xl">
 							CHAMADOS FECHADOS
 						</p>
 						<span className="text-xs bg-white px-2 py-1 rounded-md shadow-sm">
-							{/* {tasks.length} */}
 						</span>
 					</div>
 
@@ -318,7 +317,7 @@ export default function Kanban() {
 
 						<Card className="relative overflow-hidden py-4 gap-0 text-sm">
 							<div className="absolute left-0 top-0 h-full w-2 bg-(--color-concluido)" />
-							
+
 							<CardHeader>
 								<CardTitle className="font-bold">
 									(codSetor) - (codMaquina) - (codChamado)
@@ -353,6 +352,46 @@ export default function Kanban() {
 
 					</div>
 				</div>
+			</div> */}
+
+			<div className="flex-1 flex gap-6 p-6 z-10 bg-muted-foreground/90 border-bg-muted m-4 rounded">
+				<Table className="font-genty">
+					<TableCaption>A list of your recent invoices.</TableCaption>
+					<TableHeader>
+						<TableRow>
+							<TableHead className="w-[100px]">IDENTIFICADOR</TableHead>
+							<TableHead>STATUS</TableHead>
+							<TableHead>Method</TableHead>
+							<TableHead className="text-right">Amount</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						<TableRow>
+							<TableCell className="font-medium">### - ### - ###</TableCell>
+							<TableCell className="text-(--color-aberto)">AGUARDANDO</TableCell>
+							<TableCell>Credit Card</TableCell>
+							<TableCell className="text-right">$250.00</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell className="font-medium">### - ### - ###</TableCell>
+							<TableCell className="text-(--color-andamento)">EM ANDAMENTO</TableCell>
+							<TableCell>Credit Card</TableCell>
+							<TableCell className="text-right">$250.00</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell className="font-medium">### - ### - ###</TableCell>
+							<TableCell className="text-(--color-cancelado)">CANCELADO</TableCell>
+							<TableCell>Credit Card</TableCell>
+							<TableCell className="text-right">$250.00</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell className="font-medium">### - ### - ###</TableCell>
+							<TableCell className="text-(--color-concluido)">CONCLUÍDO</TableCell>
+							<TableCell>Credit Card</TableCell>
+							<TableCell className="text-right">$250.00</TableCell>
+						</TableRow>
+					</TableBody>
+				</Table>
 			</div>
 		</div>
 	</>
