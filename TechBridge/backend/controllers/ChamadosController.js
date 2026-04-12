@@ -61,7 +61,7 @@ class ChamadosController {
         }
     }
 
-    /* GET /chamados/:id - Rota para listar um chamado
+    /* GET /chamados/:id - Rota para listar um chamado específico
         • Se o usuário é um admin TechBridge, lista de qualquer jeito
         • Se o usuário é um admin Cliente, lista apenas se pertencer à empresa
         • Se o usuário é um técnico, lista apenas se pertencer à empresa e ele tiver atendido
@@ -161,6 +161,23 @@ class ChamadosController {
             chamado
         });
     }
+
+    /* PATCH /chamados/:id/atender - Rota para atualizar o estado de um chamado para "andamento"
+        • Dados a receber:
+            ► id_tecnico
+    */
+    static async atenderChamado(req, res) { }
+ 
+    /* PATCH /chamados/:id/concluir - Rota para atualizar o estado de um chamado para "concluido"
+        • Dados a receber:
+            ► id_causa
+            ► descricao_problema
+            ► solucao_aplicada
+            ► comentario_tecnico
+            ► operador
+    */
+    static async concluirChamado(req, res) { }
+
 
     /* PATCH /chamados/:id - Rota para atualizar um chamado 
         • Dados a receber:

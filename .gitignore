@@ -71,7 +71,7 @@ dev-utils/
 /coverage
 
 # next.js
-/.next/
+.next/
 /out/
 
 # production

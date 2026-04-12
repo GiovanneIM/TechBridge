@@ -84,9 +84,6 @@ export default function PageDashboard({
 		)
 	}
 
-	// content = (
-	// 	<DashboardSkeleton dashboard={dashboard} chamados={chamados} />
-	// )
 
 	return (
 		<div className="flex-1 flex flex-col">

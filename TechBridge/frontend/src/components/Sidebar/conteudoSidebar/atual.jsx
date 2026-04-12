@@ -46,7 +46,7 @@ export default function CounteudoSidebar() {
     }, [theme]);
 
     return (
-        <div className="h-full flex flex-col justify-between px-4 py-4 font-genty">
+        <div className={`h-full flex flex-col justify-between px-4 transition-all py-4 font-genty`}>
             {/* LOGO */}
             <div className="md:hidden">
                 <Link

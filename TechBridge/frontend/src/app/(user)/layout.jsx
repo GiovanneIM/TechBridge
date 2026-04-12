@@ -10,7 +10,7 @@ import {
 	Sidebar,
 	SidebarContent,
 } from "@/components/ui/sidebar"
-import CounteudoSidebar from "../../components/Sidebar/sidebarContents";
+import CounteudoSidebar from "../../components/Sidebar/conteudoSidebar";
 import SessionHandler from "@/context/SessionHandler";
 
 
@@ -21,18 +21,18 @@ export default function UserLayout({ children }) {
 				<SidebarProvider>
 					<div className="flex flex-col min-h-screen w-full">
 						{/* Header */}
-						<HeaderUser />
+						<HeaderUser className="bg-purple-500"/>
 
 						<div className="flex flex-1">
 							{/* Sidebar */}
-							<Sidebar className="top-16 h-[calc(100vh-4rem)] border-none">
+							<Sidebar className="top-[61px] h-[calc(100vh-61px)] border-none" collapsible="icon">
 								<SidebarContent>
-									<CounteudoSidebar />
+									<CounteudoSidebar/>
 								</SidebarContent>
 							</Sidebar>
 
 							{/* Conteúdo */}
-							<main className="flex-1 flex border-x">
+							<main className=" flex-1 flex border-x">
 								{children}
 								{/* <Footer /> */}
 							</main>

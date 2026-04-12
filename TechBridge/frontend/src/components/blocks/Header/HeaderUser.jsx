@@ -24,7 +24,7 @@ export default function HeaderUser() {
 
     return (<>
         <header className="sticky w-full top-0 z-50 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 border-b">
-            <nav className="px-4 lg:pe-10 py-3 w-full flex flex-wrap justify-between items-center gap-y-4">
+            <nav className="px-4 lg:pe-10 py-2 w-full flex flex-wrap justify-between items-center gap-y-4">
 
                 {/* Trigger da sidebar e logo */}
                 <div className="flex gap-4">
