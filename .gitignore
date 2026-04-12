@@ -1,65 +1,10 @@
-### BACKEND
+########################################
+# 🌉 TECHBRIDGE - FULLSTACK GITIGNORE #
+########################################
 
-# Dependências
+########## 📦 DEPENDÊNCIAS ##########
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Arquivos de ambiente
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Logs
-logs
-*.log
-
-# Arquivos de upload
-uploads/*
-!uploads/.gitkeep
-
-# Arquivos temporários
-.tmp/
-temp/
-
-# Arquivos do sistema
-.DS_Store
-Thumbs.db
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Arquivos de build
-dist/
-build/
-
-# Coverage
-coverage/
-
-# Arquivos de backup
-*.bak
-*.backup
-
-# Utilitários de desenvolvimento (NÃO devem ir para produção)
-dev-utils/
-*.secret
-*.key
-
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-### FRONTEND
-
-# dependencies
-/node_modules
-/.pnp
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -67,32 +12,69 @@ dev-utils/
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
-.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
+########## 🧪 LOGS ##########
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+########## 🔐 VARIÁVEIS DE AMBIENTE ##########
+.env
+.env.*
+!.env.example
 
-# vercel
-.vercel
+########## 🧠 CACHE / TEMP ##########
+.cache/
+.tmp/
+temp/
+*.tmp
+*.pid
 
-# typescript
+########## 🏗️ BUILD / PRODUÇÃO ##########
+dist/
+build/
+.next/
+.next/cache/
+out/
+
+########## 📊 COVERAGE ##########
+coverage/
+
+########## 📂 UPLOADS ##########
+uploads/**
+!uploads/.gitkeep
+
+########## 🗄️ BANCO / DADOS LOCAIS ##########
+*.sqlite
+*.db
+
+########## 🔑 SEGURANÇA ##########
+*.pem
+*.key
+*.secret
+
+########## 🖥️ SISTEMA ##########
+.DS_Store
+Thumbs.db
+
+########## 💻 IDE / EDITOR ##########
+.vscode/
+.idea/
+*.swp
+*.swo
+
+########## ⚙️ TYPESCRIPT ##########
 *.tsbuildinfo
 next-env.d.ts
+
+########## 🚀 DEPLOY ##########
+.vercel
+
+########## 📁 BACKUPS ##########
+*.bak
+*.backup
+
+########## 🧰 UTILITÁRIOS DEV ##########
+dev-utils/
