@@ -6,6 +6,9 @@ import path from 'path';                    //
 import { fileURLToPath } from 'url';        // 
 import cookieParser from 'cookie-parser';   // Permite interpretar cookies das requições
 
+import swaggerUi from 'swagger-ui-express'
+import { swaggerSpec } from './config/swagger.js';
+
 import { negrito, azul, verde, vermelho } from './utils/modificadoresDeSaida.js';
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -63,6 +66,14 @@ app.use(logMiddleware);
 
 // Middlewate para obter cookies
 app.use(cookieParser());
+
+// Swagger - Documentação
+app.use(
+    '/api-docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec)
+)
+
 
 // Middleware para simular atraso em TODAS as requisições
 // app.use(async (req, res, next) => {
@@ -130,6 +141,7 @@ app.listen(PORT, () => {
     console.log(negrito(azul('🌉 TECHBRIDGE - Backend')));
     console.log(`• Porta: ${negrito(verde(PORT))}`);
     console.log(`• Endereço: ${negrito(verde(`http://localhost:${PORT}`))}`);
+    console.log(`• Documentação Swagger: ${negrito(azul(`http://localhost:${PORT}/api-docs`))}`);
     console.log(`• Ambiente: ${process.env.NODE_ENV || 'development'}`);
 });
 

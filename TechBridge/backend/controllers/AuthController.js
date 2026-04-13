@@ -84,6 +84,7 @@ class AuthController {
                 sucesso: true,
                 mensagem: 'Login efetuado com sucesso',
                 dados: {
+                    token,
                     usuario: {
                         ...usuario,
                         cargo: tiposDeUsuario[usuario.tipo_usuario]
@@ -150,8 +151,7 @@ class AuthController {
 
         return res.status(200).json({
             sucesso: true,
-            mensagem: 'Logout realizado com sucesso',
-            dados: { logout: true }
+            mensagem: 'Logout realizado com sucesso'
         });
     }
 
