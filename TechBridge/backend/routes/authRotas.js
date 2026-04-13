@@ -1,6 +1,7 @@
 import express from 'express';
 import AuthController from '../controllers/AuthController.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
+import { handleUploadError, uploadImagens } from '../middlewares/uploadMiddleware.js';
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ const router = express.Router();
  * @swagger
  * /auth/login:
  *   post:
- *     summary: Realiza login
+ *     summary: Realizar login
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -37,9 +38,31 @@ router.post('/login', AuthController.login);
 
 /**
  * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Realizar logout
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/TokenBody'
+ *     responses:
+ *       200:
+ *         description: Logout realizado com sucesso
+ *       401:
+ *         description: Erro de autenticação
+ *       500:
+ *         description: Erro interno do servidor
+ */
+router.post('/logout', authMiddleware, AuthController.logout);
+
+/**
+ * @swagger
  * /auth/perfil:
  *   get:
- *     summary: Obtem o perfil
+ *     summary: Obter o perfil do usuário logado
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -63,11 +86,48 @@ router.post('/login', AuthController.login);
  */
 router.get('/perfil', authMiddleware, AuthController.obterPerfil);
 
+
 /**
  * @swagger
- * /auth/logout:
- *   post:
- *     summary: Realiza logout
+ * /auth/info:
+ *   patch:
+ *     summary: Atualizar informações do usuário (Exceto senha e foto)
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/PatchInfo'
+ *     responses:
+ *       200:
+ *         description: Informações realizadas com sucesso
+ */
+router.patch('/info', authMiddleware, AuthController.atualizarInformacoes);
+
+/**
+ * @swagger
+ * /auth/senha:
+ *   patch:
+ *     summary: Atualizar senha do usuário
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/PatchSenha'
+ *     responses:
+ *       200:
+ *         description: Senha atualizada com sucesso
+ */
+router.patch('/senha', authMiddleware, AuthController.atualizarSenha);
+
+/**
+ * @swagger
+ * /auth/foto:
+ *   patch:
+ *     summary: Atualizar imagem de perfil do usuário
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -75,15 +135,23 @@ router.get('/perfil', authMiddleware, AuthController.obterPerfil);
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/TokenBody'
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               foto:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       200:
- *         description: Logout realizado com sucesso
- *       401:
- *         description: Erro de autenticação
- *       500:
- *         description: Erro interno do servidor
+ *         description: Imagem atualizada com sucesso
  */
-router.post('/logout', authMiddleware, AuthController.logout);
+router.patch(
+    "/foto",
+    authMiddleware,
+    uploadImagens.single("foto"),
+    AuthController.atualizarImagem
+);
 
 
 

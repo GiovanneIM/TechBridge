@@ -25,6 +25,12 @@ const swaggerOptions = {
 		],
 		components: {
 			schemas: {
+				TokenBody: {
+					type: 'object',
+					properties: {
+						token: { type: 'string', example: 'Bearer Token' },
+					}
+				},
 				Login: {
 					type: 'object',
 					required: ['email', 'senha'],
@@ -66,12 +72,6 @@ const swaggerOptions = {
 						}
 					}
 				},
-				TokenBody: {
-					type: 'object',
-					properties: {
-						token: { type: 'string', example: 'Bearer Token' },
-					}
-				},
 				Perfil: {
 					type: 'object',
 					properties: {
@@ -96,6 +96,22 @@ const swaggerOptions = {
 								}
 							}
 						}
+					}
+				},
+				PatchInfo: {
+					type: 'object',
+					properties: {
+						token: { type: 'string', example: 'Bearer Token' },
+						nome: { type: 'string', example: 'Maria Silva' },
+						email: { type: 'string', example: 'maria@email.com' },
+					}
+				},
+				PatchSenha: {
+					type: 'object',
+					properties: {
+						token: { type: 'string', example: 'Bearer Token' },
+						senhaAtual: { type: 'string', example: '123456' },
+						senhaNova: { type: 'string', example: '654321' },
 					}
 				},
 			}
