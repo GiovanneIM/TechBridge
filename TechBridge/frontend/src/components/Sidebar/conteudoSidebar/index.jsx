@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation"
 import { useAuth } from "@/context/AuthContext";
 import { useSidebar } from "@/components/ui/sidebar";
 
-import { Settings, User, LogOut, Grid2X2, KanbanSquare, CircleQuestionMark, UserCog2, Warehouse, Siren } from "lucide-react";
+import { Settings, User, LogOut, Grid2X2, KanbanSquare, CircleQuestionMark, UserCog2, Warehouse, Siren, Monitor } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -58,7 +58,7 @@ export default function CounteudoSidebar() {
                 <ItemSidebar icon={KanbanSquare} label={"Painel de Controle"} href={"/painelControle"} active={pathname.startsWith("/painelControle") && nav_active} />
                 <ItemSidebar icon={Siren} label={"Chamados"} href={"/chamados"} active={pathname.startsWith("/chamados") && nav_active} />
                 <ItemSidebar icon={Warehouse} label={"Setores"} href={"/setores"} active={pathname.startsWith("/setores") && nav_active} />
-                <ItemSidebar icon={Warehouse} label={"Maquinas"} href={"/maquinas"} active={pathname.startsWith("/maquinas") && nav_active} />
+                <ItemSidebar icon={Monitor} label={"Maquinas"} href={"/maquinas"} active={pathname.startsWith("/maquinas") && nav_active} />
                 <ItemSidebar icon={UserCog2} label={"Tecnicos"} href={"/tecnicos"} active={pathname.startsWith("/tecnicos") && nav_active} />
             </div >
 

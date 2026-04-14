@@ -15,12 +15,12 @@ export function useSetores({
     const [setores, setSetores] = useState(initialSetores);
 
     // Estado que indica se há uma requisição em andamento
-    const [loading, setLoading] = useState({
+    const [loadingSetores, setLoading] = useState({
         fetch: false,
     });
 
     // Estado para armazenar mensagem de erro (se houver)
-    const [error, setError] = useState({
+    const [errorSetores, setError] = useState({
         fetch: null,
     });
 
@@ -62,8 +62,8 @@ export function useSetores({
 
     return {
         setores,
-        loading,
-        error,
+        loadingSetores,
+        errorSetores,
         refetchSetores: fetchSetores
     };
 }

@@ -9,4 +9,7 @@ router.get('/', SetoresController.listarSetores)
 
 router.get('/buscar', authMiddleware, SetoresController.listarSetores)
 
+// Listar um setor ESPECÍFICO
+router.get('/:idSetor', SetoresController.listarSetor)
+
 export default router;
