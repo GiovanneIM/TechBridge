@@ -27,7 +27,7 @@ const gentySans = localFont({
 export const metadata = {
 	title: "TechBridge",
 	icons: {
-		icon: "/TechBridge/tb.svg",
+		icon: "/TechBridge/TB.svg",
 	},
 };
 
