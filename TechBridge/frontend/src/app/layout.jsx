@@ -1,4 +1,4 @@
-// LAYOUT RAIZ - SEM HEADER E FOOTER
+// LAYOUT RAIZ
 
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
