@@ -28,8 +28,8 @@ export default function PageTecnicos({
 =======
     const {
         tecnicos,
-        loading,
-        error,
+        loadingTecnicos,
+        errorTecnicos,
     } = useUsers({
 >>>>>>> c26aeada050828f443e4bad757ac54cef82c576d
         tecnicosIniciais,
@@ -49,7 +49,7 @@ export default function PageTecnicos({
                 </Dialog>
             </div>
     // Verificando se a página está sendo carregada pela primeira vez
-    const isFirstLoad = loading.fetch && (tecnicos ?? []).length === 0;
+    const isFirstLoad = loadingTecnicos.fetch && (tecnicos ?? []).length === 0;
 
     // Conteúdo da página
     let content;
@@ -65,7 +65,7 @@ export default function PageTecnicos({
     }
 
     // Se houve erro ao carregar
-    else if (error.fetch) {
+    else if (errorTecnicos.fetch) {
         content = (
             <ErrorPage
                 errorTitle={"Erro ao carregar técnicos"}
@@ -78,7 +78,7 @@ export default function PageTecnicos({
     }
 
     // Se estiver recarregando os dados
-    else if (loading.fetch) {
+    else if (loadingTecnicos.fetch) {
         content = (<></>)
     }
 
@@ -100,7 +100,7 @@ export default function PageTecnicos({
                 icon={<UserCog2 />}
                 title="Tecnicos"
                 actions={[
-                    loading.fetch
+                    loadingTecnicos.fetch
                         ? {
                             icon: <RotateCw />,
                             text: "Carregando",

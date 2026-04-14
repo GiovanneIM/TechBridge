@@ -15,23 +15,15 @@ import {
 } from "@/components/ui/tooltip";
 import { LogOut } from "lucide-react";
 
-export default function LogoutSidebar({ href, active }) {
+export default function LogoutSidebar() {
     const router = useRouter();
 
     const { state } = useSidebar();
     const isCollapsed = state === "collapsed";
 
-    const { logout, setLoading } = useAuth()
-
-
     // Função para fazer logout
     function fazerLogout() {
-        if (!confirm("Tem certeza que deseja sair?")) return;
-
-        logout()
-        setTimeout(() => {
-            router.push("/");
-        }, 1000);
+        router.push("/logout");
     }
 
     const botao = (
@@ -48,9 +40,6 @@ export default function LogoutSidebar({ href, active }) {
                 group-data-[collapsible=icon]:gap-0
                 group-data-[collapsible=icon]:px-3
                 group-data-[collapsible=icon]:aspect-square
-                
-
-                ${active && "bg-techbridge text-white"}
             `}
         >
             <LogOut size={18} />
