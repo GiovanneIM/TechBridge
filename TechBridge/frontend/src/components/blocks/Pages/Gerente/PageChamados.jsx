@@ -1,5 +1,9 @@
 "use client"
 
+import ErrorPage from '../../HolderPages/ErrorPage';
+import LoadingPage from '../../HolderPages/LoadingPage';
+import HeaderPage from '../../Header/HeaderPage';
+
 import { RotateCw, Siren } from "lucide-react";
 import { DataTable } from "../../../Dashboard/aaa/data-table";
 import { Separator } from "../../../ui/separator";
@@ -19,42 +23,74 @@ export default function PageChamados({
         fetchOnMount: chamadosIniciais?.length === 0
     })
 
-    return (<div className='flex-1 flex flex-col'>
-        {/* Header da página */}
-        <div
-            className="
-						flex h-12 shrink-0 items-center gap-2 border-b 
-						transition-[width,height] ease-linear 
-						group-has-data-[collapsible=icon]/sidebar-wrapper:h-12
-					"
-        >
-            <div className="w-full flex items-center justify-between gap-3 px-4 lg:px-6">
-                <div className='flex gap-1 lg:gap-2'>
-                    <Siren className="-ml-1" />
+    // Verificando se a página está sendo carregada pela primeira vez
+    const isFirstLoad = loadingChamados.fetch && (chamados ?? []).length === 0;
 
-                    <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-6" />
+    // Conteúdo da página
+    let content;
 
-                    <h1 className="text-base font-genty">Chamados</h1>
-                </div>
+    // Se estiver sendo carregada pela 1ª vez
+    if (isFirstLoad) {
+        content = (
+            <LoadingPage
+                loadingTitle="Carregando Chamados"
+                loadingSubtitle={["Aguarde alguns segundos"]}
+            />
+        )
+    }
 
-                {/* Botão para buscar os chamados novamente */}
-                <div className="flex items-center gap-2">
-                    <Button
-                        variant="ghost"
-                        onClick={() => { refetchChamados({}) }}
-                        className="flex items-center border text-muted-foreground"
-                    >
-                        <RotateCw />
-                        <span className="hidden font-medium sm:inline">Recarregar chamados</span>
-                    </Button>
-                </div>
+    // Se houve erro ao carregar
+    else if (errorChamados.fetch) {
+        content = (
+            <ErrorPage
+                errorTitle={"Erro ao carregar chamados"}
+                errorSubtitle={[
+                    "Houve um erro ao carregar chamados",
+                    "Por favor recarregue a página para tentar novamente"
+                ]}
+            />
+        )
+    }
+
+    // Se estiver recarregando os dados
+    else if (loadingChamados.fetch) {
+        content = (<></>)
+    }
+
+    // Dados carregados e sem erro
+    else {
+        content = (<div className='flex-1 flex flex-col'>
+
+            <p>{JSON.stringify(chamados)}</p>
+
+            <div className="flex-1 flex flex-col gap-4 md:gap-6 p-4 lg:px-6  md:py-6">
+                <DataTable data={chamados} />
             </div>
-        </div>
+        </div>)
+    }
 
-        <p>{JSON.stringify(chamados)}</p>
+    return (
+        <div className="flex-1 flex flex-col">
+            {/* Header da página */}
+            <HeaderPage
+                icon={<Siren />}
+                title="Chamados"
+                actions={[
+                    loadingChamados.fetch
+                        ? {
+                            icon: <RotateCw />,
+                            text: "Carregando",
+                            disabled: true,
+                        }
+                        : {
+                            icon: <RotateCw />,
+                            text: "Recarregar Chamados",
+                            onClick: () => { refetchChamados() },
+                        },
+                ]}
+            />
 
-        <div className="flex-1 flex flex-col gap-4 md:gap-6 p-4 lg:px-6  md:py-6">
-            <DataTable data={chamados} />
+            {content}
         </div>
-    </div>)
+    );
 }

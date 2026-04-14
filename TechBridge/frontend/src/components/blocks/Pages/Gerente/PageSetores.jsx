@@ -1,9 +1,20 @@
 "use client";
 
-import { BriefcaseBusiness, Network, PaintRoller, Warehouse, Wrench } from "lucide-react"
+import ErrorPage from '../../HolderPages/ErrorPage';
+import LoadingPage from '../../HolderPages/LoadingPage';
+import HeaderPage from '../../Header/HeaderPage';
+
+import { BriefcaseBusiness, Network, PaintRoller, Warehouse, Wrench, RotateCw } from "lucide-react"
 import { Separator } from "../../../ui/separator"
 import { spawnDynamicRequests } from "next/dist/client/components/router-reducer/ppr-navigations"
 import { useSetores } from "@/hooks/useSetores"
+
+const icones = {
+    "Wrench": <Wrench className="h-20 w-20 text-white" />,
+    "PaintRoller": <PaintRoller className="h-20 w-20 text-white" />,
+    "BriefcaseBusiness": <BriefcaseBusiness className="h-15 w-20 text-white" />,
+    "Network": <Network className="h-20 w-20 text-white" />
+}
 
 export default function PageSetores({
     setoresIniciais = []
@@ -19,15 +30,42 @@ export default function PageSetores({
         fetchOnMount: setoresIniciais?.length === 0
     })
 
-    const icones = {
-        "Wrench": <Wrench className="h-20 w-20 text-white" />,
-        "PaintRoller": <PaintRoller className="h-20 w-20 text-white" />,
-        "BriefcaseBusiness": <BriefcaseBusiness className="h-15 w-20 text-white" />,
-        "Network": <Network className="h-20 w-20 text-white" />
+    // Verificando se a página está sendo carregada pela primeira vez
+    const isFirstLoad = loadingSetores.fetch && (setores ?? []).length === 0;
+
+    // Conteúdo da página
+    let content;
+
+    // Se estiver sendo carregada pela 1ª vez
+    if (isFirstLoad) {
+        content = (
+            <LoadingPage
+                loadingTitle="Carregando Técnicos"
+                loadingSubtitle={["Aguarde alguns segundos"]}
+            />
+        )
     }
 
+    // Se houve erro ao carregar
+    else if (errorSetores.fetch) {
+        content = (
+            <ErrorPage
+                errorTitle={"Erro ao carregar dashboard"}
+                errorSubtitle={[
+                    "Houve um erro ao carregar técnicos",
+                    "Por favor recarregue a página para tentar novamente"
+                ]}
+            />
+        )
+    }
 
-    return (
+    // Se estiver recarregando os dados
+    else if (loadingSetores.fetch) {
+        content = (<></>)
+    }
+
+    // Dados carregados e sem erro
+    else (
         <div className='flex-1 flex flex-col'>
             {/* Header da página */}
             <div
@@ -61,17 +99,17 @@ export default function PageSetores({
                                 {icones[setor.icone]}
                             </div>
 
-                                {/* Título */}
-                                <div className="text-3xl justify-between flex font-bold pb-4">
-                                    {setor.nome}
+                            {/* Título */}
+                            <div className="text-3xl justify-between flex font-bold pb-4">
+                                {setor.nome}
 
-                                    {/* Badge */}
-                                    {setor.descricao && (
-                                        <span className="self-end bg-white/20 text-xs px-3 py-1 rounded-full">
-                                            {setor.descricao}
-                                        </span>
-                                    )}
-                                </div>
+                                {/* Badge */}
+                                {setor.descricao && (
+                                    <span className="self-end bg-white/20 text-xs px-3 py-1 rounded-full">
+                                        {setor.descricao}
+                                    </span>
+                                )}
+                            </div>
                         </div>
 
                         {/* CONTEÚDO */}
@@ -83,4 +121,30 @@ export default function PageSetores({
             </div>
         </div>
     )
+
+
+    return (
+        <div className="flex-1 flex flex-col">
+            {/* Header da página */}
+            <HeaderPage
+                icon={<Warehouse />}
+                title="Setores"
+                actions={[
+                    loadingSetores.fetch
+                        ? {
+                            icon: <RotateCw />,
+                            text: "Carregando",
+                            disabled: true,
+                        }
+                        : {
+                            icon: <RotateCw />,
+                            text: "Recarregar Setores",
+                            onClick: () => { refetchSetores() },
+                        },
+                ]}
+            />
+
+            {content}
+        </div>
+    );
 }

@@ -64,7 +64,7 @@ export default function PageDashboard({
 				errorTitle={"Erro ao carregar dashboard"}
 				errorSubtitle={[
 					"Houve um erro ao carregar seu dashboard",
-					"por favor recarregue a página para tentar novamente"
+					"Por favor recarregue a página para tentar novamente"
 				]}
 			/>
 		)
