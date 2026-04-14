@@ -37,7 +37,6 @@ export default function PageTecnicos({
     })
     const [isOpen, setIsOpen] = useState(false);
 
-<<<<<<< HEAD
     return (
         <>
             <div className="p-3">
@@ -49,7 +48,6 @@ export default function PageTecnicos({
                     <FormMac />
                 </Dialog>
             </div>
-=======
     // Verificando se a página está sendo carregada pela primeira vez
     const isFirstLoad = loading.fetch && (tecnicos ?? []).length === 0;
 
@@ -87,7 +85,6 @@ export default function PageTecnicos({
     // Dados carregados e sem erro
     else {
         content = (<>
->>>>>>> c26aeada050828f443e4bad757ac54cef82c576d
             <div className="grid grid-cols-5 w-full h-50 py-5 px-5 gap-5">
                 {tecnicos.map((t, i) => (
                     <CardTecnico key={i} nome={t.nome} empresa={t.id_empresa} imagem={t.foto_perfil} email={t.email}></CardTecnico>
@@ -95,7 +92,7 @@ export default function PageTecnicos({
             </div>
         </>)
     }
-
+    
     return (
         <div className="flex-1 flex flex-col">
             {/* Header da página */}
