@@ -1,4 +1,4 @@
-import PageChamados from "@/components/blocks/Pages/PageChamados";
+import PageChamados from "@/components/blocks/Pages/Gerente/PageChamados";
 import { cookies } from "next/headers";
 
 async function getChamados(token) {
