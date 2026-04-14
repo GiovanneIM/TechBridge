@@ -23,6 +23,33 @@ class SetoresController {
         }
     }
 
+    /* LISTAR UM SETOR ESPECÍFICO */
+    static async listarSetor(req, res) {
+        try {
+            // Obtendo o id do setor
+            const idSetor = parseInt(req.params.idSetor)
+
+            // Chamando o model para fazer a consulta
+            const resultado = await SetoresModel.listarSetor(idSetor);
+
+            // Retornando a equipe
+            res.status(200).json({
+                sucesso: true,
+                dados: {
+                    setor: resultado.setores
+                },
+            });
+            
+        } catch (error) {
+            console.error('Erro ao listar o setor:', error);
+            res.status(500).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Não foi possível listar o setor'
+            });
+        }
+    }
+
 
     /* POST /maquinas - Rota para criar uma maquina */
     static async criarSetor(req, res) { }

@@ -27,7 +27,6 @@ export default async function Setores() {
     const token = cookieStore.get('token')?.value;
 
     const setores = await getSetores(token);
-    
 
     return (
         <PageSetores setores={setores}/>
