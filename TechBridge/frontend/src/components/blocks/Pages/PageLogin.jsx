@@ -39,7 +39,7 @@ export default function PageLogin() {
 	// Se houver um usuário logado, o redireciona até a página dashboard
 	useEffect(() => {
 		if (user) {
-			router.push('/dashboard');
+			router.replace('/dashboard');
 		}
 	}, [user, router]);
 

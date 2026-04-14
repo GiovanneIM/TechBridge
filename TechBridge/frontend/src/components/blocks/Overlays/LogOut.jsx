@@ -19,7 +19,7 @@ export default function LogOut() {
 
     useEffect(() => {
         if (!loading.logout) {
-            router.push("/");
+            router.replace("/");
         }
     }, [loading.logout]);
 

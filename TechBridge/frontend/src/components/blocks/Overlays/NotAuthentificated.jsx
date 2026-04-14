@@ -11,7 +11,7 @@ export default function NotAuthenticated({ }) {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            router.push("/");
+            router.replace("/");
         }, 2000);
 
         return () => clearTimeout(timer);
