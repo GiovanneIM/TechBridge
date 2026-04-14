@@ -63,7 +63,7 @@ export default function PageDashboard({
 			<ErrorPage
 				errorTitle={"Erro ao carregar dashboard"}
 				errorSubtitle={[
-					"Houve um erro ao carregar seu dashboard",
+					"Houve um erro ao carregar dashboard",
 					"Por favor recarregue a página para tentar novamente"
 				]}
 			/>

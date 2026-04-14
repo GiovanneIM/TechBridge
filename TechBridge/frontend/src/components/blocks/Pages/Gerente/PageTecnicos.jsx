@@ -42,7 +42,7 @@ export default function PageTecnicos({
     else if (error.fetch) {
         content = (
             <ErrorPage
-                errorTitle={"Erro ao carregar dashboard"}
+                errorTitle={"Erro ao carregar técnicos"}
                 errorSubtitle={[
                     "Houve um erro ao carregar técnicos",
                     "Por favor recarregue a página para tentar novamente"

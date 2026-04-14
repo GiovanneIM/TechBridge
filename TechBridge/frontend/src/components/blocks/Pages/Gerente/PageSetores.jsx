@@ -40,7 +40,7 @@ export default function PageSetores({
     if (isFirstLoad) {
         content = (
             <LoadingPage
-                loadingTitle="Carregando Técnicos"
+                loadingTitle="Carregando Setores"
                 loadingSubtitle={["Aguarde alguns segundos"]}
             />
         )
@@ -50,9 +50,9 @@ export default function PageSetores({
     else if (errorSetores.fetch) {
         content = (
             <ErrorPage
-                errorTitle={"Erro ao carregar dashboard"}
+                errorTitle={"Erro ao carregar setores"}
                 errorSubtitle={[
-                    "Houve um erro ao carregar técnicos",
+                    "Houve um erro ao carregar setores",
                     "Por favor recarregue a página para tentar novamente"
                 ]}
             />

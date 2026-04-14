@@ -33,7 +33,7 @@ export default function PageMaquinas({
     else if (errorMaquinas) {
         content = (
             <ErrorPage
-                errorTitle={"Erro ao carregar dashboard"}
+                errorTitle={"Erro ao carregar máquinas"}
                 errorSubtitle={[
                     "Houve um erro ao carregar máquinas",
                     "Por favor recarregue a página para tentar novamente"
