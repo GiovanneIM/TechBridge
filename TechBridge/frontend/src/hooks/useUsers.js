@@ -14,12 +14,12 @@ export function useUsers({
     const [tecnicos, setTecnicos] = useState(tecnicosIniciais);
 
     // Estado que indica se há uma requisição em andamento
-    const [loading, setLoading] = useState({
+    const [loadingTecnicos, setLoading] = useState({
         fetch: false,
     });
 
     // Estado para armazenar mensagem de erro (se houver)
-    const [error, setError] = useState({
+    const [errorTecnicos, setError] = useState({
         fetch: null,
     });
 
@@ -34,8 +34,6 @@ export function useUsers({
 
             // Convertendo a resposta para json
             const data = await response.json();
-            console.log(data);
-            
 
             // Se a resposta veio com status de erro
             if (!data.sucesso) {
@@ -63,7 +61,7 @@ export function useUsers({
 
     return {
         tecnicos,
-        loading,
-        error
+        loadingTecnicos,
+        errorTecnicos
     };
 }

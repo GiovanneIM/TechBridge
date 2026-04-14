@@ -1,14 +1,11 @@
 // LAYOUT RAIZ - SEM HEADER E FOOTER
 
-import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
 // Fontes
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local"
-
-import LogOut from "@/components/blocks/Overlays/LogOut";
-import NotAuthenticated from "@/components/blocks/Overlays/NotAuthentificated";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -43,7 +40,6 @@ export default function RootLayout({ children }) {
 					`}
 			>
 				<AuthProvider>
-					<LogOut/>
 					{children}
 				</AuthProvider>
 			</body>

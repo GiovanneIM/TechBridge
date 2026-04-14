@@ -1,24 +1,27 @@
 "use client";
 
 import Image from "next/image";
-import { useAuth } from "@/context/AuthContext";
-import { usePathname } from "next/navigation";
-import { useEffect } from "react";
 
-import { Spinner } from "@/components/ui/spinner";
+import { useAuth } from "@/context/AuthContext";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LogOut() {
-    const { loading, setLoading } = useAuth();
-    const pathname = usePathname();
+    const router = useRouter();
 
-    // Se o usuário estiver vindo de um redirecionamento, termina o loading
+    const { loading, setLoading, logout } = useAuth();
+
+
+
     useEffect(() => {
-        if (loading.logout) {
-            setLoading((prev) => ({ ...prev, logout: false }));
-        }
-    }, [pathname]);
+        logout();
+    }, []);
 
-    if (!loading.logout) return null;
+    useEffect(() => {
+        if (!loading.logout) {
+            router.push("/");
+        }
+    }, [loading.logout]);
 
     return (
         <div className="fixed inset-0 bg-blue-50 z-51 flex flex-col items-center justify-center">
@@ -35,7 +38,5 @@ export default function LogOut() {
                 </div>
             </div>
         </div>
-
-
     );
 }
