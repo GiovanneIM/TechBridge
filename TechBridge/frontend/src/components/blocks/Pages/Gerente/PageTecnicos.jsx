@@ -4,7 +4,17 @@ import ErrorPage from '../../HolderPages/ErrorPage';
 import LoadingPage from '../../HolderPages/LoadingPage';
 import HeaderPage from '../../Header/HeaderPage';
 
+<<<<<<< HEAD
+import { useState } from "react";
+import { UserCog2 } from "lucide-react"
+import { Separator } from "../../../ui/separator"
+import { CardTecnico } from "../../../card/cardTecnicos/page"
+=======
+>>>>>>> c26aeada050828f443e4bad757ac54cef82c576d
 import { useUsers } from "@/hooks/useUsers"
+import { Button } from "@/components/ui/button"
+import FormMac from "@/components/modal/FormMac/page"
+import { Dialog } from "@/components/ui/dialog";
 
 import { UserCog2, RotateCw } from 'lucide-react';
 
@@ -13,15 +23,31 @@ import { CardTecnico } from "../../../card/cardTecnicos/page"
 export default function PageTecnicos({
     tecnicosIniciais = []
 }) {
+<<<<<<< HEAD
+    const { tecnicos } = useUsers({
+=======
     const {
         tecnicos,
         loadingTecnicos,
         errorTecnicos,
     } = useUsers({
+>>>>>>> c26aeada050828f443e4bad757ac54cef82c576d
         tecnicosIniciais,
         fetchOnMount: tecnicosIniciais.length === 0
     })
+    const [isOpen, setIsOpen] = useState(false);
 
+    return (
+        <>
+            <div className="p-3">
+                <Button onClick={() => setIsOpen(true)}>
+                    Adicionar
+                </Button>
+
+                <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                    <FormMac />
+                </Dialog>
+            </div>
     // Verificando se a página está sendo carregada pela primeira vez
     const isFirstLoad = loadingTecnicos.fetch && (tecnicos ?? []).length === 0;
 
@@ -66,7 +92,7 @@ export default function PageTecnicos({
             </div>
         </>)
     }
-
+    
     return (
         <div className="flex-1 flex flex-col">
             {/* Header da página */}
