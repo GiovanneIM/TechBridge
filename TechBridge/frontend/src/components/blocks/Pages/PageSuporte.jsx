@@ -111,7 +111,7 @@ export default function PageSuporte() {
                             <FieldGroup className='flex items-center gap-4'>
                                 <div className="w-full flex flex-col md:flex-row gap-4">
                                     <Field className="md:w-1/2">
-                                        <FieldLabel className="font-genty text-muted-foreground">Nome</FieldLabel>
+                                        <FieldLabel className="font-semibold text-muted-foreground">Nome</FieldLabel>
                                         <InputGroup>
                                             <InputGroupInput placeholder="Nome" />
                                             <InputGroupAddon>
@@ -121,7 +121,7 @@ export default function PageSuporte() {
                                     </Field>
 
                                     <Field className="md:w-1/2">
-                                        <FieldLabel className="font-genty text-muted-foreground">E-mail</FieldLabel>
+                                        <FieldLabel className="font-semibold text-muted-foreground">E-mail</FieldLabel>
                                         <InputGroup>
                                             <InputGroupInput placeholder="E-mail para contato" />
                                             <InputGroupAddon>
@@ -132,7 +132,7 @@ export default function PageSuporte() {
                                 </div>
 
                                 <Field>
-                                    <FieldLabel className="font-genty text-muted-foreground">Mensagem</FieldLabel>
+                                    <FieldLabel className="font-semibold text-muted-foreground">Mensagem</FieldLabel>
                                     <InputGroup>
                                         <InputGroupTextarea
                                             id="block-start-textarea"

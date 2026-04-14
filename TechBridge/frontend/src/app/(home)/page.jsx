@@ -46,13 +46,13 @@ export default function Home() {
 
 					<div className="flex flex-col sm:flex-row gap-3">
 						<Button
-							size="lg" className="bg-techbridge text-white cursor-pointer hover:animate-wiggle hover:text-background font-bold"
+							size="lg" className="bg-techbridge text-white cursor-pointer hover:animate-wiggle"
 							onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth' })}
 						>
 							Entrar em contato
 						</Button>
 						<Button
-							variant="outline" size="lg" className="bg-secondary text-foreground cursor-pointer hover:bg-foreground hover:text-background hover:animate-wiggle font-bold"
+							variant="outline" size="lg" className="bg-secondary text-foreground cursor-pointer hover:bg-foreground hover:text-background dark:hover:text-white hover:animate-wiggle"
 							onClick={() => comoRef.current?.scrollIntoView({ behavior: 'smooth' })}
 						>
 							Conheça nosso serviço
@@ -123,7 +123,7 @@ export default function Home() {
 					<FieldGroup className='flex items-center gap-4'>
 						<div className="w-full flex flex-col md:flex-row gap-4">
 							<Field className="md:w-1/2">
-								<FieldLabel className="font-genty text-muted-foreground">Nome</FieldLabel>
+								<FieldLabel className="font-semibold text-muted-foreground">Nome</FieldLabel>
 								<InputGroup>
 									<InputGroupInput placeholder="Nome" />
 									<InputGroupAddon>
@@ -133,7 +133,7 @@ export default function Home() {
 							</Field>
 
 							<Field className="md:w-1/2">
-								<FieldLabel className="font-genty text-muted-foreground">E-mail</FieldLabel>
+								<FieldLabel className="font-semibold text-muted-foreground">E-mail</FieldLabel>
 								<InputGroup>
 									<InputGroupInput placeholder="E-mail para contato" />
 									<InputGroupAddon>
