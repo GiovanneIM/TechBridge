@@ -61,7 +61,7 @@ export default function PageChamados({
     else {
         content = (<div className='flex-1 flex flex-col'>
 
-            <p>{JSON.stringify(chamados)}</p>
+            {/* <p>{JSON.stringify(chamados)}</p> */}
 
             <div className="flex-1 flex flex-col gap-4 md:gap-6 p-4 lg:px-6  md:py-6">
                 <DataTable data={chamados} />
