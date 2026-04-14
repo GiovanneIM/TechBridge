@@ -1,7 +1,7 @@
 "use client";
 
 import { BriefcaseBusiness, Network, PaintRoller, Warehouse, Wrench } from "lucide-react"
-import { Separator } from "../ui/separator"
+import { Separator } from "../../ui/separator"
 import { spawnDynamicRequests } from "next/dist/client/components/router-reducer/ppr-navigations"
 import { useSetores } from "@/hooks/useSetores"
 

@@ -9,11 +9,11 @@ import { SectionCards } from "@/components/Dashboard/aaa/section-cards"
 import { Separator } from "@/components/ui/separator"
 import { Grid2X2, RotateCw } from 'lucide-react';
 
-import HeaderPage from './Header/HeaderPage';
-import LoadingPage from './HolderPages/LoadingPage';
-import ErrorPage from './HolderPages/ErrorPage';
-import DashboardContent from '../Dashboard/DashboardContent';
-import DashboardSkeleton from '../Dashboard/DashboardSkeleton';
+import HeaderPage from '../Header/HeaderPage';
+import LoadingPage from '../HolderPages/LoadingPage';
+import ErrorPage from '../HolderPages/ErrorPage';
+import DashboardContent from '../../Dashboard/DashboardContent';
+import DashboardSkeleton from '../../Dashboard/DashboardSkeleton';
 
 export default function PageDashboard({
 	chamadosIniciais,

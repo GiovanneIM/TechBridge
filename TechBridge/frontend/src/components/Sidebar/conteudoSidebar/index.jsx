@@ -58,7 +58,7 @@ export default function CounteudoSidebar() {
                 <ItemSidebar icon={KanbanSquare} label={"Painel de Controle"} href={"/painelControle"} active={pathname.startsWith("/painelControle") && nav_active} />
                 <ItemSidebar icon={Siren} label={"Chamados"} href={"/chamados"} active={pathname.startsWith("/chamados") && nav_active} />
                 <ItemSidebar icon={Warehouse} label={"Setores"} href={"/setores"} active={pathname.startsWith("/setores") && nav_active} />
-                <ItemSidebar icon={} label={"Maquinas"} href={"/maquinas"} active={pathname.startsWith("/maquinas") && nav_active} />
+                <ItemSidebar icon={Warehouse} label={"Maquinas"} href={"/maquinas"} active={pathname.startsWith("/maquinas") && nav_active} />
                 <ItemSidebar icon={UserCog2} label={"Tecnicos"} href={"/tecnicos"} active={pathname.startsWith("/tecnicos") && nav_active} />
             </div >
 

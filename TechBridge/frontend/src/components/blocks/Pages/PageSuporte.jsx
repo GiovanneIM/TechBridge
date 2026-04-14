@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/input-group";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Separator } from "../ui/separator";
+import { Separator } from "../../ui/separator";
 
 export default function PageSuporte() {
     return (

@@ -1,4 +1,4 @@
-import PageSuporte from "@/components/blocks/PageSuporte";
+import PageSuporte from "@/components/blocks/Pages/PageSuporte";
 
 export default function Suporte() {
     return <PageSuporte/>

@@ -1,4 +1,4 @@
-import PageDashboard from "@/components/blocks/PageDashboardClient"
+import PageDashboard from "@/components/blocks/Pages/PageDashboardClient"
 
 export default async function Dashboard() {
 	const dashboard = {}
