@@ -12,7 +12,7 @@ import { Settings, User, LogOut, Grid2X2, KanbanSquare, CircleQuestionMark, User
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import ItemSidebar from "./itemSidebar";
-import Dashboard from "@/app/(user)/dashboard/page";
+import Dashboard from "@/app/(user)/(gerente)/dashboard/page";
 import TemaSidebar from "./temaSidebar";
 import LogoutSidebar from "./logoutSidebar";
 
@@ -58,6 +58,7 @@ export default function CounteudoSidebar() {
                 <ItemSidebar icon={KanbanSquare} label={"Painel de Controle"} href={"/painelControle"} active={pathname.startsWith("/painelControle") && nav_active} />
                 <ItemSidebar icon={Siren} label={"Chamados"} href={"/chamados"} active={pathname.startsWith("/chamados") && nav_active} />
                 <ItemSidebar icon={Warehouse} label={"Setores"} href={"/setores"} active={pathname.startsWith("/setores") && nav_active} />
+                <ItemSidebar icon={} label={"Maquinas"} href={"/maquinas"} active={pathname.startsWith("/maquinas") && nav_active} />
                 <ItemSidebar icon={UserCog2} label={"Tecnicos"} href={"/tecnicos"} active={pathname.startsWith("/tecnicos") && nav_active} />
             </div >
 
