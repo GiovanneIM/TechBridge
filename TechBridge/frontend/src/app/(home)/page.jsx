@@ -144,7 +144,7 @@ export default function Home() {
 						</div>
 
 						<Field>
-							<FieldLabel className="font-genty text-muted-foreground">Empresa</FieldLabel>
+							<FieldLabel className="font-semibold text-muted-foreground">Empresa</FieldLabel>
 							<InputGroup className='w-1/2'>
 								<InputGroupInput placeholder="Empresa" />
 								<InputGroupAddon>
@@ -154,7 +154,7 @@ export default function Home() {
 						</Field>
 
 						<Field>
-							<FieldLabel className="font-genty text-muted-foreground">Mensagem</FieldLabel>
+							<FieldLabel className="font-semibold text-muted-foreground">Mensagem</FieldLabel>
 							<InputGroup>
 								<InputGroupTextarea
 									id="block-start-textarea"
@@ -164,7 +164,7 @@ export default function Home() {
 							</InputGroup>
 						</Field>
 
-						<Button className="w-full md:w-sm bg-techbridge font-bold text-white">Entrar em contato</Button>
+						<Button className="cursor-pointer w-full md:w-sm bg-techbridge font-semibold text-white">Entrar em contato</Button>
 					</FieldGroup>
 				</Card>
 			</div>
