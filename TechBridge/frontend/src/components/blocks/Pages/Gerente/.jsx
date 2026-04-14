@@ -4,14 +4,11 @@ import ErrorPage from '../../HolderPages/ErrorPage';
 import LoadingPage from '../../HolderPages/LoadingPage';
 import HeaderPage from '../../Header/HeaderPage';
 
-import { useState } from "react";
 import { useUsers } from "@/hooks/useUsers"
-
-import { CardTecnico } from "../../../card/cardTecnicos/page"
-import ModalNovoTecnico from '@/components/modals/addTecnico';
 
 import { UserCog2, RotateCw } from 'lucide-react';
 
+import { CardTecnico } from "../../../card/cardTecnicos/page"
 
 export default function PageTecnicos({
     tecnicosIniciais = []
@@ -24,8 +21,6 @@ export default function PageTecnicos({
         tecnicosIniciais,
         fetchOnMount: tecnicosIniciais.length === 0
     })
-
-
 
     // Verificando se a página está sendo carregada pela primeira vez
     const isFirstLoad = loadingTecnicos.fetch && (tecnicos ?? []).length === 0;
@@ -64,13 +59,7 @@ export default function PageTecnicos({
     // Dados carregados e sem erro
     else {
         content = (<>
-            <div className="p-3">
-                <ModalNovoTecnico />
-            </div>
-
             <div className="grid grid-cols-5 w-full h-50 py-5 px-5 gap-5">
-
-
                 {tecnicos.map((t, i) => (
                     <CardTecnico key={i} nome={t.nome} empresa={t.id_empresa} imagem={t.foto_perfil} email={t.email}></CardTecnico>
                 ))}
