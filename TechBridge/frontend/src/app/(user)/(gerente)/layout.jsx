@@ -4,7 +4,7 @@ import {
     Sidebar,
     SidebarContent,
 } from "@/components/ui/sidebar"
-import CounteudoSidebar from "../../components/Sidebar/conteudoSidebar";
+import CounteudoSidebar from "@/components/Sidebar/conteudoSidebar";
 
 
 
