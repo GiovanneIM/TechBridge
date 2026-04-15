@@ -11,13 +11,13 @@ import { Settings, User, LogOut, Grid2X2, KanbanSquare, CircleQuestionMark, User
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import ItemSidebar from "./itemSidebar";
+import ItemSidebar from "./items/itemSidebar";
 import Dashboard from "@/app/(user)/(gerente)/dashboard/page";
-import TemaSidebar from "./temaSidebar";
-import LogoutSidebar from "./logoutSidebar";
+import TemaSidebar from "./items/temaSidebar";
+import LogoutSidebar from "./items/logoutSidebar";
 
 
-export default function CounteudoSidebar() {
+export default function SidebarBase({ children }) {
     const pathname = usePathname();
 
     // Classe para destacar a opção de navegação ativa
@@ -54,12 +54,7 @@ export default function CounteudoSidebar() {
 
             {/* Navegação */}
             < div className="flex-1 flex flex-col w-full lg:w-auto gap-2 px-2 py-2 md:px-1 md:py-1">
-                <ItemSidebar icon={Grid2X2} label={"Dashboard"} href={"/dashboard"} active={pathname.startsWith("/dashboard") && nav_active} />
-                <ItemSidebar icon={KanbanSquare} label={"Painel de Controle"} href={"/painelControle"} active={pathname.startsWith("/painelControle") && nav_active} />
-                <ItemSidebar icon={Siren} label={"Chamados"} href={"/chamados"} active={pathname.startsWith("/chamados") && nav_active} />
-                <ItemSidebar icon={Warehouse} label={"Setores"} href={"/setores"} active={pathname.startsWith("/setores") && nav_active} />
-                <ItemSidebar icon={Monitor} label={"Maquinas"} href={"/maquinas"} active={pathname.startsWith("/maquinas") && nav_active} />
-                <ItemSidebar icon={UserCog2} label={"Tecnicos"} href={"/tecnicos"} active={pathname.startsWith("/tecnicos") && nav_active} />
+                {children}
             </div >
 
             <Separator />

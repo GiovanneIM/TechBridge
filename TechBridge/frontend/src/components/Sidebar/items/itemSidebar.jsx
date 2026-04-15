@@ -1,3 +1,6 @@
+
+import { usePathname } from "next/navigation"
+
 import Link from "next/link";
 import { useSidebar } from "@/components/ui/sidebar";
 
@@ -9,7 +12,9 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export default function ItemSidebar({ icon: Icon, label, href, active }) {
+export default function ItemSidebar({ icon: Icon, label, href }) {
+    const pathname = usePathname();
+
     const { state } = useSidebar();
     const isCollapsed = state === "collapsed";
 
@@ -29,7 +34,7 @@ export default function ItemSidebar({ icon: Icon, label, href, active }) {
                 group-data-[collapsible=icon]:aspect-square
                 
 
-                ${active && "bg-techbridge text-white"}
+                ${pathname.startsWith(href) && "bg-techbridge text-white"}
             `}
         >
             <Link href={href}>
@@ -58,6 +63,7 @@ export default function ItemSidebar({ icon: Icon, label, href, active }) {
                     <TooltipTrigger asChild>
                         {botao}
                     </TooltipTrigger>
+                    
                     <TooltipContent side="right" className="font-genty text-sm">
                         {label}
                     </TooltipContent>
