@@ -1,12 +1,7 @@
 'use client';
 
-import { useChamados } from '@/hooks/useChamados';
 import { useDashboard } from '@/hooks/useDashboard';
 
-import { ChartAreaInteractive } from "@/components/Dashboard/aaa/chart-area-interactive"
-import { DataTable } from "@/components/Dashboard/aaa/data-table"
-import { SectionCards } from "@/components/Dashboard/aaa/section-cards"
-import { Separator } from "@/components/ui/separator"
 import { Grid2X2, RotateCw } from 'lucide-react';
 
 import HeaderPage from '../../Header/HeaderPage';
@@ -16,7 +11,6 @@ import DashboardContent from '../../../Dashboard/DashboardContent';
 import DashboardSkeleton from '../../../Dashboard/DashboardSkeleton';
 
 export default function PageDashboard({
-	chamadosIniciais,
 	dashboardInicial
 }) {
 	// Obtendo o dashboard

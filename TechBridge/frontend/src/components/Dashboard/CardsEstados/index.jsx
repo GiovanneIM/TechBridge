@@ -21,7 +21,7 @@ export default function CardsEstados({
                 <div className="absolute left-0 top-0 h-full w-2 bg-(--color-aberto)" />
 
                 <CardHeader>
-                    <CardTitle className="font-bold text-md h-12">
+                    <CardTitle className="text-md h-12">
                         Chamados abertos
                     </CardTitle>
                 </CardHeader>
@@ -35,7 +35,7 @@ export default function CardsEstados({
                 <div className="absolute left-0 top-0 h-full w-2 bg-(--color-andamento)" />
 
                 <CardHeader>
-                    <CardTitle className="font-bold text-md h-12">
+                    <CardTitle className="text-md h-12">
                         Chamados em andamento
                     </CardTitle>
                 </CardHeader>
@@ -49,7 +49,7 @@ export default function CardsEstados({
                 <div className="absolute left-0 top-0 h-full w-2 bg-(--color-concluido)" />
 
                 <CardHeader>
-                    <CardTitle className="font-bold text-md h-12">
+                    <CardTitle className="text-md h-12">
                         Chamados concluídos
                     </CardTitle>
                 </CardHeader>

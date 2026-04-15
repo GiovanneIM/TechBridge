@@ -41,13 +41,13 @@ export default function RoscaEstados({
             estado: estado,
             total: chamadosPorEstados[estado],
             fill: `var(--color-${estado})`
-        }) 
+        })
     }
 
     return (
-        <Card className="flex flex-col w-full md:w-1/2" >
+        <Card className="flex flex-col w-full md:w-1/2 py-4" >
             <CardHeader className="items-center pb-0" >
-                <CardTitle>Distribuição de chamados por estado </CardTitle>
+                <CardTitle className="text-md">Distribuição de chamados por estado </CardTitle>
                 {/* <CardDescription>Distribuição de chamados por estado</CardDescription> */}
             </CardHeader>
             < CardContent className="flex-1 pb-0" >
