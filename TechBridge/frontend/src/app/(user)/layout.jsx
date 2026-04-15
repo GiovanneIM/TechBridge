@@ -4,11 +4,8 @@ import HeaderUser from "@/components/blocks/Header/HeaderUser";
 // import Footer from "@/components/blocks/Footer/page";
 
 import {
-	SidebarProvider,
-	Sidebar,
-	SidebarContent,
+	SidebarProvider
 } from "@/components/ui/sidebar"
-import CounteudoSidebar from "../../components/Sidebar/conteudoSidebar";
 import SessionHandler from "@/context/SessionHandler";
 
 

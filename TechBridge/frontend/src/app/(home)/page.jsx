@@ -265,7 +265,7 @@ function Cards() {
 
 							{/* Conteúdo do card */}
 							<CardContent className="px-4">
-								<ul className="text-muted-foreground text-justify font-genty text-sm">
+								<ul className="text-muted-foreground text-justify font-semibold text-sm">
 									{cont.list.map((l, j) => {
 										return (<li key={j} className="mt-3">{l}</li>)
 									})}

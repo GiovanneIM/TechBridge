@@ -4,7 +4,8 @@ import {
     Sidebar,
     SidebarContent,
 } from "@/components/ui/sidebar"
-import CounteudoSidebar from "@/components/Sidebar/conteudoSidebar";
+import SidebarBase from "@/components/Sidebar";
+import SidebarNavGerente from "@/components/Sidebar/nav/navGerente";
 
 
 
@@ -13,7 +14,9 @@ export default function LayoutGerente({ children }) {
         {/* Sidebar */}
         <Sidebar className="top-[61px] h-[calc(100vh-61px)] border-none" collapsible="icon">
             <SidebarContent>
-                <CounteudoSidebar />
+                <SidebarBase>
+                    <SidebarNavGerente/>
+                </SidebarBase>
             </SidebarContent>
         </Sidebar>
 
