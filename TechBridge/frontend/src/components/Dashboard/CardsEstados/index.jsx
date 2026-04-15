@@ -27,7 +27,7 @@ export default function CardsEstados({
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {chamadosPorEstados.aberto ?? 0}
+                    {chamadosPorEstados?.aberto ?? 0}
                 </CardContent>
             </Card>
 
@@ -41,7 +41,7 @@ export default function CardsEstados({
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {chamadosPorEstados.andamento ?? 0}
+                    {chamadosPorEstados?.andamento ?? 0}
                 </CardContent>
             </Card>
 
@@ -55,7 +55,7 @@ export default function CardsEstados({
                 </CardHeader>
 
                 <CardContent className="text-3xl font-bold">
-                    {chamadosPorEstados.concluido ?? 0}
+                    {chamadosPorEstados?.concluido ?? 0}
                 </CardContent>
             </Card>
         </div>

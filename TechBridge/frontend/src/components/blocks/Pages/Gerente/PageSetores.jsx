@@ -38,7 +38,7 @@ export default function PageSetores({
     });
 
     // Verificando se a página está sendo carregada pela primeira vez
-    const isFirstLoad = loadingTecnicos.fetch && (tecnicos ?? []).length === 0;
+    const isFirstLoad = loadingSetores.fetch && (tecnicos ?? []).length === 0;
 
     // Conteúdo da página
     let content;

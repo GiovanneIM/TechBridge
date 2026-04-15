@@ -4,7 +4,7 @@ import { JWT_CONFIG } from '../config/jwt.js';
 
 const tiposDeUsuario = {
     '1': 'Admin TechBridge',
-    '2': 'Admin Cliente',
+    '2': 'Gerente',
     '3': 'Técnico',
 }
 

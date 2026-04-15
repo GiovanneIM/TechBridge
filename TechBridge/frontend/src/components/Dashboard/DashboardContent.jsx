@@ -10,7 +10,7 @@ import RoscaEstados from './RoscaEstados';
 import LinhaEstados from './LinhaEstados';
 import { useChamados } from "@/hooks/useChamados";
 
-export default function DashboardContent({ dashboard, chamados }) {
+export default function DashboardContent({ dashboard }) {
 
     return (<>
         {/* Linha um */}
@@ -24,8 +24,8 @@ export default function DashboardContent({ dashboard, chamados }) {
         {/* Chamados por estado */}
         <div className="flex-1 flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
             <div className='flex flex-col md:flex-row gap-4'>
-                <CardsEstados totalChamados={dashboard.totalChamados} chamadosPorEstados={dashboard.porEstado} />
-                <RoscaEstados chamadosPorEstados={dashboard.porEstado ?? []} />
+                <CardsEstados totalChamados={dashboard?.totalChamados} chamadosPorEstados={dashboard?.porEstado} />
+                <RoscaEstados chamadosPorEstados={dashboard?.porEstado ?? []} />
             </div>
         </div>
 
@@ -33,13 +33,13 @@ export default function DashboardContent({ dashboard, chamados }) {
 
         <div className="flex-1 flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
             <div className='flex flex-col md:flex-row gap-4'>
-                <LinhaEstados chamadosPorDia={dashboard.chamadosPorDia} />
+                <LinhaEstados chamadosPorDia={dashboard?.chamadosPorDia} />
             </div>
         </div>
 
         <Separator />
 
-        <div className="flex flex-1 flex-col">
+        {/* <div className="flex flex-1 flex-col">
             <div className="@container/main flex flex-1 flex-col gap-2">
                 <div className="flex flex-col gap-4 p-4 lg:px-6 md:gap-6 md:py-6">
 
@@ -52,6 +52,6 @@ export default function DashboardContent({ dashboard, chamados }) {
                     <DataTable data={chamados} />
                 </div>
             </div>
-        </div>
+        </div> */}
     </>)
 }

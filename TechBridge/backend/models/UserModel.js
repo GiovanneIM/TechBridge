@@ -56,7 +56,14 @@ class UserModel {
     // Buscar um usuário por ID
     static async buscarPorId(id) {
         try {
-            const rows = await read('usuarios', { where: { id } });
+            const rows = await read('usuarios u', {
+                columns: ["u.*", "e.nome_fantasia as empresa"],
+                where: { 'u.id': id },
+                join: [
+                    { type: 'LEFT', table: 'empresas e', on: 'e.id = u.id_empresa' }
+                ]
+            });
+
             return rows[0] || null;
         } catch (error) {
             console.error('Erro ao buscar usuário por ID:', error);
@@ -81,7 +88,7 @@ class UserModel {
     // Listar todos os usuários (com paginação)
     static async listarTecnicos(id_empresa) {
         try {
-            const tecnicos = await read("usuarios", {where: {id_empresa, tipo_usuario: 3}})
+            const tecnicos = await read("usuarios", { where: { id_empresa, tipo_usuario: 3 } })
 
             return tecnicos
         } catch (error) {
@@ -95,7 +102,13 @@ class UserModel {
     // Buscar usuário por email
     static async buscarPorEmail(email) {
         try {
-            const rows = await read('usuarios', { where: { email } });
+            const rows = await read('usuarios u', {
+                columns: ["u.*", "e.nome_fantasia as empresa"],
+                where: { email },
+                join: [
+                    { type: 'LEFT', table: 'empresas e', on: 'e.id = u.id_empresa' }
+                ]
+            });
             return rows[0] || null;
         } catch (error) {
             console.error('Erro ao buscar usuário por email:', error);
@@ -135,19 +148,23 @@ class UserModel {
     // Verificar credenciais de login
     static async verificarCredenciais(email, senha) {
         try {
+            // Obtendo o usuário
             const usuario = await this.buscarPorEmail(email);
 
+            // Usuário não encontrado
             if (!usuario) {
                 return null;
             }
 
+            // Comparando a senha
             const senhaValida = await comparePassword(senha, usuario.senha);
 
+            // Senha errada
             if (!senhaValida) {
                 return null;
             }
 
-            // Retornar usuário sem a senha
+            // Retornando usuário sem a senha
             const { senha: _, ...usuarioSemSenha } = usuario;
             return usuarioSemSenha;
         } catch (error) {

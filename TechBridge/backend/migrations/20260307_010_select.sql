@@ -87,4 +87,6 @@ INNER JOIN maquinas m on m.id = c.id_maquina
 LEFT JOIN usuarios u on u.id = c.id_tecnico;
     
     
-delete from chamados;
+SELECT u.*, e.nome_fantasia
+FROM usuarios u
+LEFT JOIN empresas e ON e.id = u.id_empresa;

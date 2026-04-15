@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 export function middleware(req) {
     const token = req.cookies.get('token');
 
+    // Se não tiver um tokes -> Sem usuário
     if (!token) {
         return NextResponse.redirect(
             new URL('/acesso-negado', req.url)

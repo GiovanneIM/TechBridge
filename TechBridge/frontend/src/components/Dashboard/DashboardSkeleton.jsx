@@ -1,19 +1,11 @@
-import { ChartAreaInteractive } from "@/components/Dashboard/aaa/chart-area-interactive"
-import { DataTable } from "@/components/Dashboard/aaa/data-table"
-import { SectionCards } from "@/components/Dashboard/aaa/section-cards"
 import { Separator } from "@/components/ui/separator"
-import { Skeleton } from "@/components/ui/skeleton";
-
 
 import SkeletonLinhaUm from './LinhaUm/SkeletonLinhaUm';
 import SkeletonEstados from './CardsEstados/SkeletonEstados';
-
-import GraficoEstados from './RoscaEstados';
-import LinhaEstados from './LinhaEstados';
 import SkeletonRoscaEstados from "./RoscaEstados/SkeletonRosca";
 import SkeletonLinhaEstados from "./LinhaEstados/SkeletonLinha";
 
-export default function DashboardSkeleton({ dashboard, chamados }) {
+export default function DashboardSkeleton() {
     return (<>
         {/* Conteúdo do dashboard */}
         {/* Linha um */}

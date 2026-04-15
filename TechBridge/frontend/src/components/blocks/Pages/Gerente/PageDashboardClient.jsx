@@ -19,17 +19,6 @@ export default function PageDashboard({
 	chamadosIniciais,
 	dashboardInicial
 }) {
-	// Obtendo os chamados
-	const {
-		chamados,
-		loading,
-		error,
-		refetchChamados
-	} = useChamados({
-		chamadosIniciais: chamadosIniciais,
-		fetchOnMount: chamadosIniciais?.length === 0
-	})
-
 	// Obtendo o dashboard
 	const {
 		dashboard,
@@ -73,14 +62,14 @@ export default function PageDashboard({
 	// Se estiver recarregando os dados
 	else if (loadingDashboard) {
 		content = (
-			<DashboardSkeleton dashboard={dashboard} chamados={chamados} />
+			<DashboardSkeleton />
 		)
 	}
 
 	// Dados carregados e sem erro
 	else {
 		content = (
-			<DashboardContent dashboard={dashboard} chamados={chamados} />
+			<DashboardContent dashboard={dashboard} />
 		)
 	}
 
