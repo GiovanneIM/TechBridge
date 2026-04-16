@@ -11,7 +11,7 @@ const swaggerOptions = {
 			description: `
 				API REST para gerenciamento de sessão, usuários, setores, máquinas e chamados.
 
-				A API utiliza um padrão de resposta consistente, no qual todas as rotas retornam:
+				A API utiliza um padrão de respostas, no qual todas as rotas retornam:
 				- "sucesso" (boolean): indica se a requisição foi executada com êxito;
 				- "mensagem" (string): descrição do sucesso ou do erro ocorrido;
 				- "dados" (quando aplicável): informações retornadas pela operação.
