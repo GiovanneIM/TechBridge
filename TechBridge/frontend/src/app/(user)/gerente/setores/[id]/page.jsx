@@ -1,4 +1,4 @@
-export default function idSetor() {
+export default function Setor() {
     return(<>
     </>)
 }

@@ -17,7 +17,7 @@ import TemaSidebar from "./items/temaSidebar";
 import LogoutSidebar from "./items/logoutSidebar";
 
 
-export default function SidebarBase({ children }) {
+export default function SidebarBase({ children, suporte }) {
     const pathname = usePathname();
 
     // Classe para destacar a opção de navegação ativa
@@ -66,11 +66,13 @@ export default function SidebarBase({ children }) {
 
             <Separator />
 
-            {/* Config e logout */}
+            {/* Suporte, Config e logout */}
             <div className="flex flex-col gap-2 px-2 py-2 md:px-1 md:py-1">
-                <ItemSidebar icon={CircleQuestionMark} label={"Suporte"} href={"/suporte"} active={pathname.startsWith("/suporte") && nav_active} />
+                {suporte &&
+                    <ItemSidebar icon={CircleQuestionMark} label={"Suporte"} href={suporte + "/suporte"} active={pathname.startsWith("/suporte") && nav_active} />
+                }
                 <ItemSidebar icon={Settings} label={"Configurações"} href={"#"} active={pathname.startsWith("#") && nav_active} />
-                <LogoutSidebar/>
+                <LogoutSidebar />
             </div>
         </div>
     )
