@@ -17,7 +17,7 @@ export default function SidebarNavAdmin() {
 
         <ItemColapsavel icon={Warehouse} label={"Clientes"} lista={listaClientes} />
 
-        <ItemSidebar icon={MessageCircle} label={"Mensagens"} href={"/mensagens"} />
+        <ItemSidebar icon={MessageCircle} label={"Mensagens"} href={"/admin/mensagens"} />
     </>);
 }
 

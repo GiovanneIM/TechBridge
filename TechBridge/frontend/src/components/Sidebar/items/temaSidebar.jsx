@@ -21,27 +21,33 @@ export default function TemaSidebar() {
     const isCollapsed = state === "collapsed";
 
     // Controlando o tema
-    const [theme, setTheme] = useState("light");
+    const [theme, setTheme] = useState(() => {
+        if (typeof window !== "undefined") {
+            return localStorage.getItem("theme") ?? "light";
+        }
+        return "light";
+    });
+
+
     useEffect(() => {
         const root = document.documentElement;
 
-        root.classList.remove("dark", "techbridge");
+        root.classList.remove("light", "dark", "techbridge");
+        root.classList.add(theme);
 
-        if (theme !== "light") {
-            root.classList.add(theme);
-        }
+        localStorage.setItem("theme", theme);
     }, [theme]);
+
 
     const botao = (
         <Button
             variant="ghost"
-            onClick={() => {setTheme(theme !== "light" ? "light" : "dark")}}
+            onClick={() => { setTheme(theme !== "light" ? "light" : "dark") }}
             className={`
                 w-full h-10 cursor-pointer
                 text-md
                 flex items-center justify-start 
                 gap-2 px-3
-                transition-all duration-400
 
                 group-data-[collapsible=icon]:gap-0
                 group-data-[collapsible=icon]:px-3
@@ -49,11 +55,11 @@ export default function TemaSidebar() {
                 
             `}
         >
-            {theme !== "light" ? <Sun size={18}/> : <Moon size={18}/>}
+            {theme !== "light" ? <Sun size={18} /> : <Moon size={18} />}
 
             <span
                 className="
-                        whitespace-nowrap transition-all duration-400
+                        whitespace-nowrap 
                         group-data-[collapsible=icon]:opacity-0
                         group-data-[collapsible=icon]:w-0
                         group-data-[collapsible=icon]:overflow-hidden

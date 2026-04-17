@@ -29,14 +29,14 @@ export default function SidebarBase({ children, suporte }) {
             <div className="px-2 py-2 md:hidden">
                 <Link
                     href="/dashboard"
-                    className="flex items-center order-1 w-fit sm:w-1/2 lg:w-auto"
+                    className="flex gap-3 items-center order-1 w-fit sm:w-1/2 lg:w-auto"
                 >
                     <img
                         src="/TechBridge/Logo.svg"
-                        className="mr-3 h-6 sm:h-9"
+                        className="h-12"
                         alt="TechBridge logo"
                     />
-                    <p className="self-center flex text-2xl whitespace-nowrap dark:text-white font-genty">
+                    <p className="self-center flex text-3xl whitespace-nowrap dark:text-white font-genty">
                         Tech
                         <span className="text-techbridge">Bridge</span>
                     </p>

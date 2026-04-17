@@ -23,12 +23,9 @@ export default function ItemSidebar({ icon: Icon, label, href }) {
             variant="ghost"
             asChild
             className={`
-                w-full h-10
-                text-md
+                w-full h-10 gap-2 px-3 text-md
                 flex items-center justify-start 
-                gap-2 px-3
-                transition-all duration-400
-
+                
                 group-data-[collapsible=icon]:gap-0
                 group-data-[collapsible=icon]:px-3
                 group-data-[collapsible=icon]:aspect-square
@@ -43,7 +40,7 @@ export default function ItemSidebar({ icon: Icon, label, href }) {
 
                 <span
                     className="
-                        whitespace-nowrap transition-all duration-400
+                        whitespace-nowrap 
                         group-data-[collapsible=icon]:opacity-0
                         group-data-[collapsible=icon]:w-0
                         group-data-[collapsible=icon]:overflow-hidden

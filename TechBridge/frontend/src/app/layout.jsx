@@ -6,6 +6,7 @@ import "./globals.css";
 // Fontes
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local"
+import Script from "next/script";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",

@@ -1,7 +1,7 @@
 "use client"
 
-import ErrorPage from '../../HolderPages/ErrorPage';
-import LoadingPage from '../../HolderPages/LoadingPage';
+import ErrorPage from '../../Holders/ErrorPage';
+import LoadingPage from '../../Holders/LoadingPage';
 import HeaderPage from '../../Header/HeaderPage';
 
 import { RotateCw, Siren } from "lucide-react";

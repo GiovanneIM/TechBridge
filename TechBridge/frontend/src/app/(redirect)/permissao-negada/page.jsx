@@ -1,4 +1,4 @@
-import NotPermission from "@/components/blocks/Overlays/NotPermission";
+import NotPermission from "@/components/blocks/Redirect/NotPermission";
 
 export default function PermissaoNegada() {
     return (<>

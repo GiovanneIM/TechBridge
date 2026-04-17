@@ -5,8 +5,8 @@ import { useDashboard } from '@/hooks/useDashboard';
 import { Grid2X2, RotateCw } from 'lucide-react';
 
 import HeaderPage from '../../Header/HeaderPage';
-import LoadingPage from '../../HolderPages/LoadingPage';
-import ErrorPage from '../../HolderPages/ErrorPage';
+import LoadingPage from '../../Holders/LoadingPage';
+import ErrorPage from '../../Holders/ErrorPage';
 import DashboardContent from '../../../Dashboard/DashboardContent';
 import DashboardSkeleton from '../../../Dashboard/DashboardSkeleton';
 
