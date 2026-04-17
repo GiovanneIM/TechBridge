@@ -1,4 +1,5 @@
-import { API_URL } from "./utils";
+// URL base da API
+export const API_URL = 'http://localhost:3000/techbridge'
 
 // Função para padronizar as requisições à API (Sempre envia os cookies)
 export async function apiFetch(endpoint, options = {}) {
