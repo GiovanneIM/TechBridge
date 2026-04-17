@@ -73,7 +73,7 @@ export default function PageChamados({
         <div className="flex-1 flex flex-col">
             {/* Header da página */}
             <HeaderPage
-                icon={<Siren />}
+                icon={Siren}
                 title="Chamados"
                 actions={[
                     loadingChamados.fetch

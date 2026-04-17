@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
 export default function HeaderPage({
-    icon,
+    icon: Icon,
     title,
     actions
 }) {
@@ -16,7 +16,7 @@ export default function HeaderPage({
         >
             <div className="w-full flex items-center justify-between gap-3 px-4 lg:px-6">
                 <div className='flex gap-1 lg:gap-2'>
-                    {icon}
+                    <Icon/>
 
                     <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-6" />
 

@@ -82,7 +82,7 @@ export default function PageTecnicos({
         <div className="flex-1 flex flex-col">
             {/* Header da página */}
             <HeaderPage
-                icon={<UserCog2 />}
+                icon={UserCog2}
                 title="Tecnicos"
                 actions={[
                     loadingTecnicos.fetch

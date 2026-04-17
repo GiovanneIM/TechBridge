@@ -132,7 +132,7 @@ export default function PageSetores({
     return (
         <div className="flex-1 flex flex-col">
             <HeaderPage
-                icon={<Warehouse />}
+                icon={Warehouse}
                 title="Setores"
                 actions={[
                     loadingSetores.fetch
