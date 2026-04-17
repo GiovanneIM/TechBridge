@@ -29,7 +29,7 @@ export function useChamados({
 
         try {
             // Chamada à API
-            const response = await apiFetch(`${API_BASE_URL}/buscar`, {
+            const data = await apiFetch(`${API_BASE_URL}/buscar`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,9 +37,6 @@ export function useChamados({
                 body: JSON.stringify({ "options": options }),
                 credentials: 'include'
             });
-
-            // Convertendo a resposta para json
-            const data = await response.json();
 
             // Se a resposta veio com status de erro
             if (!data.sucesso) {

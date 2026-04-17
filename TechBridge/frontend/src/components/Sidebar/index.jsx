@@ -12,7 +12,7 @@ import { Settings, User, LogOut, Grid2X2, KanbanSquare, CircleQuestionMark, User
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import ItemSidebar from "./items/itemSidebar";
-import Dashboard from "@/app/(user)/(gerente)/dashboard/page";
+import Dashboard from "@/app/(user)/gerente/dashboard/page";
 import TemaSidebar from "./items/temaSidebar";
 import LogoutSidebar from "./items/logoutSidebar";
 

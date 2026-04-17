@@ -31,10 +31,7 @@ export function useSetores({
 
         try {
             // Chamada à API
-            const response = await apiFetch(API_BASE_URL + '/buscar');
-
-            // Convertendo a resposta para json
-            const data = await response.json();
+            const data = await apiFetch(API_BASE_URL + '/buscar');
 
             // Se a resposta veio com status de erro
             if (!data.sucesso) {

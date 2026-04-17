@@ -13,19 +13,6 @@ export function AuthProvider({ children }) {
         fetchOnMount: true
     });
 
-    // const auth = useAuthHook({
-    //     initialUser: {
-    //         nome: 'Giovanne Isaac Marques',
-    //         email: 'giovanne.isaac@gmail.com',
-    //         senha:'123456',
-    //         foto_perfil: 'https://images-news.now.com/newsimage/NewsImage/2025-02-07-15-22-5103GxLf4N.jpg',
-    //         ativo: true,
-    //         tipo_usuario: 1,
-    //         id_empresa: null
-    //     },
-    //     fetchOnMount: false
-    // });
-
     return (
         <AuthContext.Provider value={auth}>
             {children}
@@ -37,3 +24,17 @@ export function AuthProvider({ children }) {
 export function useAuth() {
     return useContext(AuthContext);
 }
+
+
+// const auth = useAuthHook({
+//     initialUser: {
+//         nome: 'Giovanne Isaac Marques',
+//         email: 'giovanne.isaac@gmail.com',
+//         senha:'123456',
+//         foto_perfil: 'https://images-news.now.com/newsimage/NewsImage/2025-02-07-15-22-5103GxLf4N.jpg',
+//         ativo: true,
+//         tipo_usuario: 1,
+//         id_empresa: null
+//     },
+//     fetchOnMount: false
+// });

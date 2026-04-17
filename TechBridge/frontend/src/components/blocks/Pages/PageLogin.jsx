@@ -34,20 +34,23 @@ export default function PageLogin() {
 		loading,
 		error,
 		login,
+		isAuthenticated
 	} = useAuth()
 
 	// Se houver um usuário logado, o redireciona até a página dashboard
 	useEffect(() => {
-		if (user) {
-			router.replace('/dashboard');
+		if (isAuthenticated && user) {
+			router.replace(`/${user.cargo}/dashboard`);
 		}
-	}, [user, router]);
+	}, [user, isAuthenticated]);
 
 	// Controlando o estado dos inputs
 	const [email, setEmail] = useState('');
 	const [senha, setSenha] = useState('');
 
 
+	if (isAuthenticated) return null;
+	
 	return (
 		<div className="w-vw h-svh flex justify-center items-center flex-wrap">
 			{/* Background */}

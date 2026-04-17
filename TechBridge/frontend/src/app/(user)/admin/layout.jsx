@@ -1,3 +1,5 @@
+'use client'
+
 // LAYOUT PARA PÁGINAS COM USUÁRIO LOGADO - Com header e sidebar
 
 import {
@@ -6,10 +8,28 @@ import {
 } from "@/components/ui/sidebar";
 import SidebarBase from "@/components/Sidebar";
 import SidebarNavAdmin from "@/components/Sidebar/nav/navAdmin";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 
 
 export default function LayoutAdmin({ children }) {
+    const router = useRouter()
+    const { user, loading } = useAuth()
+
+    useEffect(() => {
+        if (!loading.perfil && user?.tipo !== "admin") {
+            router.replace('/permissao-negada');
+        }
+    }, [user, loading.perfil]);
+
+    // Carregando o perfil
+    if (loading.perfil) return null;
+
+    // Se não for admin
+    if (user?.tipo !== "admin") return null;
+
     return (<>
         {/* Sidebar */}
         <Sidebar className="top-[61px] h-[calc(100vh-61px)] border-none" collapsible="icon">
@@ -26,26 +46,3 @@ export default function LayoutAdmin({ children }) {
         </main>
     </>);
 }
-
-
-
-
-
-// import { cookies } from 'next/headers'
-// import { redirect } from 'next/navigation'
-// import { jwtVerify } from 'jose'
-
-// const SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
-
-// export default async function AdminLayout({ children }) {
-//   const token = cookies().get('token')?.value
-//   if (!token) redirect('/login')
-
-//   const { payload } = await jwtVerify(token, SECRET)
-
-//   if (payload.cargo !== 'admin') {
-//     redirect('/acesso-negado')
-//   }
-
-//   return <>{children}</>
-// }

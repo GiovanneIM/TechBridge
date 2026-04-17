@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { apiFetch } from '@/lib/api';
-import { API_URL } from '@/lib/utils';
+import { API_URL, apiFetch } from '@/lib/api';
 
 const API_BASE_URL = API_URL + '/painel';
 

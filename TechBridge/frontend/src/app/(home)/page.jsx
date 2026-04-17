@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
 import { useAuth } from "@/context/AuthContext";
 
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import Image from "next/image";
 
@@ -28,9 +28,14 @@ export default function Home() {
 	const router = useRouter()
 	const formRef = useRef(null)
 	const comoRef = useRef(null)
-	const { isAuthenticated } = useAuth()
+	const { isAuthenticated, user } = useAuth()
 
-	if (isAuthenticated) { router.push('/dashboard') }
+	// Se houver um usuário logado, o redireciona até a página dashboard
+	useEffect(() => {
+		if (isAuthenticated && user) {
+			router.replace(`/${user.cargo}/dashboard`);
+		}
+	}, [user, isAuthenticated]);
 
 	return (
 		<div className="w-full">

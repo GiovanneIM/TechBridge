@@ -2,28 +2,26 @@
 
 import Image from "next/image";
 
-import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
-export default function LogOut() {
+
+export default function NotPermission({ }) {
     const router = useRouter();
-
-    const { loading, logout } = useAuth();
-
-
+    const { user } = useAuth()
 
     useEffect(() => {
-        logout();
-    }, []);
+        if (!user) return;
 
-    useEffect(() => {
-        if (!loading.logout) {
-            router.replace("/");
-        }
-    }, [loading.logout]);
+        const timer = setTimeout(() => {
+            router.replace(`/${user.cargo}/dashboard`);
+        }, 2000);
 
-    return (
+        return () => clearTimeout(timer);
+    }, [user]);
+
+    return (<>
         <div className="fixed inset-0 bg-blue-50 z-51 flex flex-col items-center justify-center">
             <div className="relative flex flex-col justify-center items-center gap-8">
                 <div className="relative w-fit h-fit">
@@ -36,7 +34,12 @@ export default function LogOut() {
                         priority
                     />
                 </div>
+
+                <div className="text-center">
+                    <p className="font-genty text-2xl">Erro de permissão</p>
+                    <p className="font-bold text-muted-foreground text-sm">Você não tem permissão para acessar essa página</p>
+                </div>
             </div>
         </div>
-    );
+    </>);
 }

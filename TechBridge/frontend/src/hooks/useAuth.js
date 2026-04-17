@@ -37,16 +37,11 @@ export function useAuth({
 
         try {
             // Chamada à API
-            const response = await apiFetch(`${API_BASE_URL}/login`, {
+            const data = await apiFetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dadosLogin),
-                credentials: 'include',
                 ignoreAuthError: true
             });
-
-            // Convertendo a resposta para json
-            const data = await response.json();
 
             // Se a resposta veio com status de erro
             if (!data.sucesso) {
@@ -79,13 +74,10 @@ export function useAuth({
 
         try {
             // Chamada à API
-            const response = await apiFetch(`${API_BASE_URL}/perfil`, {
+            const data = await apiFetch(`${API_BASE_URL}/perfil`, {
                 method: 'GET',
                 credentials: 'include'
             });
-
-            // Convertendo a resposta para json
-            const data = await response.json();
 
             // Se a resposta veio com status de erro
             if (!data.sucesso) {
@@ -124,6 +116,8 @@ export function useAuth({
             setIsAuthenticated(false)
         } catch (err) {
             console.error(err);
+        } finally {
+            setLoading((prev) => ({ ...prev, logout: false }));
         }
     };
 

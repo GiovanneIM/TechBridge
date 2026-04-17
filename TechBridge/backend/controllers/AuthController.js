@@ -3,9 +3,9 @@ import UsuarioModel from '../models/UserModel.js';
 import { JWT_CONFIG } from '../config/jwt.js';
 
 const tiposDeUsuario = {
-    '1': 'Admin TechBridge',
-    '2': 'Gerente',
-    '3': 'Técnico',
+    '1': 'admin',
+    '2': 'gerente',
+    '3': 'tecnico',
 }
 
 
