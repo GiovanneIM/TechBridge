@@ -32,7 +32,7 @@ CREATE TABLE usuarios (
 INSERT INTO usuarios (nome, email, senha, tipo_usuario, id_empresa)
 VALUES 
 	('Kim Minji', 'admin@tb.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 1, null),
-	('Poliwag', 'admcliente@email.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 2, 1),
+	('Poliwag', 'gerente@email.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 2, 1),
 	('Izuku Midoriya', 'tecnico@email.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 3, 1)
 ;
 
