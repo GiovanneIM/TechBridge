@@ -19,11 +19,11 @@ export default function UserLayout({ children }) {
 	const { loading, isAuthenticated } = useAuth()
 
     // VERIFICANDO SE HÁ UM USUÁRIO LOGADO
-	useEffect(() => {
-		if (!loading.perfil && !isAuthenticated) {
-			router.replace('/acesso-negado');
-		}
-	}, [loading.perfil, isAuthenticated]);
+	// useEffect(() => {
+	// 	if (!loading.perfil && !isAuthenticated) {
+	// 		router.replace('/acesso-negado');
+	// 	}
+	// }, [loading.perfil, isAuthenticated]);
 
 
 	// CARREGANDO PERFIL

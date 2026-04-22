@@ -114,6 +114,45 @@ const swaggerOptions = {
 						senhaNova: { type: 'string', example: '654321' },
 					}
 				},
+				NewCompany: {
+					type: 'object',
+					required: ['empresa', 'gerente'],
+					properties: {
+
+						empresa: {
+							type: 'object',
+							required: ['nome_fantasia', 'razao_social', 'cnpj', 'endereco'],
+							properties: {
+								nome_fantasia: { type: 'string', example: 'Techbridge Interprise' },
+								razao_social: { type: 'string', example: 'Techbridge LTDA' },
+								cnpj: { type: 'string', example: '12345678000190' },
+
+								endereco: {
+									type: 'object',
+									required: ['cep', 'rua', 'numero', 'bairro', 'cidade', 'estado'],
+									properties: {
+										cep: { type: 'string', example: '09572000' },
+										rua: { type: 'string', example: 'Rua Santo André' },
+										numero: { type: 'string', example: '680' },
+										complemento: { type: 'string', example: 'A' },
+										bairro: { type: 'string', example: 'Vila Palmares' },
+										cidade: { type: 'string', example: 'São Caetano do Sul' },
+										estado: { type: 'string', example: 'SP' }
+									}
+								}
+							}
+						},
+
+						gerente: {
+							type: 'object',
+							required: ['nome', 'email'],
+							properties: {
+								nome: { type: 'string', example: 'João de Souza' },
+								email: { type: 'string', example: 'joao@email.com' }
+							}
+						}
+					}
+				}
 			}
 		}
 	},
