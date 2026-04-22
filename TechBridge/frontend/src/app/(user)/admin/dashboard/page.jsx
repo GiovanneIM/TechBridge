@@ -1,4 +1,5 @@
-export default function Dashboard () {
-    return (<>
-    </>)
+import PageDashboard from "@/components/blocks/Pages/Admin/PageDashboard";
+
+export default function Dashboard() {
+    return (<PageDashboard />)
 }

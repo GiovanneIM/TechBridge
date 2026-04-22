@@ -56,7 +56,7 @@ export default function ItemColapsavel({ label, icon: Icon, lista }) {
                 group-data-[collapsible=icon]:px-3
                 group-data-[collapsible=icon]:aspect-square
 
-                ${isGroupActive && "bg-secondary text-techbridge"}
+                ${isGroupActive && "bg-secondary "}
             `}
         >
 
@@ -106,7 +106,7 @@ export default function ItemColapsavel({ label, icon: Icon, lista }) {
                                             w-full h-10 gap-2 px-3 text-md
                                             flex items-center justify-start 
                                             
-                                            ${(pathname === l.url || pathname === `${l.url}/`) && "bg-techbridge text-white"}
+                                            ${(pathname === l.url || pathname === `${l.url}/`) && "bg-techbridge font-semibold text-white"}
                                         `}
                                     >
                                         <Link href={l.url}>
@@ -144,21 +144,21 @@ export default function ItemColapsavel({ label, icon: Icon, lista }) {
                     {lista.map((l, i) => (
                         <SidebarMenuSub key={i}>
                             <SidebarMenuSubItem>
-                                <SidebarMenuSubButton
+                                <Button
                                     variant="ghost"
                                     asChild
                                     className={`
                                         w-full h-10 text-md gap-2 px-3
                                         flex items-center justify-start 
 
-                                        ${(pathname === l.url || pathname === `${l.url}/`) && "bg-techbridge text-white [&>svg]:text-white"}
+                                        ${(pathname === l.url || pathname === `${l.url}/`) && "bg-techbridge font-semibold text-white"}
                                     `}
                                 >
                                     <Link href={l.url}>
                                         <l.icon size={18} />
                                         <span>{l.label}</span>
                                     </Link>
-                                </SidebarMenuSubButton>
+                                </Button>
                             </SidebarMenuSubItem>
                         </SidebarMenuSub>
                     ))}

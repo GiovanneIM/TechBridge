@@ -24,7 +24,7 @@ export default function SidebarBase({ children, suporte }) {
     const nav_active = "bg-techbridge text-white text-md";
 
     return (
-        <div className={`h-full flex flex-col justify-between font-genty transition-[width] duration-1000 ease-in-out`}>
+        <div className={`h-full flex flex-col justify-between  transition-[width] duration-1000 ease-in-out`}>
             {/* LOGO */}
             <div className="px-2 py-2 md:hidden">
                 <Link

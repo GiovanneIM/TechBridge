@@ -31,7 +31,7 @@ export default function ItemSidebar({ icon: Icon, label, href }) {
                 group-data-[collapsible=icon]:aspect-square
                 
 
-                ${pathname.startsWith(href) && "bg-techbridge text-white"}
+                ${pathname.startsWith(href) && "bg-techbridge font-semibold text-white"}
             `}
         >
             <Link href={href}>
