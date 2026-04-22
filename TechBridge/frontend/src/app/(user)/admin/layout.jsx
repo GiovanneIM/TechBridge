@@ -22,7 +22,7 @@ export default function LayoutAdmin({ children }) {
 
     // VERIFICANDO SE O USUÁRIO É UM ADMIN
     useEffect(() => {
-        if (!loading.perfil && user?.tipo !== "admin") {
+        if (!loading.perfil && user?.cargo !== "admin") {
             router.replace('/permissao-negada');
         }
     }, [user, loading.perfil]);
@@ -32,7 +32,7 @@ export default function LayoutAdmin({ children }) {
     if (loading.perfil) return null;
 
     // USUÁRIO NÃO É UM ADMIN
-    if (user?.tipo !== "admin") return null;
+    if (user?.cargo !== "admin") return null;
 
 
     // O USUÁRIO É UM ADMIN

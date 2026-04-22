@@ -19,19 +19,19 @@ export default function LayoutGerente({ children }) {
     const router = useRouter()
     const { user, loading } = useAuth()
 
-    // // VERIFICANDO SE O USUÁRIO É UM GERENTE
-    // useEffect(() => {
-    //     if (!loading.perfil && user?.tipo !== "gerente") {
-    //         router.replace('/permissao-negada');
-    //     }
-    // }, [user, loading.perfil]);
+    // VERIFICANDO SE O USUÁRIO É UM GERENTE
+    useEffect(() => {
+        if (!loading.perfil && user?.cargo !== "gerente") {
+            router.replace('/permissao-negada');
+        }
+    }, [user, loading.perfil]);
 
 
     // // CARREGANDO PERFIL
-    // if (loading.perfil) return null;
+    if (loading.perfil) return null;
 
     // // USUÁRIO NÃO É UM GERENTE
-    // if (user?.tipo !== "gerente") return null;
+    if (user?.cargo !== "gerente") return null;
 
 
     // O USUÁRIO É UM GERENTE
