@@ -40,7 +40,7 @@ class UserModel {
                     "tu.descricao as cargo",
                     "e.nome_fantasia as empresa"
                 ],
-                where: { 'u.id': id },
+                where: { 'u.email': email },
                 join: [
                     { type: 'INNER', table: 'tipos_usuarios tu', on: 'tu.id = u.tipo_usuario' },
                     { type: 'LEFT', table: 'empresas e', on: 'e.id = u.id_empresa' }

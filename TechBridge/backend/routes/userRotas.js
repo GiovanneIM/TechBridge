@@ -24,7 +24,7 @@ router.options('/senha', (req, res) => {
 });
 
 // Listar Usuários
-router.get('/buscar', authMiddleware, UserController.listarTecnicos2)
+router.get('/buscar', authMiddleware, UserController.listarTecnicos)
 
 
 

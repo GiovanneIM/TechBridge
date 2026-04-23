@@ -29,7 +29,7 @@ class UserController {
             //     });
             // }
             const id_empresa = req.usuario.id_empresa
-            const tecnicos = await UserModel.listarTecnicos(id_empresa);
+            const tecnicos = await UserModel.listarUsuarios(1);
 
             // Remover senha de todos os usuários
             const tecnicosSemSenha = tecnicos.map(({ senha, ...tecnico }) => tecnico);
