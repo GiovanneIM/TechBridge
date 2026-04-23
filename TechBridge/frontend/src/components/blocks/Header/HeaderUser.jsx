@@ -69,7 +69,7 @@ export default function HeaderUser() {
                         <div className="flex items-center gap-2">
                             <div className="flex flex-col items-end">
                                 <div className="font-genty text-foreground text-md">{user.nome}</div>
-                                <div className="font-genty text-muted-foreground text-sm">{user.cargo}</div>
+                                <div className="font-genty text-muted-foreground text-sm">{user.cargo} - {user.empresa}</div>
                             </div>
 
                             <Avatar size="lg">

@@ -1,14 +1,12 @@
-// LAYOUT RAIZ - SEM HEADER E FOOTER
+// LAYOUT RAIZ
 
-import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
 // Fontes
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local"
-
-import LogOut from "@/components/blocks/Overlays/LogOut";
-import NotAuthenticated from "@/components/blocks/Overlays/NotAuthentificated";
+import Script from "next/script";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -30,7 +28,7 @@ const gentySans = localFont({
 export const metadata = {
 	title: "TechBridge",
 	icons: {
-		icon: "/TechBridge/tb.svg",
+		icon: "/TechBridge/TB.svg",
 	},
 };
 
@@ -43,7 +41,6 @@ export default function RootLayout({ children }) {
 					`}
 			>
 				<AuthProvider>
-					<LogOut/>
 					{children}
 				</AuthProvider>
 			</body>

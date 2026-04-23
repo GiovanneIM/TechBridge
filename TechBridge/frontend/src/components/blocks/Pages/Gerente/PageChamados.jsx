@@ -1,7 +1,7 @@
 "use client"
 
-import ErrorPage from '../../HolderPages/ErrorPage';
-import LoadingPage from '../../HolderPages/LoadingPage';
+import ErrorPage from '../../Holders/ErrorPage';
+import LoadingPage from '../../Holders/LoadingPage';
 import HeaderPage from '../../Header/HeaderPage';
 
 import { RotateCw, Siren } from "lucide-react";
@@ -73,7 +73,7 @@ export default function PageChamados({
         <div className="flex-1 flex flex-col">
             {/* Header da página */}
             <HeaderPage
-                icon={<Siren />}
+                icon={Siren}
                 title="Chamados"
                 actions={[
                     loadingChamados.fetch

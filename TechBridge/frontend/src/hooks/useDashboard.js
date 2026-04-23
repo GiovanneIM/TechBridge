@@ -27,7 +27,7 @@ export function useDashboard({
 
         try {
             // Chamada à API
-            const response = await apiFetch(`${API_BASE_ENDPOINT}`, {
+            const data = await apiFetch(`${API_BASE_ENDPOINT}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,12 +36,6 @@ export function useDashboard({
                 credentials: 'include'
                 
             });
-
-            // Convertendo a resposta para json
-            const data = await response.json();
-
-            console.log(data);
-            
 
             // Se a resposta veio com status de erro
             if (!data.sucesso) {

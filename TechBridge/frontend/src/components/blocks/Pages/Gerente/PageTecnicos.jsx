@@ -1,29 +1,34 @@
 'use client'
 
-import ErrorPage from '../../HolderPages/ErrorPage';
-import LoadingPage from '../../HolderPages/LoadingPage';
+import ErrorPage from '../../Holders/ErrorPage';
+import LoadingPage from '../../Holders/LoadingPage';
 import HeaderPage from '../../Header/HeaderPage';
 
+import { useState } from "react";
 import { useUsers } from "@/hooks/useUsers"
+
+import { CardTecnico } from "../../../card/cardTecnicos/page"
+import ModalNovoTecnico from '@/components/modals/addTecnico';
 
 import { UserCog2, RotateCw } from 'lucide-react';
 
-import { CardTecnico } from "../../../card/cardTecnicos/page"
 
 export default function PageTecnicos({
     tecnicosIniciais = []
 }) {
     const {
         tecnicos,
-        loading,
-        error,
+        loadingTecnicos,
+        errorTecnicos,
     } = useUsers({
         tecnicosIniciais,
         fetchOnMount: tecnicosIniciais.length === 0
     })
 
+
+
     // Verificando se a página está sendo carregada pela primeira vez
-    const isFirstLoad = loading.fetch && (tecnicos ?? []).length === 0;
+    const isFirstLoad = loadingTecnicos.fetch && (tecnicos ?? []).length === 0;
 
     // Conteúdo da página
     let content;
@@ -39,7 +44,7 @@ export default function PageTecnicos({
     }
 
     // Se houve erro ao carregar
-    else if (error.fetch) {
+    else if (errorTecnicos.fetch) {
         content = (
             <ErrorPage
                 errorTitle={"Erro ao carregar técnicos"}
@@ -52,14 +57,20 @@ export default function PageTecnicos({
     }
 
     // Se estiver recarregando os dados
-    else if (loading.fetch) {
+    else if (loadingTecnicos.fetch) {
         content = (<></>)
     }
 
     // Dados carregados e sem erro
     else {
         content = (<>
+            <div className="p-3">
+                <ModalNovoTecnico />
+            </div>
+
             <div className="grid grid-cols-5 w-full h-50 py-5 px-5 gap-5">
+
+
                 {tecnicos.map((t, i) => (
                     <CardTecnico key={i} nome={t.nome} empresa={t.id_empresa} imagem={t.foto_perfil} email={t.email}></CardTecnico>
                 ))}
@@ -71,10 +82,10 @@ export default function PageTecnicos({
         <div className="flex-1 flex flex-col">
             {/* Header da página */}
             <HeaderPage
-                icon={<UserCog2 />}
+                icon={UserCog2}
                 title="Tecnicos"
                 actions={[
-                    loading.fetch
+                    loadingTecnicos.fetch
                         ? {
                             icon: <RotateCw />,
                             text: "Carregando",

@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
 import { useAuth } from "@/context/AuthContext";
 
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import Image from "next/image";
 
@@ -28,9 +28,14 @@ export default function Home() {
 	const router = useRouter()
 	const formRef = useRef(null)
 	const comoRef = useRef(null)
-	const { isAuthenticated } = useAuth()
+	const { isAuthenticated, user } = useAuth()
 
-	if (isAuthenticated) { router.push('/dashboard') }
+	// Se houver um usuário logado, o redireciona até a página dashboard
+	useEffect(() => {
+		if (isAuthenticated && user) {
+			router.replace(`/${user.cargo}/dashboard`);
+		}
+	}, [user, isAuthenticated]);
 
 	return (
 		<div className="w-full">
@@ -46,13 +51,13 @@ export default function Home() {
 
 					<div className="flex flex-col sm:flex-row gap-3">
 						<Button
-							size="lg" className="bg-techbridge text-white cursor-pointer hover:animate-wiggle hover:text-background font-bold"
+							size="lg" className="bg-techbridge text-white cursor-pointer hover:animate-wiggle"
 							onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth' })}
 						>
 							Entrar em contato
 						</Button>
 						<Button
-							variant="outline" size="lg" className="bg-secondary text-foreground cursor-pointer hover:bg-foreground hover:text-background hover:animate-wiggle font-bold"
+							variant="outline" size="lg" className="bg-secondary text-foreground cursor-pointer hover:bg-foreground hover:text-background dark:hover:text-white hover:animate-wiggle"
 							onClick={() => comoRef.current?.scrollIntoView({ behavior: 'smooth' })}
 						>
 							Conheça nosso serviço
@@ -123,7 +128,7 @@ export default function Home() {
 					<FieldGroup className='flex items-center gap-4'>
 						<div className="w-full flex flex-col md:flex-row gap-4">
 							<Field className="md:w-1/2">
-								<FieldLabel className="font-genty text-muted-foreground">Nome</FieldLabel>
+								<FieldLabel className="font-semibold text-muted-foreground">Nome</FieldLabel>
 								<InputGroup>
 									<InputGroupInput placeholder="Nome" />
 									<InputGroupAddon>
@@ -133,7 +138,7 @@ export default function Home() {
 							</Field>
 
 							<Field className="md:w-1/2">
-								<FieldLabel className="font-genty text-muted-foreground">E-mail</FieldLabel>
+								<FieldLabel className="font-semibold text-muted-foreground">E-mail</FieldLabel>
 								<InputGroup>
 									<InputGroupInput placeholder="E-mail para contato" />
 									<InputGroupAddon>
@@ -144,7 +149,7 @@ export default function Home() {
 						</div>
 
 						<Field>
-							<FieldLabel className="font-genty text-muted-foreground">Empresa</FieldLabel>
+							<FieldLabel className="font-semibold text-muted-foreground">Empresa</FieldLabel>
 							<InputGroup className='w-1/2'>
 								<InputGroupInput placeholder="Empresa" />
 								<InputGroupAddon>
@@ -154,7 +159,7 @@ export default function Home() {
 						</Field>
 
 						<Field>
-							<FieldLabel className="font-genty text-muted-foreground">Mensagem</FieldLabel>
+							<FieldLabel className="font-semibold text-muted-foreground">Mensagem</FieldLabel>
 							<InputGroup>
 								<InputGroupTextarea
 									id="block-start-textarea"
@@ -164,7 +169,7 @@ export default function Home() {
 							</InputGroup>
 						</Field>
 
-						<Button className="w-full md:w-sm bg-techbridge font-bold text-white">Entrar em contato</Button>
+						<Button className="cursor-pointer w-full md:w-sm bg-techbridge font-semibold text-white">Entrar em contato</Button>
 					</FieldGroup>
 				</Card>
 			</div>
@@ -265,7 +270,7 @@ function Cards() {
 
 							{/* Conteúdo do card */}
 							<CardContent className="px-4">
-								<ul className="text-muted-foreground text-justify font-genty text-sm">
+								<ul className="text-muted-foreground text-justify font-semibold text-sm">
 									{cont.list.map((l, j) => {
 										return (<li key={j} className="mt-3">{l}</li>)
 									})}

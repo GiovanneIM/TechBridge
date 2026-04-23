@@ -9,15 +9,15 @@ USE TECHBRIDGE;
 
 -- Criando a tabela de tipos de usuários
 CREATE TABLE tipos_usuarios (
-    id 			INT 				AUTO_INCREMENT PRIMARY KEY,
-    descricao 	VARCHAR(100) 		NOT NULL UNIQUE
+    id 				INT 				AUTO_INCREMENT PRIMARY KEY,
+    descricao 		VARCHAR(100) 		NOT NULL UNIQUE
 );
 
 
 -- Inserindo os tipos de usuários
 INSERT INTO tipos_usuarios (descricao)
 VALUES 
-	('admin_TechBridge'),
-	('admin_Cliente'),
+	('administrador'),
+	('gerente'),
 	('tecnico')
 ;

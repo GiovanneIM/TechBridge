@@ -38,7 +38,7 @@ export default function LinhaUm({ dashboard, loading }) {
         >
             <Card className="flex justify-between py-4 gap-0">
                 <CardHeader>
-                    <CardTitle className="font-bold text-md h-12">
+                    <CardTitle className="text-md h-12">
                         Total de chamados
                     </CardTitle>
                 </CardHeader>
@@ -51,7 +51,7 @@ export default function LinhaUm({ dashboard, loading }) {
 
             <Card className="flex justify-between py-4 gap-0">
                 <CardHeader>
-                    <CardTitle className="font-bold text-md h-12">
+                    <CardTitle className="text-md h-12">
                         Tempo médio de espera
                     </CardTitle>
                 </CardHeader>
@@ -63,7 +63,7 @@ export default function LinhaUm({ dashboard, loading }) {
 
             <Card className="flex justify-between py-4 gap-0">
                 <CardHeader>
-                    <CardTitle className="font-bold text-md h-12">
+                    <CardTitle className="text-md h-12">
                         Tempo médio de atendimento
                     </CardTitle>
                 </CardHeader>
@@ -75,7 +75,7 @@ export default function LinhaUm({ dashboard, loading }) {
 
             <Card className="flex justify-between py-4 gap-0">
                 <CardHeader>
-                    <CardTitle className="font-bold text-md h-12">
+                    <CardTitle className="text-md h-12">
                         Tempo médio de reparo
                     </CardTitle>
                 </CardHeader>

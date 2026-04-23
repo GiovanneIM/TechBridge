@@ -44,10 +44,10 @@ const chartConfig = {
 }
 
 export default function LinhaEstados({
-    chamadosPorDia
+    chamadosPorDia = []
 }) {
 
-    const chartData = chamadosPorDia.map((item, index, arr) => {
+    const chartData = chamadosPorDia?.map((item, index, arr) => {
         const abertos = Number(item.abertos)
         const concluidos = Number(item.concluidos)
         

@@ -25,26 +25,13 @@ import {
 } from "@/components/ui/input-group";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Separator } from "../../ui/separator";
+import HeaderPage from "../Header/HeaderPage";
 
 export default function PageSuporte() {
     return (
         <div className='flex-1 flex flex-col'>
             {/* Header da página */}
-            <div
-                className="
-                flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] 
-                ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12
-            "
-            >
-                <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
-                    <CircleQuestionMark className="-ml-1" />
-
-                    <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-6" />
-
-                    <h1 className="text-base font-genty">Suporte</h1>
-                </div>
-            </div>
+            <HeaderPage icon={CircleQuestionMark} title={'Suporte'}/>
 
             <div className="w-full flex flex-col xl:flex-row justify-center items-center xl:items-stretch gap-4 mb-12 mt-4 px-2 sm:px-4">
 
@@ -111,7 +98,7 @@ export default function PageSuporte() {
                             <FieldGroup className='flex items-center gap-4'>
                                 <div className="w-full flex flex-col md:flex-row gap-4">
                                     <Field className="md:w-1/2">
-                                        <FieldLabel className="font-genty text-muted-foreground">Nome</FieldLabel>
+                                        <FieldLabel className="font-semibold text-muted-foreground">Nome</FieldLabel>
                                         <InputGroup>
                                             <InputGroupInput placeholder="Nome" />
                                             <InputGroupAddon>
@@ -121,7 +108,7 @@ export default function PageSuporte() {
                                     </Field>
 
                                     <Field className="md:w-1/2">
-                                        <FieldLabel className="font-genty text-muted-foreground">E-mail</FieldLabel>
+                                        <FieldLabel className="font-semibold text-muted-foreground">E-mail</FieldLabel>
                                         <InputGroup>
                                             <InputGroupInput placeholder="E-mail para contato" />
                                             <InputGroupAddon>
@@ -132,7 +119,7 @@ export default function PageSuporte() {
                                 </div>
 
                                 <Field>
-                                    <FieldLabel className="font-genty text-muted-foreground">Mensagem</FieldLabel>
+                                    <FieldLabel className="font-semibold text-muted-foreground">Mensagem</FieldLabel>
                                     <InputGroup>
                                         <InputGroupTextarea
                                             id="block-start-textarea"

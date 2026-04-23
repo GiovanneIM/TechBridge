@@ -14,12 +14,12 @@ export function useUsers({
     const [tecnicos, setTecnicos] = useState(tecnicosIniciais);
 
     // Estado que indica se há uma requisição em andamento
-    const [loading, setLoading] = useState({
+    const [loadingTecnicos, setLoading] = useState({
         fetch: false,
     });
 
     // Estado para armazenar mensagem de erro (se houver)
-    const [error, setError] = useState({
+    const [errorTecnicos, setError] = useState({
         fetch: null,
     });
 
@@ -30,12 +30,7 @@ export function useUsers({
 
         try {
             // Chamada à API
-            const response = await apiFetch(API_BASE_URL + '/tecnicos');
-
-            // Convertendo a resposta para json
-            const data = await response.json();
-            console.log(data);
-            
+            const data = await apiFetch(API_BASE_URL + '/tecnicos');
 
             // Se a resposta veio com status de erro
             if (!data.sucesso) {

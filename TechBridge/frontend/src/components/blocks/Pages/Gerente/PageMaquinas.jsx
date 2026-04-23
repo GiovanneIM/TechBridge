@@ -1,7 +1,7 @@
 'use client'
 
-import ErrorPage from '../../HolderPages/ErrorPage';
-import LoadingPage from '../../HolderPages/LoadingPage';
+import ErrorPage from '../../Holders/ErrorPage';
+import LoadingPage from '../../Holders/LoadingPage';
 import HeaderPage from '../../Header/HeaderPage';
 
 import { Grid2X2, RotateCw } from 'lucide-react';
@@ -57,7 +57,7 @@ export default function PageMaquinas({
         <div className="flex-1 flex flex-col">
             {/* Header da página */}
             <HeaderPage
-                icon={<Grid2X2 />}
+                icon={Grid2X2}
                 title="Maquinas"
                 actions={[
                     loadingMaquinas

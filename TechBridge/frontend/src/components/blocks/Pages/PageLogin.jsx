@@ -34,20 +34,23 @@ export default function PageLogin() {
 		loading,
 		error,
 		login,
+		isAuthenticated
 	} = useAuth()
 
 	// Se houver um usuário logado, o redireciona até a página dashboard
 	useEffect(() => {
-		if (user) {
-			router.push('/dashboard');
+		if (isAuthenticated && user) {
+			router.replace(`/${user.cargo}/dashboard`);
 		}
-	}, [user, router]);
+	}, [user, isAuthenticated]);
 
 	// Controlando o estado dos inputs
 	const [email, setEmail] = useState('');
 	const [senha, setSenha] = useState('');
 
 
+	if (isAuthenticated) return null;
+	
 	return (
 		<div className="w-vw h-svh flex justify-center items-center flex-wrap">
 			{/* Background */}
@@ -103,7 +106,7 @@ export default function PageLogin() {
 
 							<FieldGroup className="px-4">
 								<Field >
-									<FieldLabel htmlFor="emailLogin" className="font-genty text-muted-foreground">
+									<FieldLabel htmlFor="emailLogin" className="font-semibold text-muted-foreground">
 										E-mail
 									</FieldLabel>
 									<InputGroup className='w-1/2'>
@@ -124,7 +127,7 @@ export default function PageLogin() {
 								</Field>
 
 								<Field>
-									<FieldLabel htmlFor="senhaLogin" className="font-genty text-muted-foreground">
+									<FieldLabel htmlFor="senhaLogin" className="font-semibold text-muted-foreground">
 										Senha
 									</FieldLabel>
 									<InputGroup className='w-1/2'>
