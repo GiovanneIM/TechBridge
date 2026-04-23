@@ -36,7 +36,7 @@ class UserController {
 
             res.status(200).json({
                 sucesso: true,
-                dados: {tecnicos : tecnicosSemSenha},
+                dados: { tecnicos: tecnicosSemSenha },
                 // paginacao: {
                 //     pagina: resultado.pagina,
                 //     limite: resultado.limite,
@@ -318,7 +318,27 @@ class UserController {
         }
     }
 
+    //LISTANDO USUÁRIOS
+    static async listarTecnicos2(req, res) {
+        try {
+            // Chamando o model para fazer a consulta
+            const resultado = await UserModel.listarTecnicos2();
 
+            // Respondendo a requisição com os usuários
+            res.status(200).json({
+                sucesso: true,
+                dados: { tecnicos: resultado.tecnicos }
+            });
+
+        } catch (error) {
+            console.error('Erro ao listar os usuários:', error);
+            res.status(500).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Não foi possível listar os usuários'
+            });
+        }
+    }
 
 }
 

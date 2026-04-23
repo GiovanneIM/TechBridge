@@ -23,7 +23,8 @@ router.options('/senha', (req, res) => {
     res.sendStatus(200);
 });
 
-
+// Listar Usuários
+router.get('/buscar', authMiddleware, UserController.listarTecnicos2)
 
 
 

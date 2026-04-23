@@ -10,7 +10,7 @@ export function useUsers({
     fetchOnMount = false
 } = {}
 ) {
-    // Estado com as setores
+    // Estado com os técnicos
     const [tecnicos, setTecnicos] = useState(tecnicosIniciais);
 
     // Estado que indica se há uma requisição em andamento
@@ -23,7 +23,7 @@ export function useUsers({
         fetch: null,
     });
 
-    // Busca todas as setores
+    // Busca todas os técnicos
     const fetchTecnicos = useCallback(async () => {
         setLoading((prev) => ({ ...prev, fetch: true }));
         setError((prev) => ({ ...prev, fetch: null }));
@@ -37,7 +37,7 @@ export function useUsers({
                 setError((prev) => ({ ...prev, fetch: data.mensagem }))
             }
             else {
-                // Atualizando o estado das setores
+                // Atualizando o estado dos tecnicos 
                 setTecnicos(data.dados.tecnicos)
             }
 
@@ -58,7 +58,8 @@ export function useUsers({
 
     return {
         tecnicos,
-        loadingTecnicos,
-        errorTecnicos
+        loading,
+        error,
+        refetchTecnicos: fetchTecnicos
     };
 }

@@ -190,7 +190,9 @@ class UserModel {
             throw error;
         }
     }
-
 }
 
 export default UserModel;
+
+
+
