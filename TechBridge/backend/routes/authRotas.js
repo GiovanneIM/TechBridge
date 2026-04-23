@@ -1,3 +1,5 @@
+// ROTAS PARA CONTROLE DE SESSÃO DO USUÁRIO
+
 import express from 'express';
 import AuthController from '../controllers/AuthController.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';

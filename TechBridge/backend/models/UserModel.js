@@ -2,8 +2,103 @@ import { create, read, update, deleteRecord, comparePassword, hashPassword, getC
 
 // Model para operações com usuários
 class UserModel {
+    // VERIFICAR CREDENCIAIS DE LOGIN
+    static async verificarCredenciais(email, senha) {
+        try {
+            // BUSCAR O USUÁRIO
+            const usuario = await this.buscarPorEmail(email);
 
-    // Atualizar informações do usuário (Nome e email)
+            // USUÁRIO NÃO ENCONTRADO
+            if (!usuario) return null;
+
+            // COMPARAR A SENHA
+            const senhaValida = await comparePassword(senha, usuario.senha);
+
+            // SENHA ERRADA
+            if (!senhaValida) return null;
+
+            // REMOVER A SENHA DO USUÁRIO
+            const { senha: _, ...usuarioSemSenha } = usuario;
+
+            // RETORNAR O USUÁRIO SEM SENHA
+            return usuarioSemSenha;
+        } catch (error) {
+            console.error('Erro ao verificar credenciais:', error);
+            throw error;
+        }
+    }
+
+
+
+    // BUSCAR O USUÁRIO POR E-MAIL
+    static async buscarPorEmail(email) {
+        try {
+            // FAZER A CONSULTA
+            const rows = await read('usuarios u', {
+                columns: [
+                    "u.*",
+                    "tu.descricao as cargo",
+                    "e.nome_fantasia as empresa"
+                ],
+                where: { 'u.id': id },
+                join: [
+                    { type: 'INNER', table: 'tipos_usuarios tu', on: 'tu.id = u.tipo_usuario' },
+                    { type: 'LEFT', table: 'empresas e', on: 'e.id = u.id_empresa' }
+                ]
+            });
+
+            // RETORNAR O PRIMEIRO DADO ENCONTRADO
+            return rows[0] || null;
+        } catch (error) {
+            console.error('Erro ao buscar usuário por email:', error);
+            throw error;
+        }
+    }
+
+    // BUSCAR USUÁRIO POR ID
+    static async buscarPorId(id) {
+        try {
+            // FAZER A CONSULTA
+            const rows = await read('usuarios u', {
+                columns: [
+                    "u.*",
+                    "tu.descricao as cargo",
+                    "e.nome_fantasia as empresa"
+                ],
+                where: { 'u.id': id },
+                join: [
+                    { type: 'INNER', table: 'tipos_usuarios tu', on: 'tu.id = u.tipo_usuario' },
+                    { type: 'LEFT', table: 'empresas e', on: 'e.id = u.id_empresa' }
+                ]
+            });
+
+            // RETORNAR O PRIMEIRO DADO ENCONTRADO
+            return rows[0] || null;
+        } catch (error) {
+            console.error('Erro ao buscar usuário por ID:', error);
+            throw error;
+        }
+    }
+
+    // LISTAR USUÁRIOS DE UMA EMPRESA
+    static async listarUsuarios(id_empresa) {
+        try {
+            // FAZER A CONSULTA
+            const usuarios = await read("usuarios", {
+                where: { id_empresa }
+            })
+
+            // RETORNANDO OS USUARIOS
+            return usuarios
+        } catch (error) {
+            console.error('Erro ao listar usuários:', error);
+            throw error;
+        }
+    }
+
+
+
+    // ATUALIZAR INFORMAÇÕES DO USUÁRIO (Exceto senha e foto)
     static async atualizarInformacoes(id, dadosUsuario) {
         try {
             return await update('usuarios', dadosUsuario, `id = ${id}`);
@@ -13,27 +108,43 @@ class UserModel {
         }
     }
 
-    // Atualizar senha do usuário
+    // VERIFICAR SE O E-MAIL ESTÁ EM USO POR OUTRO USUÁRIO
+    static async emailEmUso(email, idUsuario) {
+        try {
+            const rows = await read('usuarios', { where: { email, id: `!= ${idUsuario}` } });
+
+            return rows.length > 0;
+        } catch (error) {
+            console.error('Erro ao buscar usuário por E-mail:', error);
+            throw error;
+        }
+    }
+
+    // ATUALIZAR A SENHA
     static async atualizarSenha(id, senhaAtual, senhaNova) {
         try {
-            // Buscando pelo usuário
+            // BUSCAR PELO USUÁRIO
             const usuario = await this.buscarPorId(id);
             if (!usuario) { throw new Error('Usuário não encontrado'); }
 
-            // Verificando senha atual
-            const senhaValida = await comparePassword(senhaAtual, usuario.senha);
-            if (!senhaValida) { throw new Error('Senha incorreta'); }
+            // VERIFICAR A SENHA ATUAL
+            const senhaCorreta = await comparePassword(senhaAtual, usuario.senha);
+            if (!senhaCorreta) { throw new Error('Senha incorreta'); }
 
-            // Criptografando a senha nova
+            // GERAR HASH DA SENHA NOVA
             const senhaNovaHash = await hashPassword(senhaNova);
 
-            // Atualizando a senha
+            // ATUALIZAR A SENHA
             return await update('usuarios', { senha: senhaNovaHash }, `id = ${id}`);
         } catch (error) {
             console.error('Erro ao atualizar usuário:', error);
             throw error;
         }
     }
+
+
+
+
 
     // Atualizar foto de perfil do usuário
     static async atualizarFoto(id, fotoNova) {
@@ -53,68 +164,7 @@ class UserModel {
 
 
 
-    // Buscar um usuário por ID
-    static async buscarPorId(id) {
-        try {
-            const rows = await read('usuarios u', {
-                columns: ["u.*", "e.nome_fantasia as empresa"],
-                where: { 'u.id': id },
-                join: [
-                    { type: 'LEFT', table: 'empresas e', on: 'e.id = u.id_empresa' }
-                ]
-            });
 
-            return rows[0] || null;
-        } catch (error) {
-            console.error('Erro ao buscar usuário por ID:', error);
-            throw error;
-        }
-    }
-
-    // Verificar se um e-mail está em uso por outro usuário
-    static async emailEmUso(email, idUsuario) {
-        try {
-            const rows = await read('usuarios', { where: { email, id: `!= ${idUsuario}` } });
-
-            return rows.length > 0;
-        } catch (error) {
-            console.error('Erro ao buscar usuário por E-mail:', error);
-            throw error;
-        }
-    }
-
-
-
-    // Listar todos os usuários (com paginação)
-    static async listarTecnicos(id_empresa) {
-        try {
-            const tecnicos = await read("usuarios", { where: { id_empresa, tipo_usuario: 3 } })
-
-            return tecnicos
-        } catch (error) {
-            console.error('Erro ao listar usuários:', error);
-            throw error;
-        }
-    }
-
-
-
-    // Buscar usuário por email
-    static async buscarPorEmail(email) {
-        try {
-            const rows = await read('usuarios u', {
-                columns: ["u.*", "e.nome_fantasia as empresa"],
-                where: { email },
-                join: [
-                    { type: 'LEFT', table: 'empresas e', on: 'e.id = u.id_empresa' }
-                ]
-            });
-            return rows[0] || null;
-        } catch (error) {
-            console.error('Erro ao buscar usuário por email:', error);
-            throw error;
-        }
-    }
 
     // Criar novo usuário
     static async criar(dadosUsuario) {
@@ -133,8 +183,6 @@ class UserModel {
         }
     }
 
-
-
     // Excluir usuário
     static async excluir(id) {
         try {
@@ -145,33 +193,8 @@ class UserModel {
         }
     }
 
-    // Verificar credenciais de login
-    static async verificarCredenciais(email, senha) {
-        try {
-            // Obtendo o usuário
-            const usuario = await this.buscarPorEmail(email);
 
-            // Usuário não encontrado
-            if (!usuario) {
-                return null;
-            }
 
-            // Comparando a senha
-            const senhaValida = await comparePassword(senha, usuario.senha);
-
-            // Senha errada
-            if (!senhaValida) {
-                return null;
-            }
-
-            // Retornando usuário sem a senha
-            const { senha: _, ...usuarioSemSenha } = usuario;
-            return usuarioSemSenha;
-        } catch (error) {
-            console.error('Erro ao verificar credenciais:', error);
-            throw error;
-        }
-    }
 }
 
 export default UserModel;

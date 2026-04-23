@@ -87,6 +87,7 @@ INNER JOIN maquinas m on m.id = c.id_maquina
 LEFT JOIN usuarios u on u.id = c.id_tecnico;
     
     
-SELECT u.*, e.nome_fantasia
+SELECT u.*, tu.descricao, e.nome_fantasia
 FROM usuarios u
+INNER JOIN tipos_usuarios tu ON tu.id = u.tipo_usuario
 LEFT JOIN empresas e ON e.id = u.id_empresa;

@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
-import UsuarioModel from '../models/UserModel.js';
+import UserModel from '../models/UserModel.js';
 import { JWT_CONFIG } from '../config/jwt.js';
+import { validarEmail, validarNome, validarSenha } from '../utils/validacoes.js';
 
 const tiposDeUsuario = {
     '1': 'admin',
@@ -13,44 +14,35 @@ const tiposDeUsuario = {
 
 class AuthController {
 
-    // POST /auth/login - Rota para fazer login
+    // POST /auth/login - FAZER LOGIN
     static async login(req, res) {
         try {
-            // Obtendo o email e a senha do corpo da requisição
+            // RECEBER E-MAIL E SENHA
             const { email, senha } = req.body;
 
-            // Verificando se o email foi enviado
-            if (!email || email.trim() === '') {
+
+            // VALIDAÇÃO DE E-MAIL
+            const validacaoEmail = validarEmail(email)
+            if (!validacaoEmail.sucesso) {
                 return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Email obrigatório',
-                    mensagem: 'O email é obrigatório'
-                });
+                    ...validacaoEmail
+                })
             }
 
-            // Verificando se a senha foi enviada
-            if (!senha || senha.trim() === '') {
+            // VALIDAÇÃO DE SENHA
+            const validacaoSenha = validarSenha(senha)
+            if (!validacaoSenha.sucesso) {
                 return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Senha obrigatória',
-                    mensagem: 'A senha é obrigatória'
-                });
+                    ...validacaoSenha
+                })
             }
 
-            // Validação básica de formato de email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Email inválido',
-                    mensagem: 'Formato de email inválido'
-                });
-            }
 
-            // Verificar credenciais
-            const usuario = await UsuarioModel.verificarCredenciais(email.trim(), senha);
+            // VERIFICAR CREDENCIAIS
+            const usuario = await UserModel.verificarCredenciais(email.trim(), senha);
 
-            // Caso o usuário não tenha sido encontrado
+
+            // CASO O USUÁRIO NÃO TENHA SIDO ENVIADO
             if (!usuario) {
                 return res.status(401).json({
                     sucesso: false,
@@ -59,7 +51,8 @@ class AuthController {
                 });
             }
 
-            // Gerar token JWT
+
+            // GERAR TOKEN JWT
             const token = jwt.sign(
                 {
                     id: usuario.id,
@@ -71,7 +64,8 @@ class AuthController {
                 { expiresIn: JWT_CONFIG.expiresIn }
             );
 
-            // Gerar cookie
+
+            // GERAR COOKIE
             res.cookie('token', token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
@@ -79,7 +73,7 @@ class AuthController {
                 maxAge: 1000 * 60 * 60 * 2
             });
 
-            // Respondendo com os dados do usuário
+            // SUCESSO: ENVIAR DADOS DO USUÁRIO E TOKEN
             res.status(200).json({
                 sucesso: true,
                 mensagem: 'Login efetuado com sucesso',
@@ -94,6 +88,8 @@ class AuthController {
 
         } catch (error) {
             console.error('Erro ao fazer login:', error);
+
+            // ERRO DO SERVIDOR
             res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
@@ -102,27 +98,29 @@ class AuthController {
         }
     }
 
-    // POST /auth/logout - Rota para excluir o cookie e fazer logout
+    // POST /auth/logout - APAGAR COOKIE 
     static async logout(req, res) {
+        // APAGAR COOKIE
         res.clearCookie('token', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
         });
 
+        // SUCESSO: ENVIAR MENSAGEM
         return res.status(200).json({
             sucesso: true,
             mensagem: 'Logout realizado com sucesso'
         });
     }
 
-    // GET /auth/perfil - Rota para obter perfil do usuário logado
+    // GET /auth/perfil - OBTER PERFIL
     static async obterPerfil(req, res) {
         try {
-            // Buscando o usuário
-            const usuario = await UsuarioModel.buscarPorId(req.usuario.id);
+            // BUSCANDO O USUÁRIO LOGADO
+            const usuario = await UserModel.buscarPorId(req.usuario.id);
 
-            // Se o usuário não foi encontrado
+            // USUÁRIO NÃO ENCONTRADO
             if (!usuario) {
                 return res.status(404).json({
                     sucesso: false,
@@ -131,16 +129,15 @@ class AuthController {
                 });
             }
 
-            // Remover senha dos dados retornados
+            // REMOVER SENHA DOS DADOS
             const { senha: _, ...usuarioSemSenha } = usuario;
 
-            // Retornando os dados do usuário
+            // SUCESSO: ENVIAR DADOS DO USUÁRIO
             res.status(200).json({
                 sucesso: true,
                 dados: {
                     usuario: {
-                        ...usuarioSemSenha,
-                        cargo: tiposDeUsuario[usuario.tipo_usuario]
+                        ...usuarioSemSenha
                     }
                 }
             });
@@ -155,96 +152,67 @@ class AuthController {
         }
     }
 
-    
 
 
-    // PATCH /auth/info - Rota para atualizar as informações do usuário (Exceto senha e foto)
+    // PATCH /auth/info - ATUALIZAR INFORMAÇÕES (nome, email)
     static async atualizarInformacoes(req, res) {
         try {
-            const idUsuario = req.usuario.id; // ID do usuário logado via authMiddleware
-            // Obtendo os dados enviados no corpo da requisição
+            // OBTER ID DO USUÁRIO LOGADO
+            const idUsuario = req.usuario.id;
+
+            // OBTER DADOS DA REQUISIÇÃO
+            const { nome, email } = req.body;
             const dados = {};
-            if (req.body.nome) dados.nome = req.body.nome.trim();
-            if (req.body.email) dados.email = req.body.email.trim();
 
-            // Verificando se algum dado foi atualizado
-            if (Object.keys(dados).length === 0) {
-                return res.status(400).json({
-                    sucesso: false,
-                    mensagem: "Nenhum dado enviado para atualização"
-                });
+            // VALIDAR O NOME, SE RECEBIDO
+            if (nome) {
+                const validacaoNome = validarNome(nome);
+
+                if (!validacaoNome.sucesso) {
+                    return res.status(400).json({
+                        ...validacaoNome
+                    })
+                }
+
+                dados.nome = nome;
             }
 
-            // Verificando se os tipos estão corretos
-            if (
-                (dados.nome && typeof dados.nome !== "string") ||
-                (dados.email && typeof dados.email !== "string")
-            ) {
-                return res.status(400).json({
-                    sucesso: false,
-                    mensagem: 'Nome e email devem ser texto'
-                });
+            // VALIDAR O E-MAIL, SE RECEBIDO
+            if (email) {
+                const validacaoEmail = validarEmail(email);
+
+                if (!validacaoEmail.sucesso) {
+                    return res.status(400).json({
+                        ...validacaoEmail
+                    })
+                }
+
+                // VERIFICAR SE JÁ EXISTE UM USUÁRIO COM O E-MAIL RECEBIDO
+                const emUso = await UserModel.emailEmUso(email, idUsuario)
+                if (emUso) {
+                    return res.status(409).json({
+                        sucesso: false,
+                        mensagem: "E-mail já está em uso"
+                    });
+                }
+
+                dados.email = email;
             }
 
-            // Validando o tamanho do nome
-            if (dados.nome && dados.nome.length > 255) {
-                return res.status(400).json({
-                    sucesso: false,
-                    mensagem: 'O nome pode ter no máximo 255 caracteres'
-                });
-            }
 
-            if (dados.nome && dados.nome.length === 0) {
-                return res.status(400).json({
-                    sucesso: false,
-                    mensagem: "O nome não pode estar vazio"
-                });
-            }
-
-            // Validando o tamanho do e-mail
-            if (dados.email && dados.email.length > 255) {
-                return res.status(400).json({
-                    sucesso: false,
-                    mensagem: 'O e-mail pode ter no máximo 255 caracteres'
-                });
-            }
-
-            if (dados.email && dados.email.length === 0) {
-                return res.status(400).json({
-                    sucesso: false,
-                    mensagem: "O e-mail não pode estar vazio"
-                });
-            }
-
-            // Validação de formato de e-mail
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (dados.email && !emailRegex.test(dados.email)) {
-                return res.status(400).json({
-                    sucesso: false,
-                    mensagem: 'Formato de e-mail inválido'
-                });
-            }
-
-            // Verificando se o e-mail já está em uso por outro usuário
-            if (await UserModel.emailEmUso(dados.email, idUsuario)) {
-                return res.status(409).json({
-                    sucesso: false,
-                    mensagem: "E-mail já está em uso"
-                });
-            }
-
-            // ATUALIZANDO INFORMAÇÕES
+            // ATUALIZAR INFORMAÇÕES
             await UserModel.atualizarInformacoes(idUsuario, dados);
 
+            // SUCESSO: ENVIAR MENSAGEM
             return res.status(200).json({
                 sucesso: true,
                 mensagem: 'Informações atualizadas com sucesso!'
             });
 
         } catch (error) {
-
-            // Erro do servidor
             console.error('Erro ao atualizar as informações do usuário:', error);
+
+            // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 mensagem: 'Erro ao atualizar as informações do usuário'
@@ -252,54 +220,46 @@ class AuthController {
         }
     }
 
-    // PATCH /auth/senha - Rota para atualizar a senha do usuário
+    // PATCH /auth/senha - ATUALIZAR SENHA
     static async atualizarSenha(req, res) {
         try {
-            const idUsuario = req.usuario.id; // ID do usuário logado via authMiddleware
-            const { senhaAtual, senhaNova } = req.body; // Obtendo a senha enviada no corpo da requisição
+            // OBTER ID DO USUÁRIO LOGADO
+            const idUsuario = req.usuario.id;
 
-            // Verificando se a senha atual foi enviada
-            if (!senhaAtual) {
+            // OBTER DADOS DA REQUISIÇÃO
+            const { senhaAtual, senhaNova } = req.body;
+
+            
+            // VALIDAR A SENHA ATUAL
+            const validacaoSenhaAtual = validarSenha(senhaAtual);
+            if (!validacaoSenhaAtual.sucesso) {
                 return res.status(400).json({
-                    sucesso: false,
-                    mensagem: 'Senha atual não foi fornecida'
-                });
+                    ...validacaoSenhaAtual
+                })
             }
 
-            // Verificando se a senha nova foi enviada
-            if (!senhaNova) {
+            // VALIDAR A SENHA NOVA
+            const validacaoSenhaNova = validarSenha(senhaNova);
+            if (!validacaoSenhaNova.sucesso) {
                 return res.status(400).json({
-                    sucesso: false,
-                    mensagem: 'Senha nova não foi fornecida'
-                });
+                    ...validacaoSenhaNova
+                })
             }
 
-            // Verificando os tipos das senhas
-            if (typeof senhaAtual !== "string" || typeof senhaNova !== "string") {
-                return res.status(400).json({
-                    sucesso: false,
-                    mensagem: "As senhas devem ser texto"
-                });
-            }
-
-            // Verificando o tamanho da senha 
-            if (senhaNova.length < 6) {
-                return res.status(400).json({
-                    sucesso: false,
-                    mensagem: 'A nova senha deve ter no mínimo 6 caracteres'
-                });
-            }
 
             // ATUALIZANDO A SENHA
             await UserModel.atualizarSenha(idUsuario, senhaAtual, senhaNova);
 
+            // SUCESSO: ENVIAR MENSAGEM
             return res.status(200).json({
                 sucesso: true,
                 mensagem: 'Senha atualizada com sucesso!'
             });
 
         } catch (error) {
-            // Usuário não encontrado
+            console.error('Erro ao atualizar a senha do usuário:', error);
+
+            // USUÁRIO NÃO ENCONTRADO
             if (error.message === 'Usuário não encontrado') {
                 return res.status(404).json({
                     sucesso: false,
@@ -307,7 +267,7 @@ class AuthController {
                 });
             }
 
-            // Senha atual incorreta
+            // SENHA ATUAL INCORRETA
             if (error.message === 'Senha incorreta') {
                 return res.status(401).json({
                     sucesso: false,
@@ -315,8 +275,7 @@ class AuthController {
                 });
             }
 
-            // Erro do servidor
-            console.error('Erro ao atualizar a senha do usuário:', error);
+            // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 mensagem: 'Erro ao atualizar a senha do usuário'
@@ -324,8 +283,12 @@ class AuthController {
         }
     }
 
-    // PATCH /auth/foto - Rota para atualizar a senha do usuário
-    static async atualizarImagem(req, res) {
+
+
+
+
+    // PATCH /auth/foto - Rota para atualizar a foto de perfil do usuário
+    static async atualizarFoto(req, res) {
         try {
             const idUsuario = req.usuario.id; // ID do usuário logado via authMiddleware
 
