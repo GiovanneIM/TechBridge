@@ -3,15 +3,8 @@ import UserModel from '../models/UserModel.js';
 import { JWT_CONFIG } from '../config/jwt.js';
 import { validarEmail, validarNome, validarSenha } from '../utils/validacoes.js';
 
-const tiposDeUsuario = {
-    '1': 'admin',
-    '2': 'gerente',
-    '3': 'tecnico',
-}
-
 
 // CONTROLLER PARA OPERAÇÕES DE AUTENTICAÇÃO
-
 class AuthController {
 
     // POST /auth/login - FAZER LOGIN
@@ -80,8 +73,7 @@ class AuthController {
                 dados: {
                     token,
                     usuario: {
-                        ...usuario,
-                        cargo: tiposDeUsuario[usuario.tipo_usuario]
+                        ...usuario
                     }
                 }
             });
