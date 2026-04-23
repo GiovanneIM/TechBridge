@@ -15,6 +15,7 @@ import { negrito, azul, verde, vermelho } from './utils/modificadoresDeSaida.js'
 
 // IMPORTAR ROTAS
 import authRotas from './routes/authRotas.js';
+import empresasRotas from './routes/empresasRotas.js';
 import criptografiaRotas from './routes/criptografiaRotas.js';
 import userRotas from './routes/userRotas.js';
 import chamadosRotas from './routes/chamadosRotas.js';
