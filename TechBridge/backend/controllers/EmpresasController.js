@@ -1,4 +1,4 @@
-import EmpresasModel from "../models/EmpresasModel";
+import EmpresasModel from "../models/EmpresasModel.js";
 
 class EmpresasController {
     static async registrarEmpresas(req, res) {}
