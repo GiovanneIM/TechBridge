@@ -164,8 +164,6 @@ class UserModel {
 
 
 
-
-
     // Criar novo usuário
     static async criar(dadosUsuario) {
         try {
