@@ -155,6 +155,30 @@ class UserModel {
             throw error;
         }
     }
+
+    //  LISTAR USUÁRIOS
+    static async listarTecnicos2() {
+        try {
+            const connection = await getConnection();
+
+            try {
+                // Comando para obter os setores
+                const sql = 'SELECT * FROM usuarios ORDER BY id';
+
+                // Fazendo a consulta
+                const [tecnicos] = await connection.query(sql);
+
+                // Retornando os usuarios
+                return { tecnicos };
+            } finally {
+                connection.release();
+            }
+
+        } catch (error) {
+            console.error('Erro ao listar usuários:', error);
+            throw error;
+        }
+    }
 }
 
 export default UserModel;
