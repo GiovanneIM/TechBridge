@@ -221,7 +221,7 @@ class AuthController {
             // OBTER DADOS DA REQUISIÇÃO
             const { senhaAtual, senhaNova } = req.body;
 
-            
+
             // VALIDAR A SENHA ATUAL
             const validacaoSenhaAtual = validarSenha(senhaAtual);
             if (!validacaoSenhaAtual.sucesso) {

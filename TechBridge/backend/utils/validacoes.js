@@ -1,7 +1,7 @@
 export function validarEmail(email) {
 
     // Validação de tipo
-    if (typeof dados.email !== "string") {
+    if (typeof email !== "string") {
         return {
             sucesso: false,
             erro: 'Email inválido',

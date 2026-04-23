@@ -21,7 +21,6 @@ export function useAuth({
         login: false,
         perfil: false,
         logout: false,
-        auth: false
     });
 
     // Estado para armazenar mensagem de erro (se houver)
