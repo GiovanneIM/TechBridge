@@ -11,7 +11,7 @@ const router = express.Router();
 /**
  * @swagger
  * /empresas:
- *   post:
+ *   0ost:
  *     summary: Registrar uma nova empresa (Admin)
  *     tags: [Empresas]
  *     requestBody:
@@ -49,7 +49,7 @@ router.post('/', authMiddleware, adminMiddleware, () => { });
  * 
  *     responses:
  *       200:
- *         description: Dados da empresa listaos com sucesso
+ *         description: Dados da empresa listados com sucesso
  *       500:
  *         description: Não foi possível obter os dados da empresa
  */
@@ -147,6 +147,40 @@ router.post('/:id/membros', authMiddleware, () => { });
  * @swagger
  * /empresas/(id)/membros/(idUsuario):
  *   patch:
+ *     summary: Obtem os dados de um membro da empresa (Admin / Gerente)
+ *     tags: [Empresas]
+ * 
+ *     parameters:
+ *     - in: path
+ *       name: id
+ *       schema:
+ *         type: integer
+ *       required: true
+ *       description: ID da empresa
+ * 
+ *     - in: path
+ *       name: idUsuario
+ *       schema:
+ *         type: integer
+ *       required: true
+ *       description: ID ou Código do usuário
+ * 
+ *     responses:
+ *       200:
+ *         description: Usuário listado com sucesso
+ *       401:
+ *         description: Permissão negada
+ *       404:
+ *         description: Usuário não encontrado
+ *       500:
+ *         description: Não foi possível atualizar o usuário da empresa
+ */
+router.patch('/:id/membros/:idUsuario', authMiddleware, () => { });
+
+/**
+ * @swagger
+ * /empresas/(id)/membros/(idUsuario):
+ *   patch:
  *     summary: Atualiza um usuário da empresa (Admin / Gerente)
  *     tags: [Empresas]
  * 
@@ -163,7 +197,7 @@ router.post('/:id/membros', authMiddleware, () => { });
  *       schema:
  *         type: integer
  *       required: true
- *       description: ID do usuário
+ *       description: ID ou Código do usuário
  * 
  *     responses:
  *       200:
@@ -221,7 +255,7 @@ router.get('/:id/setores', authMiddleware, () => { });
  * 
  *     responses:
  *       200:
- *         description: Setores listados com sucesso
+ *         description: Setor criado com sucesso
  *       401:
  *         description: Permissão negada
  *       404:
@@ -249,9 +283,9 @@ router.post('/:id/setores', authMiddleware, () => { });
  *     - in: path
  *       name: idSetor
  *       schema:
- *         type: integer
+ *         type: string
  *       required: true
- *       description: ID do setor
+ *       description: ID ou Código do setor
  * 
  *     responses:
  *       200:
