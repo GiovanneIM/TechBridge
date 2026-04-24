@@ -10,38 +10,14 @@ const router = express.Router();
 
 /**
  * @swagger
- * /empresas:
- *   0ost:
- *     summary: Registrar uma nova empresa (Admin)
- *     tags: [Empresas]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/NewCompany'
- *     responses:
- *       200:
- *         description: Empresa registrada com sucesso
- *       400: 
- *         description: Dados inválidos
- *       401:
- *         description: Permissão negada
- *       500:
- *         description: Não foi possível registrar a empresa
- */
-router.post('/', authMiddleware, adminMiddleware, () => { });
-
-/**
- * @swagger
- * /empresas/(id):
+ * /empresas/{empresa}:
  *   get:
- *     summary: Lista os dados de uma empresa
+ *     summary: Listar os dados de uma empresa
  *     tags: [Empresas]
  * 
  *     parameters:
  *     - in: path
- *       name: ID
+ *       name: empresa
  *       schema:
  *         type: integer
  *       required: true
@@ -53,18 +29,18 @@ router.post('/', authMiddleware, adminMiddleware, () => { });
  *       500:
  *         description: Não foi possível obter os dados da empresa
  */
-router.get('/:id', authMiddleware, () => { });
+router.get('/:empresa', authMiddleware, () => { });
 
 /**
  * @swagger
- * /empresas/(id):
+ * /empresas/{empresa}:
  *   patch:
- *     summary: Atualiza uma empresa (Admin / Gerente)
+ *     summary: Atualizar uma empresa (Admin / Gerente)
  *     tags: [Empresas]
  * 
  *     parameters:
  *     - in: path
- *       name: ID
+ *       name: empresa
  *       schema:
  *         type: integer
  *       required: true
@@ -87,20 +63,22 @@ router.get('/:id', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível atualizar a empresa
  */
-router.patch('/:id', authMiddleware, () => { });
+router.patch('/:empresa', authMiddleware, () => { });
 
 
+
+// MEMBROS DA EMPRESA
 
 /**
  * @swagger
- * /empresas/(id)/membros:
+ * /empresas/{empresa}/membros:
  *   get:
- *     summary: Lista os usuários de uma empresa (Admin / Gerente)
- *     tags: [Empresas]
+ *     summary: Listar os usuários de uma empresa (Admin / Gerente)
+ *     tags: [Empresas - Membros]
  * 
  *     parameters:
  *     - in: path
- *       name: ID
+ *       name: empresa
  *       schema:
  *         type: integer
  *       required: true
@@ -114,18 +92,18 @@ router.patch('/:id', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível listar os membros da empresa
  */
-router.get('/:id/membros', authMiddleware, () => { });
+router.get('/:empresa/membros', authMiddleware, () => { });
 
 /**
  * @swagger
- * /empresas/(id)/membros:
+ * /empresas/{empresa}/membros:
  *   post:
- *     summary: Registra um novo usuário para a empresa (Admin / Gerente)
- *     tags: [Empresas]
+ *     summary: Registrar um novo usuário para a empresa (Admin / Gerente)
+ *     tags: [Empresas - Membros]
  * 
  *     parameters:
  *     - in: path
- *       name: ID
+ *       name: empresa
  *       schema:
  *         type: integer
  *       required: true
@@ -141,29 +119,38 @@ router.get('/:id/membros', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível registrar o membros da empresa
  */
-router.post('/:id/membros', authMiddleware, () => { });
+router.post('/:empresa/membros', authMiddleware, () => { });
 
 /**
  * @swagger
- * /empresas/(id)/membros/(idUsuario):
- *   patch:
- *     summary: Obtem os dados de um membro da empresa (Admin / Gerente)
- *     tags: [Empresas]
+ * /empresas/empresa{empresa}/membros/{tipoIdentificador}/{membro}:
+ *   get:
+ *     summary: Obter os dados de um membro da empresa (Admin / Gerente)
+ *     tags: [Empresas - Membros]
  * 
  *     parameters:
  *     - in: path
- *       name: id
+ *       name: empresa
  *       schema:
  *         type: integer
  *       required: true
  *       description: ID da empresa
  * 
  *     - in: path
- *       name: idUsuario
+ *       name: tipoIdentificador
+ *       required: true
+ *       schema:
+ *         type: string
+ *         enum: [id, codigo]
+ * 
+ *     - in: path
+ *       name: membro
  *       schema:
  *         type: integer
  *       required: true
- *       description: ID ou Código do usuário
+ *       description: |
+ *         ID numérico quando tipoIdentificador = id  
+ *         Código alfanumérico quando tipoIdentificador = codigo
  * 
  *     responses:
  *       200:
@@ -173,31 +160,40 @@ router.post('/:id/membros', authMiddleware, () => { });
  *       404:
  *         description: Usuário não encontrado
  *       500:
- *         description: Não foi possível atualizar o usuário da empresa
+ *         description: Não foi possível listar o usuário da empresa
  */
-router.patch('/:id/membros/:idUsuario', authMiddleware, () => { });
+router.get('/:empresa/membros/:tipoIdentificador/:usuario', authMiddleware, () => { });
 
 /**
  * @swagger
- * /empresas/(id)/membros/(idUsuario):
+ * /empresas/{empresa}/membros/{tipoIdentificador}/{usuario}:
  *   patch:
- *     summary: Atualiza um usuário da empresa (Admin / Gerente)
- *     tags: [Empresas]
+ *     summary: Atualizar um usuário da empresa (Admin / Gerente)
+ *     tags: [Empresas - Membros]
  * 
  *     parameters:
  *     - in: path
- *       name: id
+ *       name: empresa
  *       schema:
  *         type: integer
  *       required: true
  *       description: ID da empresa
  * 
  *     - in: path
- *       name: idUsuario
+ *       name: tipoIdentificador
+ *       required: true
+ *       schema:
+ *         type: string
+ *         enum: [id, codigo]
+ * 
+ *     - in: path
+ *       name: usuario
  *       schema:
  *         type: integer
  *       required: true
- *       description: ID ou Código do usuário
+ *       description: |
+ *         ID numérico quando tipoIdentificador = id  
+ *         Código alfanumérico quando tipoIdentificador = codigo
  * 
  *     responses:
  *       200:
@@ -209,20 +205,65 @@ router.patch('/:id/membros/:idUsuario', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível atualizar o usuário da empresa
  */
-router.patch('/:id/membros/:idUsuario', authMiddleware, () => { });
-
-
+router.patch('/:empresa/membros/:tipoIdentificador/:usuario', authMiddleware, () => { });
 
 /**
  * @swagger
- * /empresas/(id)/setores:
- *   get:
- *     summary: Lista os setores de uma empresa (Admin / Gerente)
- *     tags: [Empresas]
+ * /empresas/{empresa}/membros/{tipoIdentificador}/{usuario}:
+ *   delete:
+ *     summary: Excluir um usuário da empresa (Admin)
+ *     tags: [Empresas - Membros]
  * 
  *     parameters:
  *     - in: path
- *       name: ID
+ *       name: empresa
+ *       schema:
+ *         type: integer
+ *       required: true
+ *       description: ID da empresa
+ * 
+ *     - in: path
+ *       name: tipoIdentificador
+ *       required: true
+ *       schema:
+ *         type: string
+ *         enum: [id, codigo]
+ * 
+ *     - in: path
+ *       name: usuario
+ *       schema:
+ *         type: integer
+ *       required: true
+ *       description: |
+ *         ID numérico quando tipoIdentificador = id  
+ *         Código alfanumérico quando tipoIdentificador = codigo
+ * 
+ *     responses:
+ *       200:
+ *         description: Usuário excluido com sucesso
+ *       401:
+ *         description: Permissão negada
+ *       404:
+ *         description: Usuário não encontrado
+ *       500:
+ *         description: Não foi possível excluir o usuário da empresa
+ */
+router.delete('/:empresa/membros/:tipoIdentificador/:usuario', authMiddleware, () => { });
+
+
+
+// SETORES DA EMPRESA
+
+/**
+ * @swagger
+ * /empresas/{empresa}/setores:
+ *   get:
+ *     summary: Listar os setores de uma empresa (Admin / Gerente)
+ *     tags: [Empresas - Setores]
+ * 
+ *     parameters:
+ *     - in: path
+ *       name: empresa
  *       schema:
  *         type: integer
  *       required: true
@@ -236,18 +277,18 @@ router.patch('/:id/membros/:idUsuario', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível listar os setores da empresa
  */
-router.get('/:id/setores', authMiddleware, () => { });
+router.get('/:empresa/setores', authMiddleware, () => { });
 
 /**
  * @swagger
- * /empresas/(id)/setores:
+ * /empresas/{empresa}/setores:
  *   post:
- *     summary: Registra um novo setor para a empresa (Admin / Gerente)
- *     tags: [Empresas]
+ *     summary: Registrar um novo setor para a empresa (Admin / Gerente)
+ *     tags: [Empresas - Setores]
  * 
  *     parameters:
  *     - in: path
- *       name: ID
+ *       name: empresa
  *       schema:
  *         type: integer
  *       required: true
@@ -263,29 +304,81 @@ router.get('/:id/setores', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível registrar o setor para a empresa
  */
-router.post('/:id/setores', authMiddleware, () => { });
+router.post('/:empresa/setores', authMiddleware, () => { });
 
 /**
  * @swagger
- * /empresas/(id)/setores/(idUsuario):
- *   patch:
- *     summary: Atualiza um usuário da empresa (Admin / Gerente)
- *     tags: [Empresas]
+ * /empresas/{empresa}/setores/{setor}/{setor}:
+ *   get:
+ *     summary: Listar um setor da empresa (Admin / Gerente)
+ *     tags: [Empresas - Setores]
  * 
  *     parameters:
  *     - in: path
- *       name: id
+ *       name: empresa
  *       schema:
  *         type: integer
  *       required: true
  *       description: ID da empresa
  * 
  *     - in: path
- *       name: idSetor
+ *       name: tipoIdentificador
+ *       required: true
+ *       schema:
+ *         type: string
+ *         enum: [id, codigo]
+ * 
+ *     - in: path
+ *       name: setor
  *       schema:
  *         type: string
  *       required: true
- *       description: ID ou Código do setor
+ *       description: |
+ *         ID numérico quando tipoIdentificador = id  
+ *         Código alfanumérico quando tipoIdentificador = codigo
+ * 
+ *     responses:
+ *       200:
+ *         description: Setor listado com sucesso
+ *       401:
+ *         description: Permissão negada
+ *       404:
+ *         description: Setor não encontrado
+ *       500:
+ *         description: Não foi possível listado o setor da empresa
+ */
+router.get('/:empresa/setores/:tipoIdentificador/:setor', authMiddleware, () => { });
+
+/**
+ * @swagger
+ * /empresas/{empresa}/setores/{tipoIdentificador}/{setor}:
+ *   patch:
+ *     summary: Atualizar um setor da empresa (Admin / Gerente)
+ *     tags: [Empresas - Setores]
+ * 
+ *     parameters:
+ *     - in: path
+ *       name: empresa
+ *       schema:
+ *         type: integer
+ *       required: true
+ *       description: ID da empresa
+ * 
+ *     - in: path
+ *       name: tipoIdentificador
+ *       required: true
+ *       schema:
+ *         type: string
+ *         enum: [id, codigo]
+ * 
+ *     - in: path
+ *       name: setor
+ *       schema:
+ *         type: string
+ *       required: true
+ *       description: |
+ *         ID numérico quando tipoIdentificador = id  
+ *         Código alfanumérico quando tipoIdentificador = codigo
  * 
  *     responses:
  *       200:
@@ -297,6 +390,6 @@ router.post('/:id/setores', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível atualizar o setor da empresa
  */
-router.patch('/:id/setores/:idSetor', authMiddleware, () => { });
+router.patch('/:empresa/setores/:tipoIdentificador/:setor', authMiddleware, () => { });
 
 export default router;

@@ -15,6 +15,7 @@ import { negrito, azul, verde, vermelho } from './utils/modificadoresDeSaida.js'
 
 // IMPORTAR ROTAS
 import authRotas from './routes/authRotas.js';
+import adminRotas from './routes/adminRotas.js'
 import empresasRotas from './routes/empresasRotas.js';
 import criptografiaRotas from './routes/criptografiaRotas.js';
 import userRotas from './routes/userRotas.js';
@@ -29,6 +30,7 @@ import painelRotas from './routes/painelRotas.js';
 import { logMiddleware } from './middlewares/logMiddleware.js';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 import { handleUploadError } from './middlewares/uploadMiddleware.js';
+import { adminMiddleware } from './middlewares/authMiddleware.js';
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 // CONFIGURANDO SERVIDOR E MIDDLEWARES
@@ -86,7 +88,11 @@ app.use(
 
 // ATIVAR AS ROTAS
 app.use('/techbridge/auth', authRotas);
+app.use('/techbridge/admin', adminMiddleware, adminRotas);
 app.use('/techbridge/criptografia', criptografiaRotas);
+
+app.use('/techbridge/empresas', empresasRotas);
+
 app.use('/techbridge/user', userRotas);
 app.use('/techbridge/chamados', chamadosRotas);
 app.use('/techbridge/maquinas', maquinasRotas);
