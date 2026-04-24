@@ -19,13 +19,13 @@ CREATE TABLE empresas (
     ativo 			BOOLEAN 		NOT NULL DEFAULT TRUE,			-- Status do serviço à empresa (Ativo ou não)
     
     -- Endereço da empresa
-    cep 			VARCHAR(9)		NOT NULL,
-    rua 			VARCHAR(150) 	NOT NULL,
-    numero 			VARCHAR(10) 	NOT NULL,
+    cep 			VARCHAR(9),
+    rua 			VARCHAR(150),
+    numero 			VARCHAR(10),
     complemento 	VARCHAR(100),
-    bairro 			VARCHAR(100) 	NOT NULL,
-    cidade 			VARCHAR(100) 	NOT NULL,
-    estado 			CHAR(2) 		NOT NULL
+    bairro 			VARCHAR(100),
+    cidade 			VARCHAR(100),
+    estado 			CHAR(2)
 ); 
 
 

@@ -17,7 +17,7 @@ CREATE TABLE tipos_usuarios (
 -- Inserindo os tipos de usuários
 INSERT INTO tipos_usuarios (descricao)
 VALUES 
-	('administrador'),
+	('admin'),
 	('gerente'),
 	('tecnico')
 ;
