@@ -10,7 +10,8 @@ USE TECHBRIDGE;
 -- Criando a tabela de tipos de usuários
 CREATE TABLE usuarios (
     id 				INT 			AUTO_INCREMENT PRIMARY KEY,
-    
+	data_criacao 	TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que o usuário foi registrado
+
     -- Atributos do usuário
     nome			VARCHAR(100) 	NOT NULL,						-- Nome do usuário
     email			VARCHAR(255) 	NOT NULL UNIQUE,				-- E-mail do usuário
@@ -18,8 +19,6 @@ CREATE TABLE usuarios (
     foto_perfil 	VARCHAR(255),									-- Foto de perfil
     ativo			BOOLEAN			DEFAULT TRUE,					-- Status do usuário (Conta ativa ou inativa)
     
-    local_nasc		VARCHAR(255)	NOT NULL,						-- Local de nascimento do usuário (Sigla da nacionalidade ao lado ex: Arthur,BR)
-    data_efetivacao VARCHAR(255)	NOT NULL, 						-- Data de efetivação do usuário
     telefone		VARCHAR(20)		NOT NULL, 						-- Número do telefone do usuário (com DDD)
     bio				VARCHAR(255)	NOT NULL, 						-- Breve biografia do usuário
     
@@ -35,11 +34,11 @@ CREATE TABLE usuarios (
 
 -- Inserindo os usuários de exemplo
 INSERT INTO usuarios 
-(nome, email, senha, tipo_usuario, id_empresa, local_nasc, data_efetivacao, telefone, bio)
+(nome, email, senha, tipo_usuario, id_empresa, telefone, bio)
 VALUES 
-('Kim Minji', 'admin@tb.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 1, NULL, 'Seoul, KR', '2024-01-10', '(11) 95989-9539', 'Admin do sistema'),
-('Poliwag Gomez', 'admcliente@email.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 2, 1, 'São Paulo, BR', '2024-02-15', '(11) 98921-8798', 'Responsável pelo cliente'),
-('Izuku Midoriya', 'tecnico@email.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 3, 1, 'Chicago, US', '2024-03-20', '(11) 97548-1367', 'Técnico de campo');
+('Kim Minji', 'admin@tb.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 1, NULL, '(11) 95989-9539', 'Admin do sistema'),
+('Poliwag Gomez', 'admcliente@email.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 2, 1, '(11) 98921-8798', 'Responsável pelo cliente'),
+('Izuku Midoriya', 'tecnico@email.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 3, 1, '(11) 97548-1367', 'Técnico de campo');
 
 -- Alterando as fotos do usuário
 -- Obs: Decidir se será definido por link ou arquivo
