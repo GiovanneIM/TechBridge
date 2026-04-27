@@ -10,13 +10,14 @@ USE TECHBRIDGE;
 -- Criando a tabela de maquinas
 CREATE TABLE maquinas (
 	id				INT				AUTO_INCREMENT PRIMARY KEY,
+    data_criacao 	TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,
+    ativo 			BOOLEAN 		DEFAULT TRUE,					-- Status da máquina (Ativa ou Inativa)
     
     -- Atributos da máquina
     cod_maquina		VARCHAR(50)		NOT NULL, 						-- Codigo de identificação (ID) interna no setor
     nome 			VARCHAR(100) 	NOT NULL,						-- Nome da máquina
     descricao		VARCHAR(255)	NOT NULL,						-- Descrição da máquina
     foto 			VARCHAR(255),									-- Foto da máquina
-    ativo 			BOOLEAN 		DEFAULT TRUE,					-- Status da máquina (Ativa ou Inativa)
     
     -- Chaves estrangeiras
     id_setor		INT				NOT NULL, 						-- ID do setor ao qual a máquina pertence

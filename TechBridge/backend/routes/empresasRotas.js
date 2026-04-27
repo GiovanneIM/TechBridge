@@ -27,7 +27,7 @@ const router = express.Router();
  *       200:
  *         description: Dados da empresa listados com sucesso
  *       500:
- *         description: Não foi possível obter os dados da empresa
+ *         description: Não foi cossível obter os dados da empresa
  */
 router.get('/:empresa', authMiddleware, () => { });
 
