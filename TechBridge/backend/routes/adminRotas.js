@@ -30,13 +30,40 @@ const router = express.Router();
  *       500:
  *         description: Não foi possível registrar a empresa
  */
-router.post('/', authMiddleware, () => { });
+router.post('/empresa', authMiddleware, () => { });
+
+/**
+ * @swagger
+ * /admin/empresas/{empresa}:
+ *   delete:
+ *     summary: Excluir uma empresa e os dados associados (Usuários, Setores, Máquinas e Chamados)
+ *     tags: [Admin]
+ * 
+ *     parameters:
+ *     - in: path
+ *       name: empresa
+ *       schema:
+ *         type: integer
+ *       required: true
+ *       description: ID da empresa
+ * 
+ *     responses:
+ *       200:
+ *         description: Empresa excluida com sucesso
+ *       401:
+ *         description: Permissão negada
+ *       404:
+ *         description: Empresa não encontrado
+ *       500:
+ *         description: Não foi possível excluir a empresa
+ */
+router.delete('/empresas/:empresa', authMiddleware, () => { });
 
 /**
  * @swagger
  * /admin/usuarios/{usuario}:
  *   delete:
- *     summary: Excluir um usuário
+ *     summary: Excluir um usuário e seus dados associados (Chamados)
  *     tags: [Admin]
  * 
  *     parameters:

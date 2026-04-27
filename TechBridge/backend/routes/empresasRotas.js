@@ -123,9 +123,9 @@ router.post('/:empresa/membros', authMiddleware, () => { });
 
 /**
  * @swagger
- * /empresas/empresa{empresa}/membros/{tipoIdentificador}/{membro}:
+ * /empresas/{empresa}/membros/{membro}:
  *   get:
- *     summary: Obter os dados de um membro da empresa (Admin / Gerente)
+ *     summary: Listar um membro da empresa (Admin / Gerente)
  *     tags: [Empresas - Membros]
  * 
  *     parameters:
@@ -137,20 +137,11 @@ router.post('/:empresa/membros', authMiddleware, () => { });
  *       description: ID da empresa
  * 
  *     - in: path
- *       name: tipoIdentificador
- *       required: true
- *       schema:
- *         type: string
- *         enum: [id, codigo]
- * 
- *     - in: path
  *       name: membro
  *       schema:
- *         type: integer
+ *         type: string
  *       required: true
- *       description: |
- *         ID numérico quando tipoIdentificador = id  
- *         Código alfanumérico quando tipoIdentificador = codigo
+ *       description: Código do usuário
  * 
  *     responses:
  *       200:
@@ -162,11 +153,11 @@ router.post('/:empresa/membros', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível listar o usuário da empresa
  */
-router.get('/:empresa/membros/:tipoIdentificador/:usuario', authMiddleware, () => { });
+router.get('/:empresa/membros/:membro', authMiddleware, () => { });
 
 /**
  * @swagger
- * /empresas/{empresa}/membros/{tipoIdentificador}/{usuario}:
+ * /empresas/{empresa}/membros/{usuario}:
  *   patch:
  *     summary: Atualizar um usuário da empresa (Admin / Gerente)
  *     tags: [Empresas - Membros]
@@ -180,20 +171,11 @@ router.get('/:empresa/membros/:tipoIdentificador/:usuario', authMiddleware, () =
  *       description: ID da empresa
  * 
  *     - in: path
- *       name: tipoIdentificador
- *       required: true
- *       schema:
- *         type: string
- *         enum: [id, codigo]
- * 
- *     - in: path
  *       name: usuario
  *       schema:
- *         type: integer
+ *         type: string
  *       required: true
- *       description: |
- *         ID numérico quando tipoIdentificador = id  
- *         Código alfanumérico quando tipoIdentificador = codigo
+ *       description: Código do usuário
  * 
  *     responses:
  *       200:
@@ -205,50 +187,7 @@ router.get('/:empresa/membros/:tipoIdentificador/:usuario', authMiddleware, () =
  *       500:
  *         description: Não foi possível atualizar o usuário da empresa
  */
-router.patch('/:empresa/membros/:tipoIdentificador/:usuario', authMiddleware, () => { });
-
-/**
- * @swagger
- * /empresas/{empresa}/membros/{tipoIdentificador}/{usuario}:
- *   delete:
- *     summary: Excluir um usuário da empresa (Admin)
- *     tags: [Empresas - Membros]
- * 
- *     parameters:
- *     - in: path
- *       name: empresa
- *       schema:
- *         type: integer
- *       required: true
- *       description: ID da empresa
- * 
- *     - in: path
- *       name: tipoIdentificador
- *       required: true
- *       schema:
- *         type: string
- *         enum: [id, codigo]
- * 
- *     - in: path
- *       name: usuario
- *       schema:
- *         type: integer
- *       required: true
- *       description: |
- *         ID numérico quando tipoIdentificador = id  
- *         Código alfanumérico quando tipoIdentificador = codigo
- * 
- *     responses:
- *       200:
- *         description: Usuário excluido com sucesso
- *       401:
- *         description: Permissão negada
- *       404:
- *         description: Usuário não encontrado
- *       500:
- *         description: Não foi possível excluir o usuário da empresa
- */
-router.delete('/:empresa/membros/:tipoIdentificador/:usuario', authMiddleware, () => { });
+router.patch('/:empresa/membros/:membro', authMiddleware, () => { });
 
 
 
@@ -308,7 +247,7 @@ router.post('/:empresa/setores', authMiddleware, () => { });
 
 /**
  * @swagger
- * /empresas/{empresa}/setores/{setor}/{setor}:
+ * /empresas/{empresa}/setores/{setor}:
  *   get:
  *     summary: Listar um setor da empresa (Admin / Gerente)
  *     tags: [Empresas - Setores]
@@ -322,20 +261,11 @@ router.post('/:empresa/setores', authMiddleware, () => { });
  *       description: ID da empresa
  * 
  *     - in: path
- *       name: tipoIdentificador
- *       required: true
- *       schema:
- *         type: string
- *         enum: [id, codigo]
- * 
- *     - in: path
  *       name: setor
  *       schema:
  *         type: string
  *       required: true
- *       description: |
- *         ID numérico quando tipoIdentificador = id  
- *         Código alfanumérico quando tipoIdentificador = codigo
+ *       description: Código do setor
  * 
  *     responses:
  *       200:
@@ -347,11 +277,11 @@ router.post('/:empresa/setores', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível listado o setor da empresa
  */
-router.get('/:empresa/setores/:tipoIdentificador/:setor', authMiddleware, () => { });
+router.get('/:empresa/setores/:setor', authMiddleware, () => { });
 
 /**
  * @swagger
- * /empresas/{empresa}/setores/{tipoIdentificador}/{setor}:
+ * /empresas/{empresa}/setores/{setor}:
  *   patch:
  *     summary: Atualizar um setor da empresa (Admin / Gerente)
  *     tags: [Empresas - Setores]
@@ -365,20 +295,11 @@ router.get('/:empresa/setores/:tipoIdentificador/:setor', authMiddleware, () => 
  *       description: ID da empresa
  * 
  *     - in: path
- *       name: tipoIdentificador
- *       required: true
- *       schema:
- *         type: string
- *         enum: [id, codigo]
- * 
- *     - in: path
  *       name: setor
  *       schema:
  *         type: string
  *       required: true
- *       description: |
- *         ID numérico quando tipoIdentificador = id  
- *         Código alfanumérico quando tipoIdentificador = codigo
+ *       description: Código do setor
  * 
  *     responses:
  *       200:
@@ -390,6 +311,182 @@ router.get('/:empresa/setores/:tipoIdentificador/:setor', authMiddleware, () => 
  *       500:
  *         description: Não foi possível atualizar o setor da empresa
  */
-router.patch('/:empresa/setores/:tipoIdentificador/:setor', authMiddleware, () => { });
+router.patch('/:empresa/setores/:setor', authMiddleware, () => { });
+
+
+
+// MÁQUINAS DA EMPRESA
+
+/**
+ * @swagger
+ * /empresas/{empresa}/maquinas:
+ *   get:
+ *     summary: Listar todas as maquinas de uma empresa (Admin / Gerente)
+ *     tags: [Empresas - Maquinas]
+ * 
+ *     parameters:
+ *     - in: path
+ *       name: empresa
+ *       schema:
+ *         type: integer
+ *       required: true
+ *       description: ID da empresa
+ * 
+ *     responses:
+ *       200:
+ *         description: Maquinas listados com sucesso
+ *       401:
+ *         description: Permissão negada
+ *       500:
+ *         description: Não foi possível listar as maquinas da empresa
+ */
+router.get('/:empresa/maquinas', authMiddleware, () => { });
+
+/**
+ * @swagger
+ * /empresas/{empresa}/setores/{setor}/maquinas:
+ *   post:
+ *     summary: Registrar uma nova máquina para um setor da empresa (Admin / Gerente)
+ *     tags: [Empresas - Maquinas]
+ * 
+ *     parameters:
+ *     - in: path
+ *       name: empresa
+ *       schema:
+ *         type: integer
+ *       required: true
+ *       description: ID da empresa
+ * 
+ *     - in: path
+ *       name: setor
+ *       schema:
+ *         type: string
+ *       required: true
+ *       description: Código do setor
+ * 
+ *     responses:
+ *       200:
+ *         description: Maquina criada com sucesso
+ *       401:
+ *         description: Permissão negada
+ *       500:
+ *         description: Não foi possível registrar a máquina para a empresa
+ */
+router.post('/:empresa/setores/:setor/maquinas', authMiddleware, () => { });
+
+/**
+ * @swagger
+ * /empresas/{empresa}/setores/{setor}/maquinas:
+ *   get:
+ *     summary: Listar as maquinas de um setor de uma empresa (Admin / Gerente)
+ *     tags: [Empresas - Maquinas]
+ * 
+ *     parameters:
+ *     - in: path
+ *       name: empresa
+ *       schema:
+ *         type: integer
+ *       required: true
+ *       description: ID da empresa
+ * 
+ *     - in: path
+ *       name: setor
+ *       schema:
+ *         type: string
+ *       required: true
+ *       description: Código do setor
+ * 
+ *     responses:
+ *       200:
+ *         description: Maquinas listados com sucesso
+ *       401:
+ *         description: Permissão negada
+ *       500:
+ *         description: Não foi possível listar as maquinas do setor
+ */
+router.get('/:empresa/setores/:setor/maquinas', authMiddleware, () => { });
+
+/**
+ * @swagger
+ * /empresas/{empresa}/setores/{setor}/maquinas/{maquina}:
+ *   get:
+ *     summary: Listar uma máquina da empresa (Admin / Gerente)
+ *     tags: [Empresas - Maquinas]
+ * 
+ *     parameters:
+ *     - in: path
+ *       name: empresa
+ *       schema:
+ *         type: integer
+ *       required: true
+ *       description: ID da empresa
+ * 
+ *     - in: path
+ *       name: setor
+ *       schema:
+ *         type: string
+ *       required: true
+ *       description: Código do setor
+ * 
+ *     - in: path
+ *       name: maquina
+ *       schema:
+ *         type: string
+ *       required: true
+ *       description: Código da máquina
+ * 
+ *     responses:
+ *       200:
+ *         description: Máquina listado com sucesso
+ *       401:
+ *         description: Permissão negada
+ *       404:
+ *         description: Máquina não encontrado
+ *       500:
+ *         description: Não foi possível listar a máquina da empresa
+ */
+router.get('/:empresa/setores/:setor/maquinas/:maquina', authMiddleware, () => { });
+
+/**
+ * @swagger
+ * /empresas/{empresa}/setores/{setor}/maquinas/{maquina}:
+ *   patch:
+ *     summary: Atualizar uma máquina de um setor da empresa (Admin / Gerente)
+ *     tags: [Empresas - Maquinas]
+ * 
+ *     parameters:
+ *     - in: path
+ *       name: empresa
+ *       schema:
+ *         type: integer
+ *       required: true
+ *       description: ID da empresa
+ * 
+ *     - in: path
+ *       name: setor
+ *       schema:
+ *         type: string
+ *       required: true
+ *       description: Código do setor
+ * 
+ *     - in: path
+ *       name: maquina
+ *       schema:
+ *         type: string
+ *       required: true
+ *       description: Código da máquina
+ * 
+ *     responses:
+ *       200:
+ *         description: Máquina atualizada com sucesso
+ *       401:
+ *         description: Permissão negada
+ *       404:
+ *         description: Máquina não encontrada
+ *       500:
+ *         description: Não foi possível atualizar a máquina
+ */
+router.patch('/:empresa/setores/:setor/maquinas/:maquina', authMiddleware, () => { });
+
 
 export default router;
