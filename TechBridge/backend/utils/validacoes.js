@@ -148,6 +148,8 @@ const estadosValidos = [
 ];
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
 // ESQUEMA DE LOGIN
 export const userLogin = z.object({
     email: z
