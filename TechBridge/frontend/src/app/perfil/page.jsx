@@ -30,7 +30,5 @@ export default async function Perfil() {
 
     const tecnicos = await getTecnicos(token);
 
-    console.log(tecnicos);
-
     return (<PagePerfil tecnicosIniciais = {tecnicos}/>)
 }
