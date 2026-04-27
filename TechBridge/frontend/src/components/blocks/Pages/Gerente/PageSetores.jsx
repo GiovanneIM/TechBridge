@@ -16,12 +16,12 @@ import { Separator } from "../../../ui/separator";
 import { useSetores } from "@/hooks/useSetores";
 
 const icones = {
-    Wrench: <Wrench className="h-20 w-20 text-white" />,
-    PaintRoller: <PaintRoller className="h-20 w-20 text-white" />,
+    Wrench: <Wrench className="h-20 w-20" />,
+    PaintRoller: <PaintRoller className="h-20 w-20" />,
     BriefcaseBusiness: (
-        <BriefcaseBusiness className="h-20 w-20 text-white" />
+        <BriefcaseBusiness className="h-20 w-20" />
     ),
-    Network: <Network className="h-20 w-20 text-white" />,
+    Network: <Network className="h-20 w-20" />,
 };
 
 export default function PageSetores({
@@ -38,7 +38,7 @@ export default function PageSetores({
     });
 
     // Verificando se a página está sendo carregada pela primeira vez
-    const isFirstLoad = loadingSetores.fetch && (tecnicos ?? []).length === 0;
+    const isFirstLoad = loadingSetores.fetch && (setores ?? []).length === 0;;
 
     // Conteúdo da página
     let content;
@@ -95,8 +95,7 @@ export default function PageSetores({
                             {/* Header do Card */}
                             <div
                                 className={`
-                  p-6 min-h-[180px] flex flex-col gap-5 text-white
-                  bg-linear-to-r ${setor.cor}
+                  p-6 min-h-[180px] flex flex-col gap-5 ${setor.cor}
                 `}
                             >
                                 {/* Ícone */}

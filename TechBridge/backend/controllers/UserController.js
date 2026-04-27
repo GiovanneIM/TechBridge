@@ -318,24 +318,34 @@ class UserController {
         }
     }
 
-    //LISTANDO USUÁRIOS
-    static async listarTecnicos2(req, res) {
+    // GET /usuarios/userLog - Usuário logado
+    static async listarUsuarioLogado(req, res) {
         try {
-            // Chamando o model para fazer a consulta
-            const resultado = await UserModel.listarTecnicos2();
+            const id = req.usuario.id; // vem do token (middleware)
 
-            // Respondendo a requisição com os usuários
-            res.status(200).json({
+            const usuario = await UserModel.buscarPorId(id);
+
+            if (!usuario) {
+                return res.status(404).json({
+                    sucesso: false,
+                    mensagem: 'Usuário não encontrado'
+                });
+            }
+
+            // remove senha
+            const { senha, ...usuarioSemSenha } = usuario;
+
+            return res.status(200).json({
                 sucesso: true,
-                dados: { tecnicos: resultado.tecnicos }
+                dados: usuarioSemSenha
             });
 
         } catch (error) {
-            console.error('Erro ao listar os usuários:', error);
-            res.status(500).json({
+            console.error('Erro ao buscar usuário logado:', error);
+
+            return res.status(500).json({
                 sucesso: false,
-                erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível listar os usuários'
+                mensagem: 'Erro interno do servidor'
             });
         }
     }
