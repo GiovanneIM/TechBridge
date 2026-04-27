@@ -28,8 +28,6 @@ class UserModel {
         }
     }
 
-
-
     // BUSCAR O USUÁRIO POR E-MAIL
     static async buscarPorEmail(email) {
         try {
@@ -96,8 +94,6 @@ class UserModel {
         }
     }
 
-
-
     // ATUALIZAR INFORMAÇÕES DO USUÁRIO (Exceto senha e foto)
     static async atualizarInformacoes(id, dadosUsuario) {
         try {
@@ -142,10 +138,6 @@ class UserModel {
         }
     }
 
-
-
-
-
     // Atualizar foto de perfil do usuário
     static async atualizarFoto(id, fotoNova) {
         try {
@@ -159,10 +151,6 @@ class UserModel {
             throw error;
         }
     }
-
-
-
-
 
     // Criar novo usuário
     static async criar(dadosUsuario) {

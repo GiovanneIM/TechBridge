@@ -1,330 +1,132 @@
 "use client";
 
-// PÁGINA DE PERFIL 
+import { useState } from "react";
 
-import { useUsers } from "@/hooks/useUsers";
+export default function PagePerfil({ usuario }) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
 
-export default function PagePerfil({ tecnicosIniciais = [] }) {
+    const tecnico = usuario;
+    console.log(tecnico);
+    
 
-    const { tecnicos, loading, error, refetchTecnicos } =
-        useUsers({
-            tecnicosIniciais: tecnicosIniciais,
-            fetchOnMount: tecnicosIniciais?.length === 0,
-        });
+    if (!tecnico) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-gray-500">
+                Carregando perfil...
+            </div>
+        );
+    }
 
-    return (<>
-        {tecnicos.map((tecnico, i) => (
-            <div key={i} className="mx-auto max-w-4xl space-y-6 px-4 py-10">
-                <div
-                    data-slot="card"
-                    className="flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm"
-                >
-                    <div data-slot="card-content" className="px-6">
-                        <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
-                            <div className="relative">
-                                <span
-                                    data-slot="avatar"
-                                    data-size="default"
-                                    className="group/avatar relative flex size-8 shrink-0 overflow-hidden rounded-full select-none data-[size=lg]:size-10 data-[size=sm]:size-6 h-24 w-24"
-                                >
-                                    <img src={tecnico.foto_perfil} alt="Img_user" className="justify-center items-center flex gap-0" />
-                                </span>
-                                <button
-                                    data-slot="button"
-                                    data-variant="outline"
-                                    data-size="icon"
-                                    className="inline-flex shrink-0 items-center justify-center gap-2 text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 size-9 absolute -right-2 -bottom-2 h-8 w-8 rounded-full"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width={24}
-                                        height={24}
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="lucide lucide-camera"
-                                        aria-hidden="true"
-                                    >
-                                        <path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" />
-                                        <circle cx={12} cy={13} r={3} />
-                                    </svg>
-                                </button>
+    const openModal = () => {
+        setUsuarioSelecionado(tecnico);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setUsuarioSelecionado(null);
+    };
+
+    return (
+        <div className="min-h-screen bg-gray-50">
+            <div className="mx-auto max-w-5xl px-4 py-10 space-y-6">
+
+                {/* HEADER */}
+                <div className="relative overflow-hidden rounded-3xl bg-white shadow-sm border">
+                    <div className="h-25"></div>
+
+                    <div className="px-6 pb-6 -mt-16 flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+
+                        <div className="flex items-center gap-5">
+
+                            <img
+                                src={tecnico.foto_perfil}
+                                className="h-32 w-32 rounded-full object-cover border-4 border-white shadow-lg"
+                            />
+
+                            <div>
+                                <h1 className="text-3xl font-bold">
+                                    {tecnico.nome}
+                                </h1>
+
+                                <p className="text-gray-600 text-sm">
+                                    {tecnico.cargo || "Sem cargo"}
+                                </p>
                             </div>
-                            <div className="flex-1 space-y-2">
-                                <div className="flex flex-col gap-2 md:flex-row md:items-center">
-                                    <h1 className="text-2xl font-bold">{tecnico.nome}</h1>
-                                    <span
-                                        data-slot="badge"
-                                        data-variant="secondary"
-                                        className="inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3 bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90"
-                                    >
-                                        Member
-                                    </span>
-                                </div>
-                                <p className="text-muted-foreground">{tecnico.cargo}</p>
-                                <div className="text-muted-foreground flex flex-wrap gap-4 text-sm">
-                                    <div className="flex items-center gap-1">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width={24}
-                                            height={24}
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth={2}
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            className="lucide lucide-mail size-4"
-                                            aria-hidden="true"
-                                        >
-                                            <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
-                                            <rect x={2} y={4} width={20} height={16} rx={2} />
-                                        </svg>
-                                        {tecnico.email}
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width={24}
-                                            height={24}
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth={2}
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            className="lucide lucide-map-pin size-4"
-                                            aria-hidden="true"
-                                        >
-                                            <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
-                                            <circle cx={12} cy={10} r={3} />
-                                        </svg>
-                                        {tecnico.local_nasc}
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width={24}
-                                            height={24}
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth={2}
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            className="lucide lucide-calendar size-4"
-                                            aria-hidden="true"
-                                        >
-                                            <path d="M8 2v4" />
-                                            <path d="M16 2v4" />
-                                            <rect width={18} height={18} x={3} y={4} rx={2} />
-                                            <path d="M3 10h18" />
-                                        </svg>
-                                        Efetivado em {tecnico.data_efetivacao.split('-')[0]+'-'}{tecnico.data_efetivacao.split('-')[1]+'-'}{tecnico.data_efetivacao.split('-')[2]}
-                                    </div>
-                                </div>
-                            </div>
-                            <button
-                                data-slot="button"
-                                data-variant="default"
-                                data-size="default"
-                                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3"
-                            >
-                                Editar Perfil
+                        </div>
+
+                        <button
+                            onClick={openModal}
+                            className="px-5 py-2.5 rounded-xl text-white bg-blue-600"
+                        >
+                            Editar perfil
+                        </button>
+                    </div>
+                </div>
+
+                {/* GRID */}
+                <div className="grid md:grid-cols-3 gap-6">
+                    <div className="bg-white border rounded-2xl p-5">
+                        <Info label="Email" value={tecnico.email} />
+                        <Info label="Telefone" value={tecnico.telefone} />
+                    </div>
+
+                    <div className="bg-white border rounded-2xl p-5">
+                        <Info label="Cargo" value={tecnico.cargo} />
+                        <Info label="Departamento" value={tecnico.departamento} />
+                    </div>
+
+                    <div className="bg-white border rounded-2xl p-5">
+                        <Info label="Cidade" value={tecnico.cidade} />
+                        <Info label="Estado" value={tecnico.estado} />
+                    </div>
+                </div>
+
+                {/* BIO */}
+                <div className="bg-white border rounded-2xl p-6">
+                    <p>{tecnico.bio || "Sem descrição."}</p>
+                </div>
+            </div>
+
+            {/* MODAL */}
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
+                    <div className="bg-white w-full max-w-2xl rounded-2xl p-6">
+                        <h2 className="text-lg font-semibold mb-4">
+                            Editar perfil
+                        </h2>
+
+                        <Input label="Nome" value={usuarioSelecionado.nome} />
+                        <Input label="Email" value={usuarioSelecionado.email} />
+
+                        <div className="flex justify-end mt-4 gap-2">
+                            <button onClick={closeModal}>Cancelar</button>
+                            <button className="bg-blue-600 text-white px-4 py-2 rounded">
+                                Salvar
                             </button>
                         </div>
                     </div>
                 </div>
-                <div
-                    dir="ltr"
-                    data-orientation="horizontal"
-                    data-slot="tabs"
-                    className="group/tabs flex gap-2 data-[orientation=horizontal]:flex-col space-y-6"
-                >
-                    <div
-                        data-state="active"
-                        data-orientation="horizontal"
-                        role="tabpanel"
-                        aria-labelledby="radix-_R_59bsnpfjb_-trigger-personal"
-                        id="radix-_R_59bsnpfjb_-content-personal"
-                        tabIndex={0}
-                        data-slot="tabs-content"
-                        className="flex-1 outline-none space-y-6"
-                        style={{ animationDuration: "0s" }}
-                    >
-                        <div
-                            data-slot="card"
-                            className="flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm"
-                        >
-                            <div
-                                data-slot="card-header"
-                                className="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
-                            >
-                                <div data-slot="card-title" className="leading-none font-semibold">
-                                    Informação Pessoal
-                                </div>
-                                <div
-                                    data-slot="card-description"
-                                    className="text-sm text-muted-foreground"
-                                >
-                                    Atualize suas informações pessoais
-                                </div>
-                            </div>
-                            <div data-slot="card-content" className="px-6 space-y-6">
-                                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                    <div className="space-y-2">
-                                        <label
-                                            data-slot="label"
-                                            className="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                            htmlFor="firstName"
-                                        >
-                                            Nome
-                                        </label>
-                                        <input
-                                            data-slot="input"
-                                            className="h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40"
-                                            id="firstName"
-                                            defaultValue={tecnico.nome.split(' ')[0]}
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label
-                                            data-slot="label"
-                                            className="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                            htmlFor="lastName"
-                                        >
-                                            Sobrenome
-                                        </label>
-                                        <input
-                                            data-slot="input"
-                                            className="h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40"
-                                            id="lastName"
-                                            defaultValue={tecnico.nome.split(' ')[1]}
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label
-                                            data-slot="label"
-                                            className="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                            htmlFor="email"
-                                        >
-                                            Email
-                                        </label>
-                                        <input
-                                            type="email"
-                                            data-slot="input"
-                                            className="h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40"
-                                            id="email"
-                                            defaultValue={tecnico.email}
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label
-                                            data-slot="label"
-                                            className="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                            htmlFor="phone"
-                                        >
-                                            Telefone
-                                        </label>
-                                        <input
-                                            data-slot="input"
-                                            className="h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40"
-                                            id="phone"
-                                            defaultValue={tecnico.telefone}
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label
-                                            data-slot="label"
-                                            className="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                            htmlFor="jobTitle"
-                                        >
-                                            Cargo
-                                        </label>
-                                        <input
-                                            data-slot="input"
-                                            className="h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40"
-                                            id="jobTitle"
-                                            defaultValue={tecnico.cargo}
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label
-                                            data-slot="label"
-                                            className="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                            htmlFor="company"
-                                        >
-                                            Empresa
-                                        </label>
-                                        <input
-                                            data-slot="input"
-                                            className="h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40"
-                                            id="company"
-                                            defaultValue={tecnico.id_empresa}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <label
-                                        data-slot="label"
-                                        className="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-                                        htmlFor="bio"
-                                    >
-                                        Bio
-                                    </label>
-                                    <textarea
-                                        data-slot="textarea"
-                                        className="flex field-sizing-content min-h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:ring-destructive/40"
-                                        id="bio"
-                                        placeholder="Tell us about yourself..."
-                                        rows={4}
-                                        defaultValue={
-                                            tecnico.bio
-                                        }
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        data-state="inactive"
-                        data-orientation="horizontal"
-                        role="tabpanel"
-                        aria-labelledby="radix-_R_59bsnpfjb_-trigger-account"
-                        hidden=""
-                        id="radix-_R_59bsnpfjb_-content-account"
-                        tabIndex={0}
-                        data-slot="tabs-content"
-                        className="flex-1 outline-none space-y-6"
-                    />
-                    <div
-                        data-state="inactive"
-                        data-orientation="horizontal"
-                        role="tabpanel"
-                        aria-labelledby="radix-_R_59bsnpfjb_-trigger-security"
-                        hidden=""
-                        id="radix-_R_59bsnpfjb_-content-security"
-                        tabIndex={0}
-                        data-slot="tabs-content"
-                        className="flex-1 outline-none space-y-6"
-                    />
-                    <div
-                        data-state="inactive"
-                        data-orientation="horizontal"
-                        role="tabpanel"
-                        aria-labelledby="radix-_R_59bsnpfjb_-trigger-notifications"
-                        hidden=""
-                        id="radix-_R_59bsnpfjb_-content-notifications"
-                        tabIndex={0}
-                        data-slot="tabs-content"
-                        className="flex-1 outline-none space-y-6"
-                    />
-                </div>
-            </div>
+            )}
+        </div>
+    );
+}
 
-        ))}
-    </>);
+function Info({ label, value }) {
+    return (
+        <div className="flex justify-between text-sm">
+            <span className="text-gray-500">{label}</span>
+            <span>{value || "-"}</span>
+        </div>
+    );
+}
+
+function Input({ label, value }) {
+    return (
+        <div className="mb-3">
+            <label className="text-xs text-gray-500">{label}</label>
+            <input defaultValue={value} className="w-full border p-2 rounded" />
+        </div>
+    );
 }
