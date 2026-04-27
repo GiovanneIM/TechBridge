@@ -18,9 +18,12 @@ CREATE TABLE usuarios (
     senha			VARCHAR(255) 	NOT NULL,						-- Senha do usuário
     foto_perfil 	VARCHAR(255),									-- Foto de perfil
     ativo			BOOLEAN			DEFAULT TRUE,					-- Status do usuário (Conta ativa ou inativa)
+    data_efetivacao	VARCHAR(10)		NOT NULL,						-- Data da efetivação
+    cargo			VARCHAR(100)	NOT NULL,						-- Cargo do funcionário
     
     telefone		VARCHAR(20)		NOT NULL, 						-- Número do telefone do usuário (com DDD)
     bio				VARCHAR(255)	NOT NULL, 						-- Breve biografia do usuário
+    local_nasc		VARCHAR(100)	NOT NULL, 						-- Local de nascimento
     
     -- Chaves estrangeiras
     tipo_usuario	INT				NOT NULL,						-- Tipo de usuário
@@ -34,11 +37,44 @@ CREATE TABLE usuarios (
 
 -- Inserindo os usuários de exemplo
 INSERT INTO usuarios 
-(nome, email, senha, tipo_usuario, id_empresa, telefone, bio)
+(nome, email, senha, tipo_usuario, id_empresa, telefone, cargo, data_efetivacao, bio, local_nasc)
 VALUES 
-('Kim Minji', 'admin@tb.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 1, NULL, '(11) 95989-9539', 'Admin do sistema'),
-('Poliwag Gomez', 'admcliente@email.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 2, 1, '(11) 98921-8798', 'Responsável pelo cliente'),
-('Izuku Midoriya', 'tecnico@email.com', '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 3, 1, '(11) 97548-1367', 'Técnico de campo');
+(
+'Kim Minji', 
+'admin@tb.com', 
+'$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
+1, 
+NULL, 
+'(11) 95989-9539', 
+'Administrador do sistema', 
+'05-03-2024', 
+'Administradora de sistemas com foco em organização, segurança e eficiência operacional. Atua garantindo o bom funcionamento das plataformas e suporte estratégico para a equipe.', 
+'São Paulo, BR'
+),
+(
+'Poliwag Gomez', 
+'admcliente@email.com', 
+'$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
+2, 
+1, 
+'(11) 98921-8798', 
+'Gerente de produção', 
+'22-11-2022', 
+'Gerente de produção experiente, especializado em otimização de processos e liderança de equipes. Trabalha para aumentar a produtividade e garantir a qualidade nas entregas.', 
+'Chigago, US'
+),
+(
+'Izuku Midoriya', 
+'tecnico@email.com', 
+'$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
+3, 
+1, 
+'(11) 97548-1367', 
+'Técnico de campo', 
+'15-05-2019', 
+'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.', 
+'Buenos Aires, AR'
+);
 
 -- Alterando as fotos do usuário
 -- Obs: Decidir se será definido por link ou arquivo
