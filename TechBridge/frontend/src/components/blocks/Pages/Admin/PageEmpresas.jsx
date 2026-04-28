@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 export default function PageEmpresas() {
     let content;
 
+    const { empresas } = useEmpresas({})
 
     content = (<>
         <div className="p-4 lg:p-6">
             <div className="flex flex-col bg-secondary p-2 w-sm justify-center rounded gap-2">
                 <label className="font-semibold">Código da registro</label>
-                <input placeholder="Código" className="border bg-muted p-1 rounded"/>
+                <input placeholder="Código" className="border bg-muted p-1 rounded" />
 
                 <Button>Procurar</Button>
 

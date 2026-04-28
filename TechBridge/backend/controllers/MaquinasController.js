@@ -20,6 +20,8 @@ class MaquinasController {
 
         } catch (error) {
             console.error('Erro ao listar os maquinas:', error);
+
+            // ERRO DO SERVIDOR
             res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',

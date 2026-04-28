@@ -7,6 +7,7 @@ import { authMiddleware, adminMiddleware } from '../middlewares/authMiddleware.j
 const router = express.Router();
 
 
+router.get('/empresas', authMiddleware, EmpresasController.listarEmpresas)
 
 /**
  * @swagger
