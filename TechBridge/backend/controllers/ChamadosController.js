@@ -66,12 +66,11 @@ class ChamadosController {
         • Se o usuário é um admin Cliente, lista apenas se pertencer à empresa
         • Se o usuário é um técnico, lista apenas se pertencer à empresa e ele tiver atendido
     */
-    static async listarChamado(req, res) {
+    static async listarChamadoId(req, res) {
         try {
-            // Obtendo o id
             const id = Number(req.params.id);
 
-            // Se o ID não for número
+            // valida ID
             if (isNaN(id)) {
                 return res.status(400).json({
                     sucesso: false,
@@ -80,29 +79,37 @@ class ChamadosController {
                 });
             }
 
-            options.where.id = id;
+            // garante usuário autenticado
+            if (!req.usuario) {
+                return res.status(401).json({
+                    sucesso: false,
+                    erro: "Não autenticado",
+                    mensagem: "Usuário não encontrado na requisição"
+                });
+            }
 
-            // Limitando os chamados de acordo com o tipo de usuário
+            // monta filtros
+            const options = {
+                where: {
+                    id
+                }
+            };
+
+            // regras de acesso
             switch (req.usuario.tipo_usuario) {
-                // Se é um ADM Cliente, lista apenas os chamados da empresa dele
-                case 2:
+                case 2: // ADM cliente
                     options.where.id_empresa = req.usuario.id_empresa;
                     break;
 
-                // Se é um técnico, lista apenas os chamados que ele atendeu
-                case 3:
+                case 3: // técnico
                     options.where.id_empresa = req.usuario.id_empresa;
                     options.where.id_tecnico = req.usuario.id_usuario;
                     break;
             }
 
-            // Chamando o model para fazer a consulta
-            const resultado = await ChamadosModel.listarChamado(options);
+            // chama model correto
+            const chamado = await ChamadosModel.buscarChamadoPorId(options);
 
-            // Obtendo o chamado
-            const chamado = resultado.chamados[0];
-
-            // Se o chamado não foi encontrado
             if (!chamado) {
                 return res.status(404).json({
                     sucesso: false,
@@ -111,19 +118,19 @@ class ChamadosController {
                 });
             }
 
-            // Respondendo a requisição com o chamado
-            res.status(200).json({
+            return res.status(200).json({
                 sucesso: true,
                 dados: { chamado }
             });
 
         } catch (error) {
-            // Erro do servidor
-            console.error('Erro ao listar o chamado:', error);
-            res.status(500).json({
+            console.error("Erro ao listar chamado:", error);
+
+            return res.status(500).json({
                 sucesso: false,
-                erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível listar o chamado'
+                erro: "Erro interno do servidor",
+                mensagem: error.message,
+                stack: error.stack
             });
         }
     }
@@ -167,7 +174,7 @@ class ChamadosController {
             ► id_tecnico
     */
     static async atenderChamado(req, res) { }
- 
+
     /* PATCH /chamados/:id/concluir - Rota para atualizar o estado de um chamado para "concluido"
         • Dados a receber:
             ► id_causa

@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/buscar', authMiddleware, ChamadosController.listarChamados)
 
 // Obter um chamado específico
-router.get('/:id', authMiddleware, ChamadosController.listarChamado)
+router.get('/:id', authMiddleware, ChamadosController.listarChamadoId)
 
 // Criar um chamado
 router.post('/', ChamadosController.criarChamado)

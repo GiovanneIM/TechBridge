@@ -33,16 +33,15 @@ class ChamadosModel {
     }
 
     //  BUSCAR UM CHAMADO ESPECÍFICO
-    static async listarChamado(id) {
+    static async buscarChamadoPorId(options) {
         try {
-            // Fazendo a consulta
-            const chamados = await read("chamados", { where: { id } });
-            const chamado = chamados[0]
+            const chamados = await read("chamados", options.where);
 
-            // Retornando o chamado
-            return chamado || null;
+            // retorna só 1 registro
+            return chamados?.[0] || null;
+
         } catch (error) {
-            console.error('Erro ao listar chamados:', error);
+            console.error("Erro no model buscarChamadoPorId:", error);
             throw error;
         }
     }
