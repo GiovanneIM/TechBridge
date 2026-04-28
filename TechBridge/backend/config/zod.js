@@ -1,17 +1,34 @@
 import { z } from 'zod';
 
+const PAGINACAO_LIMITE_MAXIMO = Number(process.env.PAGINACAO_LIMITE_MAXIMO) || 100;
+const PAGINACAO_LIMITE_PADRAO = Number(process.env.PAGINACAO_LIMITE_PADRAO) || 10;
+
 const estadosValidos = [
     'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO',
     'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI',
     'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
 ];
 
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+// PAGINAÇÃO
+export const paginacaoSchema = z.object({
+    page: z.coerce.number().int()
+        .min(1)
+        .default(1),
+
+    limit: z.coerce.number().int()
+        .min(1)
+        .max(PAGINACAO_LIMITE_MAXIMO)
+        .default(PAGINACAO_LIMITE_PADRAO)
+})
+    .strict();
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 
 // ESQUEMA DE LOGIN
-export const loginUser = z.object({
+export const loginUserSchema = z.object({
     email: z
         .string({
             required_error: 'O e-mail é obrigatório',
@@ -33,7 +50,7 @@ export const loginUser = z.object({
 }).strict();
 
 // ESQUEMA DE ATUALIZAÇÃO DE USUÁRIO (Exceto senha e foto)
-export const updateUser = z.object({
+export const updateUserSchema = z.object({
     nome: z
         .string({
             invalid_type_error: 'O nome deve ser um texto'
@@ -76,7 +93,7 @@ export const updateUser = z.object({
     });
 
 // ESQUEMA DE ATUALIZAÇÃO DE USUÁRIO (Senha)
-export const updateSenha = z.object({
+export const updateSenhaSchema = z.object({
     senhaAtual: z
         .string({
             required_error: 'A senha atual é obrigatória',
@@ -98,8 +115,48 @@ export const updateSenha = z.object({
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 
+// ESQUEMA DE CRIAÇÃO DE USUÁRIO
+export const createUserSchema = z.object({
+    nome: z
+        .string({
+            required_error: 'O nome é obrigatório',
+            invalid_type_error: 'O nome deve ser um texto'
+        })
+        .trim()
+        .min(3, 'O nome deve ter no mínimo 3 carácteres')
+        .max(255, 'O nome pode ter no máximo 255 carácteres'),
+
+    email: z
+        .string({
+            required_error: 'O e-mail é obrigatório',
+            invalid_type_error: 'O e-mail deve ser um texto'
+        })
+        .trim()
+        .max(255, 'O e-mail pode ter no máximo 255 carácteres')
+        .toLowerCase()
+        .pipe(
+            z.email({ error: 'Formato de e-mail inválido' })
+        ),
+
+    senha: z
+        .string({
+            required_error: 'A senha é obrigatória',
+            invalid_type_error: 'A senha deve ser um texto'
+        })
+        .min(6, 'A senha deve ter no mínimo 6 carácteres')
+        .max(255, 'A senha pode ter no máximo 255 carácteres'),
+
+
+    tipo_usuario: z
+        .number({
+            required_error: 'O cargo é obrigatório',
+            invalid_type_error: 'O ID do cargo deve ser um inteiro'
+        })
+        .int()
+}).strict()
+
 // ESQUEMA DE CRIAÇÃO DE EMPRESA
-export const createEmpresa = z.object({
+export const createEmpresaSchema = z.object({
     cnpj: z
         .string({
             required_error: 'CNPJ é obrigatório',
@@ -196,52 +253,11 @@ export const createEmpresa = z.object({
             })
     }),
 
-    gerente: createUser
+    gerente: createUserSchema
 });
 
-// ESQUEMA DE CRIAÇÃO DE USUÁRIO
-export const createUser = z.object({
-    nome: z
-        .string({
-            required_error: 'O nome é obrigatório',
-            invalid_type_error: 'O nome deve ser um texto'
-        })
-        .trim()
-        .min(3, 'O nome deve ter no mínimo 3 carácteres')
-        .max(255, 'O nome pode ter no máximo 255 carácteres'),
-
-    email: z
-        .string({
-            required_error: 'O e-mail é obrigatório',
-            invalid_type_error: 'O e-mail deve ser um texto'
-        })
-        .trim()
-        .max(255, 'O e-mail pode ter no máximo 255 carácteres')
-        .toLowerCase()
-        .pipe(
-            z.email({ error: 'Formato de e-mail inválido' })
-        ),
-
-    senha: z
-        .string({
-            required_error: 'A senha é obrigatória',
-            invalid_type_error: 'A senha deve ser um texto'
-        })
-        .min(6, 'A senha deve ter no mínimo 6 carácteres')
-        .max(255, 'A senha pode ter no máximo 255 carácteres'),
-
-
-    tipo_usuario: z
-        .number({
-            required_error: 'O cargo é obrigatório',
-            invalid_type_error: 'O ID do cargo deve ser um inteiro'
-        })
-        .int()
-}).strict()
-
-
 // ESQUEMA DE CRIAÇÃO DE SETOR
-export const createSetor = z.object({
+export const createSetorSchema = z.object({
     nome: z
         .string({
             required_error: 'O nome é obrigatório',
@@ -281,7 +297,7 @@ export const createSetor = z.object({
 });
 
 // ESQUEMA DE CRIAÇÃO DE MÁQUINA
-export const createMaquina = z.object({
+export const createMaquinaSchema = z.object({
     nome: z
         .string({
             required_error: 'O nome é obrigatório',

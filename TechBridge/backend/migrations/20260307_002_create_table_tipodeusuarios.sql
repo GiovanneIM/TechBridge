@@ -18,6 +18,7 @@ CREATE TABLE tipos_usuarios (
 INSERT INTO tipos_usuarios (descricao)
 VALUES 
 	('admin'),
+	('gerente_principal'),
 	('gerente'),
 	('tecnico')
 ;

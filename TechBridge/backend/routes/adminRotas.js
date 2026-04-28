@@ -1,17 +1,51 @@
-// ROTAS PARA CONTROLE DE EMPRESAS
-
 import express from 'express';
 import EmpresasController from '../controllers/EmpresasController.js';
-import { authMiddleware, adminMiddleware } from '../middlewares/authMiddleware.js';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
+import { validateZod } from '../middlewares/validate.js';
+import { createEmpresaSchema, paginacaoSchema } from '../config/zod.js';
 
 const router = express.Router();
 
-
-router.get('/empresas', authMiddleware, EmpresasController.listarEmpresas)
+/**
+ * @swagger
+ * /admin/empresas:
+ *   get:
+ *     summary: Listar todas as empresas. (Com paginação)
+ *     tags: [Admin]
+ * 
+ *     parameters:
+ *     - in: query
+ *       name: page
+ *       schema:
+ *         type: integer
+ *         minimum: 1
+ *         default: 1
+ *       description: Número da página
+ * 
+ *     - in: query
+ *       name: limit
+ *       schema:
+ *         type: integer
+ *         minimum: 1
+ *         maximum: 100
+ *         default: 10
+ *       description: Limite de dados por página
+ * 
+ *     responses:
+ *       200:
+ *         description: Empresas listadas com sucesso
+ *       400: 
+ *         description: Dados inválidos
+ *       401:
+ *         description: Permissão negada
+ *       500:
+ *         description: Não foi possível listar as empresas
+ */
+router.get('/empresas', validateZod(paginacaoSchema, 'query'), EmpresasController.listarEmpresas)
 
 /**
  * @swagger
- * /admin/empresa:
+ * /admin/empresas:
  *   post:
  *     summary: Registrar uma nova empresa e um gerente inicial para ela
  *     tags: [Admin]
@@ -22,7 +56,7 @@ router.get('/empresas', authMiddleware, EmpresasController.listarEmpresas)
  *           schema:
  *             $ref: '#/components/schemas/NewCompany'
  *     responses:
- *       200:
+ *       201:
  *         description: Empresa registrada com sucesso
  *       400: 
  *         description: Dados inválidos
@@ -31,7 +65,7 @@ router.get('/empresas', authMiddleware, EmpresasController.listarEmpresas)
  *       500:
  *         description: Não foi possível registrar a empresa
  */
-router.post('/empresa', authMiddleware, () => { });
+router.post('/empresas', validateZod(createEmpresaSchema, 'body'), EmpresasController.criarEmpresa);
 
 /**
  * @swagger
@@ -58,7 +92,7 @@ router.post('/empresa', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível excluir a empresa
  */
-router.delete('/empresas/:empresa', authMiddleware, () => { });
+router.delete('/empresas/:empresa', () => { });
 
 /**
  * @swagger
@@ -85,7 +119,7 @@ router.delete('/empresas/:empresa', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível excluir o usuário
  */
-router.delete('/usuarios/:usuario', authMiddleware, () => { });
+router.delete('/usuarios/:usuario', () => { });
 
 
 export default router;

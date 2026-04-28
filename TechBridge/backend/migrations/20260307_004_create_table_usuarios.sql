@@ -19,12 +19,12 @@ CREATE TABLE usuarios (
     senha			VARCHAR(255) 	NOT NULL,						-- Senha do usuário
 
     foto_perfil 	VARCHAR(255),									-- Foto de perfil
-    bio				VARCHAR(300)	NOT NULL, 						-- Breve biografia do usuário
-    telefone		VARCHAR(20)		NOT NULL, 						-- Número do telefone do usuário (com DDD)
+    bio				VARCHAR(300), 			            			-- Breve biografia do usuário
+    telefone		VARCHAR(20), 					            	-- Número do telefone do usuário (com DDD)
     
-    
-    data_efetivacao	VARCHAR(10)		NOT NULL,						-- Data da efetivação
-    local_nasc		VARCHAR(100)	NOT NULL, 						-- Local de nascimento
+    -- Não necessários
+    data_efetivacao	VARCHAR(10),			            			-- Data da efetivação
+    local_nasc		VARCHAR(100), 		    	        			-- Local de nascimento
     
 
     -- Chaves estrangeiras
@@ -46,7 +46,7 @@ VALUES
 'admin@tb.com', 
 '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
 1, 
-NULL, 
+1, 
 '(11) 95989-9539', 
 'Administrador do sistema', 
 '05-03-2024', 
@@ -55,10 +55,10 @@ NULL,
 ),
 (
 'Poliwag Gomez', 
-'admcliente@email.com', 
+'gerentePrincipal@email.com', 
 '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
 2, 
-1, 
+2, 
 '(11) 98921-8798', 
 'Gerente de produção', 
 '22-11-2022', 
@@ -66,11 +66,23 @@ NULL,
 'Chigago, US'
 ),
 (
+'The Rock', 
+'gerente@email.com', 
+'$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
+3, 
+2, 
+'(11) 97548-1367', 
+'Técnico de campo', 
+'15-05-2019', 
+'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.', 
+'Buenos Aires, AR'
+);,
+(
 'Izuku Midoriya', 
 'tecnico@email.com', 
 '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
-3, 
-1, 
+4, 
+2, 
 '(11) 97548-1367', 
 'Técnico de campo', 
 '15-05-2019', 
@@ -79,7 +91,6 @@ NULL,
 );
 
 -- Alterando as fotos do usuário
--- Obs: Decidir se será definido por link ou arquivo
 UPDATE usuarios 
 SET foto_perfil = 'https://images-news.now.com/newsimage/NewsImage/2025-02-07-15-22-5103GxLf4N.jpg'
 WHERE id = 1;
@@ -87,6 +98,10 @@ WHERE id = 1;
 UPDATE usuarios 
 SET foto_perfil = 'https://tse2.mm.bing.net/th/id/OIP.nzFhNGOabtBPZxm6pqLL3wHaHO?rs=1&pid=ImgDetMain&o=7&rm=3'
 WHERE id = 2;
+
+UPDATE usuarios 
+SET foto_perfil = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Dwayne_Johnson-1809_%28cropped%29.jpg/960px-Dwayne_Johnson-1809_%28cropped%29.jpg'
+WHERE id = 3;
 
 UPDATE usuarios 
 SET foto_perfil = 'https://i.pinimg.com/736x/2a/f1/12/2af1129122bc8118735dfaae9df21d10.jpg'

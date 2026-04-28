@@ -149,10 +149,8 @@ router.patch('/senha', authMiddleware, AuthController.atualizarSenha);
  *         description: Imagem atualizada com sucesso
  */
 router.patch(
-    "/foto",
-    authMiddleware,
-    uploadImagens.single("foto"),
-    handleUploadError,
+    "/foto", authMiddleware,
+    uploadImagens.single("foto"), handleUploadError,
     AuthController.atualizarFoto
 );
 

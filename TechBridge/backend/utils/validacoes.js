@@ -1,5 +1,3 @@
-import { success } from "zod";
-
 export function validarEmail() {
     return { sucesso: true}
 }

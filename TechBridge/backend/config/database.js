@@ -3,7 +3,6 @@
 import mysql from 'mysql2/promise';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
-import { join } from 'path';
 
 // Carregando variáveis do arquivo .env
 dotenv.config();

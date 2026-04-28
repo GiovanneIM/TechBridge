@@ -2,16 +2,23 @@ import EmpresasModel from "../models/EmpresasModel.js";
 
 class EmpresasController {
 
-    // LISTAR EMPRESAS
+    // LISTAR EMPRESAS (COM PAGINAÇÃO)
     static async listarEmpresas(req, res) {
         try {
+            // OBTER PAGINAÇÃO
+            const { page, limit } = req.query;
+
+            // CALCULANDO OFFSET
+            const offset = (page - 1) * limit;
+
             // OBTER AS EMPRESAS
-            const { empresas } = EmpresasModel.listarEmpresas()
+            const resultado = await EmpresasModel.listarEmpresas(limit, offset)
 
             // SUCESSO: ENVIAR EMPRESAS
             res.status(200).json({
                 sucesso: true,
-                dados: { empresas }
+                mensagem: `Empresas listadas com sucesso - página ${page}`,
+                dados: resultado
             });
 
         } catch (error) {
@@ -28,14 +35,10 @@ class EmpresasController {
     }
 
     // REGISTAR UMA NOVA EMPRESA
-    static async registrarEmpresas(req, res) {
+    static async criarEmpresa(req, res) {
         const { empresa, gerente } = req.body;
 
         try {
-            // VALIDAR DADOS DA NOVA EMPRESA
-            const validacaoEmpresa = validarEmpresa(empresa)
-
-            // VALIDAR DADOS DO NOVO GERENTE
 
         }
         catch {

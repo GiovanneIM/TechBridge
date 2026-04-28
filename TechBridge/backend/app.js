@@ -30,7 +30,7 @@ import painelRotas from './routes/painelRotas.js';
 import { logMiddleware } from './middlewares/logMiddleware.js';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 import { handleUploadError } from './middlewares/uploadMiddleware.js';
-import { adminMiddleware } from './middlewares/authMiddleware.js';
+import { adminMiddleware, authMiddleware } from './middlewares/authMiddleware.js';
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 // CONFIGURANDO SERVIDOR E MIDDLEWARES
@@ -93,10 +93,10 @@ app.use(
 
 // ATIVAR AS ROTAS
 app.use('/techbridge/auth', authRotas);
-app.use('/techbridge/admin', adminMiddleware, adminRotas);
+app.use('/techbridge/admin', authMiddleware, adminMiddleware, adminRotas);
 app.use('/techbridge/criptografia', criptografiaRotas);
 
-app.use('/techbridge/empresas', empresasRotas);
+app.use('/techbridge/empresas', authMiddleware, empresasRotas);
 
 app.use('/techbridge/user', userRotas);
 app.use('/techbridge/chamados', chamadosRotas);
