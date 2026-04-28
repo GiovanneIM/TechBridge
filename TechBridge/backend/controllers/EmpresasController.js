@@ -1,5 +1,4 @@
 import EmpresasModel from "../models/EmpresasModel.js";
-import { validarNome } from "../utils/validacoes.js";
 
 class EmpresasController {
 

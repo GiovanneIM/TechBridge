@@ -143,8 +143,8 @@ class UserModel {
         try {
             return await update(
                 'usuarios',
-                { foto_perfil: fotoNova },
-                `id = ${id}`
+                { foto_perfil: 'http://localhost:3000/uploads/imagens/' + fotoNova },
+                {id}
             );
         } catch (error) {
             console.error('Erro ao atualizar usuário:', error);

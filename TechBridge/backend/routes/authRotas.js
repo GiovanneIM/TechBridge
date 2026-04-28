@@ -152,6 +152,7 @@ router.patch(
     "/foto",
     authMiddleware,
     uploadImagens.single("foto"),
+    handleUploadError,
     AuthController.atualizarFoto
 );
 

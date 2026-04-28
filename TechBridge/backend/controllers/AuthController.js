@@ -282,8 +282,10 @@ class AuthController {
     // PATCH /auth/foto - Rota para atualizar a foto de perfil do usuário
     static async atualizarFoto(req, res) {
         try {
-            const idUsuario = req.usuario.id; // ID do usuário logado via authMiddleware
+            // ID DO USUÁRIO
+            const idUsuario = req.usuario.id;
 
+            // CASO IMAGEM NÃO TENHA SIDO ENVIADA
             if (!req.file) {
                 return res.status(400).json({
                     sucesso: false,
@@ -291,21 +293,40 @@ class AuthController {
                 });
             }
 
+            // EXIBIR INFORMAÇÕES DA IMAGEM
+            console.log({
+                original: req.file.originalname,
+                salvo: req.file.filename,
+                tipo: req.file.mimetype,
+                tamanho: req.file.size
+            });
+
+            // OBTER O NOME DA FOTO
             const nomeFoto = req.file.filename;
 
-            await UserModel.atualizarFoto(idUsuario, nomeFoto);
+            // OBTER O USUARIO
+            const usuario = await UserModel.buscarPorId(idUsuario)
+
+            // ATUALIZAR A IMAGEM DO USUÁRIO NO BANCO
+            await UserModel.atualizarFoto(idUsuario, nomeFoto)
+
+            // REMOVER A IMAGEM ANTIGA DO USUÁRIO
+            if (usuario.foto) {
+                await removerArquivoAntigo(usuario.foto, 'imagem')
+            }
 
             return res.json({
                 sucesso: true,
                 mensagem: 'Foto atualizada com sucesso',
+                foto: nomeFoto
             });
 
         } catch (error) {
             // Erro do servidor
-            console.error('Erro ao atualizar a senha do usuário:', error);
+            console.error('Erro ao atualizar a foto do usuário:', error);
             return res.status(500).json({
                 sucesso: false,
-                mensagem: 'Erro ao atualizar a senha do usuário'
+                mensagem: 'Erro ao atualizar a foto do usuário'
             });
         }
     }

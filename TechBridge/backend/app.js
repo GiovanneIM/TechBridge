@@ -46,16 +46,21 @@ const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3000;
 
 // Middlewares globais
-app.use(helmet()); // Segurança HTTP headers
+//app.use(helmet()); // Segurança HTTP headers
+app.use(
+    helmet({
+        crossOriginResourcePolicy: false
+    })
+);
 
 // Configurar CORS para permitir que rotas OPTIONS específicas sejam processadas
 app.use(cors({
-    origin: 'http://localhost:3001',                        // Permitindo acesso do Frontend
-    credentials: true,                                      // Permitindo receber cookies do navegador
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],   // Metódos permitidos
-    allowedHeaders: ['Content-Type', 'Authorization'],      // Headers permmitidos
-    preflightContinue: false,                               // Deixa as rotas OPTIONS específicas serem processadas
-    optionsSuccessStatus: 200,                              // Retorna 200 para OPTIONS em vez de 204
+    origin: 'http://localhost:3001',                                 // Permitindo acesso do Frontend
+    credentials: true,                                               // Permitindo receber cookies do navegador
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],   // Metódos permitidos
+    allowedHeaders: ['Content-Type', 'Authorization'],               // Headers permmitidos
+    preflightContinue: false,                                        // Deixa as rotas OPTIONS específicas serem processadas
+    optionsSuccessStatus: 200,                                       // Retorna 200 para OPTIONS em vez de 204
 }));
 
 app.use(express.json());
