@@ -1,11 +1,15 @@
 import { Warehouse } from "lucide-react";
 import HeaderPage from "../../Header/HeaderPage";
 import { Button } from "@/components/ui/button";
+import { useEmpresas } from "@/hooks/useEmpresas";
 
 export default function PageEmpresas() {
     let content;
 
-    const { empresas } = useEmpresas({})
+    const { empresas } = useEmpresas({
+        empresasIniciais: [],
+        
+    })
 
     content = (<>
         <div className="p-4 lg:p-6">

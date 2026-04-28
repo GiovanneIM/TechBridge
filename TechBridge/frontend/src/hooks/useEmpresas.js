@@ -26,7 +26,7 @@ export function useEmpresas({
 
     // BUSCAR TODAS AS EMPRESAS
     const fetchEmpresas = useCallback(async () => {
-        // LIMPANDO ESTADOS
+        // LIMPANDO ERRO E INICIANDO LOADING
         setLoading((prev) => ({ ...prev, fetch: true }));
         setError((prev) => ({ ...prev, fetch: null }));
 
@@ -39,16 +39,15 @@ export function useEmpresas({
                 setError((prev) => ({ ...prev, fetch: data.mensagem }))
             }
             else {
-                // 
-                setMaquinas(data.dados.maquinas)
+                // ATUALIZANDO O ESTADO DAS EMPRESAS
+                setEmpresas(data.dados.empresas)
             }
 
         } catch (err) {
-            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
-            setError((prev) => ({ ...prev, fetch: 'Erro ao buscar maquinas, tente novamente mais tarde.' }))
-
+            // CASO DÊ ERRO
+            setError((prev) => ({ ...prev, fetch: 'Erro ao buscar empresas, tente novamente mais tarde.' }))
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
+            // ENCERRANDO O LOADING
             setLoading((prev) => ({ ...prev, fetch: false }));
         }
     }, []);
