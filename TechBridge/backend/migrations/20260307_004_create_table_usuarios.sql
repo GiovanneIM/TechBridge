@@ -11,20 +11,22 @@ USE TECHBRIDGE;
 CREATE TABLE usuarios (
     id 				INT 			AUTO_INCREMENT PRIMARY KEY,
 	data_criacao 	TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que o usuário foi registrado
+    ativo			BOOLEAN			DEFAULT TRUE,					-- Status do usuário (Conta ativa ou inativa)
 
     -- Atributos do usuário
-    nome			VARCHAR(100) 	NOT NULL,						-- Nome do usuário
+    nome			VARCHAR(255) 	NOT NULL,						-- Nome do usuário
     email			VARCHAR(255) 	NOT NULL UNIQUE,				-- E-mail do usuário
     senha			VARCHAR(255) 	NOT NULL,						-- Senha do usuário
+
     foto_perfil 	VARCHAR(255),									-- Foto de perfil
-    ativo			BOOLEAN			DEFAULT TRUE,					-- Status do usuário (Conta ativa ou inativa)
-    data_efetivacao	VARCHAR(10)		NOT NULL,						-- Data da efetivação
-    cargo			VARCHAR(100)	NOT NULL,						-- Cargo do funcionário
-    
+    bio				VARCHAR(300)	NOT NULL, 						-- Breve biografia do usuário
     telefone		VARCHAR(20)		NOT NULL, 						-- Número do telefone do usuário (com DDD)
-    bio				VARCHAR(255)	NOT NULL, 						-- Breve biografia do usuário
+    
+    
+    data_efetivacao	VARCHAR(10)		NOT NULL,						-- Data da efetivação
     local_nasc		VARCHAR(100)	NOT NULL, 						-- Local de nascimento
     
+
     -- Chaves estrangeiras
     tipo_usuario	INT				NOT NULL,						-- Tipo de usuário
     id_empresa		INT,											-- ID da empresa do usuário

@@ -10,12 +10,16 @@ USE TECHBRIDGE;
 -- Criando a tabela de setores
 CREATE TABLE setores (
 	id				INT				AUTO_INCREMENT PRIMARY KEY,
+    data_criacao 	TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,
+    ativo			BOOLEAN			DEFAULT TRUE,
     
     -- Atributos do setor
     cod_setor       VARCHAR(50)     NOT NULL, 						-- Código de identificação (ID) interna na empresa (Definido pela empresa)
     nome			VARCHAR(100)	NOT NULL,						-- Nome do setor
     descricao		VARCHAR(255),									-- Descrição do setor (Opcional)
-    icone			VARCHAR(25)		NOT NULL,
+
+    
+    icone			VARCHAR(50)		NOT NULL,
     cor 			VARCHAR(255)	NOT NULL,
     
     -- Chaves estrangeiras

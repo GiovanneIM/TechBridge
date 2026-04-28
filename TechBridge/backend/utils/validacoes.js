@@ -1,150 +1,28 @@
 import { z } from 'zod';
 
-// Regex de email
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 const estadosValidos = [
     'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO',
     'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI',
     'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
 ];
 
-// ========================
-// VALIDAÇÕES MANUAIS
-// ========================
 
-export function validarEmail(email) {
-    if (typeof email !== "string") {
-        return {
-            sucesso: false,
-            erro: 'Email inválido',
-            mensagem: 'O e-mail deve ser um texto'
-        };
-    }
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-    email = email.trim();
 
-    if (!email) {
-        return {
-            sucesso: false,
-            erro: 'Email obrigatório',
-            mensagem: 'O email é obrigatório'
-        };
-    }
-
-    if (!emailRegex.test(email)) {
-        return {
-            sucesso: false,
-            erro: 'Email inválido',
-            mensagem: 'Formato de email inválido'
-        };
-    }
-
-    if (email.length > 255) {
-        return {
-            sucesso: false,
-            erro: 'Email inválido',
-            mensagem: 'O e-mail pode ter no máximo 255 caracteres'
-        };
-    }
-
-    return { sucesso: true };
-}
-
-export function validarSenha(senha) {
-    if (typeof senha !== "string") {
-        return {
-            sucesso: false,
-            erro: 'Senha inválida',
-            mensagem: 'A senha deve ser um texto'
-        };
-    }
-
-    senha = senha.trim();
-
-    if (!senha) {
-        return {
-            sucesso: false,
-            erro: 'Senha obrigatória',
-            mensagem: 'A senha é obrigatória'
-        };
-    }
-
-    if (senha.length < 6) {
-        return {
-            sucesso: false,
-            erro: 'Senha inválida',
-            mensagem: 'A senha deve ter no mínimo 6 caracteres'
-        };
-    }
-
-    return { sucesso: true };
-}
-
-export function validarNome(nome) {
-    if (typeof nome !== "string") {
-        return {
-            sucesso: false,
-            erro: 'Nome inválido',
-            mensagem: 'O nome deve ser um texto'
-        };
-    }
-
-    nome = nome.trim();
-
-    if (!nome) {
-        return {
-            sucesso: false,
-            erro: 'Nome obrigatório',
-            mensagem: 'O nome é obrigatório'
-        };
-    }
-
-    if (nome.length > 255) {
-        return {
-            sucesso: false,
-            erro: 'Nome inválido',
-            mensagem: 'O nome pode ter no máximo 255 caracteres'
-        };
-    }
-
-    return { sucesso: true };
-}
-
-export function validarEmpresa(empresa) {
-    const {
-        cnpj,
-        razao_social,
-        nome_fantasia,
-        cep,
-        rua,
-        complemento,
-        bairro,
-        cidade,
-        estado
-    } = empresa;
-
-    // (Você ainda pode implementar regras aqui se quiser)
-
-    return { sucesso: true };
-}
-
-// ========================
-// SCHEMAS ZOD
-// ========================
-
-// LOGIN
-export const userLogin = z.object({
+// ESQUEMA DE LOGIN
+export const loginUser = z.object({
     email: z
         .string({
             required_error: 'O e-mail é obrigatório',
             invalid_type_error: 'O e-mail deve ser um texto'
         })
         .trim()
-        .min(1, 'O e-mail não pode estar vazio')
-        .max(255, 'O e-mail pode ter no máximo 255 caracteres')
-        .email('Formato de e-mail inválido')
-        .transform(val => val.toLowerCase()),
+        .max(255, 'O e-mail pode ter no máximo 255 carácteres')
+        .toLowerCase()
+        .pipe(
+            z.email({ error: 'Formato de e-mail inválido' })
+        ),
 
     senha: z
         .string({
@@ -154,10 +32,73 @@ export const userLogin = z.object({
         .min(6, 'A senha deve ter no mínimo 6 dígitos')
 }).strict();
 
-// CRIAÇÃO DE USUÁRIO (placeholder)
-export const createuser = z.object({});
+// ESQUEMA DE ATUALIZAÇÃO DE USUÁRIO (Exceto senha e foto)
+export const updateUser = z.object({
+    nome: z
+        .string({
+            invalid_type_error: 'O nome deve ser um texto'
+        })
+        .trim()
+        .min(3, 'O nome deve ter no mínimo 3 carácteres')
+        .max(255, 'O nome pode ter no máximo 255 carácteres')
+        .optional(),
 
-// CRIAÇÃO DE EMPRESA
+    email: z
+        .string({
+            invalid_type_error: 'O e-mail deve ser um texto'
+        })
+        .trim()
+        .max(255, 'O e-mail pode ter no máximo 255 carácteres')
+        .toLowerCase()
+        .pipe(
+            z.email({ error: 'Formato de e-mail inválido' })
+        )
+        .optional(),
+
+    bio: z
+        .string({
+            invalid_type_error: 'A biografia deve ser um texto'
+        })
+        .trim()
+        .max(300, 'O biografia pode ter no máximo 300 carácteres')
+        .optional(),
+
+    telefone: z
+        .string({ invalid_type_error: 'O telefone deve ser um texto' })
+        .trim()
+        .regex(/^\d{10,11}$/, 'Telefone deve conter 10 ou 11 números')
+        .optional()
+
+})
+    .strict()
+    .refine(data => Object.keys(data).length > 0, {
+        message: 'Informe ao menos um campo para atualização'
+    });
+
+// ESQUEMA DE ATUALIZAÇÃO DE USUÁRIO (Senha)
+export const updateSenha = z.object({
+    senhaAtual: z
+        .string({
+            required_error: 'A senha atual é obrigatória',
+            invalid_type_error: 'A senha atual deve ser um texto'
+        })
+        .min(6, 'A senha atual deve ter no mínimo 6 carácteres')
+        .max(255, 'A senha atual pode ter no máximo 255 carácteres'),
+
+    senhaNova: z
+        .string({
+            required_error: 'A nova senha é obrigatória',
+            invalid_type_error: 'A nova senha deve ser um texto'
+        })
+        .min(6, 'A nova senha deve ter no mínimo 6 carácteres')
+        .max(255, 'A nova senha pode ter no máximo 255 carácteres')
+}).strict();
+
+
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+
+// ESQUEMA DE CRIAÇÃO DE EMPRESA
 export const createEmpresa = z.object({
     cnpj: z
         .string({
@@ -243,5 +184,90 @@ export const createEmpresa = z.object({
             })
     }),
 
-    gerente: z.object({}).optional()
+    gerente: createUser
+});
+
+// ESQUEMA DE CRIAÇÃO DE USUÁRIO
+export const createUser = z.object({
+    nome: z
+        .string({
+            required_error: 'O nome é obrigatório',
+            invalid_type_error: 'O nome deve ser um texto'
+        })
+        .trim()
+        .min(3, 'O nome deve ter no mínimo 3 carácteres')
+        .max(255, 'O nome pode ter no máximo 255 carácteres'),
+
+    email: z
+        .string({
+            required_error: 'O e-mail é obrigatório',
+            invalid_type_error: 'O e-mail deve ser um texto'
+        })
+        .trim()
+        .max(255, 'O e-mail pode ter no máximo 255 carácteres')
+        .toLowerCase()
+        .pipe(
+            z.email({ error: 'Formato de e-mail inválido' })
+        ),
+
+    senha: z
+        .string({
+            required_error: 'A senha é obrigatória',
+            invalid_type_error: 'A senha deve ser um texto'
+        })
+        .min(6, 'A senha deve ter no mínimo 6 carácteres')
+        .max(255, 'A senha pode ter no máximo 255 carácteres'),
+
+
+    tipo_usuario: z
+        .number({
+            required_error: 'O cargo é obrigatório',
+            invalid_type_error: 'O ID do cargo deve ser um inteiro'
+        })
+        .int()
+}).strict()
+
+
+// ESQUEMA DE CRIAÇÃO DE SETOR
+export const createSetor = z.object({
+    nome: z
+        .string({
+            required_error: 'O nome é obrigatório',
+            invalid_type_error: 'O nome deve ser um texto'
+        })
+        .trim()
+        .min(3, 'O nome deve ter no mínimo 3 carácteres')
+        .max(100, 'O nome pode ter no máximo 100 carácteres'),
+
+    cod_setor: z
+        .string({
+            required_error: 'O código é obrigatório',
+            invalid_type_error: 'O código deve ser um texto'
+        })
+        .trim()
+        .max(50, 'O código pode ter no máximo 50 carácteres'),
+
+    descricao: z
+        .string({
+            invalid_type_error: 'A descrição deve ser um texto'
+        })
+        .trim()
+        .max(255, 'A descrição pode ter no máximo 255 carácteres')
+        .optional(),
+
+    icone: z
+        .string({
+            required_error: 'O icone do setor é obrigatório',
+            invalid_type_error: 'O icone do setor deve ser um texto'
+        }),
+
+    cor: z
+        .string({
+            required_error: 'A cor do setor é obrigatória',
+            invalid_type_error: 'A cor do setor deve ser um texto'
+        })
+});
+
+// ESQUEMA DE CRIAÇÃO DE MÁQUINA
+export const createMaquina = z.object({
 });
