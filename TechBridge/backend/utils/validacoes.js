@@ -1,8 +1,19 @@
-import { email, z } from 'zod';
+import { z } from 'zod';
+
+// Regex de email
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const estadosValidos = [
+    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO',
+    'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI',
+    'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
+];
+
+// ========================
+// VALIDAÇÕES MANUAIS
+// ========================
 
 export function validarEmail(email) {
-
-    // Validação de tipo
     if (typeof email !== "string") {
         return {
             sucesso: false,
@@ -11,8 +22,9 @@ export function validarEmail(email) {
         };
     }
 
-    // Verificando se o email existe e não está vazio
-    if (!email || email.trim() === '') {
+    email = email.trim();
+
+    if (!email) {
         return {
             sucesso: false,
             erro: 'Email obrigatório',
@@ -20,7 +32,6 @@ export function validarEmail(email) {
         };
     }
 
-    // Validação básica de formato de email
     if (!emailRegex.test(email)) {
         return {
             sucesso: false,
@@ -29,16 +40,6 @@ export function validarEmail(email) {
         };
     }
 
-    // Validando o tamanho mínimo do e-mail
-    if (email.length === 0) {
-        return {
-            sucesso: false,
-            erro: 'Email inválido',
-            mensagem: "O e-mail não pode estar vazio"
-        };
-    }
-
-    // Validando o tamanho máximo do e-mail
     if (email.length > 255) {
         return {
             sucesso: false,
@@ -47,13 +48,10 @@ export function validarEmail(email) {
         };
     }
 
-
-
-    return { sucesso: true }
+    return { sucesso: true };
 }
 
 export function validarSenha(senha) {
-    // Verificando se o tipo está correto
     if (typeof senha !== "string") {
         return {
             sucesso: false,
@@ -62,8 +60,9 @@ export function validarSenha(senha) {
         };
     }
 
-    // Verificando se a senha foi enviada e não está vazia
-    if (!senha || senha.trim() === '') {
+    senha = senha.trim();
+
+    if (!senha) {
         return {
             sucesso: false,
             erro: 'Senha obrigatória',
@@ -71,20 +70,18 @@ export function validarSenha(senha) {
         };
     }
 
-    // Verificando o tamanho da senha 
     if (senha.length < 6) {
         return {
             sucesso: false,
             erro: 'Senha inválida',
-            mensagem: 'A nova senha deve ter no mínimo 6 caracteres'
+            mensagem: 'A senha deve ter no mínimo 6 caracteres'
         };
     }
 
-    return { sucesso: true }
+    return { sucesso: true };
 }
 
 export function validarNome(nome) {
-    // Verificando se o tipo está correto
     if (typeof nome !== "string") {
         return {
             sucesso: false,
@@ -93,8 +90,9 @@ export function validarNome(nome) {
         };
     }
 
-    // Verificando se o nome existe e não está vazio
-    if (!nome || nome.trim() === '') {
+    nome = nome.trim();
+
+    if (!nome) {
         return {
             sucesso: false,
             erro: 'Nome obrigatório',
@@ -102,31 +100,18 @@ export function validarNome(nome) {
         };
     }
 
-    // Validando o tamanho mínimo do nome
-    if (nome.length === 0) {
-        return res.status(400).json({
-            sucesso: false,
-            erro: 'Nome inválido',
-            mensagem: "O nome não pode estar vazio"
-        });
-    }
-
-    // Validando o tamanho máximo do nome
     if (nome.length > 255) {
-        return res.status(400).json({
+        return {
             sucesso: false,
             erro: 'Nome inválido',
             mensagem: 'O nome pode ter no máximo 255 caracteres'
-        });
+        };
     }
 
-
-
-    return { sucesso: true }
+    return { sucesso: true };
 }
+
 export function validarEmpresa(empresa) {
-
-
     const {
         cnpj,
         razao_social,
@@ -139,16 +124,16 @@ export function validarEmpresa(empresa) {
         estado
     } = empresa;
 
+    // (Você ainda pode implementar regras aqui se quiser)
+
+    return { sucesso: true };
 }
 
-const estadosValidos = [
-    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO',
-    'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI',
-    'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
-];
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// ========================
+// SCHEMAS ZOD
+// ========================
 
-// ESQUEMA DE LOGIN
+// LOGIN
 export const userLogin = z.object({
     email: z
         .string({
@@ -156,25 +141,23 @@ export const userLogin = z.object({
             invalid_type_error: 'O e-mail deve ser um texto'
         })
         .trim()
-        .transform(val => val.toLowerCase())
         .min(1, 'O e-mail não pode estar vazio')
-        .max(255, 'O e-mail pode ter no máximo 255 carácteres')
-        .email('Formato de e-mail inválido'),
+        .max(255, 'O e-mail pode ter no máximo 255 caracteres')
+        .email('Formato de e-mail inválido')
+        .transform(val => val.toLowerCase()),
 
     senha: z
         .string({
             required_error: 'A senha é obrigatória',
             invalid_type_error: 'A senha deve ser um texto'
         })
-        .min(6, 'A senha dever ter no mínimo 6 dígitos')
+        .min(6, 'A senha deve ter no mínimo 6 dígitos')
 }).strict();
 
-// ESQUEMA DE CRIAÇÃO DE USUÁRIO
-export const createuser = z.object({
+// CRIAÇÃO DE USUÁRIO (placeholder)
+export const createuser = z.object({});
 
-})
-
-// ESQUEMA DE CRIAÇÃO DE EMPRESA
+// CRIAÇÃO DE EMPRESA
 export const createEmpresa = z.object({
     cnpj: z
         .string({
@@ -225,36 +208,25 @@ export const createEmpresa = z.object({
             .max(150, 'Rua deve ter no máximo 150 caracteres'),
 
         numero: z.union([
-            z.string({
-                required_error: 'Número é obrigatório',
-                invalid_type_error: 'Número deve ser texto'
-            }).min(1, 'Número não pode ser vazio'),
-
-            z.number({
-                required_error: 'Número é obrigatório',
-                invalid_type_error: 'Número deve ser numérico'
-            })
+            z.string().min(1, 'Número não pode ser vazio'),
+            z.number()
         ]),
 
         complemento: z
-            .string({
-                invalid_type_error: 'Complemento deve ser um texto'
-            })
+            .string()
             .max(100, 'Complemento deve ter no máximo 100 caracteres')
             .optional(),
 
         bairro: z
             .string({
-                required_error: 'Bairro é obrigatório',
-                invalid_type_error: 'Bairro deve ser um texto'
+                required_error: 'Bairro é obrigatório'
             })
             .trim()
             .min(2, 'Bairro deve ter no mínimo 2 caracteres'),
 
         cidade: z
             .string({
-                required_error: 'Cidade é obrigatória',
-                invalid_type_error: 'Cidade deve ser um texto'
+                required_error: 'Cidade é obrigatória'
             })
             .trim()
             .min(2, 'Cidade deve ter no mínimo 2 caracteres')
@@ -262,8 +234,7 @@ export const createEmpresa = z.object({
 
         estado: z
             .string({
-                required_error: 'Estado é obrigatório',
-                invalid_type_error: 'Estado deve ser um texto'
+                required_error: 'Estado é obrigatório'
             })
             .length(2, 'Estado deve ter 2 caracteres')
             .transform(val => val.toUpperCase())
@@ -272,7 +243,5 @@ export const createEmpresa = z.object({
             })
     }),
 
-    gerente: z.object({
-
-    })
+    gerente: z.object({}).optional()
 });
