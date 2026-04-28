@@ -45,6 +45,7 @@ export default function PageEmpresasAdd() {
         }))
     }
 
+    // BUSCAR ENDEREÇO VIA CEP
     async function buscarCEP(cep) {
         const cepLimpo = cep.replace(/\D/g, '')
 
