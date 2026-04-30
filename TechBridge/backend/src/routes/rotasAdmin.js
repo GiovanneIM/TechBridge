@@ -48,7 +48,7 @@ const router = express.Router();
  *         content:
  *           'application/json': 
  *             schema:
- *               $ref: '#/components/schemas/LoginResponse'
+ *               $ref: '#/components/schemas/GetEmpresas'
  *       400: 
  *         description: Dados inválidos
  *       401:

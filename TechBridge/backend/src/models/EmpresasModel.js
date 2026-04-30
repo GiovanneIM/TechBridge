@@ -25,9 +25,9 @@ class EmpresasModel {
                 empresas,
                 paginacao: {
                     total,
-                    pagina_atual,
+                    page,
+                    limit,
                     total_paginas,
-                    limit
                 }
             }
         } catch (error) {
