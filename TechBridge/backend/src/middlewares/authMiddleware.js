@@ -20,6 +20,7 @@ const authMiddleware = (req, res, next) => {
         // Nenhum token encontrado
         if (!token) {
             return res.status(401).json({
+                sucesso: false,
                 erro: 'Token não fornecido',
                 mensagem: 'É necessário autenticação'
             });
@@ -40,6 +41,7 @@ const authMiddleware = (req, res, next) => {
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
             return res.status(401).json({
+                sucesso: false,
                 erro: 'Token expirado',
                 mensagem: 'Faça login novamente'
             });
@@ -47,6 +49,7 @@ const authMiddleware = (req, res, next) => {
 
         if (error.name === 'JsonWebTokenError') {
             return res.status(401).json({
+                sucesso: false,
                 erro: 'Token inválido',
                 mensagem: 'Token de autenticação inválido'
             });
@@ -54,6 +57,8 @@ const authMiddleware = (req, res, next) => {
 
         console.error('Erro no middleware:', error);
         return res.status(500).json({
+            sucesso: false,
+            erro: 'Erro do servidor',
             erro: 'Erro interno do servidor'
         });
     }
@@ -63,6 +68,7 @@ const authMiddleware = (req, res, next) => {
 const adminMiddleware = (req, res, next) => {
     if (req.usuario.tipo !== 1) {
         return res.status(403).json({
+            sucesso: false,
             erro: 'Acesso negado',
             mensagem: 'Apenas administradores podem acessar este recurso'
         });

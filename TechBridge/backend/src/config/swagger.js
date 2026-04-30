@@ -1,4 +1,4 @@
-import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerJSDoc from "swagger-jsdoc"
 
 const PORT = process.env.PORT || 3000
 
@@ -18,12 +18,23 @@ const swaggerOptions = {
 
             `
 		},
+
 		servers: [
 			{
 				url: `http://localhost:${PORT}/techbridge`
 			}
 		],
+
 		components: {
+			securitySchemes: {
+				bearerAuth: {
+					type: 'http',
+					scheme: 'bearer',
+					bearerFormat: 'JWT',
+					description: 'Insira o token JWT retornado pelo login: **Bearer &lt;token&gt;**',
+				},
+			},
+	  
 			schemas: {
 				TokenBody: {
 					type: 'object',
@@ -178,7 +189,8 @@ const swaggerOptions = {
 			},
 		}
 	},
-	apis: ['./routes/*.js']
+
+	apis: ['./src/routes/*.js']
 }
 
 export const swaggerSpec = swaggerJSDoc(swaggerOptions)

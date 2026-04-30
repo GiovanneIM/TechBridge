@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { helperSenha } from '../helpers/helperSenha';
-import { helperId } from '../helpers/helperId';
+import { helperSenha } from '../helpers/helperSenha.js';
+import { helperId } from '../helpers/helperId.js';
 
 // ID DO USUÁRIO
 export const id_usuario = helperId('ID do usuário');

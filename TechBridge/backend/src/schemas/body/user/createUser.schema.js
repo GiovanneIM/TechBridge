@@ -1,4 +1,5 @@
-import { email, nome, senha, tipo_usuario } from "../../dados/usuario";
+import z from "zod";
+import { email, nome, senha, tipo_usuario } from "../../dados/usuario.js";
 
 
 // ESQUEMA DE CRIAÇÃO DE USUÁRIO

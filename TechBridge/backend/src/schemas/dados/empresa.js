@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { helperId } from '../helpers/helperId';
+import { helperId } from '../helpers/helperId.js';
 
 const estadosValidos = [
     'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO',
@@ -112,7 +112,7 @@ export const cep = z
 export const endereco = z.object({
     cep,
     rua,
-    numeroEndereco,
+    numero,
     complemento,
     bairro,
     cidade,

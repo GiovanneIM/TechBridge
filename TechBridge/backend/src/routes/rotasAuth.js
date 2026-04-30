@@ -7,7 +7,12 @@ import { handleUploadError, uploadImagens } from '../middlewares/uploadMiddlewar
 
 const router = express.Router();
 
-
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Rotas relacionada ao controle da sessão e do usuário logado
+ */
 
 
 /**
@@ -33,6 +38,8 @@ const router = express.Router();
  *         description: Dados inválidos (email ausente, senha ausente ou formato incorreto)
  *       401:
  *         description: Email ou senha incorretos
+ *       409:
+ *         description: E-mail já cadastrado
  *       500:
  *         description: Não foi possível processar o login
  */
@@ -44,6 +51,7 @@ router.post('/login', AuthController.login);
  *   post:
  *     summary: Realizar logout
  *     tags: [Auth]
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -66,6 +74,8 @@ router.post('/logout', authMiddleware, AuthController.logout);
  *   get:
  *     summary: Obter o perfil do usuário logado
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -95,6 +105,8 @@ router.get('/perfil', authMiddleware, AuthController.obterPerfil);
  *   patch:
  *     summary: Atualizar informações do usuário (Exceto senha e foto)
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -113,6 +125,8 @@ router.patch('/info', authMiddleware, AuthController.atualizarInformacoes);
  *   patch:
  *     summary: Atualizar senha do usuário
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -131,6 +145,8 @@ router.patch('/senha', authMiddleware, AuthController.atualizarSenha);
  *   patch:
  *     summary: Atualizar imagem de perfil do usuário
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:

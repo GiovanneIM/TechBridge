@@ -2,9 +2,17 @@ import express from 'express';
 import EmpresasController from '../controllers/EmpresasController.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
 import { validateZod } from '../middlewares/validate.js';
-import { createEmpresaSchema, paginacaoSchema } from '../config/zod/zod.js';
+import { paginacaoSchema } from '../schemas/query/paginacao.js';
+import { createEmpresaSchema } from '../schemas/body/empresa/createEmpresa.schema.js';
 
 const router = express.Router();
+
+/**
+ * @swagger
+ * tags:
+ *   name: Admin
+ *   description: Rotas exclusivas para Admin
+ */
 
 // OBTER EMPRESAS (Com paginação)
 /**
@@ -13,6 +21,8 @@ const router = express.Router();
  *   get:
  *     summary: Listar todas as empresas. (Com paginação)
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  * 
  *     parameters:
  *     - in: query
@@ -51,6 +61,9 @@ router.get('/empresas', validateZod(paginacaoSchema, 'query'), EmpresasControlle
  *   post:
  *     summary: Registrar uma nova empresa e um gerente inicial para ela
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ * 
  *     requestBody:
  *       required: true
  *       content:
@@ -76,6 +89,8 @@ router.post('/empresas', validateZod(createEmpresaSchema, 'body'), EmpresasContr
  *   delete:
  *     summary: Excluir uma empresa e os dados associados (Usuários, Setores, Máquinas e Chamados)
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  * 
  *     parameters:
  *     - in: path
@@ -104,6 +119,8 @@ router.delete('/empresas/:empresa', () => { });
  *   delete:
  *     summary: Excluir um usuário e seus dados associados (Chamados)
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  * 
  *     parameters:
  *     - in: path
