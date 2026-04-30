@@ -38,7 +38,7 @@ CREATE TABLE usuarios (
 
     -- Indices
     INDEX idx_usuarios_empresa (id_empresa)
-    INDEX idx_usuarios_empresa (ativo)
+    INDEX idx_usuarios_ativo (ativo)
 ); 
 
 

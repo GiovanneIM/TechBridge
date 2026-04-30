@@ -18,12 +18,32 @@ export const nome = z
 // DESCRICAO
 export const descricao = z
     .string({
-        invalid_type_error: 'O nome deve ser um texto'
+        invalid_type_error: 'A descrição deve ser um texto'
     })
     .trim()
     .max(300, 'A descrição do setor pode ter no máximo 300 carácteres');
 
+// ICONE
+export const icone = z
+    .string({
+        required_error: 'Icone é obrigatório',
+        invalid_type_error: 'Icone deve ser um texto'
+    })
+    .min(1, 'O Icone deve ter ao menos 1 caráctere')
+    .refine(val => iconesValidos.includes(val), {
+        message: 'Icone inválido'
+    });
 
+// COR
+export const cor = z
+    .string({
+        required_error: 'Cor é obrigatório',
+        invalid_type_error: 'Cor deve ser um texto'
+    })
+    .min(1, 'A cor deve ter ao menos 1 caráctere')
+    .refine(val => coresValidas.includes(val), {
+        message: 'Cor inválida'
+    });
 
 
 
@@ -80,4 +100,13 @@ const iconesValidos = [
     'Shield',
     'Lock',
     'Eye'
+];
+
+const coresValidas = [
+    'Azul',
+    'Verde',
+    'Amarelo',
+    'Vermelho',
+    'Roxo',
+    'Laranja'
 ];

@@ -18,8 +18,9 @@ CREATE TABLE setores (
     nome			VARCHAR(150)	NOT NULL,			-- Nome do setor
     descricao		TEXT,								-- Descrição do setor (Opcional)
 
+    -- Estilização do setor
     icone			VARCHAR(50)		NOT NULL,
-    cor 			VARCHAR(255)	NOT NULL,
+    cor 			VARCHAR(50) 	NOT NULL,
     
     -- Chaves estrangeiras
     id_empresa		INT				NOT NULL,			-- ID da empresa à qual o setor pertence
@@ -29,6 +30,9 @@ CREATE TABLE setores (
     
     -- Impede que uma empresa tenha dois setores com o mesmo código
     UNIQUE (id_empresa, cod_setor)
+
+    -- Indices
+    INDEX idx_setores_ativos (ativo)
 ); 
 
 
