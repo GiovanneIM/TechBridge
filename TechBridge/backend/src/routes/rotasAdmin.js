@@ -45,6 +45,10 @@ const router = express.Router();
  *     responses:
  *       200:
  *         description: Empresas listadas com sucesso
+ *         content:
+ *           'application/json': 
+ *             schema:
+ *               $ref: '#/components/schemas/LoginResponse'
  *       400: 
  *         description: Dados inválidos
  *       401:
@@ -70,6 +74,7 @@ router.get('/empresas', validateZod(paginacaoSchema, 'query'), EmpresasControlle
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/NewCompany'
+ * 
  *     responses:
  *       201:
  *         description: Empresa registrada com sucesso

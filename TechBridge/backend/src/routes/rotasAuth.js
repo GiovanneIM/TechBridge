@@ -27,6 +27,7 @@ const router = express.Router();
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Login'
+ * 
  *     responses:
  *       200:
  *         description: Login realizado com sucesso
@@ -52,12 +53,7 @@ router.post('/login', AuthController.login);
  *     summary: Realizar logout
  *     tags: [Auth]
  *     security: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/TokenBody'
+ * 
  *     responses:
  *       200:
  *         description: Logout realizado com sucesso
@@ -76,12 +72,7 @@ router.post('/logout', authMiddleware, AuthController.logout);
  *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/TokenBody'
+ * 
  *     responses:
  *       200:
  *         description: Login realizado com sucesso
@@ -107,12 +98,14 @@ router.get('/perfil', authMiddleware, AuthController.obterPerfil);
  *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
+ * 
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/PatchInfo'
+ * 
  *     responses:
  *       200:
  *         description: Informações realizadas com sucesso

@@ -34,14 +34,8 @@ const swaggerOptions = {
 					description: 'Insira o token JWT retornado pelo login: **Bearer &lt;token&gt;**',
 				},
 			},
-	  
+
 			schemas: {
-				TokenBody: {
-					type: 'object',
-					properties: {
-						token: { type: 'string', example: 'Bearer Token' },
-					}
-				},
 				Login: {
 					type: 'object',
 					required: ['email', 'senha'],
