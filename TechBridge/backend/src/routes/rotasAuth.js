@@ -21,6 +21,7 @@ const router = express.Router();
  *   post:
  *     summary: Realizar login
  *     tags: [Auth]
+ * 
  *     requestBody:
  *       required: true
  *       content:
@@ -38,7 +39,7 @@ const router = express.Router();
  *       400: 
  *         description: Dados inválidos (email ausente, senha ausente ou formato incorreto)
  *       401:
- *         description: Email ou senha incorretos
+ *         description: Credenciais inválidas
  *       409:
  *         description: E-mail já cadastrado
  *       500:
@@ -52,7 +53,8 @@ router.post('/login', AuthController.login);
  *   post:
  *     summary: Realizar logout
  *     tags: [Auth]
- *     security: []
+ *     security:
+ *       - bearerAuth: []
  * 
  *     responses:
  *       200:
@@ -120,12 +122,14 @@ router.patch('/info', authMiddleware, AuthController.atualizarInformacoes);
  *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
+ * 
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/PatchSenha'
+ * 
  *     responses:
  *       200:
  *         description: Senha atualizada com sucesso
@@ -140,12 +144,10 @@ router.patch('/senha', authMiddleware, AuthController.atualizarSenha);
  *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
+ * 
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/TokenBody'
  *         multipart/form-data:
  *           schema:
  *             type: object
@@ -153,6 +155,7 @@ router.patch('/senha', authMiddleware, AuthController.atualizarSenha);
  *               foto:
  *                 type: string
  *                 format: binary
+ * 
  *     responses:
  *       200:
  *         description: Imagem atualizada com sucesso

@@ -36,6 +36,7 @@ const swaggerOptions = {
 			},
 
 			schemas: {
+				// AUTH
 				Login: {
 					type: 'object',
 					required: ['email', 'senha'],
@@ -95,7 +96,6 @@ const swaggerOptions = {
 										},
 										ativo: { type: 'boolean', example: true },
 										tipo_usuario: { type: 'number', example: 1 },
-										cargo: { type: 'string', example: 'admin' },
 										id_empresa: { type: 'number', example: 1 }
 									}
 								}
@@ -106,19 +106,20 @@ const swaggerOptions = {
 				PatchInfo: {
 					type: 'object',
 					properties: {
-						token: { type: 'string', example: 'Bearer Token' },
 						nome: { type: 'string', example: 'Maria Silva' },
 						email: { type: 'string', example: 'maria@email.com' },
+						telefone: { type: 'string', example: '11903231230' },
+						tipo_usuario: {type: 'string', example: 2}
 					}
 				},
 				PatchSenha: {
 					type: 'object',
 					properties: {
-						token: { type: 'string', example: 'Bearer Token' },
 						senhaAtual: { type: 'string', example: '123456' },
-						senhaNova: { type: 'string', example: '654321' },
+						senhaNova: { type: 'string', example: '123456' },
 					}
 				},
+				// ADMIN
 				NewCompany: {
 					type: 'object',
 					required: ['empresa', 'gerente'],
@@ -158,6 +159,7 @@ const swaggerOptions = {
 						}
 					}
 				},
+				// EMPRESAS
 				PatchCompany: {
 					type: 'object',
 					properties: {
@@ -179,7 +181,9 @@ const swaggerOptions = {
 							}
 						}
 					}
-				}
+				},
+
+				
 			},
 		}
 	},
