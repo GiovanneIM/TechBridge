@@ -36,6 +36,16 @@ const swaggerOptions = {
 			},
 
 			schemas: {
+				// PAGINACAO
+				paginacao: {
+					type: 'object',
+					properties: {
+						total: { type: 'int', example: 78 },
+						page: { type: 'int', example: 1 },
+						limit: { type: 'int', example: 10 },
+						total_paginas: { type: 'int', example: 8 },
+					}
+				},
 				// ADMIN
 				GetEmpresas: {
 					type: 'object',
@@ -44,15 +54,7 @@ const swaggerOptions = {
 							type: 'array',
 							example: ['...']
 						},
-						paginacao: {
-							type: 'object',
-							properties: {
-								total: {type: 'int', example: 78},
-								page: {type: 'int', example: 1},
-								limit: {type: 'int', example: 10},
-								total_paginas: {type: 'int', example: 8},
-							}
-						}
+						paginacao
 					}
 				},
 				NewCompany: {
@@ -95,7 +97,7 @@ const swaggerOptions = {
 					}
 				},
 				// AUTH
-				Login: {
+				ReqLogin: {
 					type: 'object',
 					required: ['email', 'senha'],
 					properties: {
@@ -109,7 +111,7 @@ const swaggerOptions = {
 						}
 					}
 				},
-				LoginResponse: {
+				ResLogin: {
 					type: 'object',
 					properties: {
 						dados: {

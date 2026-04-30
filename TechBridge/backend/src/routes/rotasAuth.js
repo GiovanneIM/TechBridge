@@ -27,7 +27,7 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Login'
+ *             $ref: '#/components/schemas/ReqLogin'
  * 
  *     responses:
  *       200:
@@ -35,7 +35,7 @@ const router = express.Router();
  *         content:
  *           'application/json': 
  *             schema:
- *               $ref: '#/components/schemas/LoginResponse'
+ *               $ref: '#/components/schemas/ResLogin'
  *       400: 
  *         description: Dados inválidos (email ausente, senha ausente ou formato incorreto)
  *       401:
@@ -111,6 +111,9 @@ router.get('/perfil', authMiddleware, AuthController.obterPerfil);
  *     responses:
  *       200:
  *         description: Informações realizadas com sucesso
+ *         content: 
+ *           schema:
+ *             $ref: '#/components/schemas/perifil'
  */
 router.patch('/info', authMiddleware, AuthController.atualizarInformacoes);
 
