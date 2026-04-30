@@ -9,9 +9,10 @@ USE TECHBRIDGE;
 
 -- Criando a tabela de tipos de usuários
 CREATE TABLE usuarios (
-    id 				INT 			AUTO_INCREMENT PRIMARY KEY,
-	data_criacao 	TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que o usuário foi registrado
-    ativo			BOOLEAN			DEFAULT TRUE,					-- Status do usuário (Conta ativa ou inativa)
+    id 				    INT 			AUTO_INCREMENT PRIMARY KEY,
+	data_criacao 	    DATETIME 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que o usuário foi registrado
+    data_desativacao    DATETIME,                                       -- Data em que o usuário foi desativado
+    ativo			    BOOLEAN			DEFAULT TRUE,					-- Status do usuário (Conta ativa ou inativa)
 
     -- Atributos do usuário
     nome			VARCHAR(255) 	NOT NULL,						-- Nome do usuário
@@ -19,12 +20,12 @@ CREATE TABLE usuarios (
     senha			VARCHAR(255) 	NOT NULL,						-- Senha do usuário
 
     foto_perfil 	VARCHAR(255),									-- Foto de perfil
-    bio				VARCHAR(300), 			            			-- Breve biografia do usuário
-    telefone		VARCHAR(20), 					            	-- Número do telefone do usuário (com DDD)
+    bio				TEXT, 		        	            			-- Breve biografia do usuário
+    telefone		VARCHAR(15), 					            	-- Número do telefone do usuário (com DDD)
     
     -- Não necessários
-    data_efetivacao	VARCHAR(10),			            			-- Data da efetivação
-    local_nasc		VARCHAR(100), 		    	        			-- Local de nascimento
+    --data_efetivacao	VARCHAR(10),			            			-- Data da efetivação
+    --local_nasc		VARCHAR(100), 		    	        			-- Local de nascimento
     
 
     -- Chaves estrangeiras
@@ -34,6 +35,10 @@ CREATE TABLE usuarios (
     -- Referênciando as chaves estrangeiras
     FOREIGN KEY (tipo_usuario) REFERENCES tipos_usuarios(id),
     FOREIGN KEY (id_empresa) REFERENCES empresas(id)
+
+    -- Indices
+    INDEX idx_usuarios_empresa (id_empresa)
+    INDEX idx_usuarios_empresa (ativo)
 ); 
 
 

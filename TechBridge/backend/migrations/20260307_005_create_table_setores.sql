@@ -14,16 +14,15 @@ CREATE TABLE setores (
     ativo			BOOLEAN			DEFAULT TRUE,
     
     -- Atributos do setor
-    cod_setor       VARCHAR(50)     NOT NULL, 						-- Código de identificação (ID) interna na empresa (Definido pela empresa)
-    nome			VARCHAR(100)	NOT NULL,						-- Nome do setor
-    descricao		VARCHAR(255),									-- Descrição do setor (Opcional)
+    cod_setor       VARCHAR(50)     NOT NULL, 			-- Código de identificação (ID) interna na empresa (Definido pela empresa)
+    nome			VARCHAR(150)	NOT NULL,			-- Nome do setor
+    descricao		TEXT,								-- Descrição do setor (Opcional)
 
-    
     icone			VARCHAR(50)		NOT NULL,
     cor 			VARCHAR(255)	NOT NULL,
     
     -- Chaves estrangeiras
-    id_empresa		INT				NOT NULL,						-- ID da empresa à qual o setor pertence
+    id_empresa		INT				NOT NULL,			-- ID da empresa à qual o setor pertence
     
     -- Referênciando chaves estrangeiras
     FOREIGN KEY (id_empresa) REFERENCES empresas(id),

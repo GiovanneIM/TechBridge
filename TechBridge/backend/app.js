@@ -22,7 +22,6 @@ import rotas from './src/routes/index.js';
 import { logMiddleware } from './src/middlewares/logMiddleware.js';
 import { errorMiddleware } from './src/middlewares/errorMiddleware.js';
 import { handleUploadError } from './src/middlewares/uploadMiddleware.js';
-import { adminMiddleware, authMiddleware } from './src/middlewares/authMiddleware.js';
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 // CONFIGURANDO SERVIDOR E MIDDLEWARES

@@ -10,22 +10,26 @@ USE TECHBRIDGE;
 -- Criando a tabela de empresas
 CREATE TABLE empresas (
     id 				INT 			AUTO_INCREMENT PRIMARY KEY,
+    data_criacao 	DATETIME 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que a empresa foi registrada
+    data_desativacao DATETIME,                                      -- Data em que a empresa foi desativada
+    ativo 			BOOLEAN 		NOT NULL DEFAULT TRUE,			-- Status do serviço à empresa (Ativo ou não)
     
     -- Atributos da empresa
     cnpj			CHAR(14)		NOT NULL UNIQUE,				-- CNPJ da empresa
  	razao_social	VARCHAR(200)	NOT NULL,						-- Nome oficial da empresa
-    nome_fantasia	VARCHAR(150) 	NOT NULL,						-- Nome que a empresa usa popularmente
-    data_criacao 	TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que a empresa foi registrada
-    ativo 			BOOLEAN 		NOT NULL DEFAULT TRUE,			-- Status do serviço à empresa (Ativo ou não)
+    nome_fantasia	VARCHAR(200) 	NOT NULL,						-- Nome que a empresa usa popularmente
     
     -- Endereço da empresa
-    cep 			VARCHAR(9),
+    cep 			VARCHAR(8),
     rua 			VARCHAR(150),
     numero 			VARCHAR(10),
     complemento 	VARCHAR(100),
     bairro 			VARCHAR(100),
     cidade 			VARCHAR(100),
     estado 			CHAR(2)
+
+    -- Indices
+    INDEX idx_empresas_ativo (ativo)
 ); 
 
 

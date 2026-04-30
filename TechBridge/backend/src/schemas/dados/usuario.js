@@ -5,6 +5,15 @@ import { helperId } from '../helpers/helperId.js';
 // ID DO USUÁRIO
 export const id_usuario = helperId('ID do usuário');
 
+// NOME
+export const nome = z
+    .string({
+        invalid_type_error: 'O nome deve ser um texto'
+    })
+    .trim()
+    .min(3, 'O nome deve ter no mínimo 3 carácteres')
+    .max(255, 'O nome pode ter no máximo 255 carácteres');
+
 // E-MAIL
 export const email = z
     .string({
@@ -21,33 +30,26 @@ export const email = z
 // SENHA
 export const senha = helperSenha('senha')
 
-// NOME
-export const nome = z
-    .string({
-        invalid_type_error: 'O nome deve ser um texto'
-    })
-    .trim()
-    .min(3, 'O nome deve ter no mínimo 3 carácteres')
-    .max(255, 'O nome pode ter no máximo 255 carácteres');
-
 // BIO
 export const bio = z
     .string({
         invalid_type_error: 'A biografia deve ser um texto'
     })
     .trim()
-    .max(300, 'O biografia pode ter no máximo 300 carácteres');
+    .max(350, 'O biografia pode ter no máximo 300 carácteres');
 
 // TELEFONE
 export const telefone = z
     .string({ invalid_type_error: 'O telefone deve ser um texto' })
     .trim()
-    .regex(/^\d{10,11}$/, 'Telefone deve conter 10 ou 11 números');
+    .regex(/^\d{10,11}$/, 'Telefone deve conter 10 ou 11 digitos');
+
+
 
 // SENHA ATUAL
 export const senhaAtual = helperSenha('senha atual')
 
-// SENHA ATUAL
+// SENHA NOVA
 export const senhaNova = helperSenha('nova senha')
 
 // ID DO CARGO

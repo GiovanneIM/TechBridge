@@ -2,9 +2,11 @@ import { z } from 'zod';
 import { helperId } from '../helpers/helperId.js';
 
 const estadosValidos = [
-    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO',
-    'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI',
-    'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
+    'AC', 'AP', 'AM', 'PA', 'RO', 'RR', 'TO',
+    'AL', 'BA', 'CE', 'MA', 'PB', 'PE', 'PI', 'RN', 'SE',
+    'DF', 'GO', 'MT', 'MS',
+    'ES', 'MG', 'RJ', 'SP',
+    'PR', 'RS', 'SC'
 ];
 
 
@@ -40,43 +42,27 @@ export const nome_fantasia = z
     })
     .trim()
     .min(2, 'Nome fantasia deve ter no mínimo 2 caracteres')
-    .max(100, 'Nome fantasia deve ter no máximo 100 caracteres')
+    .max(200, 'Nome fantasia deve ter no máximo 200 caracteres')
 
 // ENDEREÇO
-export const estado = z
+export const cep = z
     .string({
-        required_error: 'Estado é obrigatório',
-        invalid_type_error: 'Estado deve ser um texto'
+        required_error: 'CEP é obrigatório',
+        invalid_type_error: 'CEP deve ser um texto'
     })
-    .length(2, 'Estado deve ter 2 caracteres')
-    .transform(val => val.toUpperCase())
-    .refine(val => estadosValidos.includes(val), {
-        message: 'Estado inválido'
-    });
+    .transform(val => val.replace(/\D/g, ''))
+    .refine(val => val.length === 8, {
+        message: 'CEP deve ter 8 dígitos'
+    })
 
-export const cidade = z
+export const rua = z
     .string({
-        required_error: 'Cidade é obrigatória',
-        invalid_type_error: 'Cidade deve ser um texto'
+        required_error: 'Rua é obrigatória',
+        invalid_type_error: 'Rua deve ser um texto'
     })
     .trim()
-    .min(2, 'Cidade deve ter no mínimo 2 caracteres')
-    .max(100, 'Cidade deve ter no máximo 100 caracteres');
-
-export const bairro = z
-    .string({
-        required_error: 'Bairro é obrigatório',
-        invalid_type_error: 'Bairro deve ser um texto'
-    })
-    .trim()
-    .min(2, 'Bairro deve ter no mínimo 2 caracteres');
-
-export const complemento = z
-    .string({
-        invalid_type_error: 'Complemento deve ser um texto'
-    })
-    .max(100, 'Complemento deve ter no máximo 100 caracteres')
-    .optional();
+    .min(3, 'Rua deve ter no mínimo 3 caracteres')
+    .max(150, 'Rua deve ter no máximo 150 caracteres');
 
 export const numero = z.union([
     z.string({
@@ -88,26 +74,48 @@ export const numero = z.union([
         required_error: 'Número é obrigatório',
         invalid_type_error: 'Número deve ser numérico'
     })
-]);
+]).transform(val => String(val));
 
-export const rua = z
+
+export const complemento = z
     .string({
-        required_error: 'Rua é obrigatória',
-        invalid_type_error: 'Rua deve ser um texto'
+        invalid_type_error: 'Complemento deve ser um texto'
+    })
+    .max(100, 'Complemento deve ter no máximo 100 caracteres')
+    .optional();
+
+export const bairro = z
+    .string({
+        required_error: 'Bairro é obrigatório',
+        invalid_type_error: 'Bairro deve ser um texto'
     })
     .trim()
-    .min(3, 'Rua deve ter no mínimo 3 caracteres')
-    .max(150, 'Rua deve ter no máximo 150 caracteres');
+    .min(2, 'Bairro deve ter no mínimo 2 caracteres')
+    .max(100, 'Bairro deve ter no máximo 100 caracteres');
 
-export const cep = z
+
+export const cidade = z
     .string({
-        required_error: 'CEP é obrigatório',
-        invalid_type_error: 'CEP deve ser um texto'
+        required_error: 'Cidade é obrigatória',
+        invalid_type_error: 'Cidade deve ser um texto'
     })
-    .transform(val => val.replace(/\D/g, ''))
-    .refine(val => val.length === 8, {
-        message: 'CEP deve ter 8 dígitos'
+    .trim()
+    .min(2, 'Cidade deve ter no mínimo 2 caracteres')
+    .max(100, 'Cidade deve ter no máximo 100 caracteres');
+
+export const estado = z
+    .string({
+        required_error: 'Estado é obrigatório',
+        invalid_type_error: 'Estado deve ser um texto'
     })
+    .length(2, 'Estado deve ter 2 caracteres')
+    .transform(val => val.toUpperCase())
+    .refine(val => estadosValidos.includes(val), {
+        message: 'Estado inválido'
+    });
+
+
+
 
 export const endereco = z.object({
     cep,
