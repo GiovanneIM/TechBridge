@@ -33,6 +33,6 @@ CREATE TABLE empresas (
 -- Inserindo empresa cliente de exemplo
 INSERT INTO empresas (cnpj, razao_social, nome_fantasia)
 VALUES 
-    ('00000000000000', 'TechBridge - Softwares e Hardwares para Andons', 'TechBridge')
+    ('00000000000000', 'TechBridge - Softwares e Hardwares para Andons', 'TechBridge'),
 	('12345678000190', 'Empresa Cliente 01', 'EC 01')
 ;
