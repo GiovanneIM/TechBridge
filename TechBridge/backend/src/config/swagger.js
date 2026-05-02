@@ -54,7 +54,9 @@ const swaggerOptions = {
 							type: 'array',
 							example: ['...']
 						},
-						paginacao
+						paginacao: {
+							$ref: '#/components/schemas/paginacao'
+						}
 					}
 				},
 				NewCompany: {

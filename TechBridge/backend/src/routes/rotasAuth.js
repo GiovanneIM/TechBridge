@@ -4,6 +4,8 @@ import express from 'express';
 import AuthController from '../controllers/AuthController.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
 import { handleUploadError, uploadImagens } from '../middlewares/uploadMiddleware.js';
+import { validateZod } from '../middlewares/validate.js';
+import { loginUserSchema } from '../schemas/body/auth/login.schema.js';
 
 const router = express.Router();
 
@@ -11,7 +13,7 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Auth
- *   description: Rotas relacionada ao controle da sessão e do usuário logado
+ *   description: Rotas relacionada ao controle da sessão de login
  */
 
 
@@ -45,7 +47,7 @@ const router = express.Router();
  *       500:
  *         description: Não foi possível processar o login
  */
-router.post('/login', AuthController.login);
+router.post('/login', validateZod(loginUserSchema, 'body'), AuthController.login);
 
 /**
  * @swagger

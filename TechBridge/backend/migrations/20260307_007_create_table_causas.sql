@@ -8,7 +8,7 @@ USE TECHBRIDGE;
 
 
 -- Criando a tabela de causas
-CREATE TABLE causas (
+CREATE TABLE IF NOT EXISTS causas (
 	id				INT				AUTO_INCREMENT PRIMARY KEY,
     
     -- Atributos da causa

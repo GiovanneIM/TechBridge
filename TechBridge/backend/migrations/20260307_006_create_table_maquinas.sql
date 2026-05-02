@@ -8,11 +8,11 @@ USE TECHBRIDGE;
 
 
 -- Criando a tabela de maquinas
-CREATE TABLE maquinas (
+CREATE TABLE IF NOT EXISTS maquinas (
 	id				INT				AUTO_INCREMENT PRIMARY KEY,
     data_criacao 	TIMESTAMP       DEFAULT CURRENT_TIMESTAMP,
     -- Status da máquina
-    status 			ENUM('ativa', 'inativa', 'em_manutencao', 'arquivada') 		DEFAULT TRUE,
+    status 			ENUM('ativa', 'inativa', 'em_manutencao', 'arquivada') 		DEFAULT 'ativa',
     
     -- Atributos da máquina
     cod_maquina		VARCHAR(50)		NOT NULL, 						-- Codigo de identificação (ID) interna no setor
@@ -27,7 +27,7 @@ CREATE TABLE maquinas (
     FOREIGN KEY (id_setor) REFERENCES setores(id),
 
     -- Impede que um setor tenha duas maquinas com o mesmo código
-    UNIQUE (id_setor, cod_maquina)
+    UNIQUE (id_setor, cod_maquina),
 
     -- Indices
     INDEX idx_maquinas_status (status)

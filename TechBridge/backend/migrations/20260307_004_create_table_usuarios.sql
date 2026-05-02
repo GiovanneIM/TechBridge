@@ -8,7 +8,7 @@ USE TECHBRIDGE;
 
 
 -- Criando a tabela de tipos de usuários
-CREATE TABLE usuarios (
+CREATE TABLE IF NOT EXISTS usuarios (
     id 				    INT 			AUTO_INCREMENT PRIMARY KEY,
 	data_criacao 	    DATETIME 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que o usuário foi registrado
     data_desativacao    DATETIME,                                       -- Data em que o usuário foi desativado
@@ -23,9 +23,9 @@ CREATE TABLE usuarios (
     bio				TEXT, 		        	            			-- Breve biografia do usuário
     telefone		VARCHAR(15), 					            	-- Número do telefone do usuário (com DDD)
     
-    -- Não necessários
-    --data_efetivacao	VARCHAR(10),			            			-- Data da efetivação
-    --local_nasc		VARCHAR(100), 		    	        			-- Local de nascimento
+    -- Não necessarios
+    -- data_efetivacao	VARCHAR(10),			            			-- Data da efetivação
+    -- local_nasc		VARCHAR(100), 		    	        			-- Local de nascimento
     
 
     -- Chaves estrangeiras
@@ -34,17 +34,17 @@ CREATE TABLE usuarios (
     
     -- Referênciando as chaves estrangeiras
     FOREIGN KEY (tipo_usuario) REFERENCES tipos_usuarios(id),
-    FOREIGN KEY (id_empresa) REFERENCES empresas(id)
+    FOREIGN KEY (id_empresa) REFERENCES empresas(id),
 
     -- Indices
-    INDEX idx_usuarios_empresa (id_empresa)
+    INDEX idx_usuarios_empresa (id_empresa),
     INDEX idx_usuarios_ativo (ativo)
 ); 
 
 
 -- Inserindo os usuários de exemplo
 INSERT INTO usuarios 
-(nome, email, senha, tipo_usuario, id_empresa, telefone, cargo, data_efetivacao, bio, local_nasc)
+(nome, email, senha, tipo_usuario, id_empresa, telefone, bio)
 VALUES 
 (
 'Kim Minji', 
@@ -53,10 +53,7 @@ VALUES
 1, 
 1, 
 '(11) 95989-9539', 
-'Administrador do sistema', 
-'05-03-2024', 
 'Administradora de sistemas com foco em organização, segurança e eficiência operacional. Atua garantindo o bom funcionamento das plataformas e suporte estratégico para a equipe.', 
-'São Paulo, BR'
 ),
 (
 'Poliwag Gomez', 
@@ -65,10 +62,7 @@ VALUES
 2, 
 2, 
 '(11) 98921-8798', 
-'Gerente de produção', 
-'22-11-2022', 
 'Gerente de produção experiente, especializado em otimização de processos e liderança de equipes. Trabalha para aumentar a produtividade e garantir a qualidade nas entregas.', 
-'Chigago, US'
 ),
 (
 'The Rock', 
@@ -77,11 +71,8 @@ VALUES
 3, 
 2, 
 '(11) 97548-1367', 
-'Técnico de campo', 
-'15-05-2019', 
 'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.', 
-'Buenos Aires, AR'
-);,
+),
 (
 'Izuku Midoriya', 
 'tecnico@email.com', 
@@ -89,10 +80,7 @@ VALUES
 4, 
 2, 
 '(11) 97548-1367', 
-'Técnico de campo', 
-'15-05-2019', 
 'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.', 
-'Buenos Aires, AR'
 );
 
 -- Alterando as fotos do usuário
