@@ -46,7 +46,7 @@ app.use(
 
 // Configurar CORS para permitir que rotas OPTIONS específicas sejam processadas
 app.use(cors({
-    origin: 'http://localhost:3001, http://10.84.7.4:3001',                                 // Permitindo acesso do Frontend
+    origin: 'http://localhost:3001',                                 // Permitindo acesso do Frontend
     credentials: true,                                               // Permitindo receber cookies do navegador
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],   // Metódos permitidos
     allowedHeaders: ['Content-Type', 'Authorization'],               // Headers permmitidos
