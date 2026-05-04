@@ -47,7 +47,7 @@ export default function LayoutAdmin({ children }) {
         </Sidebar>
 
         {/* Conteúdo */}
-        <main className=" flex-1 flex border-x">
+        <main className=" flex-1 flex border-x justify-center">
             {children}
         </main>
     </>);
