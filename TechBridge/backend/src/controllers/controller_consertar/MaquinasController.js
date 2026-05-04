@@ -1,4 +1,4 @@
-import MaquinasModel from "../models/MaquinasModel.js";
+import MaquinasModel from "../../models/model_consertar/MaquinasModel.js";
 
 class MaquinasController {
 

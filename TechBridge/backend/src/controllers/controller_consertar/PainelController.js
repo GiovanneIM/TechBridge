@@ -1,4 +1,4 @@
-import ChamadosModel from '../models/ChamadosModel.js';
+import ChamadosModel from '../../models/model_consertar/ChamadosModel.js';
 
 // Lista de clientes conectados
 let clientes = [];
