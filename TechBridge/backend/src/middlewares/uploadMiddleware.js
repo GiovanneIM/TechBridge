@@ -271,6 +271,7 @@ export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = 'image
         const caminhoArquivo = path.join(
             __dirname,
             '..',
+            '..',
             'uploads',
             idUsuario.toString(),
             tipo === 'imagem' ? 'imagens' : 'arquivos',
