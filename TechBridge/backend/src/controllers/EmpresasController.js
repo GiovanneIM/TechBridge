@@ -23,19 +23,18 @@ class EmpresasController {
             if (usuarioEmail) {
                 res.status(409).json({
                     sucesso: false,
-                    mensagem: `O e-mail já está em uso`,
-                    dados: { id_empresa }
+                    mensagem: `O e-mail já está em uso`
                 });
             }
 
             // REGISTRAR EMPRESA
-            const id_empresa = await EmpresasModel.criarEmpresa(dadosEmpresa, gerente)
+            const resultado = await EmpresasModel.criarEmpresa(dadosEmpresa, gerente)
 
             // SUCESSO: ENVIAR ID DA EMPRESA
             res.status(201).json({
                 sucesso: true,
-                mensagem: `Empresas registrada com sucesso - ID ${id_empresa}`,
-                dados: { id_empresa }
+                mensagem: `Empresa registrada com sucesso - ID ${resultado.id_empresa}`,
+                dados: resultado
             });
         }
         catch (error) {
@@ -111,32 +110,24 @@ class EmpresasController {
         }
 
         try {
-            // OBTER AS EMPRESAS
-            const resultado = await EmpresasModel.listarEmpresas(limit, offset)
-
-            // SUCESSO: ENVIAR EMPRESAS
-            res.status(200).json({
-                sucesso: true,
-                mensagem: `Empresas listadas com sucesso - página ${page}`,
-                dados: resultado
-            });
 
         }
         catch (error) {
             // ERROS:
-            console.error('Erro ao listar as empresas:', error);
+            console.error('Erro ao atualizar a empresa:', error);
 
             // ERRO DO SERVIDOR
             res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível listar as empresas'
+                mensagem: 'Não foi possível atualizar a empresa'
             });
         }
 
 
     }
 
+    // EXCLUIR UMA EMPRESA
     static async excluirEmpresa(req, res) {
     }
 }

@@ -74,7 +74,7 @@ export default function HeaderUser() {
 
                             <Avatar size="lg">
                                 <AvatarImage src={user.foto_perfil} />
-                                <AvatarFallback>CN</AvatarFallback>
+                                <AvatarFallback>{user.nome.split(' ').map((n) => (n[0]))}</AvatarFallback>
                             </Avatar>
                         </div>
                     </div>

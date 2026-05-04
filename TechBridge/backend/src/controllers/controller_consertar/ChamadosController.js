@@ -11,8 +11,8 @@ class ChamadosController {
     static async listarChamados(req, res) {
         try {
             // Opções da consulta
-            const options = req.body.options || {};
-            options.where = options.where || {};
+            const options = {};
+            options.where = {};
 
             // Paginação
             options.limit = Math.min(Number(options.limit ?? 15), 100);
@@ -21,19 +21,19 @@ class ChamadosController {
 
 
             // Limitando os chamados de acordo com o tipo de usuário
-            switch (req.usuario.tipo_usuario) {
+            // switch (req.usuario.tipo_usuario) {
                 // ADM Cliente: lista apenas os chamados da empresa dele
-                case 2:
-                    options.where.id_empresa = req.usuario.id_empresa;
-                    break;
+                // case 2:
+                //     options.where.id_empresa = req.usuario.id_empresa;
+                //     break;
 
                 // Técnico: lista apenas os chamados que ele atendeu
-                case 3:
-                    options.where.id_empresa = req.usuario.id_empresa;
-                    options.where.id_tecnico = req.usuario.id;
-                    break;
+            //     case 3:
+            //         options.where.id_empresa = req.usuario.id_empresa;
+            //         options.where.id_tecnico = req.usuario.id;
+            //         break;
 
-            }
+            // }
 
             // Fazendo a consulta
             const resultado = await ChamadosModel.listarChamados(options);

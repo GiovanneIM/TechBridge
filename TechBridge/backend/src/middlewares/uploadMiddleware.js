@@ -35,34 +35,66 @@ const gerarNomeUnico = (nomeOriginal) => {
 
 
 // Configuração do multer para upload de imagens
+// const storageImagens = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, uploadPathImagens);
+//     },
+//     filename: (req, file, cb) => {
+//         const nomeArquivo = gerarNomeUnico(file.originalname);
+//         cb(null, nomeArquivo);
+//     }
+// });
+
 const storageImagens = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, uploadPathImagens);
+        const userPath = getUserUploadPath(req, 'imagens');
+
+        // Criar pasta se não existir
+        if (!fs.existsSync(userPath)) {
+            fs.mkdirSync(userPath, { recursive: true });
+        }
+
+        cb(null, userPath);
     },
+
     filename: (req, file, cb) => {
         const nomeArquivo = gerarNomeUnico(file.originalname);
         cb(null, nomeArquivo);
     }
 });
-
 
 
 // Configuração do multer para upload de outros arquivos
+// const storageArquivos = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         // Verificar se pasta existe, criar se não existir
+//         if (!fs.existsSync(uploadPathArquivos)) {
+//             fs.mkdirSync(uploadPathArquivos, { recursive: true });
+//         }
+//         cb(null, uploadPathArquivos);
+//     },
+//     filename: (req, file, cb) => {
+//         const nomeArquivo = gerarNomeUnico(file.originalname);
+//         cb(null, nomeArquivo);
+//     }
+// });
+
 const storageArquivos = multer.diskStorage({
     destination: (req, file, cb) => {
-        // Verificar se pasta existe, criar se não existir
-        if (!fs.existsSync(uploadPathArquivos)) {
-            fs.mkdirSync(uploadPathArquivos, { recursive: true });
+        const userPath = getUserUploadPath(req, 'arquivos');
+
+        if (!fs.existsSync(userPath)) {
+            fs.mkdirSync(userPath, { recursive: true });
         }
-        cb(null, uploadPathArquivos);
+
+        cb(null, userPath);
     },
+
     filename: (req, file, cb) => {
         const nomeArquivo = gerarNomeUnico(file.originalname);
         cb(null, nomeArquivo);
     }
 });
-
-
 
 
 // Verificar se é imagem
@@ -72,10 +104,10 @@ const isImage = (mimetype) => {
 
 // Filtro para tipos de arquivo permitidos (imagens)
 const fileFilterImagens = (req, file, cb) => {
-    const tiposPermitidos = process.env.ALLOWED_FILE_TYPES ? 
-        process.env.ALLOWED_FILE_TYPES.split(',').map(t => t.trim()) : 
+    const tiposPermitidos = process.env.ALLOWED_FILE_TYPES ?
+        process.env.ALLOWED_FILE_TYPES.split(',').map(t => t.trim()) :
         ['image/jpeg', 'image/png', 'image/gif'];
-    
+
     if (tiposPermitidos.includes(file.mimetype)) {
         cb(null, true);
     } else {
@@ -135,7 +167,7 @@ const handleUploadError = (error, req, res, next) => {
             });
         }
     }
-    
+
     if (error.message && error.message.includes('Tipo de arquivo não permitido')) {
         return res.status(400).json({
             sucesso: false,
@@ -148,23 +180,62 @@ const handleUploadError = (error, req, res, next) => {
 };
 
 // Função helper para remover arquivo antigo
-export const removerArquivoAntigo = async (nomeArquivo, tipo = 'imagem') => {
+// export const removerArquivoAntigo = async (nomeArquivo, tipo = 'imagem') => {
+//     try {
+//         if (!nomeArquivo) return;
+
+//         const caminhoArquivo = tipo === 'imagem'
+//             ? path.join(uploadPathImagens, nomeArquivo)
+//             : path.join(uploadPathArquivos, nomeArquivo);
+
+//         if (fs.existsSync(caminhoArquivo)) {
+//             fs.unlinkSync(caminhoArquivo);
+//             return true;
+//         }
+//         return false;
+//     } catch (error) {
+//         console.error('Erro ao remover arquivo antigo:', error);
+//         return false;
+//     }
+// };
+
+
+
+
+export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = 'imagem') => {
     try {
-        if (!nomeArquivo) return;
-        
-        const caminhoArquivo = tipo === 'imagem' 
-            ? path.join(uploadPathImagens, nomeArquivo)
-            : path.join(uploadPathArquivos, nomeArquivo);
-        
+        if (!nomeArquivo || !idUsuario) return;
+
+        const caminhoArquivo = path.join(
+            __dirname,
+            '..',
+            'uploads',
+            idUsuario.toString(),
+            tipo === 'imagem' ? 'imagens' : 'arquivos',
+            nomeArquivo
+        );
+
         if (fs.existsSync(caminhoArquivo)) {
             fs.unlinkSync(caminhoArquivo);
             return true;
         }
+
         return false;
     } catch (error) {
         console.error('Erro ao remover arquivo antigo:', error);
         return false;
     }
 };
+
+
+const getUserUploadPath = (req, tipo = 'imagens') => {
+    const idUsuario = req.user?.id || req.params.id || 'anonimo';
+
+    return path.join(__dirname, '..', 'uploads', idUsuario.toString(), tipo);
+};
+
+
+
+
 
 export { uploadImagens, uploadArquivos, handleUploadError };
