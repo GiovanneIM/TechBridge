@@ -26,7 +26,7 @@ export default function TesteIMG() {
         if (!file) return setMSG('Sem imagem')
 
         const formData = new FormData()
-        formData.append('foto', file)
+        formData.append('imagem', file)
 
         const response = await fetch(
             'http://localhost:3000/techbridge/auth/foto', {

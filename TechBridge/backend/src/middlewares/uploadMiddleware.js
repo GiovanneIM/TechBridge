@@ -8,22 +8,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-
-// Criar pastas de uploads se não existirem
-const uploadPathImagens = path.join(__dirname, '..', 'uploads', 'imagens');
-const uploadPathArquivos = path.join(__dirname, '..', 'uploads', 'arquivos');
-
-// Verificando se as pastas de upload existem
-if (!fs.existsSync(uploadPathImagens)) {
-    fs.mkdirSync(uploadPathImagens, { recursive: true });
-}
-
-if (!fs.existsSync(uploadPathArquivos)) {
-    fs.mkdirSync(uploadPathArquivos, { recursive: true });
-}
-
-
-
 // Função para gerar nome único com timestamp (Baseado no horário do upload)
 const gerarNomeUnico = (nomeOriginal) => {
     const timestamp = Date.now();
@@ -202,6 +186,84 @@ const handleUploadError = (error, req, res, next) => {
 
 
 
+// TIPOS DE UPLOAD
+const TIPOS_UPLOAD = {
+    USER_IMAGEM: 'user_imagem',
+    USER_ARQUIVO: 'user_arquivo',
+    EMPRESA_LOGO: 'empresa_logo',
+    EMPRESA_MAQUINA: 'empresa_maquina'
+};
+
+// IDENTIFICA O TIPO DE UPLOAD
+const getUploadPath = (req, file) => {
+    const tipo = req.uploadTipo;
+    const userId = req.usuario?.id;
+    const empresaId = req.usuario?.empresaId || req.params.empresaId;
+
+    if (!userId && tipo.includes('USER')) {
+        return cb(new Error('Usuário não identificado'), false);
+    }
+
+    if (!empresaId && tipo.includes('EMPRESA')) {
+        return cb(new Error('Empresa não identificada'), false);
+    }
+
+    switch (tipo) {
+        case TIPOS_UPLOAD.USER_IMAGEM:
+            return path.join(__dirname, '..', '..', 'uploads', 'imagens', 'usuarios', userId.toString());
+
+        case TIPOS_UPLOAD.USER_ARQUIVO:
+            return path.join(__dirname, '..', '..', 'uploads', 'arquivos', 'usuarios', userId.toString());
+
+        case TIPOS_UPLOAD.EMPRESA_LOGO:
+            return path.join(__dirname, '..', '..', 'uploads', 'imagens', 'empresas', empresaId.toString(), 'logo');
+
+        case TIPOS_UPLOAD.EMPRESA_MAQUINA:
+            return path.join(__dirname, '..', '..', 'uploads', 'imagens', 'empresas', empresaId.toString(), 'maquinas');
+
+        default:
+            return path.join(__dirname, '..', '..', 'uploads', 'outros');
+    }
+};
+
+// STORAGE
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const destino = getUploadPath(req, file);
+
+        if (!fs.existsSync(destino)) {
+            fs.mkdirSync(destino, { recursive: true });
+        }
+
+        cb(null, destino);
+    },
+
+    filename: (req, file, cb) => {
+        const nomeArquivo = gerarNomeUnico(file.originalname);
+        cb(null, nomeArquivo);
+    }
+});
+
+// MULTER
+const upload = multer({
+    storage,
+    limits: { fileSize: maxFileSize },
+    fileFilter: (req, file, cb) => {
+        if (req.uploadTipo === TIPOS_UPLOAD.EMPRESA_LOGO || req.uploadTipo === TIPOS_UPLOAD.USER_IMAGEM) {
+            return fileFilterImagens(req, file, cb);
+        }
+
+        cb(null, true);
+    }
+});
+
+// MIDDLEWARE PARA DEFINIR O TIPO DE UPLOAD
+const setUploadTipo = (tipo) => (req, res, next) => {
+    req.uploadTipo = tipo;
+    next();
+};
+
+
 export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = 'imagem') => {
     try {
         if (!nomeArquivo || !idUsuario) return;
@@ -228,14 +290,13 @@ export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = 'image
 };
 
 
-const getUserUploadPath = (req, tipo = 'imagens') => {
-    const idUsuario = req.user?.id || req.params.id || 'anonimo';
 
-    return path.join(__dirname, '..', 'uploads', idUsuario.toString(), tipo);
+
+
+
+export {
+    setUploadTipo,
+    TIPOS_UPLOAD,
+    upload,
+    handleUploadError
 };
-
-
-
-
-
-export { uploadImagens, uploadArquivos, handleUploadError };

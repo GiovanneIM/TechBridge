@@ -292,8 +292,8 @@ class AuthController {
             await UserModel.atualizarFoto(idUsuario, nomeFoto)
 
             // REMOVER A IMAGEM ANTIGA DO USUÁRIO
-            if (usuario.foto) {
-                await removerArquivoAntigo(usuario.foto, 'imagem')
+            if (usuario.foto && usuario.foto !== nomeFoto) {
+                await removerArquivoAntigo(usuario.foto, idUsuario, 'imagem');
             }
 
             return res.json({
