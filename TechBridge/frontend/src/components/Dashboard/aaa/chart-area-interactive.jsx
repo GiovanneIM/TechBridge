@@ -4,7 +4,7 @@ import * as React from "react"
 import { useEffect, useState } from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
-import { useIsMobile } from "@/hooks/use-mobile"
+import { useIsMobile } from "@/hooks/hooks2/use-mobile"
 import {
 	Card,
 	CardAction,

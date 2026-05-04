@@ -4,10 +4,17 @@ import express from 'express';
 import AuthController from '../controllers/AuthController.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
 import { handleUploadError, uploadImagens } from '../middlewares/uploadMiddleware.js';
+import { validateZod } from '../middlewares/validate.js';
+import { loginUserSchema } from '../schemas/body/auth/login.schema.js';
 
 const router = express.Router();
 
-
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Rotas relacionada ao controle da sessão de login
+ */
 
 
 /**
@@ -16,27 +23,31 @@ const router = express.Router();
  *   post:
  *     summary: Realizar login
  *     tags: [Auth]
+ * 
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Login'
+ *             $ref: '#/components/schemas/ReqLogin'
+ * 
  *     responses:
  *       200:
  *         description: Login realizado com sucesso
  *         content:
  *           'application/json': 
  *             schema:
- *               $ref: '#/components/schemas/LoginResponse'
+ *               $ref: '#/components/schemas/ResLogin'
  *       400: 
  *         description: Dados inválidos (email ausente, senha ausente ou formato incorreto)
  *       401:
- *         description: Email ou senha incorretos
+ *         description: Credenciais inválidas
+ *       409:
+ *         description: E-mail já cadastrado
  *       500:
  *         description: Não foi possível processar o login
  */
-router.post('/login', AuthController.login);
+router.post('/login', validateZod(loginUserSchema, 'body'), AuthController.login);
 
 /**
  * @swagger
@@ -44,12 +55,9 @@ router.post('/login', AuthController.login);
  *   post:
  *     summary: Realizar logout
  *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/TokenBody'
+ *     security:
+ *       - bearerAuth: []
+ * 
  *     responses:
  *       200:
  *         description: Logout realizado com sucesso
@@ -66,12 +74,9 @@ router.post('/logout', authMiddleware, AuthController.logout);
  *   get:
  *     summary: Obter o perfil do usuário logado
  *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/TokenBody'
+ *     security:
+ *       - bearerAuth: []
+ * 
  *     responses:
  *       200:
  *         description: Login realizado com sucesso
@@ -95,15 +100,22 @@ router.get('/perfil', authMiddleware, AuthController.obterPerfil);
  *   patch:
  *     summary: Atualizar informações do usuário (Exceto senha e foto)
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ * 
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/PatchInfo'
+ * 
  *     responses:
  *       200:
  *         description: Informações realizadas com sucesso
+ *         content: 
+ *           schema:
+ *             $ref: '#/components/schemas/perifil'
  */
 router.patch('/info', authMiddleware, AuthController.atualizarInformacoes);
 
@@ -113,12 +125,16 @@ router.patch('/info', authMiddleware, AuthController.atualizarInformacoes);
  *   patch:
  *     summary: Atualizar senha do usuário
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ * 
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/PatchSenha'
+ * 
  *     responses:
  *       200:
  *         description: Senha atualizada com sucesso
@@ -131,12 +147,12 @@ router.patch('/senha', authMiddleware, AuthController.atualizarSenha);
  *   patch:
  *     summary: Atualizar imagem de perfil do usuário
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ * 
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/TokenBody'
  *         multipart/form-data:
  *           schema:
  *             type: object
@@ -144,6 +160,7 @@ router.patch('/senha', authMiddleware, AuthController.atualizarSenha);
  *               foto:
  *                 type: string
  *                 format: binary
+ * 
  *     responses:
  *       200:
  *         description: Imagem atualizada com sucesso

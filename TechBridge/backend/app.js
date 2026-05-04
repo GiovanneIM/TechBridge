@@ -7,30 +7,21 @@ import { fileURLToPath } from 'url';        //
 import cookieParser from 'cookie-parser';   // Permite interpretar cookies das requições
 
 import swaggerUi from 'swagger-ui-express'
-import { swaggerSpec } from './config/swagger.js';
+import { swaggerSpec } from './src/config/swagger.js';
 
-import { negrito, azul, verde, vermelho } from './utils/modificadoresDeSaida.js';
+import { negrito, azul, verde, vermelho } from './src/utils/modificadoresDeSaida.js';
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // IMPORTAR ROTAS
-import authRotas from './routes/authRotas.js';
-import adminRotas from './routes/adminRotas.js'
-import empresasRotas from './routes/empresasRotas.js';
-import criptografiaRotas from './routes/criptografiaRotas.js';
-import userRotas from './routes/userRotas.js';
-import chamadosRotas from './routes/chamadosRotas.js';
-import maquinasRotas from './routes/maquinasRotas.js';
-import setoresRotas from './routes/setoresRotas.js';
-import painelRotas from './routes/painelRotas.js';
+import rotas from './src/routes/index.js';
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // IMPORTAR MIDDLEWARES
-import { logMiddleware } from './middlewares/logMiddleware.js';
-import { errorMiddleware } from './middlewares/errorMiddleware.js';
-import { handleUploadError } from './middlewares/uploadMiddleware.js';
-import { adminMiddleware, authMiddleware } from './middlewares/authMiddleware.js';
+import { logMiddleware } from './src/middlewares/logMiddleware.js';
+import { errorMiddleware } from './src/middlewares/errorMiddleware.js';
+import { handleUploadError } from './src/middlewares/uploadMiddleware.js';
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 // CONFIGURANDO SERVIDOR E MIDDLEWARES
@@ -92,17 +83,7 @@ app.use(
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // ATIVAR AS ROTAS
-app.use('/techbridge/auth', authRotas);
-app.use('/techbridge/admin', authMiddleware, adminMiddleware, adminRotas);
-app.use('/techbridge/criptografia', criptografiaRotas);
-
-app.use('/techbridge/empresas', authMiddleware, empresasRotas);
-
-app.use('/techbridge/user', userRotas);
-app.use('/techbridge/chamados', chamadosRotas);
-app.use('/techbridge/maquinas', maquinasRotas);
-app.use('/techbridge/setores', setoresRotas);
-app.use('/techbridge/painel', painelRotas);
+app.use('/techbridge', rotas);
 
 // Rota raiz
 app.get('/', (req, res) => {

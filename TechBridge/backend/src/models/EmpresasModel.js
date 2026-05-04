@@ -3,16 +3,24 @@ import { create, read, update, deleteRecord, dadosDashboard, dadosPainelChamados
 class EmpresasModel {
 
     // LISTAR TODAS AS EMPRESAS (Com paginação)
-    static async listarEmpresas(limit, offset) {
+    static async listarEmpresas(limit, offset, page, filtro) {
         try {
             // OBTER AS EMPRESAS
             const empresas = await read('empresas', {
                 limit,
-                offset
+                offset,
+                where: {
+                    ...filtro
+                }
             });
 
             // TOTAL DE EMPRESAS
-            const [{ total }] = await read('COUNT(*) as total');
+            const [{ total }] = await read('empresas', {
+                columns: ['COUNT(*) as total'],
+                where: {
+                    ...filtro
+                }
+            });
 
             // PAGINA ATUAL
             const pagina_atual = Math.floor(offset / limit) + 1;
@@ -22,12 +30,12 @@ class EmpresasModel {
 
             // RETORNAR AS EMPRESAS E INFORMAÇÕES DE PAGINAÇÃO
             return {
-                empresas,
+                lista: empresas,
                 paginacao: {
                     total,
-                    pagina_atual,
+                    page,
+                    limit,
                     total_paginas,
-                    limit
                 }
             }
         } catch (error) {
@@ -46,15 +54,11 @@ class EmpresasModel {
             // REGISTRAR O 1º GERENTE PRINCIPAL DA EMPRESA
             const id_gerente = await create('usuarios', {
                 ...gerente,
-                tipo: 2,
                 id_empresa
             });
 
-            // RETORNANDO O ID DA EMPRESA E DO GERENTE
-            return {
-                id_empresa,
-                id_gerente
-            }
+            // RETORNANDO O ID DA EMPRESA
+            return id_empresa
         } catch (error) {
             // ERRO
             console.error('Erro ao registrar empresa: ', error);

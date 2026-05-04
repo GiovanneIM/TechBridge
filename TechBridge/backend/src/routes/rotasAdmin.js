@@ -2,16 +2,27 @@ import express from 'express';
 import EmpresasController from '../controllers/EmpresasController.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
 import { validateZod } from '../middlewares/validate.js';
-import { createEmpresaSchema, paginacaoSchema } from '../config/zod.js';
+import { paginacaoSchema } from '../schemas/query/paginacao.js';
+import { createEmpresaSchema } from '../schemas/body/empresa/createEmpresa.schema.js';
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Admin
+ *   description: Rotas exclusivas para Admin
+ */
+
+// OBTER EMPRESAS (Com paginação)
 /**
  * @swagger
  * /admin/empresas:
  *   get:
  *     summary: Listar todas as empresas. (Com paginação)
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  * 
  *     parameters:
  *     - in: query
@@ -34,6 +45,10 @@ const router = express.Router();
  *     responses:
  *       200:
  *         description: Empresas listadas com sucesso
+ *         content:
+ *           'application/json': 
+ *             schema:
+ *               $ref: '#/components/schemas/GetEmpresas'
  *       400: 
  *         description: Dados inválidos
  *       401:
@@ -43,18 +58,23 @@ const router = express.Router();
  */
 router.get('/empresas', validateZod(paginacaoSchema, 'query'), EmpresasController.listarEmpresas)
 
+// CRIAR UMA EMPRESA
 /**
  * @swagger
  * /admin/empresas:
  *   post:
  *     summary: Registrar uma nova empresa e um gerente inicial para ela
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ * 
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/NewCompany'
+ * 
  *     responses:
  *       201:
  *         description: Empresa registrada com sucesso
@@ -67,12 +87,15 @@ router.get('/empresas', validateZod(paginacaoSchema, 'query'), EmpresasControlle
  */
 router.post('/empresas', validateZod(createEmpresaSchema, 'body'), EmpresasController.criarEmpresa);
 
+// EXCLUIR UMA EMPRESA (E seus dados associados)
 /**
  * @swagger
  * /admin/empresas/{empresa}:
  *   delete:
  *     summary: Excluir uma empresa e os dados associados (Usuários, Setores, Máquinas e Chamados)
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  * 
  *     parameters:
  *     - in: path
@@ -94,12 +117,15 @@ router.post('/empresas', validateZod(createEmpresaSchema, 'body'), EmpresasContr
  */
 router.delete('/empresas/:empresa', () => { });
 
+// EXCLUIR UM USUÁRIO (E seus dados associados)
 /**
  * @swagger
  * /admin/usuarios/{usuario}:
  *   delete:
  *     summary: Excluir um usuário e seus dados associados (Chamados)
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
  * 
  *     parameters:
  *     - in: path

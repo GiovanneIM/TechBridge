@@ -8,7 +8,7 @@ import CardsEstados from "./CardsEstados";
 
 import RoscaEstados from './RoscaEstados';
 import LinhaEstados from './LinhaEstados';
-import { useChamados } from "@/hooks/useChamados";
+import { useChamados } from "@/hooks/hooks2/useChamados";
 
 export default function DashboardContent({ dashboard }) {
 

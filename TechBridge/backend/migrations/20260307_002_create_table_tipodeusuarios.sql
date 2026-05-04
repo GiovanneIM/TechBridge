@@ -8,7 +8,7 @@ USE TECHBRIDGE;
 
 
 -- Criando a tabela de tipos de usuários
-CREATE TABLE tipos_usuarios (
+CREATE TABLE IF NOT EXISTS tipos_usuarios (
     id 				INT 				AUTO_INCREMENT PRIMARY KEY,
     descricao 		VARCHAR(100) 		NOT NULL UNIQUE
 );

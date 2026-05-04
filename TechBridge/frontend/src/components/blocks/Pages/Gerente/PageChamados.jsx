@@ -8,7 +8,7 @@ import { RotateCw, Siren } from "lucide-react";
 import { DataTable } from "../../../Dashboard/aaa/data-table";
 import { Separator } from "../../../ui/separator";
 import { Button } from "../../../ui/button";
-import { useChamados } from "@/hooks/useChamados";
+import { useChamados } from "@/hooks/hooks2/useChamados";
 
 export default function PageChamados({
     chamadosIniciais = []

@@ -22,9 +22,6 @@ import { Separator } from "@/components/ui/separator";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../../ui/input-group";
 import { KeyRound, Mail } from "lucide-react";
 
-
-
-
 export default function PageLogin() {
 	const router = useRouter()
 
@@ -39,10 +36,10 @@ export default function PageLogin() {
 
 	// Se houver um usuário logado, o redireciona até a página dashboard
 	useEffect(() => {
-		if (isAuthenticated && user) {
+		if (isAuthenticated && user?.cargo) {
 			router.replace(`/${user.cargo}/dashboard`);
 		}
-	}, [user, isAuthenticated]);
+	}, [user, isAuthenticated, router]);
 
 	// Controlando o estado dos inputs
 	const [email, setEmail] = useState('');
@@ -50,7 +47,7 @@ export default function PageLogin() {
 
 
 	if (isAuthenticated) return null;
-	
+
 	return (
 		<div className="w-vw h-svh flex justify-center items-center flex-wrap">
 			{/* Background */}
@@ -69,7 +66,7 @@ export default function PageLogin() {
 				</svg>
 			</div>
 
-			{/* Formulario */}
+			{/* Card */}
 			<div className="w-full max-w-md h-fit z-10 opacity-95 border p-4 rounded-md bg-card">
 
 				{/* Logo da TechBridge*/}
@@ -98,7 +95,9 @@ export default function PageLogin() {
 
 					try {
 						await login(dadosLogin);
-					} catch { }
+					} catch (err) {
+						console.error(err);
+					}
 				}}>
 					<FieldGroup className="">
 						<FieldSet>
@@ -157,7 +156,9 @@ export default function PageLogin() {
 						{/* Botão de Login */}
 						<Field orientation="horizontal" className="justify-center">
 							<Button
-								type="submit" size="lg" disabled={loading.login}
+								type="submit" 
+								size="lg" 
+								disabled={loading.login}
 								className="bg-techbridge text-white w-35 font-bold text-md"
 							>
 								Entrar

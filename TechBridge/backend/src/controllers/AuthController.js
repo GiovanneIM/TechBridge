@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import UserModel from '../models/UserModel.js';
 import { JWT_CONFIG } from '../config/jwt.js';
 import { validarEmail, validarNome, validarSenha } from '../utils/validacoes.js';
+import { negrito, verde } from '../utils/modificadoresDeSaida.js';
 
 
 // CONTROLLER PARA OPERAÇÕES DE AUTENTICAÇÃO
@@ -13,27 +14,8 @@ class AuthController {
             // RECEBER E-MAIL E SENHA
             const { email, senha } = req.body;
 
-
-            // VALIDAÇÃO DE E-MAIL
-            const validacaoEmail = validarEmail(email)
-            if (!validacaoEmail.sucesso) {
-                return res.status(400).json({
-                    ...validacaoEmail
-                })
-            }
-
-            // VALIDAÇÃO DE SENHA
-            const validacaoSenha = validarSenha(senha)
-            if (!validacaoSenha.sucesso) {
-                return res.status(400).json({
-                    ...validacaoSenha
-                })
-            }
-
-
             // VERIFICAR CREDENCIAIS
             const usuario = await UserModel.verificarCredenciais(email.trim(), senha);
-
 
             // CASO O USUÁRIO NÃO TENHA SIDO ENVIADO
             if (!usuario) {
@@ -43,7 +25,6 @@ class AuthController {
                     mensagem: 'Email ou senha incorretos'
                 });
             }
-
 
             // GERAR TOKEN JWT
             const token = jwt.sign(
@@ -56,7 +37,6 @@ class AuthController {
                 JWT_CONFIG.secret,
                 { expiresIn: JWT_CONFIG.expiresIn }
             );
-
 
             // GERAR COOKIE
             res.cookie('token', token, {

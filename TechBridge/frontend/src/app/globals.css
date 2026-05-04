@@ -208,6 +208,9 @@
 @theme {
   --color-techbridge: #5170ff;
   --font-genty: var(--font-genty);
+
+  --color-ativo: var(--color-emerald-500);
+  --color-inativo: var(--color-red-500);
 }
 
 .wave path {
@@ -245,4 +248,8 @@ body {
   width: 100%;
   max-width: 100%;
   /* overflow-x: hidden; */
+}
+
+button {
+  cursor: pointer;
 }

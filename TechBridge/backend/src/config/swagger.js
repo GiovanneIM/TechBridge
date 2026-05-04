@@ -1,4 +1,4 @@
-import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerJSDoc from "swagger-jsdoc"
 
 const PORT = process.env.PORT || 3000
 
@@ -18,20 +18,88 @@ const swaggerOptions = {
 
             `
 		},
+
 		servers: [
 			{
 				url: `http://localhost:${PORT}/techbridge`
 			}
 		],
+
 		components: {
+			securitySchemes: {
+				bearerAuth: {
+					type: 'http',
+					scheme: 'bearer',
+					bearerFormat: 'JWT',
+					description: 'Insira o token JWT retornado pelo login: **Bearer &lt;token&gt;**',
+				},
+			},
+
 			schemas: {
-				TokenBody: {
+				// PAGINACAO
+				paginacao: {
 					type: 'object',
 					properties: {
-						token: { type: 'string', example: 'Bearer Token' },
+						total: { type: 'int', example: 78 },
+						page: { type: 'int', example: 1 },
+						limit: { type: 'int', example: 10 },
+						total_paginas: { type: 'int', example: 8 },
 					}
 				},
-				Login: {
+				// ADMIN
+				GetEmpresas: {
+					type: 'object',
+					properties: {
+						empresas: {
+							type: 'array',
+							example: ['...']
+						},
+						paginacao: {
+							$ref: '#/components/schemas/paginacao'
+						}
+					}
+				},
+				NewCompany: {
+					type: 'object',
+					required: ['empresa', 'gerente'],
+					properties: {
+
+						empresa: {
+							type: 'object',
+							required: ['nome_fantasia', 'razao_social', 'cnpj', 'endereco'],
+							properties: {
+								nome_fantasia: { type: 'string', example: 'Techbridge Interprise' },
+								razao_social: { type: 'string', example: 'Techbridge LTDA' },
+								cnpj: { type: 'string', example: '12345678000190' },
+
+								endereco: {
+									type: 'object',
+									required: ['cep', 'rua', 'numero', 'bairro', 'cidade', 'estado'],
+									properties: {
+										cep: { type: 'string', example: '09572000' },
+										rua: { type: 'string', example: 'Rua Santo André' },
+										numero: { type: 'string', example: '680' },
+										complemento: { type: 'string', example: 'A' },
+										bairro: { type: 'string', example: 'Vila Palmares' },
+										cidade: { type: 'string', example: 'São Caetano do Sul' },
+										estado: { type: 'string', example: 'SP' }
+									}
+								}
+							}
+						},
+
+						gerente: {
+							type: 'object',
+							required: ['nome', 'email'],
+							properties: {
+								nome: { type: 'string', example: 'João de Souza' },
+								email: { type: 'string', example: 'joao@email.com' }
+							}
+						}
+					}
+				},
+				// AUTH
+				ReqLogin: {
 					type: 'object',
 					required: ['email', 'senha'],
 					properties: {
@@ -45,7 +113,7 @@ const swaggerOptions = {
 						}
 					}
 				},
-				LoginResponse: {
+				ResLogin: {
 					type: 'object',
 					properties: {
 						dados: {
@@ -90,7 +158,6 @@ const swaggerOptions = {
 										},
 										ativo: { type: 'boolean', example: true },
 										tipo_usuario: { type: 'number', example: 1 },
-										cargo: { type: 'string', example: 'admin' },
 										id_empresa: { type: 'number', example: 1 }
 									}
 								}
@@ -101,58 +168,20 @@ const swaggerOptions = {
 				PatchInfo: {
 					type: 'object',
 					properties: {
-						token: { type: 'string', example: 'Bearer Token' },
 						nome: { type: 'string', example: 'Maria Silva' },
 						email: { type: 'string', example: 'maria@email.com' },
+						telefone: { type: 'string', example: '11903231230' },
+						tipo_usuario: { type: 'string', example: 2 }
 					}
 				},
 				PatchSenha: {
 					type: 'object',
 					properties: {
-						token: { type: 'string', example: 'Bearer Token' },
 						senhaAtual: { type: 'string', example: '123456' },
-						senhaNova: { type: 'string', example: '654321' },
+						senhaNova: { type: 'string', example: '123456' },
 					}
 				},
-				NewCompany: {
-					type: 'object',
-					required: ['empresa', 'gerente'],
-					properties: {
-
-						empresa: {
-							type: 'object',
-							required: ['nome_fantasia', 'razao_social', 'cnpj', 'endereco'],
-							properties: {
-								nome_fantasia: { type: 'string', example: 'Techbridge Interprise' },
-								razao_social: { type: 'string', example: 'Techbridge LTDA' },
-								cnpj: { type: 'string', example: '12345678000190' },
-
-								endereco: {
-									type: 'object',
-									required: ['cep', 'rua', 'numero', 'bairro', 'cidade', 'estado'],
-									properties: {
-										cep: { type: 'string', example: '09572000' },
-										rua: { type: 'string', example: 'Rua Santo André' },
-										numero: { type: 'string', example: '680' },
-										complemento: { type: 'string', example: 'A' },
-										bairro: { type: 'string', example: 'Vila Palmares' },
-										cidade: { type: 'string', example: 'São Caetano do Sul' },
-										estado: { type: 'string', example: 'SP' }
-									}
-								}
-							}
-						},
-
-						gerente: {
-							type: 'object',
-							required: ['nome', 'email'],
-							properties: {
-								nome: { type: 'string', example: 'João de Souza' },
-								email: { type: 'string', example: 'joao@email.com' }
-							}
-						}
-					}
-				},
+				// EMPRESAS
 				PatchCompany: {
 					type: 'object',
 					properties: {
@@ -174,11 +203,14 @@ const swaggerOptions = {
 							}
 						}
 					}
-				}
+				},
+
+
 			},
 		}
 	},
-	apis: ['./routes/*.js']
+
+	apis: ['./src/routes/*.js']
 }
 
 export const swaggerSpec = swaggerJSDoc(swaggerOptions)

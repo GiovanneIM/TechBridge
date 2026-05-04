@@ -5,7 +5,7 @@ import LoadingPage from '../../Holders/LoadingPage';
 import HeaderPage from '../../Header/HeaderPage';
 
 import { useState } from "react";
-import { useUsers } from "@/hooks/useUsers"
+import { useUsers } from "@/hooks/hooks2/useUsers"
 
 import { CardTecnico } from "../../../card/cardTecnicos/page"
 import ModalNovoTecnico from '@/components/modals/addTecnico';

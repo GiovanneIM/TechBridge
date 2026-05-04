@@ -1,6 +1,6 @@
 'use client';
 
-import { useDashboard } from '@/hooks/useDashboard';
+import { useDashboard } from '@/hooks/hooks2/useDashboard';
 
 import { Grid2X2, RotateCw } from 'lucide-react';
 

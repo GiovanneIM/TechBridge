@@ -1,15 +1,19 @@
 'use client'
 
-import { BriefcaseBusiness, Mail, MapPin, User2, Warehouse } from "lucide-react";
+import { BriefcaseBusiness, Mail, MapPin, PlusCircle, User2, Warehouse } from "lucide-react";
 import HeaderPage from "../../Header/HeaderPage";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { InputGroup, InputGroupInput } from "@/components/ui/input-group";
+import { useEmpresa } from "@/hooks/useEmpresa";
 
 export default function PageEmpresasAdd() {
+    // HOOK EMPRESA
+    const { criarEmpresa, loading, error } = useEmpresa();
 
+    // ESTADO DE EMPRESA
     const [empresa, setEmpresa] = useState({
         razao_social: '',
         nome_fantasia: '',
@@ -25,11 +29,14 @@ export default function PageEmpresasAdd() {
         }
     })
 
+    // ESTADO DE GERENTE
     const [gerente, setGerente] = useState({
         nome: '',
         email: '',
+        tipo_usuario: 2
     })
 
+    // LOADING - CEP
     const [loadingCep, setLoadingCep] = useState(false)
 
     // HANDLER EMPRESA
@@ -101,6 +108,7 @@ export default function PageEmpresasAdd() {
                                     }}
                                 />
                             </InputGroup>
+                            <FieldError>{error.criarEmpresa?.zod?.empresa?.razao_social}</FieldError>
                         </Field>
 
                         <Field className="gap-1">
@@ -113,6 +121,7 @@ export default function PageEmpresasAdd() {
                                     }}
                                 />
                             </InputGroup>
+                            <FieldError>{error.criarEmpresa?.zod?.empresa?.nome_fantasia}</FieldError>
                         </Field>
 
                         <Field className="gap-1">
@@ -125,6 +134,7 @@ export default function PageEmpresasAdd() {
                                     }}
                                 />
                             </InputGroup>
+                            <FieldError>{error.criarEmpresa?.zod?.empresa?.cnpj}</FieldError>
                         </Field>
                     </div>
                 </div>
@@ -152,6 +162,7 @@ export default function PageEmpresasAdd() {
                                         }}
                                     />
                                 </InputGroup>
+                                <FieldError>{error.criarEmpresa?.zod?.empresa?.endereco?.cep}</FieldError>
                             </Field>
                         </div>
 
@@ -170,6 +181,7 @@ export default function PageEmpresasAdd() {
                                         }}
                                     />
                                 </InputGroup>
+                                <FieldError>{error.criarEmpresa?.zod?.empresa?.endereco?.estado}</FieldError>
                             </Field>
                         </div>
 
@@ -188,6 +200,7 @@ export default function PageEmpresasAdd() {
                                         }}
                                     />
                                 </InputGroup>
+                                <FieldError>{error.criarEmpresa?.zod?.empresa?.endereco?.rua}</FieldError>
                             </Field>
                         </div>
 
@@ -206,6 +219,7 @@ export default function PageEmpresasAdd() {
                                         }}
                                     />
                                 </InputGroup>
+                                <FieldError>{error.criarEmpresa?.zod?.empresa?.endereco?.cidade}</FieldError>
                             </Field>
                         </div>
 
@@ -224,6 +238,7 @@ export default function PageEmpresasAdd() {
                                         }}
                                     />
                                 </InputGroup>
+                                <FieldError>{error.criarEmpresa?.zod?.empresa?.endereco?.bairro}</FieldError>
                             </Field>
                         </div>
 
@@ -244,6 +259,7 @@ export default function PageEmpresasAdd() {
                                         }}
                                     />
                                 </InputGroup>
+                                <FieldError>{error.criarEmpresa?.zod?.empresa?.endereco?.numero}</FieldError>
                             </Field>
                         </div>
 
@@ -262,6 +278,7 @@ export default function PageEmpresasAdd() {
                                         }}
                                     />
                                 </InputGroup>
+                                <FieldError>{error.criarEmpresa?.zod?.empresa?.endereco?.complemento}</FieldError>
                             </Field>
                         </div>
 
@@ -285,6 +302,7 @@ export default function PageEmpresasAdd() {
                                     }}
                                 />
                             </InputGroup>
+                            <FieldError>{error.criarEmpresa?.zod?.gerente?.nome}</FieldError>
                         </Field>
 
                         <Field className="gap-1">
@@ -297,13 +315,23 @@ export default function PageEmpresasAdd() {
                                     }}
                                 />
                             </InputGroup>
+                            <FieldError>{error.criarEmpresa?.zod?.gerente?.email}</FieldError>
                         </Field>
                     </div>
                 </div>
             </div>
 
-            <div className="flex justify-end pt-4">
-                <Button className="px-6">Registrar</Button>
+            <div className="flex border-t justify-between pt-4">
+                <div className="text-red-500">{error.criarEmpresa?.mensagem}</div>
+
+                <Button className="px-6 bg-techbridge"
+                    onClick={() => {
+                        criarEmpresa({ empresa, gerente })
+                    }}
+                >
+                    <PlusCircle className="inline" />
+                    Registrar empresa
+                </Button>
             </div>
 
         </Card>

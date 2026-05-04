@@ -8,10 +8,11 @@ USE TECHBRIDGE;
 
 
 -- Criando a tabela de tipos de usuários
-CREATE TABLE usuarios (
-    id 				INT 			AUTO_INCREMENT PRIMARY KEY,
-	data_criacao 	TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que o usuário foi registrado
-    ativo			BOOLEAN			DEFAULT TRUE,					-- Status do usuário (Conta ativa ou inativa)
+CREATE TABLE IF NOT EXISTS usuarios (
+    id 				    INT 			AUTO_INCREMENT PRIMARY KEY,
+	data_criacao 	    DATETIME 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que o usuário foi registrado
+    data_desativacao    DATETIME,                                       -- Data em que o usuário foi desativado
+    status			    BOOLEAN			DEFAULT TRUE,					-- Status do usuário (Conta ativa ou inativa)
 
     -- Atributos do usuário
     nome			VARCHAR(255) 	NOT NULL,						-- Nome do usuário
@@ -19,13 +20,18 @@ CREATE TABLE usuarios (
     senha			VARCHAR(255) 	NOT NULL,						-- Senha do usuário
 
     foto_perfil 	VARCHAR(255),									-- Foto de perfil
+<<<<<<< HEAD
     bio				VARCHAR(300), 			            			-- Breve biografia do usuário
     telefone		VARCHAR(20),
     cargo           VARCHAR(255)    NOT NULL,					            	-- Número do telefone do usuário (com DDD)
+=======
+    bio				TEXT, 		        	            			-- Breve biografia do usuário
+    telefone		VARCHAR(15), 					            	-- Número do telefone do usuário (com DDD)
+>>>>>>> 2b87fb681c8cfafdafe4150f022c52b9edc3267d
     
-    -- Não necessários
-    data_efetivacao	VARCHAR(10),			            			-- Data da efetivação
-    local_nasc		VARCHAR(100), 		    	        			-- Local de nascimento
+    -- Não necessarios
+    -- data_efetivacao	VARCHAR(10),			            			-- Data da efetivação
+    -- local_nasc		VARCHAR(100), 		    	        			-- Local de nascimento
     
 
     -- Chaves estrangeiras
@@ -34,13 +40,17 @@ CREATE TABLE usuarios (
     
     -- Referênciando as chaves estrangeiras
     FOREIGN KEY (tipo_usuario) REFERENCES tipos_usuarios(id),
-    FOREIGN KEY (id_empresa) REFERENCES empresas(id)
+    FOREIGN KEY (id_empresa) REFERENCES empresas(id),
+
+    -- Indices
+    INDEX idx_usuarios_empresa (id_empresa),
+    INDEX idx_usuarios_ativo (status)
 ); 
 
 
 -- Inserindo os usuários de exemplo
 INSERT INTO usuarios 
-(nome, email, senha, tipo_usuario, id_empresa, telefone, cargo, data_efetivacao, bio, local_nasc)
+(nome, email, senha, tipo_usuario, id_empresa, telefone, bio)
 VALUES 
 (
 'Kim Minji', 
@@ -49,10 +59,7 @@ VALUES
 1, 
 1, 
 '(11) 95989-9539', 
-'Administrador do sistema', 
-'05-03-2024', 
-'Administradora de sistemas com foco em organização, segurança e eficiência operacional. Atua garantindo o bom funcionamento das plataformas e suporte estratégico para a equipe.', 
-'São Paulo, BR'
+'Administradora de sistemas com foco em organização, segurança e eficiência operacional. Atua garantindo o bom funcionamento das plataformas e suporte estratégico para a equipe.'
 ),
 (
 'Poliwag Gomez', 
@@ -61,10 +68,7 @@ VALUES
 2, 
 2, 
 '(11) 98921-8798', 
-'Gerente de produção', 
-'22-11-2022', 
-'Gerente de produção experiente, especializado em otimização de processos e liderança de equipes. Trabalha para aumentar a produtividade e garantir a qualidade nas entregas.', 
-'Chigago, US'
+'Gerente de produção experiente, especializado em otimização de processos e liderança de equipes. Trabalha para aumentar a produtividade e garantir a qualidade nas entregas.'
 ),
 (
 'The Rock', 
@@ -73,11 +77,8 @@ VALUES
 3, 
 2, 
 '(11) 97548-1367', 
-'Técnico de campo', 
-'15-05-2019', 
-'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.', 
-'Buenos Aires, AR'
-);,
+'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.'
+),
 (
 'Izuku Midoriya', 
 'tecnico@email.com', 
@@ -85,10 +86,7 @@ VALUES
 4, 
 2, 
 '(11) 97548-1367', 
-'Técnico de campo', 
-'15-05-2019', 
-'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.', 
-'Buenos Aires, AR'
+'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.'
 );
 
 -- Alterando as fotos do usuário

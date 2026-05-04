@@ -3,7 +3,6 @@ import { apiFetch } from '@/lib/api';
 
 
 // URL base da API
-// const API_BASE_URL = 'http://localhost:3000/api/auth';
 const API_BASE_URL = '/auth';
 
 export function useAuth({

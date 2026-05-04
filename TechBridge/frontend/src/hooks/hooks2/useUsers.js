@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from 'react';
 import { apiFetch } from '@/lib/api';
 
 // URL base da API
-// const API_BASE_URL = 'http://localhost:3000/api/setores';
 const API_BASE_URL = '/user';
 
 export function useUsers({
