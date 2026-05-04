@@ -3,6 +3,7 @@ import UserModel from '../models/UserModel.js';
 import { JWT_CONFIG } from '../config/jwt.js';
 import { validarEmail, validarNome, validarSenha } from '../utils/validacoes.js';
 import { negrito, verde } from '../utils/modificadoresDeSaida.js';
+import { removerArquivoAntigo } from '../middlewares/uploadMiddleware.js';
 
 
 // CONTROLLER PARA OPERAÇÕES DE AUTENTICAÇÃO

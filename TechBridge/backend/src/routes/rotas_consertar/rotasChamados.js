@@ -5,7 +5,7 @@ import { authMiddleware } from '../../middlewares/authMiddleware.js';
 const router = express.Router();
 
 // Listar todos chamados
-router.post('/buscar', authMiddleware, ChamadosController.listarChamados)
+router.get('/buscar', ChamadosController.listarChamados)
 
 // Obter um chamado específico
 router.get('/:id', authMiddleware, ChamadosController.listarChamadoId)

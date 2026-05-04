@@ -1,4 +1,5 @@
 import { create, read, update, deleteRecord, dadosDashboard, dadosPainelChamados, comparePassword, hashPassword } from '../config/database.js';
+import UserModel from './UserModel.js';
 
 class EmpresasModel {
 
@@ -52,13 +53,10 @@ class EmpresasModel {
             const id_empresa = await create('empresas', empresa);
 
             // REGISTRAR O 1º GERENTE PRINCIPAL DA EMPRESA
-            const id_gerente = await create('usuarios', {
-                ...gerente,
-                id_empresa
-            });
+            const id_gerente = await UserModel.criar(gerente)
 
-            // RETORNANDO O ID DA EMPRESA
-            return id_empresa
+            // RETORNANDO O ID DA EMPRESA E DO GERENTE
+            return { id_empresa, id_gerente }
         } catch (error) {
             // ERRO
             console.error('Erro ao registrar empresa: ', error);

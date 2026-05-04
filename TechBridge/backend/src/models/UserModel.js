@@ -2,6 +2,23 @@ import { create, read, update, deleteRecord, comparePassword, hashPassword, getC
 
 // Model para operações com usuários
 class UserModel {
+    // CRIAR USUÁRIO
+    static async criar(dadosUsuario) {
+        try {
+            // Hash da senha antes de salvar
+            const senhaHash = await hashPassword(dadosUsuario.senha);
+            const dadosComHash = {
+                ...dadosUsuario,
+                senha: senhaHash
+            };
+
+            return await create('usuarios', dadosComHash);
+        } catch (error) {
+            console.error('Erro ao criar usuário:', error);
+            throw error;
+        }
+    }
+
     // VERIFICAR CREDENCIAIS DE LOGIN
     static async verificarCredenciais(email, senha) {
         try {
@@ -143,7 +160,7 @@ class UserModel {
         try {
             return await update(
                 'usuarios',
-                { foto_perfil: 'http://localhost:3000/uploads/imagens/' + fotoNova },
+                { foto_perfil: `http://localhost:3000/uploads/imagens/usuarios/${id}/` + fotoNova },
                 {id}
             );
         } catch (error) {
@@ -152,22 +169,7 @@ class UserModel {
         }
     }
 
-    // Criar novo usuário
-    static async criar(dadosUsuario) {
-        try {
-            // Hash da senha antes de salvar
-            const senhaHash = await hashPassword(dadosUsuario.senha);
-            const dadosComHash = {
-                ...dadosUsuario,
-                senha: senhaHash
-            };
-
-            return await create('usuarios', dadosComHash);
-        } catch (error) {
-            console.error('Erro ao criar usuário:', error);
-            throw error;
-        }
-    }
+    
 
     // Excluir usuário
     static async excluir(id) {
