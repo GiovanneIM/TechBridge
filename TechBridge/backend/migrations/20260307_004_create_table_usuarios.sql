@@ -20,7 +20,8 @@ CREATE TABLE usuarios (
 
     foto_perfil 	VARCHAR(255),									-- Foto de perfil
     bio				VARCHAR(300), 			            			-- Breve biografia do usuário
-    telefone		VARCHAR(20), 					            	-- Número do telefone do usuário (com DDD)
+    telefone		VARCHAR(20),
+    cargo           VARCHAR(255)    NOT NULL,					            	-- Número do telefone do usuário (com DDD)
     
     -- Não necessários
     data_efetivacao	VARCHAR(10),			            			-- Data da efetivação
