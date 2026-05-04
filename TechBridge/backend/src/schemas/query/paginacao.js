@@ -12,5 +12,7 @@ export const paginacaoSchema = z.object({
     limit: z.coerce.number().int()
         .min(1)
         .max(PAGINACAO_LIMITE_MAXIMO)
-        .default(PAGINACAO_LIMITE_PADRAO)
+        .default(PAGINACAO_LIMITE_PADRAO),
+
+    status: z.string().optional()
 }).strict();

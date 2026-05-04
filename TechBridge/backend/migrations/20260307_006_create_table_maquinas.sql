@@ -11,7 +11,6 @@ USE TECHBRIDGE;
 CREATE TABLE IF NOT EXISTS maquinas (
 	id				INT				AUTO_INCREMENT PRIMARY KEY,
     data_criacao 	TIMESTAMP       DEFAULT CURRENT_TIMESTAMP,
-    -- Status da máquina
     status 			ENUM('ativa', 'inativa', 'em_manutencao', 'arquivada') 		DEFAULT 'ativa',
     
     -- Atributos da máquina

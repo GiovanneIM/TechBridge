@@ -7,11 +7,12 @@ class EmpresasController {
         // OBTER DADOS DA EMPRESA E DO GERENTE PRINCIPAL
         const { empresa, gerente } = req.body;
 
+        const { endereco, ...restoEmpresa } = empresa;
+
         const dadosEmpresa = {
-            ...empresa,
-            ...empresa.endereco,
-            endereco: null
-        }
+            ...restoEmpresa,
+            ...endereco
+        };
 
         try {
             // REGISTRAR EMPRESA
@@ -40,14 +41,25 @@ class EmpresasController {
     // LISTAR EMPRESAS (COM PAGINAÇÃO)
     static async listarEmpresas(req, res) {
         // OBTER PAGINAÇÃO
-        const { page, limit } = req.query;
+        const { page, limit, status } = req.validated.query;
 
         // CALCULANDO OFFSET
         const offset = (page - 1) * limit;
 
+        // FILTROS
+        const filtro = {};
+
+        if (status) {
+            if (status === 'all') return
+
+            status === 'ativa'
+                ? filtro.status = true
+                : filtro.status = false
+        }
+
         try {
             // OBTER AS EMPRESAS
-            const resultado = await EmpresasModel.listarEmpresas(limit, offset)
+            const resultado = await EmpresasModel.listarEmpresas(limit, offset, page, filtro)
 
             // SUCESSO: ENVIAR EMPRESAS
             res.status(200).json({

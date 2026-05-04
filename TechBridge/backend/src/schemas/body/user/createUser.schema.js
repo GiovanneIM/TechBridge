@@ -6,6 +6,6 @@ import { email, nome, senha, tipo_usuario } from "../../dados/usuario.js";
 export const createUserSchema = z.object({
     nome: nome,
     email: email,
-    senha: senha,
+    senha: senha.default('123456'),
     tipo_usuario: tipo_usuario
 }).strict();

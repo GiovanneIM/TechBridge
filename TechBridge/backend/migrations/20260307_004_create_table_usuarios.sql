@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     id 				    INT 			AUTO_INCREMENT PRIMARY KEY,
 	data_criacao 	    DATETIME 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que o usuário foi registrado
     data_desativacao    DATETIME,                                       -- Data em que o usuário foi desativado
-    ativo			    BOOLEAN			DEFAULT TRUE,					-- Status do usuário (Conta ativa ou inativa)
+    status			    BOOLEAN			DEFAULT TRUE,					-- Status do usuário (Conta ativa ou inativa)
 
     -- Atributos do usuário
     nome			VARCHAR(255) 	NOT NULL,						-- Nome do usuário
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
     -- Indices
     INDEX idx_usuarios_empresa (id_empresa),
-    INDEX idx_usuarios_ativo (ativo)
+    INDEX idx_usuarios_ativo (status)
 ); 
 
 
@@ -53,7 +53,7 @@ VALUES
 1, 
 1, 
 '(11) 95989-9539', 
-'Administradora de sistemas com foco em organização, segurança e eficiência operacional. Atua garantindo o bom funcionamento das plataformas e suporte estratégico para a equipe.', 
+'Administradora de sistemas com foco em organização, segurança e eficiência operacional. Atua garantindo o bom funcionamento das plataformas e suporte estratégico para a equipe.'
 ),
 (
 'Poliwag Gomez', 
@@ -62,7 +62,7 @@ VALUES
 2, 
 2, 
 '(11) 98921-8798', 
-'Gerente de produção experiente, especializado em otimização de processos e liderança de equipes. Trabalha para aumentar a produtividade e garantir a qualidade nas entregas.', 
+'Gerente de produção experiente, especializado em otimização de processos e liderança de equipes. Trabalha para aumentar a produtividade e garantir a qualidade nas entregas.'
 ),
 (
 'The Rock', 
@@ -71,7 +71,7 @@ VALUES
 3, 
 2, 
 '(11) 97548-1367', 
-'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.', 
+'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.'
 ),
 (
 'Izuku Midoriya', 
@@ -80,7 +80,7 @@ VALUES
 4, 
 2, 
 '(11) 97548-1367', 
-'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.', 
+'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.'
 );
 
 -- Alterando as fotos do usuário

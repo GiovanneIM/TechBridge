@@ -22,9 +22,6 @@ import { Separator } from "@/components/ui/separator";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../../ui/input-group";
 import { KeyRound, Mail } from "lucide-react";
 
-
-
-
 export default function PageLogin() {
 	const router = useRouter()
 
@@ -69,7 +66,7 @@ export default function PageLogin() {
 				</svg>
 			</div>
 
-			{/* Formulario */}
+			{/* Card */}
 			<div className="w-full max-w-md h-fit z-10 opacity-95 border p-4 rounded-md bg-card">
 
 				{/* Logo da TechBridge*/}

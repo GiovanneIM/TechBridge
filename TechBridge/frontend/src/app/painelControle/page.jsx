@@ -1,6 +1,6 @@
 'use client';
 
-import { conexaoKanban } from "@/hooks/conexaoKanban";
+import { conexaoKanban } from "@/hooks/hooks2/conexaoKanban";
 
 import {
 	Table,

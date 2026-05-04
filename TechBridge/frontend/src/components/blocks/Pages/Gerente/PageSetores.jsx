@@ -13,7 +13,7 @@ import {
     RotateCw,
 } from "lucide-react";
 import { Separator } from "../../../ui/separator";
-import { useSetores } from "@/hooks/useSetores";
+import { useSetores } from "@/hooks/hooks2/useSetores";
 
 const icones = {
     Wrench: <Wrench className="h-20 w-20" />,

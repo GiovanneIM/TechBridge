@@ -11,7 +11,7 @@ USE TECHBRIDGE;
 CREATE TABLE setores (
 	id				INT				AUTO_INCREMENT PRIMARY KEY,
     data_criacao 	TIMESTAMP 		DEFAULT CURRENT_TIMESTAMP,
-    ativo			BOOLEAN			DEFAULT TRUE,
+    status			BOOLEAN			DEFAULT TRUE,
     
     -- Atributos do setor
     cod_setor       VARCHAR(50)     NOT NULL, 			-- Código de identificação (ID) interna na empresa (Definido pela empresa)
@@ -29,10 +29,10 @@ CREATE TABLE setores (
     FOREIGN KEY (id_empresa) REFERENCES empresas(id),
     
     -- Impede que uma empresa tenha dois setores com o mesmo código
-    UNIQUE (id_empresa, cod_setor)
+    UNIQUE (id_empresa, cod_setor),
 
     -- Indices
-    INDEX idx_setores_ativos (ativo)
+    INDEX idx_setores_ativos (status)
 ); 
 
 
