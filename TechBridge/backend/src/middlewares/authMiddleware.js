@@ -76,5 +76,36 @@ const adminMiddleware = (req, res, next) => {
     next();
 };
 
-export { authMiddleware, adminMiddleware, };
+// Middleware para verificar se o usuário é gerente principal (ou superior)
+const gerentePrincipalMiddleware = (req, res, next) => {    
+    if (req.usuario.tipo_usuario > 2) {
+        return res.status(403).json({
+            sucesso: false,
+            erro: 'Acesso negado',
+            mensagem: 'Voce não tem acesso a este recurso'
+        });
+    }
+    next();
+};
+
+
+// Middleware para verificar se o usuário é gerente principal (ou superior)
+const gerenteMiddleware = (req, res, next) => {    
+    if (req.usuario.tipo_usuario > 3) {
+        return res.status(403).json({
+            sucesso: false,
+            erro: 'Acesso negado',
+            mensagem: 'Voce não tem acesso a este recurso'
+        });
+    }
+    next();
+};
+
+
+export { 
+    authMiddleware, 
+    adminMiddleware, 
+    gerentePrincipalMiddleware,
+    gerenteMiddleware
+};
 

@@ -7,9 +7,12 @@ const router = express.Router();
 import authRotas from './rotasAuth.js';
 import adminRotas from './rotasAdmin.js'
 import empresasRotas from './rotasEmpresas.js';
-import criptografiaRotas from './rotasCripto.js';
-import userRotas from './rotasUser.js';
 
+
+// ROTAS PARA CONSERTAR
+import criptografiaRotas from './criptografia/rotasCripto.js';
+
+import userRotas from './rotas_consertar/rotasUser.js';
 import chamadosRotas from './rotas_consertar/rotasChamados.js';
 import maquinasRotas from './rotas_consertar/rotasMaquinas.js';
 import setoresRotas from './rotas_consertar/rotasSetores.js';

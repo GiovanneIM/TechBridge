@@ -1,4 +1,4 @@
-import { create, read, update, deleteRecord, comparePassword, hashPassword, getConnection } from '../config/database.js';
+import { create, read, update, deleteRecord, comparePassword, hashPassword, getConnection } from '../../config/database.js';
 
 // Model para operações com usuários
 class UserModel {
@@ -114,12 +114,7 @@ class UserModel {
     // ATUALIZAR INFORMAÇÕES DO USUÁRIO (Exceto senha e foto)
     static async atualizarInformacoes(id, dadosUsuario) {
         try {
-            return await update(
-                'usuarios',
-                dadosUsuario,
-                'id = ?',
-                [id]
-            );
+            return await update('usuarios', dadosUsuario, { id });
         } catch (error) {
             console.error('Erro ao atualizar usuário:', error);
             throw error;
@@ -153,7 +148,7 @@ class UserModel {
             const senhaNovaHash = await hashPassword(senhaNova);
 
             // ATUALIZAR A SENHA
-            return await update('usuarios', { senha: senhaNovaHash }, `id = ${id}`);
+            return await update('usuarios', { senha: senhaNovaHash }, { id });
         } catch (error) {
             console.error('Erro ao atualizar usuário:', error);
             throw error;
@@ -166,7 +161,7 @@ class UserModel {
             return await update(
                 'usuarios',
                 { foto_perfil: fotoNova },
-                {id}
+                { id }
             );
         } catch (error) {
             console.error('Erro ao atualizar usuário:', error);
@@ -174,7 +169,7 @@ class UserModel {
         }
     }
 
-    
+
 
     // Excluir usuário
     static async excluir(id) {

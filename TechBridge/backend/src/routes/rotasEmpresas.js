@@ -1,12 +1,21 @@
 // ROTAS PARA CONTROLE DE EMPRESAS
 
 import express from 'express';
+import { 
+    authMiddleware, 
+    adminMiddleware,
+    gerentePrincipalMiddleware,
+    gerenteMiddleware
+} from '../middlewares/authMiddleware.js';
+import { validateZod } from '../middlewares/validate.js';
 import EmpresasController from '../controllers/EmpresasController.js';
-import { authMiddleware, adminMiddleware } from '../middlewares/authMiddleware.js';
+import { params_Empresa } from '../schemas/params/empresa.schema.js';
+import { updateEmpresaSchema } from '../schemas/body/empresa/updateEmpresa.schema.js';
 
 const router = express.Router();
 
 
+// CONTROLE DA EMPRESA
 
 /**
  * @swagger
@@ -26,10 +35,18 @@ const router = express.Router();
  *     responses:
  *       200:
  *         description: Dados da empresa listados com sucesso
+ *       401:
+ *         description: Autorização negada
+ *       404:
+ *         description: Empresa não encontrada
  *       500:
- *         description: Não foi cossível obter os dados da empresa
+ *         description: Não foi possível obter os dados da empresa
  */
-router.get('/:empresa', authMiddleware, () => { });
+router.get(
+    '/:id_empresa',
+    validateZod(params_Empresa, 'params'),
+    EmpresasController.obterEmpresa
+);
 
 /**
  * @swagger
@@ -60,10 +77,17 @@ router.get('/:empresa', authMiddleware, () => { });
  *         description: Dados inválidos
  *       401:
  *         description: Permissão negada
+ *       404:
+ *         description: Empresa não encontrada
  *       500:
  *         description: Não foi possível atualizar a empresa
  */
-router.patch('/:empresa', authMiddleware, () => { });
+router.patch(
+    '/:id_empresa',
+    validateZod(params_Empresa, 'params'),
+    validateZod(updateEmpresaSchema, 'body'),
+    EmpresasController.atualizarEmpresa
+);
 
 
 
@@ -92,7 +116,7 @@ router.patch('/:empresa', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível listar os membros da empresa
  */
-router.get('/:empresa/membros', authMiddleware, () => { });
+router.get('/:empresa/membros', () => { });
 
 /**
  * @swagger
@@ -119,7 +143,7 @@ router.get('/:empresa/membros', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível registrar o membros da empresa
  */
-router.post('/:empresa/membros', authMiddleware, () => { });
+router.post('/:empresa/membros', () => { });
 
 /**
  * @swagger
@@ -153,7 +177,7 @@ router.post('/:empresa/membros', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível listar o usuário da empresa
  */
-router.get('/:empresa/membros/:membro', authMiddleware, () => { });
+router.get('/:empresa/membros/:membro', () => { });
 
 /**
  * @swagger
@@ -187,7 +211,7 @@ router.get('/:empresa/membros/:membro', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível atualizar o usuário da empresa
  */
-router.patch('/:empresa/membros/:membro', authMiddleware, () => { });
+router.patch('/:empresa/membros/:membro', () => { });
 
 
 
@@ -216,7 +240,7 @@ router.patch('/:empresa/membros/:membro', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível listar os setores da empresa
  */
-router.get('/:empresa/setores', authMiddleware, () => { });
+router.get('/:empresa/setores', () => { });
 
 /**
  * @swagger
@@ -243,7 +267,7 @@ router.get('/:empresa/setores', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível registrar o setor para a empresa
  */
-router.post('/:empresa/setores', authMiddleware, () => { });
+router.post('/:empresa/setores', () => { });
 
 /**
  * @swagger
@@ -277,7 +301,7 @@ router.post('/:empresa/setores', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível listado o setor da empresa
  */
-router.get('/:empresa/setores/:setor', authMiddleware, () => { });
+router.get('/:empresa/setores/:setor', () => { });
 
 /**
  * @swagger
@@ -311,7 +335,7 @@ router.get('/:empresa/setores/:setor', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível atualizar o setor da empresa
  */
-router.patch('/:empresa/setores/:setor', authMiddleware, () => { });
+router.patch('/:empresa/setores/:setor', () => { });
 
 
 
@@ -340,7 +364,7 @@ router.patch('/:empresa/setores/:setor', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível listar as maquinas da empresa
  */
-router.get('/:empresa/maquinas', authMiddleware, () => { });
+router.get('/:empresa/maquinas', () => { });
 
 /**
  * @swagger
@@ -372,7 +396,7 @@ router.get('/:empresa/maquinas', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível registrar a máquina para a empresa
  */
-router.post('/:empresa/setores/:setor/maquinas', authMiddleware, () => { });
+router.post('/:empresa/setores/:setor/maquinas', () => { });
 
 /**
  * @swagger
@@ -404,7 +428,7 @@ router.post('/:empresa/setores/:setor/maquinas', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível listar as maquinas do setor
  */
-router.get('/:empresa/setores/:setor/maquinas', authMiddleware, () => { });
+router.get('/:empresa/setores/:setor/maquinas', () => { });
 
 /**
  * @swagger
@@ -445,7 +469,7 @@ router.get('/:empresa/setores/:setor/maquinas', authMiddleware, () => { });
  *       500:
  *         description: Não foi possível listar a máquina da empresa
  */
-router.get('/:empresa/setores/:setor/maquinas/:maquina', authMiddleware, () => { });
+router.get('/:empresa/setores/:setor/maquinas/:maquina', () => { });
 
 /**
  * @swagger
@@ -486,7 +510,7 @@ router.get('/:empresa/setores/:setor/maquinas/:maquina', authMiddleware, () => {
  *       500:
  *         description: Não foi possível atualizar a máquina
  */
-router.patch('/:empresa/setores/:setor/maquinas/:maquina', authMiddleware, () => { });
+router.patch('/:empresa/setores/:setor/maquinas/:maquina', () => { });
 
 
 export default router;

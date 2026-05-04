@@ -1,4 +1,4 @@
-import UserModel from "../models/UserModel.js";
+import UserModel from "../../models/model_consertar/UserModel.js";
 
 // CONTROLLER PARA OPERAÇÕES DE USUÁRIOS
 
