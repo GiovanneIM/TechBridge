@@ -3,7 +3,7 @@ import UserModel from '../models/UserModel.js';
 import { JWT_CONFIG } from '../config/jwt.js';
 import { validarEmail, validarNome, validarSenha } from '../utils/validacoes.js';
 import { negrito, verde } from '../utils/modificadoresDeSaida.js';
-import { removerArquivoAntigo } from '../middlewares/uploadMiddleware.js';
+import { removerArquivoAntigo, TIPOS_PASTA } from '../middlewares/uploadMiddleware.js';
 
 
 // CONTROLLER PARA OPERAÇÕES DE AUTENTICAÇÃO
@@ -110,7 +110,8 @@ class AuthController {
                 sucesso: true,
                 dados: {
                     usuario: {
-                        ...usuarioSemSenha
+                        ...usuarioSemSenha,
+                        foto_perfil: `http://localhost:3000/uploads/imagens/usuarios/${usuario.id}/${usuario.foto_perfil}`
                     }
                 }
             });
@@ -285,15 +286,15 @@ class AuthController {
             // OBTER O NOME DA FOTO
             const nomeFoto = req.file.filename;
 
-            // OBTER O USUARIO
+            // OBTER O USUARIO ANTES DE ATUALIZAR (Para excluir a foto antiga)
             const usuario = await UserModel.buscarPorId(idUsuario)
 
             // ATUALIZAR A IMAGEM DO USUÁRIO NO BANCO
             await UserModel.atualizarFoto(idUsuario, nomeFoto)
 
             // REMOVER A IMAGEM ANTIGA DO USUÁRIO
-            if (usuario.foto && usuario.foto !== nomeFoto) {
-                await removerArquivoAntigo(usuario.foto, idUsuario, 'imagem');
+            if (usuario.foto_perfil && usuario.foto_perfil !== nomeFoto) {
+                await removerArquivoAntigo(usuario.foto_perfil, idUsuario, TIPOS_PASTA.IMAGENS);
             }
 
             return res.json({

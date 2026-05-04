@@ -194,6 +194,13 @@ const TIPOS_UPLOAD = {
     EMPRESA_MAQUINA: 'empresa_maquina'
 };
 
+// TIPOS DE PASTAS
+const TIPOS_PASTA = {
+    IMAGENS: 'imagens',
+    ARQUIVOS: 'arquivos',
+    OUTROS: 'outros'
+};
+
 // IDENTIFICA O TIPO DE UPLOAD
 const getUploadPath = (req, file) => {
     const tipo = req.uploadTipo;
@@ -201,28 +208,28 @@ const getUploadPath = (req, file) => {
     const empresaId = req.usuario?.empresaId || req.params.empresaId;
 
     if (!userId && tipo.includes('USER')) {
-        return cb(new Error('Usuário não identificado'), false);
+        throw new Error('Usuário não identificado');
     }
 
     if (!empresaId && tipo.includes('EMPRESA')) {
-        return cb(new Error('Empresa não identificada'), false);
+        throw new Error('Empresa não identificada');
     }
 
     switch (tipo) {
         case TIPOS_UPLOAD.USER_IMAGEM:
-            return path.join(__dirname, '..', '..', 'uploads', 'imagens', 'usuarios', userId.toString());
+            return path.join(__dirname, '..', '..', 'uploads', TIPOS_PASTA.IMAGENS, 'usuarios', userId.toString());
 
         case TIPOS_UPLOAD.USER_ARQUIVO:
-            return path.join(__dirname, '..', '..', 'uploads', 'arquivos', 'usuarios', userId.toString());
+            return path.join(__dirname, '..', '..', 'uploads', TIPOS_PASTA.ARQUIVOS, 'usuarios', userId.toString());
 
         case TIPOS_UPLOAD.EMPRESA_LOGO:
-            return path.join(__dirname, '..', '..', 'uploads', 'imagens', 'empresas', empresaId.toString(), 'logo');
+            return path.join(__dirname, '..', '..', 'uploads', TIPOS_PASTA.IMAGENS, 'empresas', empresaId.toString(), 'logo');
 
         case TIPOS_UPLOAD.EMPRESA_MAQUINA:
-            return path.join(__dirname, '..', '..', 'uploads', 'imagens', 'empresas', empresaId.toString(), 'maquinas');
+            return path.join(__dirname, '..', '..', 'uploads', TIPOS_PASTA.IMAGENS, 'empresas', empresaId.toString(), 'maquinas');
 
         default:
-            return path.join(__dirname, '..', '..', 'uploads', 'outros');
+            return path.join(__dirname, '..', '..', 'uploads', TIPOS_PASTA.OUTROS);
     }
 };
 
@@ -264,7 +271,7 @@ const setUploadTipo = (tipo) => (req, res, next) => {
 };
 
 
-export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = 'imagem') => {
+export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = TIPOS_PASTA.IMAGENS) => {
     try {
         if (!nomeArquivo || !idUsuario) return;
 
@@ -273,10 +280,13 @@ export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = 'image
             '..',
             '..',
             'uploads',
+            tipo,
+            'usuarios',
             idUsuario.toString(),
-            tipo === 'imagem' ? 'imagens' : 'arquivos',
             nomeArquivo
         );
+        console.log(caminhoArquivo);
+        
 
         if (fs.existsSync(caminhoArquivo)) {
             fs.unlinkSync(caminhoArquivo);
@@ -298,6 +308,7 @@ export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = 'image
 export {
     setUploadTipo,
     TIPOS_UPLOAD,
+    TIPOS_PASTA,
     upload,
     handleUploadError
 };
