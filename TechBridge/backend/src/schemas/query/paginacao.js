@@ -14,5 +14,8 @@ export const paginacaoSchema = z.object({
         .max(PAGINACAO_LIMITE_MAXIMO)
         .default(PAGINACAO_LIMITE_PADRAO),
 
-    status: z.string().optional()
+
+    status: z.string().optional(),
+    nome_empresa: z.string().optional(),
+    estado: z.string().optional()
 }).strict();

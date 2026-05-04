@@ -48,7 +48,8 @@ async function read(table, options = {}) {
 
     // Criando conexão
     const connection = await getConnection();
-
+    let hasWhere = false;
+    
     try {
         // Formando o comando
         let sql = "SELECT ";
@@ -79,25 +80,23 @@ async function read(table, options = {}) {
             for (const [key, value] of Object.entries(options.where)) {
                 if (value === null) {
                     conditions.push(`${key} IS NULL`);
-                }
-                else if (value === 'NOT_NULL') {
+                } else if (value === 'NOT_NULL') {
                     conditions.push(`${key} IS NOT NULL`);
-                }
-                else if (Array.isArray(value)) {
+                } else if (Array.isArray(value)) {
                     const placeholders = value.map(() => "?").join(", ");
                     conditions.push(`${key} IN (${placeholders})`);
                     values.push(...value);
-                }
-                else {
+                } else {
                     conditions.push(`${key} = ?`);
                     values.push(value);
                 }
             }
 
             sql += " WHERE " + conditions.join(" AND ");
+            hasWhere = true;
         }
 
-        // LIKE
+        // LIKE (AND)
         if (options.like && Object.keys(options.like).length > 0) {
             const conditions = [];
 
@@ -106,8 +105,24 @@ async function read(table, options = {}) {
                 values.push(`%${value}%`);
             }
 
-            sql += options.where ? " AND " : " WHERE ";
+            sql += hasWhere ? " AND " : " WHERE ";
             sql += conditions.join(" AND ");
+            hasWhere = true;
+        }
+
+        // LIKE (OR)
+        if (options.likeOr && Object.keys(options.likeOr).length > 0) {
+            const conditions = [];
+
+            for (const [key, value] of Object.entries(options.likeOr)) {
+                conditions.push(`${key} LIKE ?`);
+                values.push(`%${value}%`);
+            }
+
+            sql += hasWhere ? " AND (" : " WHERE (";
+            sql += conditions.join(" OR ");
+            sql += ")";
+            hasWhere = true;
         }
 
         // GROUP BY
@@ -141,6 +156,8 @@ async function read(table, options = {}) {
             values.push(options.offset);
         }
 
+
+        console.log(sql);
 
         // Executando o comando
         const [rows] = await connection.execute(sql, values);
@@ -439,7 +456,7 @@ export {
     comparePassword,
     hashPassword,
     getConnection,
-    
+
     dadosDashboard,
     dadosPainelChamados,
 };

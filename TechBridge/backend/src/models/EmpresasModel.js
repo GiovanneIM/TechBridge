@@ -4,27 +4,24 @@ import UserModel from './UserModel.js';
 class EmpresasModel {
 
     // LISTAR TODAS AS EMPRESAS (Com paginação)
-    static async listarEmpresas(limit, offset, page, filtro) {
+    static async listarEmpresas(limit, offset, page, where, like, likeOr) {
         try {
             // OBTER AS EMPRESAS
             const empresas = await read('empresas', {
                 limit,
                 offset,
-                where: {
-                    ...filtro
-                }
+                where,
+                like,
+                likeOr
             });
 
             // TOTAL DE EMPRESAS
             const [{ total }] = await read('empresas', {
                 columns: ['COUNT(*) as total'],
-                where: {
-                    ...filtro
-                }
+                where,
+                like,
+                likeOr
             });
-
-            // PAGINA ATUAL
-            const pagina_atual = Math.floor(offset / limit) + 1;
 
             // TOTAL DE PAGINAS
             const total_paginas = Math.ceil(total / limit)

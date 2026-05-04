@@ -53,25 +53,34 @@ class EmpresasController {
     // LISTAR EMPRESAS (COM PAGINAÇÃO)
     static async listarEmpresas(req, res) {
         // OBTER PAGINAÇÃO
-        const { page, limit, status } = req.validated.query;
+        const { page, limit, status, nome_empresa, estado } = req.validated.query;
 
         // CALCULANDO OFFSET
         const offset = (page - 1) * limit;
 
         // FILTROS
-        const filtro = {};
+        const where = {};
+        const like = {};
+        const likeOr = {};
 
-        if (status) {
-            if (status === 'all') return
-
+        if (status && status !== 'all') {
             status === 'ativa'
-                ? filtro.status = true
-                : filtro.status = false
+                ? where.status = true
+                : where.status = false
+        }
+
+        if (estado) {
+            like.estado = estado
+        }
+
+        if (nome_empresa) {
+            likeOr.nome_fantasia = nome_empresa;
+            likeOr.razao_social = nome_empresa;
         }
 
         try {
             // OBTER AS EMPRESAS
-            const resultado = await EmpresasModel.listarEmpresas(limit, offset, page, filtro)
+            const resultado = await EmpresasModel.listarEmpresas(limit, offset, page, where, like, likeOr)
 
             // SUCESSO: ENVIAR EMPRESAS
             res.status(200).json({

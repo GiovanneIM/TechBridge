@@ -22,6 +22,9 @@ router.use('/criptografia', criptografiaRotas);
 
 router.use('/empresas', authMiddleware, empresasRotas);
 
+
+
+
 router.use('/user', userRotas);
 router.use('/chamados', chamadosRotas);
 router.use('/maquinas', maquinasRotas);
