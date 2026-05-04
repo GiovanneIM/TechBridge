@@ -1,6 +1,6 @@
 import express from 'express';
-import ChamadosController from '../controllers/ChamadosController.js';
-import { authMiddleware } from '../middlewares/authMiddleware.js';
+import ChamadosController from '../../controllers/controller_consertar/ChamadosController.js';
+import { authMiddleware } from '../../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
