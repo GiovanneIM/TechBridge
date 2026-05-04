@@ -1,5 +1,5 @@
 import express from 'express';
-import PainelController from '../controllers/PainelController.js';
+import PainelController from '../../controllers/controller_consertar/PainelController.js';
 
 const router = express.Router();
 

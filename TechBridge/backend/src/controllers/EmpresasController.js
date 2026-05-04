@@ -1,4 +1,5 @@
 import EmpresasModel from "../models/EmpresasModel.js";
+import UserModel from "../models/UserModel.js";
 
 class EmpresasController {
 
@@ -15,6 +16,18 @@ class EmpresasController {
         };
 
         try {
+            // VERIFICAR SE O E-MAIL ESTÁ DISPONÍVEL
+            const usuarioEmail = UserModel.buscarPorEmail(gerente.email)
+
+            // E-MAIL EM USO
+            if (usuarioEmail) {
+                res.status(409).json({
+                    sucesso: false,
+                    mensagem: `O e-mail já está em uso`,
+                    dados: { id_empresa }
+                });
+            }
+
             // REGISTRAR EMPRESA
             const id_empresa = await EmpresasModel.criarEmpresa(dadosEmpresa, gerente)
 

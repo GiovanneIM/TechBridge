@@ -1,4 +1,4 @@
-import { create, read, update, deleteRecord, comparePassword, hashPassword, getConnection } from '../config/database.js';
+import { create, read, update, deleteRecord, comparePassword, hashPassword, getConnection } from '../../config/database.js';
 
 class MaquinasModel {
 

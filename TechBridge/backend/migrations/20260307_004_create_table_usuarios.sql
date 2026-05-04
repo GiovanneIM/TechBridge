@@ -20,10 +20,19 @@ CREATE TABLE IF NOT EXISTS usuarios (
     senha			VARCHAR(255) 	NOT NULL,						-- Senha do usuário
 
     foto_perfil 	VARCHAR(255),									-- Foto de perfil
+<<<<<<< HEAD
+    bio				VARCHAR(300), 			            			-- Breve biografia do usuário
+    telefone		VARCHAR(20),
+    cargo           VARCHAR(255)    NOT NULL,					            	-- Número do telefone do usuário (com DDD)
+=======
     bio				TEXT, 		        	            			-- Breve biografia do usuário
     telefone		VARCHAR(15), 					            	-- Número do telefone do usuário (com DDD)
+<<<<<<< HEAD
     departamento	VARCHAR(100)	NOT NULL,						-- Departamento do funcionário
     nacionalidade	VARCHAR(50)		NOT NULL,						-- Nacionalidade do usuário manter padrão Cidade, Sigla país
+=======
+>>>>>>> 2b87fb681c8cfafdafe4150f022c52b9edc3267d
+>>>>>>> 5dede9da385df326a86a68d0bdef96b98a6f1acb
     
     -- Não necessarios
     -- data_efetivacao	VARCHAR(10),			            			-- Data da efetivação

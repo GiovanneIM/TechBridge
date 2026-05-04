@@ -1,5 +1,5 @@
 import express from 'express';
-import MaquinasController from '../controllers/MaquinasController.js';
+import MaquinasController from '../../controllers/controller_consertar/MaquinasController.js';
 
 const router = express.Router();
 

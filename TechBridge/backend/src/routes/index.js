@@ -9,10 +9,11 @@ import adminRotas from './rotasAdmin.js'
 import empresasRotas from './rotasEmpresas.js';
 import criptografiaRotas from './rotasCripto.js';
 import userRotas from './rotasUser.js';
-import chamadosRotas from './rotasChamados.js';
-import maquinasRotas from './rotasMaquinas.js';
-import setoresRotas from './rotasSetores.js';
-import painelRotas from './rotasPainel.js';
+
+import chamadosRotas from './rotas_consertar/rotasChamados.js';
+import maquinasRotas from './rotas_consertar/rotasMaquinas.js';
+import setoresRotas from './rotas_consertar/rotasSetores.js';
+import painelRotas from './rotas_consertar/rotasPainel.js';
 
 // ATIVAR AS ROTAS
 router.use('/auth', authRotas);

@@ -1,4 +1,4 @@
-import SetoresModel from "../models/SetoresModel.js";
+import SetoresModel from "../../models/model_consertar/SetoresModel.js";
 
 class SetoresController {
 
