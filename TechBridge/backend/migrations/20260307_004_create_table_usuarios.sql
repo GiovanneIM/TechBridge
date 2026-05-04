@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
     foto_perfil 	VARCHAR(255),									-- Foto de perfil
     bio				TEXT, 		        	            			-- Breve biografia do usuário
     telefone		VARCHAR(15), 					            	-- Número do telefone do usuário (com DDD)
+    departamento	VARCHAR(100)	NOT NULL,						-- Departamento do funcionário
+    nacionalidade	VARCHAR(50)		NOT NULL,						-- Nacionalidade do usuário manter padrão Cidade, Sigla país
     
     -- Não necessarios
     -- data_efetivacao	VARCHAR(10),			            			-- Data da efetivação
@@ -44,7 +46,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
 -- Inserindo os usuários de exemplo
 INSERT INTO usuarios 
-(nome, email, senha, tipo_usuario, id_empresa, telefone, bio)
+(nome, email, senha, tipo_usuario, id_empresa, telefone, bio, departamento, nacionalidade)
 VALUES 
 (
 'Kim Minji', 
@@ -53,7 +55,9 @@ VALUES
 1, 
 1, 
 '(11) 95989-9539', 
-'Administradora de sistemas com foco em organização, segurança e eficiência operacional. Atua garantindo o bom funcionamento das plataformas e suporte estratégico para a equipe.'
+'Administradora de sistemas com foco em organização, segurança e eficiência operacional. Atua garantindo o bom funcionamento das plataformas e suporte estratégico para a equipe.',
+'Administração',
+'Seul, KOR'
 ),
 (
 'Poliwag Gomez', 
@@ -62,7 +66,9 @@ VALUES
 2, 
 2, 
 '(11) 98921-8798', 
-'Gerente de produção experiente, especializado em otimização de processos e liderança de equipes. Trabalha para aumentar a produtividade e garantir a qualidade nas entregas.'
+'Gerente de produção experiente, especializado em otimização de processos e liderança de equipes. Trabalha para aumentar a produtividade e garantir a qualidade nas entregas.',
+'Produção',
+'São Paulo, BR'
 ),
 (
 'The Rock', 
@@ -71,7 +77,9 @@ VALUES
 3, 
 2, 
 '(11) 97548-1367', 
-'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.'
+'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.',
+'Manutenção',
+'Chicago, US'
 ),
 (
 'Izuku Midoriya', 
@@ -80,7 +88,9 @@ VALUES
 4, 
 2, 
 '(11) 97548-1367', 
-'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.'
+'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.',
+'Manutenção Central',
+'Tóquio, JP'
 );
 
 -- Alterando as fotos do usuário

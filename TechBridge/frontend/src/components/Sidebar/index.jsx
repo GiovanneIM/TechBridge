@@ -23,6 +23,9 @@ export default function SidebarBase({ children, suporte }) {
     // Classe para destacar a opção de navegação ativa
     const nav_active = "bg-techbridge text-white text-md";
 
+    // Obtendo o usuário
+    const { user } = useAuth();
+
     return (
         <div className={`h-full flex flex-col justify-between  transition-[width] duration-1000 ease-in-out`}>
             {/* LOGO */}
@@ -47,7 +50,7 @@ export default function SidebarBase({ children, suporte }) {
 
             {/* Perfil */}
             <div className="px-2 py-2 md:px-1 md:py-1">
-                <ItemSidebar icon={User} label={"Perfil"} href={"#"} active={pathname.startsWith("#") && nav_active} />
+                <ItemSidebar icon={User} label={"Perfil"} href={`/${user.cargo}/perfil`} active={pathname.startsWith(`/${user.cargo}/perfil`) && nav_active} />
             </div>
 
             <Separator />
