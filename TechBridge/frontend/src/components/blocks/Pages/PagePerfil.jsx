@@ -27,6 +27,46 @@ export default function PagePerfil({ usuario }) {
         setForm((prev) => ({ ...prev, [field]: value }));
     };
 
+    const salvarPerfil = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/techbridge/user/atualizarPerfil", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include", // se usar cookie
+                body: JSON.stringify({
+                    nome: form.nome,
+                    email: form.email,
+                    telefone: form.telefone,
+                    bio: form.bio,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(data.mensagem || "Erro ao atualizar perfil");
+                return;
+            }
+
+            if (data.sucesso) {
+                alert("Perfil atualizado com sucesso!");
+
+            }
+
+
+            // atualiza UI sem reload
+            window.location.reload();
+
+            setIsModalOpen(false);
+
+        } catch (error) {
+            console.error(error);
+            alert("Erro ao salvar perfil");
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gray-50">
 
@@ -55,7 +95,7 @@ export default function PagePerfil({ usuario }) {
             </div>
 
             {/* CONTEÚDO */}
-            <div className="max-w-6xl mx-auto mt-15 px-6">
+            <div className="max-w-6xl mx-auto mt-15">
 
                 {/* STATS */}
                 <div className="grid grid-cols-3 gap-4 mb-6">
@@ -66,19 +106,7 @@ export default function PagePerfil({ usuario }) {
 
                 {/* TABS */}
                 <div className="flex gap-6 border-b mb-6">
-                    {["perfil", "atividade", "projetos"].map(tab => (
-                        <button
-                            key={tab}
-                            onClick={() => setActiveTab(tab)}
-                            className={`pb-2 capitalize ${
-                                activeTab === tab
-                                    ? "border-b-2 border-blue-600 text-blue-600"
-                                    : "text-gray-500"
-                            }`}
-                        >
-                            {tab}
-                        </button>
-                    ))}
+                    <p className="pb-1 font-semibold">Perfil</p>
                 </div>
 
                 {/* TAB CONTENT */}
@@ -123,18 +151,6 @@ export default function PagePerfil({ usuario }) {
                         </div>
                     </div>
                 )}
-
-                {activeTab === "atividade" && (
-                    <Card>
-                        <p className="text-gray-500">Nenhuma atividade recente.</p>
-                    </Card>
-                )}
-
-                {activeTab === "projetos" && (
-                    <Card>
-                        <p className="text-gray-500">Nenhum projeto ainda.</p>
-                    </Card>
-                )}
             </div>
 
             {/* MODAL */}
@@ -160,18 +176,18 @@ export default function PagePerfil({ usuario }) {
                             />
                         </div>
 
-                        <Input label="Nome" value={form.nome} onChange={(v)=>handleChange("nome",v)} />
-                        <Input label="Email" value={form.email} onChange={(v)=>handleChange("email",v)} />
-                        <Input label="Telefone" value={form.telefone} onChange={(v)=>handleChange("telefone",v)} />
+                        <Input label="Nome" value={form.nome} onChange={(v) => handleChange("nome", v)} />
+                        <Input label="Email" value={form.email} onChange={(v) => handleChange("email", v)} />
+                        <Input label="Telefone" value={form.telefone} onChange={(v) => handleChange("telefone", v)} />
 
-                        <Textarea label="Bio" value={form.bio} onChange={(v)=>handleChange("bio",v)} />
+                        <Textarea label="Bio" value={form.bio} onChange={(v) => handleChange("bio", v)} />
 
                         <div className="flex justify-end mt-4 gap-2">
-                            <button onClick={()=>setIsModalOpen(false)}>
+                            <button onClick={() => setIsModalOpen(false)}>
                                 Cancelar
                             </button>
 
-                            <button className="bg-blue-600 text-white px-4 py-2 rounded">
+                            <button onClick={salvarPerfil} className="bg-blue-600 text-white px-4 py-2 rounded">
                                 Salvar
                             </button>
                         </div>
@@ -203,7 +219,7 @@ function Input({ label, value, onChange }) {
             <label className="text-xs text-gray-500">{label}</label>
             <input
                 value={value || ""}
-                onChange={(e)=>onChange(e.target.value)}
+                onChange={(e) => onChange(e.target.value)}
                 className="w-full border p-2 rounded mt-1 focus:ring-2 focus:ring-blue-500"
             />
         </div>
@@ -216,7 +232,7 @@ function Textarea({ label, value, onChange }) {
             <label className="text-xs text-gray-500">{label}</label>
             <textarea
                 value={value || ""}
-                onChange={(e)=>onChange(e.target.value)}
+                onChange={(e) => onChange(e.target.value)}
                 className="w-full border p-2 rounded mt-1 focus:ring-2 focus:ring-blue-500"
             />
         </div>

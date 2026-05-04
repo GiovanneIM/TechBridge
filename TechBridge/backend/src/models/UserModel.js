@@ -114,7 +114,12 @@ class UserModel {
     // ATUALIZAR INFORMAÇÕES DO USUÁRIO (Exceto senha e foto)
     static async atualizarInformacoes(id, dadosUsuario) {
         try {
-            return await update('usuarios', dadosUsuario, `id = ${id}`);
+            return await update(
+                'usuarios',
+                dadosUsuario,
+                'id = ?',
+                [id]
+            );
         } catch (error) {
             console.error('Erro ao atualizar usuário:', error);
             throw error;
@@ -160,8 +165,13 @@ class UserModel {
         try {
             return await update(
                 'usuarios',
+<<<<<<< HEAD
+                { foto_perfil: 'http://localhost:3000/uploads/imagens/' + fotoNova },
+                { id }
+=======
                 { foto_perfil: `http://localhost:3000/uploads/imagens/usuarios/${id}/` + fotoNova },
                 {id}
+>>>>>>> 115b450eea0db151663dca3fe73aab45a4c2d164
             );
         } catch (error) {
             console.error('Erro ao atualizar usuário:', error);
