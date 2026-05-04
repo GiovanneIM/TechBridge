@@ -4,9 +4,20 @@ import { authMiddleware, adminMiddleware } from '../middlewares/authMiddleware.j
 
 const router = express.Router();
 
+// ===================================== GET ===================================== //
+
 // Obter tecnicos
 router.get("/tecnicos", authMiddleware, UserController.listarTecnicos)
 
+// Obter usuário logado
+router.get('/userLog', authMiddleware, UserController.listarUsuarioLogado);
+
+// ===================================== PUT ===================================== //
+
+// Atualizar perfil do usuário logado
+router.put('/atualizarPerfil', authMiddleware, UserController.atualizarPerfil);
+
+// ===================================== CORS ===================================== //
 
 // Rotas OPTIONS para CORS (preflight requests)
 router.options('/info', (req, res) => {
@@ -23,8 +34,7 @@ router.options('/senha', (req, res) => {
     res.sendStatus(200);
 });
 
-router.get('/userLog', authMiddleware, UserController.listarUsuarioLogado);
-
+// ============================================================================== //
 
 
 export default router;

@@ -350,6 +350,96 @@ class UserController {
         }
     }
 
+    // PUT /atualizarPerfil - Atualizar Usuário logado
+    static async atualizarPerfil(req, res) {
+        try {
+            const id = req.usuario?.id;
+
+            if (!id) {
+                return res.status(401).json({
+                    sucesso: false,
+                    mensagem: 'Usuário não autenticado'
+                });
+            }
+
+            const { nome, email, telefone, bio } = req.body;
+
+            const dadosAtualizacao = {};
+
+            // NOME
+            if (nome !== undefined) {
+                const nomeLimpo = nome.trim();
+
+                if (nomeLimpo.length < 2) {
+                    return res.status(400).json({
+                        sucesso: false,
+                        mensagem: 'Nome deve ter pelo menos 2 caracteres'
+                    });
+                }
+
+                dadosAtualizacao.nome = nomeLimpo;
+            }
+
+            // EMAIL
+            if (email !== undefined) {
+                const emailLimpo = email.trim().toLowerCase();
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!emailRegex.test(emailLimpo)) {
+                    return res.status(400).json({
+                        sucesso: false,
+                        mensagem: 'Email inválido'
+                    });
+                }
+
+                dadosAtualizacao.email = emailLimpo;
+            }
+
+            // TELEFONE (opcional, mas agora tratado)
+            if (telefone !== undefined) {
+                const telefoneLimpo = telefone.trim();
+
+                if (telefoneLimpo.length < 8) {
+                    return res.status(400).json({
+                        sucesso: false,
+                        mensagem: 'Telefone inválido'
+                    });
+                }
+
+                dadosAtualizacao.telefone = telefoneLimpo;
+            }
+
+            // BIO (opcional)
+            if (bio !== undefined) {
+                dadosAtualizacao.bio = bio.trim();
+            }
+
+            // valida se tem algo pra atualizar
+            if (Object.keys(dadosAtualizacao).length === 0) {
+                return res.status(400).json({
+                    sucesso: false,
+                    mensagem: 'Nenhum dado para atualizar'
+                });
+            }
+
+            await UserModel.atualizarInformacoes(id, dadosAtualizacao);
+
+            return res.status(200).json({
+                sucesso: true,
+                mensagem: 'Perfil atualizado com sucesso'
+            });
+
+        } catch (error) {
+            console.error('Erro ao atualizar perfil:', error);
+
+            return res.status(500).json({
+                sucesso: false,
+                mensagem: 'Erro interno do servidor'
+            });
+        }
+    }
+
 }
 
 
