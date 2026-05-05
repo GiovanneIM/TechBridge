@@ -14,12 +14,13 @@ CREATE TABLE setores (
     status			BOOLEAN			DEFAULT TRUE,
     
     -- Atributos do setor
-    cod_setor       VARCHAR(50)     NOT NULL, 			-- Código de identificação (ID) interna na empresa (Definido pela empresa)
     nome			VARCHAR(150)	NOT NULL,			-- Nome do setor
+    cod_setor       VARCHAR(50)     NOT NULL, 			-- Código de identificação (ID) interna na empresa (Definido pela empresa)
     descricao		TEXT,								-- Descrição do setor (Opcional)
 
     -- Estilização do setor
     icone			VARCHAR(50)		NOT NULL,
+    cor		        VARCHAR(50)		NOT NULL,
     
     -- Chaves estrangeiras
     id_empresa		INT				NOT NULL,			-- ID da empresa à qual o setor pertence
@@ -37,10 +38,11 @@ CREATE TABLE setores (
 
 
 -- Inserindo setores de exemplo
-INSERT INTO setores (nome, descricao, cod_setor, id_empresa, icone)
+INSERT INTO setores 
+    (nome, descricao, cod_setor, id_empresa, icone, cor)
 VALUES 
-('Pintura', 'Acabamento', 'PIN', 1, 'PaintRoller'),
-('Montagem', 'Setor de montagem', 'MON', 1, 'Wrench'),
-('RH', 'Gestão de pessoas', 'RH', 1, 'BriefcaseBusiness'),
-('GA', 'Logística', 'GA', 1, 'Network')
+    ('Pintura', 'Acabamento', 'PIN', 1, 'PaintRoller', 'Vermelho'),
+    ('Montagem', 'Setor de montagem', 'MON', 1, 'Wrench', 'Verde'),
+    ('Recursos Humanos', 'Gestão de pessoas', 'RH', 1, 'BriefcaseBusiness', 'Amarelo'),
+    ('GA', 'Logística', 'GA', 1, 'Network', 'Azul')
 ;

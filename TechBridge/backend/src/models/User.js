@@ -103,7 +103,7 @@ class UserModel {
 
 
     // LISTAR USUÁRIOS DE UMA EMPRESA
-    static async obterMembros(id_empresa) {
+    static async listar(id_empresa) {
         try {
             // FAZER A CONSULTA
             const usuarios = await read("usuarios", {

@@ -6,7 +6,7 @@ import { pertenceAEmpresa } from "../utils/validacoes.js";
 class EmpresasController {
 
     // REGISTAR UMA NOVA EMPRESA
-    static async criarEmpresa(req, res) {
+    static async criar(req, res) {
         // OBTER DADOS DA EMPRESA E DO GERENTE PRINCIPAL
         const { empresa, gerente } = req.body;
 
@@ -37,7 +37,7 @@ class EmpresasController {
             }
 
             // REGISTRAR EMPRESA
-            const resultado = await EmpresasModel.criarEmpresa(dadosEmpresa, gerente)
+            const resultado = await EmpresasModel.criar(dadosEmpresa, gerente)
 
             // SUCESSO: ENVIAR ID DA EMPRESA
             res.status(201).json({
@@ -60,7 +60,7 @@ class EmpresasController {
     }
 
     // LISTAR EMPRESAS (COM PAGINAÇÃO)
-    static async listarEmpresas(req, res) {
+    static async listar(req, res) {
         // OBTER PAGINAÇÃO
         const { page, limit, status, nome_empresa, estado } = req.validated.query;
 
@@ -89,7 +89,7 @@ class EmpresasController {
 
         try {
             // OBTER AS EMPRESAS
-            const resultado = await EmpresasModel.listarEmpresas(limit, offset, page, where, like, likeOr)
+            const resultado = await EmpresasModel.listar(limit, offset, page, where, like, likeOr)
 
             // SUCESSO: ENVIAR EMPRESAS
             res.status(200).json({
@@ -112,13 +112,13 @@ class EmpresasController {
     }
 
     // EXCLUIR UMA EMPRESA
-    static async excluirEmpresa(req, res) {
+    static async excluir(req, res) {
     }
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
     // OBTER UMA EMPRESA
-    static async obterEmpresa(req, res) {
+    static async obter(req, res) {
         // OBTER O ID DA EMPRESA
         const { id_empresa } = req.params;
 
@@ -167,7 +167,7 @@ class EmpresasController {
     }
 
     // ATUALIZAR UM EMPRESA
-    static async atualizarEmpresa(req, res) {
+    static async atualizar(req, res) {
         const {
             cnpj,
             razao_social,

@@ -3,8 +3,8 @@ import { pertenceAEmpresa } from "../utils/validacoes.js";
 
 class UserController {
 
-    // OBTER MEMBROS DE UMA EMPRESA
-    static async obterMembros(req, res) {
+    // LISTAR MEMBROS DE UMA EMPRESA
+    static async listar(req, res) {
         // OBTER O ID DA EMPRESA
         const { id_empresa } = req.params;
 
@@ -19,7 +19,7 @@ class UserController {
             }
 
             // REQUISIÇÃO
-            const membros = await UserModel.obterMembros(id_empresa);
+            const membros = await UserModel.listar(id_empresa);
 
             // SUCESSO: ENVIAR USUÁRIOS
             res.status(200).json({

@@ -19,7 +19,8 @@ import { createUserSchema } from '../schemas/body/user/createUser.schema.js';
 // CONTROLLERS
 import EmpresasController from '../controllers/Empresas.js';
 import UserController from '../controllers/User.js';
-import SetoresController from '../controllers/setores.js';
+import SetoresController from '../controllers/Setores.js';
+import { createSetorSchema } from '../schemas/body/setor/createSetor.schema.js';
 
 const router = express.Router();
 
@@ -54,7 +55,7 @@ const router = express.Router();
 router.get(
     '/:id_empresa',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
-    EmpresasController.obterEmpresa             // Controller empresa - Obter Empresa
+    EmpresasController.obter                    // Controller empresa - Obter
 );
 
 /**
@@ -96,7 +97,7 @@ router.patch(
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
     validateZod(updateEmpresaSchema, 'body'),   // Body - Dados para atualizar
     gerentePrincipalMiddleware,                 // Gerente principal
-    EmpresasController.atualizarEmpresa         // Controller empresas - Atualizar
+    EmpresasController.atualizar                // Controller empresas - Atualizar
 );
 
 
@@ -130,7 +131,7 @@ router.get(
     '/:id_empresa/membros',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
     gerenteMiddleware,                          // Gerente
-    UserController.obterMembros                 // Controller users - Obter membros
+    UserController.listar                       // Controller users - Obter
 );
 
 /**
@@ -271,7 +272,7 @@ router.patch(
 router.get(
     '/:id_empresa/setores',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
-    SetoresController.obterSetores              // Controller setores - Obter setores
+    SetoresController.listar                     // Controller setores - Obter
 );
 
 /**
@@ -299,7 +300,13 @@ router.get(
  *       500:
  *         description: Não foi possível registrar o setor para a empresa
  */
-router.post('/:id_empresa/setores', () => { });
+router.post(
+    '/:id_empresa/setores',
+    validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    validateZod(createSetorSchema, 'params'),   // Body - Dados do setor
+    gerenteMiddleware,                          // Gerente
+    SetoresController.criar                     // Controller Setores - Criar
+);
 
 /**
  * @swagger
@@ -333,7 +340,11 @@ router.post('/:id_empresa/setores', () => { });
  *       500:
  *         description: Não foi possível listado o setor da empresa
  */
-router.get('/:id_empresa/setores/:id_setor', () => { });
+router.get(
+    '/:id_empresa/setores/:id_setor',
+    validateZod(params_EmpresaSetor, 'params'),     // Params - ID da empresa, ID do setor
+    SetoresController.obter                         // Controller Setores - Criar
+);
 
 /**
  * @swagger
@@ -367,7 +378,10 @@ router.get('/:id_empresa/setores/:id_setor', () => { });
  *       500:
  *         description: Não foi possível atualizar o setor da empresa
  */
-router.patch('/:id_empresa/setores/:id_setor', () => { });
+router.patch(
+    '/:id_empresa/setores/:id_setor',
+    () => { }
+);
 
 
 
@@ -396,7 +410,10 @@ router.patch('/:id_empresa/setores/:id_setor', () => { });
  *       500:
  *         description: Não foi possível listar as maquinas da empresa
  */
-router.get('/:id_empresa/maquinas', () => { });
+router.get(
+    '/:id_empresa/maquinas',
+    () => { }
+);
 
 /**
  * @swagger
@@ -428,7 +445,10 @@ router.get('/:id_empresa/maquinas', () => { });
  *       500:
  *         description: Não foi possível registrar a máquina para a empresa
  */
-router.post('/:id_empresa/setores/:id_setor/maquinas', () => { });
+router.post(
+    '/:id_empresa/setores/:id_setor/maquinas',
+    () => { }
+);
 
 /**
  * @swagger
@@ -460,7 +480,10 @@ router.post('/:id_empresa/setores/:id_setor/maquinas', () => { });
  *       500:
  *         description: Não foi possível listar as maquinas do setor
  */
-router.get('/:id_empresa/setores/:id_setor/maquinas', () => { });
+router.get(
+    '/:id_empresa/setores/:id_setor/maquinas',
+    () => { }
+);
 
 /**
  * @swagger
@@ -501,7 +524,10 @@ router.get('/:id_empresa/setores/:id_setor/maquinas', () => { });
  *       500:
  *         description: Não foi possível listar a máquina da empresa
  */
-router.get('/:id_empresa/setores/:id_setor/maquinas/:id_maquina', () => { });
+router.get(
+    '/:id_empresa/setores/:id_setor/maquinas/:id_maquina',
+    () => { }
+);
 
 /**
  * @swagger
@@ -542,7 +568,10 @@ router.get('/:id_empresa/setores/:id_setor/maquinas/:id_maquina', () => { });
  *       500:
  *         description: Não foi possível atualizar a máquina
  */
-router.patch('/:id_empresa/setores/:id_setor/maquinas/:id_maquina', () => { });
+router.patch(
+    '/:id_empresa/setores/:id_setor/maquinas/:id_maquina',
+    () => { }
+);
 
 
 export default router;
