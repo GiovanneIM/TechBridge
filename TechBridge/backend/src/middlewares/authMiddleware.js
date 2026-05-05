@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { JWT_CONFIG } from '../config/jwt.js';
+import { CARGOS } from '../utils/validacoes.js';
 
 // Middleware de autenticação JWT
 const authMiddleware = (req, res, next) => {
@@ -64,9 +65,9 @@ const authMiddleware = (req, res, next) => {
     }
 };
 
-// Middleware para verificar se o usuário é administrador
+// MIDDLEWARE - USER É ADMIN
 const adminMiddleware = (req, res, next) => {    
-    if (req.usuario.tipo_usuario !== 1) {
+    if (req.usuario.tipo_usuario !== CARGOS.ADMIN) {
         return res.status(403).json({
             sucesso: false,
             erro: 'Acesso negado',
@@ -76,9 +77,9 @@ const adminMiddleware = (req, res, next) => {
     next();
 };
 
-// Middleware para verificar se o usuário é gerente principal (ou superior)
+// MIDDLEWARE - USER É GERENTE PRINCIPAL
 const gerentePrincipalMiddleware = (req, res, next) => {    
-    if (req.usuario.tipo_usuario > 2) {
+    if (req.usuario.tipo_usuario > CARGOS.GERENTE_PRINCIPAL) {
         return res.status(403).json({
             sucesso: false,
             erro: 'Acesso negado',
@@ -89,9 +90,9 @@ const gerentePrincipalMiddleware = (req, res, next) => {
 };
 
 
-// Middleware para verificar se o usuário é gerente principal (ou superior)
+// MIDDLEWARE - USER É GERENTE
 const gerenteMiddleware = (req, res, next) => {    
-    if (req.usuario.tipo_usuario > 3) {
+    if (req.usuario.tipo_usuario > CARGOS.GERENTE) {
         return res.status(403).json({
             sucesso: false,
             erro: 'Acesso negado',

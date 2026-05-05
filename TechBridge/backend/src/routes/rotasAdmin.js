@@ -1,5 +1,5 @@
 import express from 'express';
-import EmpresasController from '../controllers/EmpresasController.js';
+import EmpresasController from '../controllers/Empresas.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
 import { validateZod } from '../middlewares/validate.js';
 import { paginacaoSchema } from '../schemas/query/paginacao.js';

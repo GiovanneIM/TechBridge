@@ -125,8 +125,8 @@ export function useEmpresa({
 
     // OBTER EMPRESA
     const obterEmpresa = useCallback(async (id) => {
-        setLoading((prev) => ({ ...prev, obterEmpresas: true }));
-        setError((prev) => ({ ...prev, obterEmpresas: null }));
+        setLoading((prev) => ({ ...prev, obterEmpresa: true }));
+        setError((prev) => ({ ...prev, obterEmpresa: null }));
 
         try {
             // REQUISIÇÃO
@@ -134,15 +134,18 @@ export function useEmpresa({
                 method: 'GET'
             });
 
+            console.log(data);
+            
+
             // ERRO
             if (!data.sucesso) {
-                setError((prev) => ({ ...prev, obterEmpresas: data.mensagem }))
+                setError((prev) => ({ ...prev, obterEmpresa: data.mensagem }))
             }
 
             // SUCESSO
             else {
                 // ATUALIZAR EMPRESA
-                setEmpresa(data.dados)
+                setEmpresa(data.dados.empresa)
             }
         } catch (err) {
             // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
@@ -150,12 +153,12 @@ export function useEmpresa({
 
             setError((prev) => ({
                 ...prev,
-                obterEmpresas: 'Erro ao obter empresas, tente novamente mais tarde.'
+                obterEmpresa: 'Erro ao obter empresas, tente novamente mais tarde.'
             }));
 
         } finally {
             // Independente de sucesso ou erro, o loading termina aqui
-            setLoading((prev) => ({ ...prev, obterEmpresas: false }));
+            setLoading((prev) => ({ ...prev, obterEmpresa: false }));
         }
     }, []);
 
@@ -168,9 +171,11 @@ export function useEmpresa({
 
     return {
         empresas,
+        empresa,
         loading,
         error,
         obterEmpresas,
-        criarEmpresa
+        criarEmpresa,
+        obterEmpresa
     };
 }

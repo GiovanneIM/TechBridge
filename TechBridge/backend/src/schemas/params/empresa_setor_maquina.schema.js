@@ -6,7 +6,7 @@ import { cod_setor } from "../dados/setor";
 // • ID DA EMPRESA
 // • CÓDIGO DO SETOR
 // • CÓDIGO DA MÁQUINA
-export const params_EmpresaSetor = z.object({
+export const params_EmpresaMaquina = z.object({
     id_empresa: id_empresa,
     cod_setor: cod_setor,
     cod_maquina: cod_maquina
