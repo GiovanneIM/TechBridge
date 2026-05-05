@@ -10,7 +10,7 @@ class EmpresasModel {
             const id_empresa = await create('empresas', empresa);
 
             // REGISTRAR O 1º GERENTE PRINCIPAL DA EMPRESA
-            const id_gerente = await UserModel.criar(gerente);
+            const id_gerente = await UserModel.criar(gerente, id_empresa);
 
             // RETORNANDO O ID DA EMPRESA E DO GERENTE
             return { id_empresa, id_gerente }

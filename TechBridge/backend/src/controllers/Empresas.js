@@ -23,6 +23,7 @@ class EmpresasController {
             if (usuarioEmail) {
                 res.status(409).json({
                     sucesso: false,
+                    erro: 'E-mail em uso',
                     mensagem: `O e-mail já está em uso`
                 });
             }
@@ -240,7 +241,7 @@ class EmpresasController {
 
     }
 
-    
+
 }
 
 export default EmpresasController;

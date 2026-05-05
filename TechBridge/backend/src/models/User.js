@@ -2,13 +2,14 @@ import { create, read, update, deleteRecord, comparePassword, hashPassword, getC
 
 class UserModel {
     // CRIAR USUÁRIO
-    static async criar(dadosUsuario) {
+    static async criar(dadosUsuario, id_empresa) {
         try {
             // CRIPTOGRAFAR A SENHA
             const senhaHash = await hashPassword(dadosUsuario.senha);
             const dadosComHash = {
                 ...dadosUsuario,
-                senha: senhaHash
+                senha: senhaHash,
+                id_empresa
             };
 
             return await create('usuarios', dadosComHash);

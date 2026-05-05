@@ -131,7 +131,7 @@ router.get(
     '/:id_empresa/membros',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
     gerenteMiddleware,                          // Gerente
-    UserController.listar                       // Controller users - Obter
+    UserController.listar                       // Controller users - Listar
 );
 
 /**
@@ -161,9 +161,10 @@ router.get(
  */
 router.post(
     '/:id_empresa/membros',
-    validateZod(params_Empresa, 'params'),
-    validateZod(createUserSchema, 'body'),
-    () => { }
+    validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    validateZod(createUserSchema, 'body'),      // Body - Dados do usuário
+    gerenteMiddleware,                          // Gerente
+    UserController.criar                        // Controller users - Criar
 );
 
 /**
@@ -199,9 +200,10 @@ router.post(
  *         description: Não foi possível listar o usuário da empresa
  */
 router.get(
-    '/:id_empresa/membros/:id_membro',
-    validateZod(params_EmpresaUsuario, 'params'),
-    () => { }
+    '/:id_empresa/membros/:id_usuario',
+    validateZod(params_EmpresaUsuario, 'params'),   // Params - ID da empresa, ID do usuário
+    gerenteMiddleware,                              // Gerente
+    UserController.obter                            // Controller users - Obter
 );
 
 /**
@@ -237,7 +239,7 @@ router.get(
  *         description: Não foi possível atualizar o usuário da empresa
  */
 router.patch(
-    '/:id_empresa/membros/:id_membro',
+    '/:id_empresa/membros/:id_usuario',
     validateZod(params_EmpresaUsuario, 'params'),
     () => { }
 );
@@ -272,7 +274,7 @@ router.patch(
 router.get(
     '/:id_empresa/setores',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
-    SetoresController.listar                     // Controller setores - listar
+    SetoresController.listar                    // Controller setores - listar
 );
 
 /**
@@ -342,8 +344,8 @@ router.post(
  */
 router.get(
     '/:id_empresa/setores/:cod_setor',
-    validateZod(params_EmpresaSetor, 'params'),     // Params - ID da empresa, Código do setor
-    SetoresController.obter                         // Controller Setores - Obter
+    validateZod(params_EmpresaSetor, 'params'), // Params - ID da empresa, Código do setor
+    SetoresController.obter                     // Controller Setores - Obter
 );
 
 /**
