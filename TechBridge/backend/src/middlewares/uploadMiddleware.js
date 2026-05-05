@@ -8,22 +8,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-
-// Criar pastas de uploads se não existirem
-const uploadPathImagens = path.join(__dirname, '..', 'uploads', 'imagens');
-const uploadPathArquivos = path.join(__dirname, '..', 'uploads', 'arquivos');
-
-// Verificando se as pastas de upload existem
-if (!fs.existsSync(uploadPathImagens)) {
-    fs.mkdirSync(uploadPathImagens, { recursive: true });
-}
-
-if (!fs.existsSync(uploadPathArquivos)) {
-    fs.mkdirSync(uploadPathArquivos, { recursive: true });
-}
-
-
-
 // Função para gerar nome único com timestamp (Baseado no horário do upload)
 const gerarNomeUnico = (nomeOriginal) => {
     const timestamp = Date.now();
@@ -202,18 +186,107 @@ const handleUploadError = (error, req, res, next) => {
 
 
 
-export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = 'imagem') => {
+// TIPOS DE UPLOAD
+const TIPOS_UPLOAD = {
+    USER_IMAGEM: 'user_imagem',
+    USER_ARQUIVO: 'user_arquivo',
+    EMPRESA_LOGO: 'empresa_logo',
+    EMPRESA_MAQUINA: 'empresa_maquina'
+};
+
+// TIPOS DE PASTAS
+const TIPOS_PASTA = {
+    IMAGENS: 'imagens',
+    ARQUIVOS: 'arquivos',
+    OUTROS: 'outros'
+};
+
+// IDENTIFICA O TIPO DE UPLOAD
+const getUploadPath = (req, file) => {
+    const tipo = req.uploadTipo;
+    const userId = req.usuario?.id;
+    const empresaId = req.usuario?.empresaId || req.params.empresaId;
+
+    if (!userId && tipo.includes('USER')) {
+        throw new Error('Usuário não identificado');
+    }
+
+    if (!empresaId && tipo.includes('EMPRESA')) {
+        throw new Error('Empresa não identificada');
+    }
+
+    switch (tipo) {
+        case TIPOS_UPLOAD.USER_IMAGEM:
+            return path.join(__dirname, '..', '..', 'uploads', TIPOS_PASTA.IMAGENS, 'usuarios', userId.toString());
+
+        case TIPOS_UPLOAD.USER_ARQUIVO:
+            return path.join(__dirname, '..', '..', 'uploads', TIPOS_PASTA.ARQUIVOS, 'usuarios', userId.toString());
+
+        case TIPOS_UPLOAD.EMPRESA_LOGO:
+            return path.join(__dirname, '..', '..', 'uploads', TIPOS_PASTA.IMAGENS, 'empresas', empresaId.toString(), 'logo');
+
+        case TIPOS_UPLOAD.EMPRESA_MAQUINA:
+            return path.join(__dirname, '..', '..', 'uploads', TIPOS_PASTA.IMAGENS, 'empresas', empresaId.toString(), 'maquinas');
+
+        default:
+            return path.join(__dirname, '..', '..', 'uploads', TIPOS_PASTA.OUTROS);
+    }
+};
+
+// STORAGE
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const destino = getUploadPath(req, file);
+
+        if (!fs.existsSync(destino)) {
+            fs.mkdirSync(destino, { recursive: true });
+        }
+
+        cb(null, destino);
+    },
+
+    filename: (req, file, cb) => {
+        const nomeArquivo = gerarNomeUnico(file.originalname);
+        cb(null, nomeArquivo);
+    }
+});
+
+// MULTER
+const upload = multer({
+    storage,
+    limits: { fileSize: maxFileSize },
+    fileFilter: (req, file, cb) => {
+        if (req.uploadTipo === TIPOS_UPLOAD.EMPRESA_LOGO || req.uploadTipo === TIPOS_UPLOAD.USER_IMAGEM) {
+            return fileFilterImagens(req, file, cb);
+        }
+
+        cb(null, true);
+    }
+});
+
+// MIDDLEWARE PARA DEFINIR O TIPO DE UPLOAD
+const setUploadTipo = (tipo) => (req, res, next) => {
+    req.uploadTipo = tipo;
+    next();
+};
+
+
+export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = TIPOS_PASTA.IMAGENS) => {
     try {
         if (!nomeArquivo || !idUsuario) return;
 
         const caminhoArquivo = path.join(
             __dirname,
             '..',
+            '..',
             'uploads',
+            tipo,
+            'usuarios',
             idUsuario.toString(),
-            tipo === 'imagem' ? 'imagens' : 'arquivos',
             nomeArquivo
         );
+        console.log(caminhoArquivo);
+        
 
         if (fs.existsSync(caminhoArquivo)) {
             fs.unlinkSync(caminhoArquivo);
@@ -228,14 +301,14 @@ export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = 'image
 };
 
 
-const getUserUploadPath = (req, tipo = 'imagens') => {
-    const idUsuario = req.user?.id || req.params.id || 'anonimo';
 
-    return path.join(__dirname, '..', 'uploads', idUsuario.toString(), tipo);
+
+
+
+export {
+    setUploadTipo,
+    TIPOS_UPLOAD,
+    TIPOS_PASTA,
+    upload,
+    handleUploadError
 };
-
-
-
-
-
-export { uploadImagens, uploadArquivos, handleUploadError };

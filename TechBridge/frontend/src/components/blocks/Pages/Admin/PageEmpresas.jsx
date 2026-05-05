@@ -27,7 +27,7 @@ export default function PageEmpresas() {
     let content;
 
     const [filtro, setFiltro] = useState({
-        nome: '',
+        nome_empresa: '',
         status: null,
         limit: 10,
         page: 1,
@@ -52,9 +52,14 @@ export default function PageEmpresas() {
     );
 
 
+    // BUSCAR EMPRESAS
     useEffect(() => {
         obterEmpresas(filtro)
     }, [filtro.page, filtro.limit, filtro.status])
+
+    const filtrar = () => {
+        obterEmpresas(filtro)
+    }
 
 
     content = (
@@ -68,11 +73,11 @@ export default function PageEmpresas() {
                 <FieldContent>
                     <FieldLabel>Procurar Empresa</FieldLabel>
                     <Input type='text'
-                        value={filtro.nome}
+                        value={filtro.nome_empresa}
                         onChange={(e) => {
                             setFiltro((prev) => ({
                                 ...prev,
-                                nome: e.target.value
+                                nome_empresa: e.target.value
                             }))
                         }}
                     />
@@ -126,7 +131,7 @@ export default function PageEmpresas() {
                     </Tabs>
                 </FieldContent>
 
-                <Button className='text-white'>Procurar</Button>
+                <Button className='text-white' onClick={filtrar}>Procurar</Button>
             </Field>
 
 

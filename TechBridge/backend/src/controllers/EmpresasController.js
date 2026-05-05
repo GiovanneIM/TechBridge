@@ -1,5 +1,5 @@
 import EmpresasModel from "../models/EmpresasModel.js";
-import UserModel from "../models/UserModel.js";
+import UserModel from "../models/model_consertar/UserModel.js";
 
 class EmpresasController {
 
@@ -16,14 +16,21 @@ class EmpresasController {
         };
 
         try {
-            // VERIFICAR SE O E-MAIL ESTÁ DISPONÍVEL
-            const usuarioEmail = UserModel.buscarPorEmail(gerente.email)
-
             // E-MAIL EM USO
+            const usuarioEmail = UserModel.buscarPorEmail(gerente.email)
             if (usuarioEmail) {
                 res.status(409).json({
                     sucesso: false,
                     mensagem: `O e-mail já está em uso`
+                });
+            }
+
+            // CNPJ EM USO
+            const empresaCNPJ = UserModel.buscarPorEmail(gerente.email)
+            if (empresaCNPJ) {
+                res.status(409).json({
+                    sucesso: false,
+                    mensagem: `O CNPJ já foi registrado no sistema`
                 });
             }
 
@@ -53,25 +60,34 @@ class EmpresasController {
     // LISTAR EMPRESAS (COM PAGINAÇÃO)
     static async listarEmpresas(req, res) {
         // OBTER PAGINAÇÃO
-        const { page, limit, status } = req.validated.query;
+        const { page, limit, status, nome_empresa, estado } = req.validated.query;
 
         // CALCULANDO OFFSET
         const offset = (page - 1) * limit;
 
         // FILTROS
-        const filtro = {};
+        const where = {};
+        const like = {};
+        const likeOr = {};
 
-        if (status) {
-            if (status === 'all') return
-
+        if (status && status !== 'all') {
             status === 'ativa'
-                ? filtro.status = true
-                : filtro.status = false
+                ? where.status = true
+                : where.status = false
+        }
+
+        if (estado) {
+            like.estado = estado
+        }
+
+        if (nome_empresa) {
+            likeOr.nome_fantasia = nome_empresa;
+            likeOr.razao_social = nome_empresa;
         }
 
         try {
             // OBTER AS EMPRESAS
-            const resultado = await EmpresasModel.listarEmpresas(limit, offset, page, filtro)
+            const resultado = await EmpresasModel.listarEmpresas(limit, offset, page, where, like, likeOr)
 
             // SUCESSO: ENVIAR EMPRESAS
             res.status(200).json({
@@ -93,6 +109,48 @@ class EmpresasController {
         }
     }
 
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+    // OBTER UMA EMPRESA
+    static async obterEmpresa(req, res) {
+        // OBTER O ID DA EMPRESA
+        const { id_empresa } = req.params;
+
+        try {
+            // FAZER A CONSULTA
+            const empresa = await EmpresasModel.buscarPorId(id_empresa);
+
+            // EMPRESA NÃO ENCONTRADA
+            if (!empresa) {
+                res.status(404).json({
+                    sucesso: false,
+                    mensagem: 'Empresa não encontrada'
+                });
+            }
+
+            // SUCESSO: ENVIAR EMPRESA
+            res.status(200).json({
+                sucesso: true,
+                mensagem: 'Empresa obtida com sucesso',
+                dados: {
+                    empresa
+                }
+            });
+
+        }
+        catch (error) {
+            // ERROS:
+            console.error('Erro ao obter a empresa:', error);
+
+            // ERRO DO SERVIDOR
+            res.status(500).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Não foi possível obter os dados da empresa'
+            });
+        }
+    }
+
     // ATUALIZAR UM EMPRESA
     static async atualizarEmpresa(req, res) {
         const {
@@ -102,15 +160,55 @@ class EmpresasController {
             endereco
         } = req.body;
 
-        const dadosEmpresa = {
-            cnpj,
-            razao_social,
-            nome_fantasia,
-            ...endereco
+        const dadosEmpresa = {}
+
+        if (cnpj) {
+            dadosEmpresa = {
+                ...dadosEmpresa,
+                cnpj
+            }
+        }
+
+        if (razao_social) {
+            dadosEmpresa = {
+                ...dadosEmpresa,
+                razao_social
+            }
+        }
+
+        if (nome_fantasia) {
+            dadosEmpresa = {
+                ...dadosEmpresa,
+                nome_fantasia
+            }
+        }
+
+        if (endereco && Object.keys(endereco).length > 0) {
+            dadosEmpresa = {
+                ...dadosEmpresa,
+                ...endereco
+            }
         }
 
         try {
+            // EMPRESA NÃO ENCONTRADA
+            const empresa = await EmpresasModel.buscarPorId(id_empresa);
+            if (!empresa) {
+                res.status(404).json({
+                    sucesso: false,
+                    mensagem: 'Empresa não encontrada'
+                });
+            }
 
+            // ATUALIZAR EMPRESA
+            const resultado = await EmpresasModel.atualizar(id, dadosAtualizacao);
+
+            // SUCESSO
+            res.status(200).json({
+                sucesso: true,
+                mensagem: 'Empresa atualizada com sucesso',
+                dados: resultado
+            });
         }
         catch (error) {
             // ERROS:

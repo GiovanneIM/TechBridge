@@ -1,5 +1,5 @@
 import express from 'express';
-import CriptografiaController from '../controllers/CriptografiaController.js';
+import CriptografiaController from '../../controllers/criptografia/CriptografiaController.js';
 
 const router = express.Router();
 

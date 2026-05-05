@@ -3,7 +3,7 @@
 import express from 'express';
 import AuthController from '../controllers/AuthController.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
-import { handleUploadError, uploadImagens } from '../middlewares/uploadMiddleware.js';
+import { handleUploadError, setUploadTipo, TIPOS_UPLOAD, upload } from '../middlewares/uploadMiddleware.js';
 import { validateZod } from '../middlewares/validate.js';
 import { loginUserSchema } from '../schemas/body/auth/login.schema.js';
 
@@ -167,7 +167,9 @@ router.patch('/senha', authMiddleware, AuthController.atualizarSenha);
  */
 router.patch(
     "/foto", authMiddleware,
-    uploadImagens.single("foto"), handleUploadError,
+    setUploadTipo(TIPOS_UPLOAD.USER_IMAGEM),
+    upload.single("imagem"),
+    handleUploadError,
     AuthController.atualizarFoto
 );
 
