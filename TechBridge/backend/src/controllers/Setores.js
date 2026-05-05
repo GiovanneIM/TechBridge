@@ -98,7 +98,7 @@ class SetoresController {
     // OBTER UM SETOR DE UMA EMPRESA
     static async obter(req, res) {
         // OBTER O ID DA EMPRESA
-        const { id_empresa, id_setor } = req.params;
+        const { id_empresa, cod_setor } = req.params;
 
         // VERIFICANDO SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
@@ -112,18 +112,18 @@ class SetoresController {
 
         try {
             // BUSCAR SETOR
-            const setores = await SetoresModel.obter(id_empresa, id_setor);
+            const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor);
 
             // SUCESSO: ENVIAR SETORES
             res.status(200).json({
                 sucesso: true,
-                mensagem: `Empresa ${id_empresa} - Setores listados com sucesso`,
-                dados: { setores },
+                mensagem: `Empresa ${id_empresa} - Setor ${cod_setor} obtido com sucesso`,
+                dados: { setor },
             });
         }
         catch (error) {
             // ERROS:
-            console.error('Erro ao obter os setores da empresa:', error);
+            console.error('Erro ao obter o setor da empresa:', error);
 
             // ERRO DO SERVIDOR
             return res.status(500).json({

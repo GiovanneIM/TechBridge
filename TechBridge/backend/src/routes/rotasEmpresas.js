@@ -341,9 +341,9 @@ router.post(
  *         description: Não foi possível listado o setor da empresa
  */
 router.get(
-    '/:id_empresa/setores/:id_setor',
-    validateZod(params_EmpresaSetor, 'params'),     // Params - ID da empresa, ID do setor
-    SetoresController.obter                         // Controller Setores - Criar
+    '/:id_empresa/setores/:cod_setor',
+    validateZod(params_EmpresaSetor, 'params'),     // Params - ID da empresa, Código do setor
+    SetoresController.obter                         // Controller Setores - Obter
 );
 
 /**
@@ -379,7 +379,7 @@ router.get(
  *         description: Não foi possível atualizar o setor da empresa
  */
 router.patch(
-    '/:id_empresa/setores/:id_setor',
+    '/:id_empresa/setores/:cod_setor',
     () => { }
 );
 
@@ -446,7 +446,7 @@ router.get(
  *         description: Não foi possível registrar a máquina para a empresa
  */
 router.post(
-    '/:id_empresa/setores/:id_setor/maquinas',
+    '/:id_empresa/setores/:cod_setor/maquinas',
     () => { }
 );
 
@@ -481,7 +481,7 @@ router.post(
  *         description: Não foi possível listar as maquinas do setor
  */
 router.get(
-    '/:id_empresa/setores/:id_setor/maquinas',
+    '/:id_empresa/setores/:cod_setor/maquinas',
     () => { }
 );
 
@@ -525,7 +525,7 @@ router.get(
  *         description: Não foi possível listar a máquina da empresa
  */
 router.get(
-    '/:id_empresa/setores/:id_setor/maquinas/:id_maquina',
+    '/:id_empresa/setores/:cod_setor/maquinas/:id_maquina',
     () => { }
 );
 
@@ -569,7 +569,7 @@ router.get(
  *         description: Não foi possível atualizar a máquina
  */
 router.patch(
-    '/:id_empresa/setores/:id_setor/maquinas/:id_maquina',
+    '/:id_empresa/setores/:cod_setor/maquinas/:id_maquina',
     () => { }
 );
 
