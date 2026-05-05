@@ -1,7 +1,7 @@
 // ROTAS PARA CONTROLE DE SESSÃO DO USUÁRIO
 
 import express from 'express';
-import AuthController from '../controllers/AuthController.js';
+import AuthController from '../controllers/Auth.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
 import { handleUploadError, setUploadTipo, TIPOS_UPLOAD, upload } from '../middlewares/uploadMiddleware.js';
 import { validateZod } from '../middlewares/validate.js';

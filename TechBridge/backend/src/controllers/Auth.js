@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/model_consertar/UserModel.js';
 import { JWT_CONFIG } from '../config/jwt.js';
-import { validarEmail, validarNome, validarSenha } from '../utils/validacoes.js';
 import { negrito, verde } from '../utils/modificadoresDeSaida.js';
 import { removerArquivoAntigo, TIPOS_PASTA } from '../middlewares/uploadMiddleware.js';
 
@@ -136,42 +135,9 @@ class AuthController {
 
             // OBTER DADOS DA REQUISIÇÃO
             const { nome, email } = req.body;
-            const dados = {};
+            const dados = { nome, email };
 
-            // VALIDAR O NOME, SE RECEBIDO
-            if (nome) {
-                const validacaoNome = validarNome(nome);
 
-                if (!validacaoNome.sucesso) {
-                    return res.status(400).json({
-                        ...validacaoNome
-                    })
-                }
-
-                dados.nome = nome;
-            }
-
-            // VALIDAR O E-MAIL, SE RECEBIDO
-            if (email) {
-                const validacaoEmail = validarEmail(email);
-
-                if (!validacaoEmail.sucesso) {
-                    return res.status(400).json({
-                        ...validacaoEmail
-                    })
-                }
-
-                // VERIFICAR SE JÁ EXISTE UM USUÁRIO COM O E-MAIL RECEBIDO
-                const emUso = await UserModel.emailEmUso(email, idUsuario)
-                if (emUso) {
-                    return res.status(409).json({
-                        sucesso: false,
-                        mensagem: "E-mail já está em uso"
-                    });
-                }
-
-                dados.email = email;
-            }
 
 
             // ATUALIZAR INFORMAÇÕES

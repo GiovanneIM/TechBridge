@@ -1,21 +1,25 @@
 // ROTAS PARA CONTROLE DE EMPRESAS
 
 import express from 'express';
-import { 
-    authMiddleware, 
+import {
+    authMiddleware,
     adminMiddleware,
     gerentePrincipalMiddleware,
     gerenteMiddleware
 } from '../middlewares/authMiddleware.js';
 import { validateZod } from '../middlewares/validate.js';
-import EmpresasController from '../controllers/EmpresasController.js';
+import EmpresasController from '../controllers/Empresas.js';
 import { params_Empresa } from '../schemas/params/empresa.schema.js';
+import { params_EmpresaUsuario } from '../schemas/params/empresa_usuario.schema.js';
+import { params_EmpresaSetor } from '../schemas/params/empresa_setor.schema.js';
+import { params_EmpresaMaquina } from '../schemas/params/empresa_setor_maquina.schema.js';
 import { updateEmpresaSchema } from '../schemas/body/empresa/updateEmpresa.schema.js';
+import { createUserSchema } from '../schemas/body/user/createUser.schema.js';
 
 const router = express.Router();
 
 
-// CONTROLE DA EMPRESA
+// EMPRESA
 
 /**
  * @swagger
@@ -44,15 +48,15 @@ const router = express.Router();
  */
 router.get(
     '/:id_empresa',
-    validateZod(params_Empresa, 'params'),
-    EmpresasController.obterEmpresa
+    validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    EmpresasController.obterEmpresa             // Controller empresa - Obter Empresa
 );
 
 /**
  * @swagger
  * /empresas/{empresa}:
  *   patch:
- *     summary: Atualizar uma empresa (Admin / Gerente)
+ *     summary: Atualizar uma empresa (Admin / Gerente Principal)
  *     tags: [Empresas]
  * 
  *     parameters:
@@ -84,9 +88,10 @@ router.get(
  */
 router.patch(
     '/:id_empresa',
-    validateZod(params_Empresa, 'params'),
-    validateZod(updateEmpresaSchema, 'body'),
-    EmpresasController.atualizarEmpresa
+    validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    validateZod(updateEmpresaSchema, 'body'),   // Body - Dados para atualizar
+    gerentePrincipalMiddleware,                 // Gerente principal
+    EmpresasController.atualizarEmpresa         // Controller empresa - Atualizar
 );
 
 
@@ -116,7 +121,12 @@ router.patch(
  *       500:
  *         description: Não foi possível listar os membros da empresa
  */
-router.get('/:empresa/membros', () => { });
+router.get(
+    '/:empresa/membros',
+    validateZod(params_Empresa, 'params'),  // Params - ID da empresa
+    gerenteMiddleware,                      // Gerente
+    () => { }                               // Controller empresa - Obter membros
+);
 
 /**
  * @swagger
@@ -143,7 +153,12 @@ router.get('/:empresa/membros', () => { });
  *       500:
  *         description: Não foi possível registrar o membros da empresa
  */
-router.post('/:empresa/membros', () => { });
+router.post(
+    '/:empresa/membros',
+    validateZod(params_Empresa, 'params'),
+    validateZod(createUserSchema, 'body'),
+    () => { }
+);
 
 /**
  * @swagger
@@ -177,7 +192,11 @@ router.post('/:empresa/membros', () => { });
  *       500:
  *         description: Não foi possível listar o usuário da empresa
  */
-router.get('/:empresa/membros/:membro', () => { });
+router.get(
+    '/:empresa/membros/:membro',
+    validateZod(params_EmpresaUsuario, 'params'),
+    () => { }
+);
 
 /**
  * @swagger
@@ -211,7 +230,11 @@ router.get('/:empresa/membros/:membro', () => { });
  *       500:
  *         description: Não foi possível atualizar o usuário da empresa
  */
-router.patch('/:empresa/membros/:membro', () => { });
+router.patch(
+    '/:empresa/membros/:membro',
+    validateZod(params_EmpresaUsuario, 'params'),
+    () => { }
+);
 
 
 
