@@ -1,12 +1,8 @@
 import { z } from 'zod';
-import { helperCodigo } from '../helpers/helperCodigo';
+import { helperCodigo } from '../helpers/helperCodigo.js';
 
 // CÓDIGO DE MÁQUINA
 export const cod_maquina = helperCodigo('Código da máquina');
-
-import { z } from 'zod';
-import { helperCodigo } from '../helpers/helperCodigo';
-
 
 // CÓDIGO DE SETOR
 export const cod_setor = helperCodigo('Código da máquina');

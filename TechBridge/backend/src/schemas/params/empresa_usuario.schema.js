@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { id_empresa } from "../dados/empresa";
-import { id_usuario } from '../dados/usuario';
+import { id_empresa } from "../dados/empresa.js";
+import { id_usuario } from '../dados/usuario.js';
 
 // • ID DA EMPRESA
 // • ID DO USUÁRIO

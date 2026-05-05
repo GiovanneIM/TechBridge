@@ -1,4 +1,4 @@
-import UserModel from "../models/model_consertar/UserModel";
+import UserModel from "../models/User.js";
 import { pertenceAEmpresa } from "../utils/validacoes.js";
 
 class UserController {
@@ -9,7 +9,15 @@ class UserController {
         const { id_empresa } = req.params;
 
         try {
+            // REQUISIÇÃO
+            const membros = await UserModel.obterMembros(id_empresa);
 
+            // SUCESSO: ENVIAR USUÁRIOS
+            res.status(200).json({
+                sucesso: true,
+                mensagem: `Empresa ${id_empresa} - Membros listados com sucesso`,
+                dados: { membros },
+            });
         }
         catch (error) {
             // ERROS:

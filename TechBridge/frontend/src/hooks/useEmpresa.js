@@ -7,29 +7,30 @@ import { nestErrors } from '@/lib/zodErrors';
 // ENDPOINT BASE DA API
 const API_BASE_URL = '/empresas';
 
-export function useEmpresa({
-    empresasIniciais = [],
-    fetchOnMount = false
-} = {}
-) {
+export function useEmpresa() {
     // Lista de empresas
     const [empresas, setEmpresas] = useState(null);
 
     // Empresa
     const [empresa, setEmpresa] = useState(null);
 
+    // Membros de uma empresa
+    const [membros, setMembros] = useState(null);
+
     // Loading
     const [loading, setLoading] = useState({
         obterEmpresas: null,
         criarEmpresa: null,
-        obterEmpresa: null
+        obterEmpresa: null,
+        obterMembros: null,
     });
 
     // Erros
     const [error, setError] = useState({
         obterEmpresas: null,
         criarEmpresa: null,
-        obterEmpresa: null
+        obterEmpresa: null,
+        obterMembros: null,
     });
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -123,19 +124,18 @@ export function useEmpresa({
         }
     }, []);
 
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
     // OBTER EMPRESA
-    const obterEmpresa = useCallback(async (id) => {
+    const obterEmpresa = useCallback(async (id_empresa) => {
         setLoading((prev) => ({ ...prev, obterEmpresa: true }));
         setError((prev) => ({ ...prev, obterEmpresa: null }));
 
         try {
             // REQUISIÇÃO
-            const data = await apiFetch(`/empresas/${id}`, {
+            const data = await apiFetch(`/empresas/${id_empresa}`, {
                 method: 'GET'
             });
-
-            console.log(data);
-            
 
             // ERRO
             if (!data.sucesso) {
@@ -162,20 +162,58 @@ export function useEmpresa({
         }
     }, []);
 
+    // OBTER MEMBROS (Gerente)
+    const obterMembros = useCallback(async (id_empresa) => {
+        setLoading((prev) => ({ ...prev, obterMembros: true }));
+        setError((prev) => ({ ...prev, obterMembros: null }));
+
+        try {
+            console.log(id_empresa);
+            
+            // REQUISIÇÃO
+            const data = await apiFetch(`/empresas/${id_empresa}/membros`, {
+                method: 'GET'
+            });
+
+            console.log(data);
+
+
+            // ERRO
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, obterMembros: data.mensagem }))
+            }
+
+            // SUCESSO
+            else {
+                // ATUALIZAR MEMBROS
+                setMembros(data.dados.membros)
+            }
+        } catch (err) {
+            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
+            if (err.message === 'Sessão expirada') return;
+
+            setError((prev) => ({
+                ...prev,
+                obterMembros: 'Erro ao obter membros, tente novamente mais tarde.'
+            }));
+
+        } finally {
+            // Independente de sucesso ou erro, o loading termina aqui
+            setLoading((prev) => ({ ...prev, obterMembros: false }));
+        }
+    }, []);
+
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-    useEffect(() => {
-        if (!fetchOnMount) return;
-        fetchEmpresas();
-    }, [fetchOnMount]);
-
     return {
-        empresas,
-        empresa,
         loading,
         error,
+        empresas,
+        empresa,
+        membros,
         obterEmpresas,
         criarEmpresa,
-        obterEmpresa
+        obterEmpresa,
+        obterMembros,
     };
 }

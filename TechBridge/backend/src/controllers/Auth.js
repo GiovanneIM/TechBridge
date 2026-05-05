@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import UserModel from '../models/model_consertar/UserModel.js';
+import UserModel from '../models/User.js';
 import { JWT_CONFIG } from '../config/jwt.js';
 import { negrito, verde } from '../utils/modificadoresDeSaida.js';
 import { removerArquivoAntigo, TIPOS_PASTA } from '../middlewares/uploadMiddleware.js';

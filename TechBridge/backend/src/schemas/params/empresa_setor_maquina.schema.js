@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { id_empresa } from "../dados/empresa";
-import { cod_maquina } from "../dados/maquina";
-import { cod_setor } from "../dados/setor";
+import { id_empresa } from "../dados/empresa.js";
+import { cod_maquina } from "../dados/maquina.js";
+import { cod_setor } from "../dados/setor.js";
 
 // • ID DA EMPRESA
 // • CÓDIGO DO SETOR

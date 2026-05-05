@@ -1,5 +1,5 @@
 import EmpresasModel from "../models/Empresas.js";
-import UserModel from "../models/model_consertar/UserModel.js";
+import UserModel from "../models/User.js";
 import { pertenceAEmpresa } from "../utils/validacoes.js";
 
 

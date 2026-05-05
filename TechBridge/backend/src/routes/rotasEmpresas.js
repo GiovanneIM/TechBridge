@@ -1,20 +1,24 @@
 // ROTAS PARA CONTROLE DE EMPRESAS
 
 import express from 'express';
+// MIDDLEWARES
 import {
     authMiddleware,
     adminMiddleware,
     gerentePrincipalMiddleware,
     gerenteMiddleware
 } from '../middlewares/authMiddleware.js';
+// ZOD
 import { validateZod } from '../middlewares/validate.js';
-import EmpresasController from '../controllers/Empresas.js';
 import { params_Empresa } from '../schemas/params/empresa.schema.js';
 import { params_EmpresaUsuario } from '../schemas/params/empresa_usuario.schema.js';
 import { params_EmpresaSetor } from '../schemas/params/empresa_setor.schema.js';
 import { params_EmpresaMaquina } from '../schemas/params/empresa_setor_maquina.schema.js';
 import { updateEmpresaSchema } from '../schemas/body/empresa/updateEmpresa.schema.js';
 import { createUserSchema } from '../schemas/body/user/createUser.schema.js';
+// CONTROLLERS
+import EmpresasController from '../controllers/Empresas.js';
+import UserController from '../controllers/User.js';
 
 const router = express.Router();
 
@@ -123,9 +127,9 @@ router.patch(
  */
 router.get(
     '/:empresa/membros',
-    validateZod(params_Empresa, 'params'),  // Params - ID da empresa
-    gerenteMiddleware,                      // Gerente
-    () => { }                               // Controller empresa - Obter membros
+    validateZod(params_Empresa, 'params'),   // Params - ID da empresa
+    gerenteMiddleware,                       // Gerente
+    UserController.obterMembros              // Controller empresa - Obter membros
 );
 
 /**

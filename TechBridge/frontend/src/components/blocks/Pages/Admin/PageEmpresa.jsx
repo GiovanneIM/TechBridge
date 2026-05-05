@@ -10,11 +10,18 @@ export default function PageEmpresa() {
     const params = useParams();
     const id_empresa = params.id;
 
-    const { empresa, obterEmpresa } = useEmpresa()
+    const {
+        empresa, obterEmpresa,
+        membros, obterMembros,
+    } = useEmpresa()
 
     useEffect(() => {
         if (!empresa) obterEmpresa(id_empresa)
     }, [empresa, obterEmpresa])
+
+    useEffect(() => {
+        if (!membros) obterMembros(id_empresa)
+    }, [membros, obterMembros])
 
 
     let content;
@@ -26,6 +33,13 @@ export default function PageEmpresa() {
             <pre>
                 {
                     JSON.stringify(empresa, null, 2)
+                }
+            </pre>
+
+            <p>INTEGRANTES DA EMPRESA</p>
+            <pre>
+                {
+                    JSON.stringify(membros, null, 2)
                 }
             </pre>
         </>)

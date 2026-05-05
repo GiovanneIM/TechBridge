@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { helperCodigo } from '../helpers/helperCodigo';
+import { helperCodigo } from '../helpers/helperCodigo.js';
 
 
 // CÓDIGO DE SETOR

@@ -1,5 +1,5 @@
 import { create, read, update, deleteRecord, dadosDashboard, dadosPainelChamados, comparePassword, hashPassword } from '../config/database.js';
-import UserModel from './model_consertar/UserModel.js';
+import UserModel from './User.js';
 
 class EmpresasModel {
 
