@@ -40,6 +40,8 @@ class UserController {
             });
         }
     }
+
+    // OBTER UM MEMBRO DA EMPRESA
 }
 
 export default UserController;

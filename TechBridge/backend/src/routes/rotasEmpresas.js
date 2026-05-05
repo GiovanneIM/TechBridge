@@ -272,7 +272,7 @@ router.patch(
 router.get(
     '/:id_empresa/setores',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
-    SetoresController.listar                     // Controller setores - Obter
+    SetoresController.listar                     // Controller setores - listar
 );
 
 /**
