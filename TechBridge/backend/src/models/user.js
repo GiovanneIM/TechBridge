@@ -65,10 +65,10 @@ class UserModel {
             const dados = rows[0] || null;
 
             // REMOVER A SENHA DOS DADOS OBTIDO
-            const { senha: _, ...dadosSemSenha } = dados;
+            // const { senha: _, ...dadosSemSenha } = dados;
 
             // RETORNAR OS DADOS SEM SENHA
-            return dadosSemSenha;
+            return dados;
         } catch (error) {
             console.error('Erro ao buscar usuário por email:', error);
             throw error;
