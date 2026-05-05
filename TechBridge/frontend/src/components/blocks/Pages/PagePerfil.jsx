@@ -1,18 +1,19 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
 
-export default function PagePerfil({ usuario }) {
+export default function PagePerfil() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState("perfil");
     const [form, setForm] = useState({});
     const [preview, setPreview] = useState(null);
 
-    const tecnico = usuario;
+    const { user } = useAuth()
 
-    if (!tecnico) {
-        return <div className="p-10 text-center">Carregando...</div>;
-    }
+    const tecnico = user;
+    console.log(tecnico);
+    
 
     const openModal = () => {
         setForm({
@@ -68,7 +69,7 @@ export default function PagePerfil({ usuario }) {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="dark:bg-sidebar min-h-scree bg-gray-50">
 
             {/* HEADER PREMIUM */}
             <div className="relative h-37 bg-linear-to-r mt-10 rounded from-indigo-600 to-blue-500">
@@ -88,7 +89,7 @@ export default function PagePerfil({ usuario }) {
 
                 <button
                     onClick={openModal}
-                    className="absolute top-5 right-5 bg-white text-blue-600 px-4 py-2 rounded-lg shadow hover:scale-105 transition"
+                    className="absolute dark:bg-sidebar dark:text-white top-5 right-5 bg-white text-blue-600 px-4 py-2 rounded-lg shadow hover:scale-105 transition"
                 >
                     Editar
                 </button>
@@ -129,13 +130,13 @@ export default function PagePerfil({ usuario }) {
                         </Card>
 
                         {/* BIO */}
-                        <div className="md:col-span-3 bg-white p-6 rounded-2xl shadow-sm">
+                        <div className="md:col-span-3 dark:bg-sidebar dark:border bg-white p-6 rounded-2xl shadow-sm">
                             <h3 className="font-semibold mb-2">Sobre</h3>
-                            <p className="text-gray-600">{tecnico.bio}</p>
+                            <p className="text-gray-600 dark:text-white">{tecnico.bio}</p>
                         </div>
 
                         {/* SKILLS */}
-                        <div className="md:col-span-3 bg-white p-6 rounded-2xl shadow-sm">
+                        <div className="md:col-span-3 dark:bg-sidebar dark:border bg-white p-6 rounded-2xl shadow-sm">
                             <h3 className="font-semibold mb-3">Habilidades</h3>
 
                             <div className="flex flex-wrap gap-2">
@@ -201,13 +202,13 @@ export default function PagePerfil({ usuario }) {
 /* COMPONENTES */
 
 function Card({ children }) {
-    return <div className="bg-white p-5 rounded-2xl shadow-sm">{children}</div>;
+    return <div className="bg-white dark:bg-sidebar dark:border p-5 rounded-2xl shadow-sm">{children}</div>;
 }
 
 function Info({ label, value }) {
     return (
         <div className="flex justify-between text-sm mb-2">
-            <span className="text-gray-500">{label}</span>
+            <span className="text-gray-500 dark:text-white">{label}</span>
             <span>{value}</span>
         </div>
     );
@@ -241,9 +242,9 @@ function Textarea({ label, value, onChange }) {
 
 function Stat({ label, value }) {
     return (
-        <div className="bg-white p-4 rounded-xl shadow-sm text-center">
+        <div className="bg-white dark:bg-sidebar dark:border p-4 rounded-xl shadow-sm text-center">
             <p className="text-xl font-bold">{value}</p>
-            <p className="text-gray-500 text-sm">{label}</p>
+            <p className="text-gray-500 text-sm dark:text-white">{label}</p>
         </div>
     );
 }

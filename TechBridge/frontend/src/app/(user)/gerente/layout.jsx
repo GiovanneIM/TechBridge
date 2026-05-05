@@ -46,7 +46,7 @@ export default function LayoutGerente({ children }) {
         </Sidebar>
 
         {/* Conteúdo */}
-        <main className=" flex-1 flex border-x">
+        <main className=" flex-1 flex border-x justify-center dark:bg-sidebar">
             {children}
         </main>
     </>);
