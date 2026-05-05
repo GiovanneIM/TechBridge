@@ -19,6 +19,7 @@ import { createUserSchema } from '../schemas/body/user/createUser.schema.js';
 // CONTROLLERS
 import EmpresasController from '../controllers/Empresas.js';
 import UserController from '../controllers/User.js';
+import SetoresController from '../controllers/setores.js';
 
 const router = express.Router();
 
@@ -95,7 +96,7 @@ router.patch(
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
     validateZod(updateEmpresaSchema, 'body'),   // Body - Dados para atualizar
     gerentePrincipalMiddleware,                 // Gerente principal
-    EmpresasController.atualizarEmpresa         // Controller empresa - Atualizar
+    EmpresasController.atualizarEmpresa         // Controller empresas - Atualizar
 );
 
 
@@ -129,7 +130,7 @@ router.get(
     '/:id_empresa/membros',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
     gerenteMiddleware,                          // Gerente
-    UserController.obterMembros                 // Controller empresa - Obter membros
+    UserController.obterMembros                 // Controller users - Obter membros
 );
 
 /**
@@ -267,7 +268,11 @@ router.patch(
  *       500:
  *         description: Não foi possível listar os setores da empresa
  */
-router.get('/:id_empresa/setores', () => { });
+router.get(
+    '/:id_empresa/setores',
+    validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    SetoresController.obterSetores              // Controller setores - Obter setores
+);
 
 /**
  * @swagger

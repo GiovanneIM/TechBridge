@@ -1,6 +1,5 @@
 import { create, read, update, deleteRecord, comparePassword, hashPassword, getConnection } from '../config/database.js';
 
-// Model para operações com usuários
 class UserModel {
     // CRIAR USUÁRIO
     static async criar(dadosUsuario) {

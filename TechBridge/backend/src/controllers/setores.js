@@ -1,10 +1,11 @@
-import UserModel from "../models/User.js";
+
+import SetoresModel from "../models/setores.js";
 import { pertenceAEmpresa } from "../utils/validacoes.js";
 
-class UserController {
+class SetoresController {
 
-    // OBTER MEMBROS DE UMA EMPRESA
-    static async obterMembros(req, res) {
+    // OBTER SETORES DE UMA EMPRESA
+    static async obterSetores(req, res) {
         // OBTER O ID DA EMPRESA
         const { id_empresa } = req.params;
 
@@ -19,27 +20,27 @@ class UserController {
             }
 
             // REQUISIÇÃO
-            const membros = await UserModel.obterMembros(id_empresa);
+            const setores = await SetoresModel.obterSetores(id_empresa);
 
-            // SUCESSO: ENVIAR USUÁRIOS
+            // SUCESSO: ENVIAR SETORES
             res.status(200).json({
                 sucesso: true,
-                mensagem: `Empresa ${id_empresa} - Membros listados com sucesso`,
-                dados: { membros },
+                mensagem: `Empresa ${id_empresa} - Setores listados com sucesso`,
+                dados: { setores },
             });
         }
         catch (error) {
             // ERROS:
-            console.error('Erro ao obter os membros da empresa:', error);
+            console.error('Erro ao obter os setores da empresa:', error);
 
             // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível obter os membros da empresa'
+                mensagem: 'Não foi possível obter os setores da empresa'
             });
         }
     }
 }
 
-export default UserController;
+export default SetoresController;

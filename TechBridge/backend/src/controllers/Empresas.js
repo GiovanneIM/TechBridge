@@ -125,8 +125,6 @@ class EmpresasController {
         try {
             // VERIFICANDO SE O USUÁRIO TEM ACESSO
             const acesso = pertenceAEmpresa(req, id_empresa);
-
-            // VERIFICANDO SE O USUÁRIO É ADMIN
             if (!acesso) {
                 return res.status(403).json({
                     sucesso: false,
