@@ -12,18 +12,24 @@ export function useEmpresa({
     fetchOnMount = false
 } = {}
 ) {
+    // Lista de empresas
     const [empresas, setEmpresas] = useState(null);
 
+    // Empresa
+    const [empresa, setEmpresa] = useState(null);
+
+    // Loading
     const [loading, setLoading] = useState({
         obterEmpresas: null,
         criarEmpresa: null,
-        patch: null
+        obterEmpresa: null
     });
 
+    // Erros
     const [error, setError] = useState({
         obterEmpresas: null,
         criarEmpresa: null,
-        patch: null
+        obterEmpresa: null
     });
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -114,6 +120,42 @@ export function useEmpresa({
         } finally {
             // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, criarEmpresa: false }));
+        }
+    }, []);
+
+    // OBTER EMPRESA
+    const obterEmpresa = useCallback(async (id) => {
+        setLoading((prev) => ({ ...prev, obterEmpresas: true }));
+        setError((prev) => ({ ...prev, obterEmpresas: null }));
+
+        try {
+            // REQUISIÇÃO
+            const data = await apiFetch(`/empresas/${id}`, {
+                method: 'GET'
+            });
+
+            // ERRO
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, obterEmpresas: data.mensagem }))
+            }
+
+            // SUCESSO
+            else {
+                // ATUALIZAR EMPRESA
+                setEmpresa(data.dados)
+            }
+        } catch (err) {
+            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
+            if (err.message === 'Sessão expirada') return;
+
+            setError((prev) => ({
+                ...prev,
+                obterEmpresas: 'Erro ao obter empresas, tente novamente mais tarde.'
+            }));
+
+        } finally {
+            // Independente de sucesso ou erro, o loading termina aqui
+            setLoading((prev) => ({ ...prev, obterEmpresas: false }));
         }
     }, []);
 
