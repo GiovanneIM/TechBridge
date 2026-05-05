@@ -20,7 +20,6 @@ CREATE TABLE setores (
 
     -- Estilização do setor
     icone			VARCHAR(50)		NOT NULL,
-    cor 			VARCHAR(50) 	NOT NULL,
     
     -- Chaves estrangeiras
     id_empresa		INT				NOT NULL,			-- ID da empresa à qual o setor pertence
@@ -38,10 +37,10 @@ CREATE TABLE setores (
 
 
 -- Inserindo setores de exemplo
-INSERT INTO setores (nome, descricao, cod_setor, id_empresa, icone, cor)
+INSERT INTO setores (nome, descricao, cod_setor, id_empresa, icone)
 VALUES 
-('Pintura', 'Acabamento', 'PIN', 1, 'PaintRoller', 'bg-linear-to-r from-blue-500 to-indigo-500'),
-('Montagem', 'Setor de montagem', 'MON', 1, 'Wrench','bg-linear-to-r from-purple-500 to-purple-600'),
-('RH', 'Gestão de pessoas', 'RH', 1, 'BriefcaseBusiness', 'bg-linear-to-r from-teal-500 to-teal-600'),
-('GA', 'Logística', 'GA', 1, 'Network', 'bg-linear-to-r from-pink-500 to-pink-600')
+('Pintura', 'Acabamento', 'PIN', 1, 'PaintRoller'),
+('Montagem', 'Setor de montagem', 'MON', 1, 'Wrench'),
+('RH', 'Gestão de pessoas', 'RH', 1, 'BriefcaseBusiness'),
+('GA', 'Logística', 'GA', 1, 'Network')
 ;
