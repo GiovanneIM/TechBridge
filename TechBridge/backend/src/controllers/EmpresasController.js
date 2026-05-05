@@ -1,6 +1,8 @@
 import EmpresasModel from "../models/EmpresasModel.js";
 import UserModel from "../models/model_consertar/UserModel.js";
 
+const ADMIN = 1;
+
 class EmpresasController {
 
     // REGISTAR UMA NOVA EMPRESA
@@ -117,19 +119,30 @@ class EmpresasController {
         const { id_empresa } = req.params;
 
         try {
+            // VERIFICANDO SE O USUÁRIO É ADMIN
+            if (req.usuario.tipo_usuario != ADMIN) {
+                // SE NÃO FOR ADMIN, SÓ CONTINUA SE ELE PERTENCER À EMPRESA
+                if (req.usuario.id_empresa != id_empresa) {
+                    return res.status(403).json({
+                        sucesso: false,
+                        mensagem: 'Você não tem acesso a essa rota'
+                    });
+                }
+            }
+
             // FAZER A CONSULTA
             const empresa = await EmpresasModel.buscarPorId(id_empresa);
 
             // EMPRESA NÃO ENCONTRADA
             if (!empresa) {
-                res.status(404).json({
+                return res.status(404).json({
                     sucesso: false,
                     mensagem: 'Empresa não encontrada'
                 });
             }
 
             // SUCESSO: ENVIAR EMPRESA
-            res.status(200).json({
+            return res.status(200).json({
                 sucesso: true,
                 mensagem: 'Empresa obtida com sucesso',
                 dados: {
@@ -143,7 +156,7 @@ class EmpresasController {
             console.error('Erro ao obter a empresa:', error);
 
             // ERRO DO SERVIDOR
-            res.status(500).json({
+            return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
                 mensagem: 'Não foi possível obter os dados da empresa'
