@@ -1,7 +1,7 @@
-import EmpresasModel from "../models/EmpresasModel.js";
+import EmpresasModel from "../models/Empresas.js";
 import UserModel from "../models/model_consertar/UserModel.js";
+import { pertenceAEmpresa } from "../utils/validacoes.js";
 
-const ADMIN = 1;
 
 class EmpresasController {
 
@@ -111,6 +111,10 @@ class EmpresasController {
         }
     }
 
+    // EXCLUIR UMA EMPRESA
+    static async excluirEmpresa(req, res) {
+    }
+
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
     // OBTER UMA EMPRESA
@@ -119,15 +123,15 @@ class EmpresasController {
         const { id_empresa } = req.params;
 
         try {
+            // VERIFICANDO SE O USUÁRIO TEM ACESSO
+            const acesso = pertenceAEmpresa(req, id_empresa);
+
             // VERIFICANDO SE O USUÁRIO É ADMIN
-            if (req.usuario.tipo_usuario != ADMIN) {
-                // SE NÃO FOR ADMIN, SÓ CONTINUA SE ELE PERTENCER À EMPRESA
-                if (req.usuario.id_empresa != id_empresa) {
-                    return res.status(403).json({
-                        sucesso: false,
-                        mensagem: 'Você não tem acesso a essa rota'
-                    });
-                }
+            if (!acesso) {
+                return res.status(403).json({
+                    sucesso: false,
+                    mensagem: 'Você não tem acesso a essa rota'
+                });
             }
 
             // FAZER A CONSULTA
@@ -238,9 +242,7 @@ class EmpresasController {
 
     }
 
-    // EXCLUIR UMA EMPRESA
-    static async excluirEmpresa(req, res) {
-    }
+    
 }
 
 export default EmpresasController;
