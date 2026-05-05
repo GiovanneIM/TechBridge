@@ -126,10 +126,10 @@ router.patch(
  *         description: Não foi possível listar os membros da empresa
  */
 router.get(
-    '/:empresa/membros',
-    validateZod(params_Empresa, 'params'),   // Params - ID da empresa
-    gerenteMiddleware,                       // Gerente
-    UserController.obterMembros              // Controller empresa - Obter membros
+    '/:id_empresa/membros',
+    validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    gerenteMiddleware,                          // Gerente
+    UserController.obterMembros                 // Controller empresa - Obter membros
 );
 
 /**
@@ -158,7 +158,7 @@ router.get(
  *         description: Não foi possível registrar o membros da empresa
  */
 router.post(
-    '/:empresa/membros',
+    '/:id_empresa/membros',
     validateZod(params_Empresa, 'params'),
     validateZod(createUserSchema, 'body'),
     () => { }
@@ -197,7 +197,7 @@ router.post(
  *         description: Não foi possível listar o usuário da empresa
  */
 router.get(
-    '/:empresa/membros/:membro',
+    '/:id_empresa/membros/:id_membro',
     validateZod(params_EmpresaUsuario, 'params'),
     () => { }
 );
@@ -235,7 +235,7 @@ router.get(
  *         description: Não foi possível atualizar o usuário da empresa
  */
 router.patch(
-    '/:empresa/membros/:membro',
+    '/:id_empresa/membros/:id_membro',
     validateZod(params_EmpresaUsuario, 'params'),
     () => { }
 );
@@ -267,7 +267,7 @@ router.patch(
  *       500:
  *         description: Não foi possível listar os setores da empresa
  */
-router.get('/:empresa/setores', () => { });
+router.get('/:id_empresa/setores', () => { });
 
 /**
  * @swagger
@@ -294,7 +294,7 @@ router.get('/:empresa/setores', () => { });
  *       500:
  *         description: Não foi possível registrar o setor para a empresa
  */
-router.post('/:empresa/setores', () => { });
+router.post('/:id_empresa/setores', () => { });
 
 /**
  * @swagger
@@ -328,7 +328,7 @@ router.post('/:empresa/setores', () => { });
  *       500:
  *         description: Não foi possível listado o setor da empresa
  */
-router.get('/:empresa/setores/:setor', () => { });
+router.get('/:id_empresa/setores/:id_setor', () => { });
 
 /**
  * @swagger
@@ -362,7 +362,7 @@ router.get('/:empresa/setores/:setor', () => { });
  *       500:
  *         description: Não foi possível atualizar o setor da empresa
  */
-router.patch('/:empresa/setores/:setor', () => { });
+router.patch('/:id_empresa/setores/:id_setor', () => { });
 
 
 
@@ -391,7 +391,7 @@ router.patch('/:empresa/setores/:setor', () => { });
  *       500:
  *         description: Não foi possível listar as maquinas da empresa
  */
-router.get('/:empresa/maquinas', () => { });
+router.get('/:id_empresa/maquinas', () => { });
 
 /**
  * @swagger
@@ -423,7 +423,7 @@ router.get('/:empresa/maquinas', () => { });
  *       500:
  *         description: Não foi possível registrar a máquina para a empresa
  */
-router.post('/:empresa/setores/:setor/maquinas', () => { });
+router.post('/:id_empresa/setores/:id_setor/maquinas', () => { });
 
 /**
  * @swagger
@@ -455,7 +455,7 @@ router.post('/:empresa/setores/:setor/maquinas', () => { });
  *       500:
  *         description: Não foi possível listar as maquinas do setor
  */
-router.get('/:empresa/setores/:setor/maquinas', () => { });
+router.get('/:id_empresa/setores/:id_setor/maquinas', () => { });
 
 /**
  * @swagger
@@ -496,7 +496,7 @@ router.get('/:empresa/setores/:setor/maquinas', () => { });
  *       500:
  *         description: Não foi possível listar a máquina da empresa
  */
-router.get('/:empresa/setores/:setor/maquinas/:maquina', () => { });
+router.get('/:id_empresa/setores/:id_setor/maquinas/:id_maquina', () => { });
 
 /**
  * @swagger
@@ -537,7 +537,7 @@ router.get('/:empresa/setores/:setor/maquinas/:maquina', () => { });
  *       500:
  *         description: Não foi possível atualizar a máquina
  */
-router.patch('/:empresa/setores/:setor/maquinas/:maquina', () => { });
+router.patch('/:id_empresa/setores/:id_setor/maquinas/:id_maquina', () => { });
 
 
 export default router;
