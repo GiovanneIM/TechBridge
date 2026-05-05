@@ -1,21 +1,32 @@
 package com.senai.techbridgemobile;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.senai.techbridgemobile.model.Chamado;
+import com.senai.techbridgemobile.model.ChamadoResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.senai.techbridgemobile.adapter.ChamadosAdapter;
+
 public class MainActivity extends AppCompatActivity {
 
     Button btnCarregar;
     String token;
+
+    RecyclerView recyclerChamados;
+    ChamadosAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,42 +35,68 @@ public class MainActivity extends AppCompatActivity {
 
         btnCarregar = findViewById(R.id.btnCarregar);
 
-        // Pegar token vindo do login
         token = getIntent().getStringExtra("token");
+        recyclerChamados = findViewById(R.id.recyclerChamados);
+        recyclerChamados.setLayoutManager(new LinearLayoutManager(this));
 
-        btnCarregar.setOnClickListener(v -> carregarChamado());
+        // 🔥 proteção contra token nulo
+        if (token == null || token.isEmpty()) {
+            Toast.makeText(this, "Token não encontrado", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        btnCarregar.setOnClickListener(v -> carregarChamados());
     }
 
-    private void carregarChamado() {
+    private void carregarChamados() {
 
         ApiService api = RetrofitClient.getRetrofitInstance().create(ApiService.class);
 
-        api.listarChamado("Bearer " + token).enqueue(new Callback<Chamado>() {
+        api.carregarChamados("Bearer " + token).enqueue(new Callback<ChamadoResponse>() {
             @Override
-            public void onResponse(Call<Chamado> call, Response<Chamado> response) {
+            public void onResponse(Call<ChamadoResponse> call, Response<ChamadoResponse> response) {
 
                 if (response.isSuccessful() && response.body() != null) {
 
-                    Chamado chamado = response.body();
+                    ChamadoResponse resposta = response.body();
 
-                    Toast.makeText(MainActivity.this,
-                            "ID: " + chamado.getId() +
-                                    "\nEstado: " + chamado.getEstado() +
-                                    "\nProblema: " + chamado.getDescricaoProblema(),
-                            Toast.LENGTH_LONG).show();
+                    if (resposta.getDados() == null || resposta.getDados().getChamados() == null) {
+                        Toast.makeText(MainActivity.this,
+                                "Resposta vazia da API",
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    List<Chamado> chamados = resposta.getDados().getChamados();
+
+                    if (chamados.isEmpty()) {
+                        Toast.makeText(MainActivity.this,
+                                "Nenhum chamado encontrado",
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    List<Chamado> Chamados = resposta.getDados().getChamados();
+
+                    adapter = new ChamadosAdapter(chamados);
+                    recyclerChamados.setAdapter(adapter);
 
                 } else {
                     Toast.makeText(MainActivity.this,
                             "Erro: " + response.code(),
                             Toast.LENGTH_LONG).show();
+
+                    Log.e("API_ERRO", "Código: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<Chamado> call, Throwable t) {
+            public void onFailure(Call<ChamadoResponse> call, Throwable t) {
                 Toast.makeText(MainActivity.this,
                         "Falha: " + t.getMessage(),
                         Toast.LENGTH_LONG).show();
+
+                Log.e("API_FALHA", t.getMessage());
             }
         });
     }

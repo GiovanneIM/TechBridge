@@ -75,7 +75,7 @@ export default function PageSetores({ setoresIniciais }) {
     } else {
         content = (
             <div className="flex-1 px-6 py-6 bg-gray-50 dark:bg-slate-950">
-                <div className="max-w-7xl mx-auto">
+                <div className="max-w-10xl mx-auto">
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
@@ -112,7 +112,7 @@ export default function PageSetores({ setoresIniciais }) {
                                         <div className="absolute inset-0 bg-black/10"></div>
 
                                         <div className="relative">
-                                            <div className="group-hover:scale-110 transition-transform duration-300">
+                                            <div className="group-hover:scale-99 transition-transform duration-300">
                                                 {icone}
                                             </div>
 
