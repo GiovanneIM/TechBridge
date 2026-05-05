@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { helperId } from '../helpers/helperId.js';
 
+
 const estadosValidos = [
     'AC', 'AP', 'AM', 'PA', 'RO', 'RR', 'TO',
     'AL', 'BA', 'CE', 'MA', 'PB', 'PE', 'PI', 'RN', 'SE',
