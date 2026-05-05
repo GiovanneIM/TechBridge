@@ -8,12 +8,13 @@ import retrofit2.Call;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
-
+import com.senai.techbridgemobile.model.ChamadoResponse;
 public interface ApiService {
-    @GET("techbridge/chamados/1")
-    Call<Chamado> listarChamado(
-            @retrofit2.http.Header("Authorization") String token
+    @GET("techbridge/chamados/buscar")
+    Call<ChamadoResponse> carregarChamados(
+            @Header("Authorization") String token
     );
 
     @POST("techbridge/auth/login")
