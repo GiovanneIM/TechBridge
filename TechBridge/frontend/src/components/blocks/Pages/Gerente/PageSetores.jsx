@@ -15,7 +15,7 @@ import {
 
 import { useSetores } from "@/hooks/hooks2/useSetores";
 
-// ícones
+// Ícones
 const icones = {
     Wrench: <Wrench className="h-14 w-14 opacity-90" />,
     PaintRoller: <PaintRoller className="h-14 w-14 opacity-90" />,
@@ -24,6 +24,20 @@ const icones = {
     default: <Warehouse className="h-14 w-14 opacity-90" />,
 };
 
+// 🎨 CORES FIXAS (SEMPRE FUNCIONA)
+const coresFixas = [
+    "bg-gradient-to-r from-blue-600 to-indigo-600",
+    "bg-gradient-to-r from-emerald-600 to-teal-600",
+    "bg-gradient-to-r from-purple-600 to-pink-600",
+    "bg-gradient-to-r from-orange-500 to-red-500",
+    "bg-gradient-to-r from-slate-600 to-slate-800",
+    "bg-gradient-to-r from-cyan-600 to-blue-600",
+];
+
+// pega cor pelo índice
+function getCor(index) {
+    return coresFixas[index % coresFixas.length];
+}
 
 export default function PageSetores({ setoresIniciais }) {
     const {
@@ -61,13 +75,15 @@ export default function PageSetores({ setoresIniciais }) {
     } else {
         content = (
             <div className="flex-1 px-6 py-6 bg-gray-50 dark:bg-slate-950">
-                <div className="max-w-10xl mx-auto">
+                <div className="max-w-7xl mx-auto">
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
                         {setores.map((setor, i) => {
                             const icone =
                                 icones[setor.icone] || icones.default;
+
+                            const cor = getCor(i);
 
                             return (
                                 <div
@@ -84,15 +100,15 @@ export default function PageSetores({ setoresIniciais }) {
                                         hover:-translate-y-1
                                     "
                                 >
-                                    {/* HEADER COLORIDO */}
+                                    {/* HEADER */}
                                     <div
                                         className={`
                                             p-6 flex flex-col justify-between
                                             min-h-[170px] text-white relative
-                                            ${console.log(setor.cor)}
+                                            ${cor}
                                         `}
                                     >
-                                        {/* overlay leve para contraste */}
+                                        {/* overlay leve */}
                                         <div className="absolute inset-0 bg-black/10"></div>
 
                                         <div className="relative">
