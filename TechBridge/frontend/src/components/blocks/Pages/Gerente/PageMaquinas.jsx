@@ -39,9 +39,6 @@ export default function PageMaquinas({ maquinasIniciais }) {
 
     const isFirstLoad = loading.fetch && (maquinas ?? []).length === 0;
 
-    // =========================
-    // 📦 FILTROS
-    // =========================
     const [filtro, setFiltro] = useState({
         nome_maquina: '',
         status: null,
@@ -49,9 +46,6 @@ export default function PageMaquinas({ maquinasIniciais }) {
         page: 1,
     });
 
-    // =========================
-    // 🔎 FILTRAGEM
-    // =========================
     const filteredMaquinas = useMemo(() => {
         return (maquinas ?? []).filter((m) => {
 
@@ -68,9 +62,6 @@ export default function PageMaquinas({ maquinasIniciais }) {
         });
     }, [maquinas, filtro.nome_maquina, filtro.status]);
 
-    // =========================
-    // 📄 PAGINAÇÃO
-    // =========================
     const totalPages = Math.ceil(filteredMaquinas.length / filtro.limit);
 
     const paginatedMaquinas = useMemo(() => {
@@ -113,9 +104,6 @@ export default function PageMaquinas({ maquinasIniciais }) {
         setFiltro((prev) => ({ ...prev, page: 1 }));
     };
 
-    // =========================
-    // LOADING / ERROR
-    // =========================
     if (isFirstLoad) {
         return (
             <LoadingPage
@@ -139,10 +127,6 @@ export default function PageMaquinas({ maquinasIniciais }) {
 
     return (
         <div className="flex-1 flex flex-col bg-gray-50">
-
-            {/* =========================
-                HEADER
-            ========================= */}
             <HeaderPage
                 icon={Grid2X2}
                 title="Máquinas em Operação"
@@ -157,10 +141,6 @@ export default function PageMaquinas({ maquinasIniciais }) {
             />
 
             <div className="p-4 flex-1 flex flex-col gap-4">
-
-                {/* =========================
-                    FILTROS (MESMO PADRÃO DO OUTRO)
-                ========================= */}
                 <Field
                     orientation="horizontal"
                     className="border bg-card p-3 rounded gap-3 items-end flex-wrap"
@@ -208,25 +188,25 @@ export default function PageMaquinas({ maquinasIniciais }) {
                     </FieldContent>
 
                     {/* STATUS (VISUAL, OPCIONAL) */}
-                    <FieldContent className="w-[320px]">
-                    <Tabs
-                        value={filtro.status}
-                        onValueChange={(value) =>
-                            setFiltro((prev) => ({
-                                ...prev,
-                                status: value,
-                                page: 1
-                            }))
-                        }
-                        className="w-full"
-                    >
-                        <FieldLabel>Status</FieldLabel>
-                        <TabsList className="w-full">
-                            <TabsTrigger value="all" className="flex-1">Todas</TabsTrigger>
-                            <TabsTrigger value="ativa" className="flex-1">Ativa</TabsTrigger>
-                            <TabsTrigger value="inativa" className="flex-1">Inativa</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
+                    <FieldContent className="w-xs">
+                        <Tabs
+                            value={filtro.status}
+                            onValueChange={(value) =>
+                                setFiltro((prev) => ({
+                                    ...prev,
+                                    status: value,
+                                    page: 1
+                                }))
+                            }
+                            className="w-full"
+                        >
+                            <FieldLabel>Status</FieldLabel>
+                            <TabsList className="w-full">
+                                <TabsTrigger value="all" className="flex-1">Todas</TabsTrigger>
+                                <TabsTrigger value="ativa" className="flex-1">Ativa</TabsTrigger>
+                                <TabsTrigger value="inativa" className="flex-1">Inativa</TabsTrigger>
+                            </TabsList>
+                        </Tabs>
                     </FieldContent>
 
                     {/* BOTÃO */}
@@ -236,9 +216,6 @@ export default function PageMaquinas({ maquinasIniciais }) {
 
                 </Field>
 
-                {/* =========================
-                    PAGINAÇÃO TOPO
-                ========================= */}
                 <Pagination>
                     <PaginationContent>
 
@@ -274,9 +251,6 @@ export default function PageMaquinas({ maquinasIniciais }) {
                     </PaginationContent>
                 </Pagination>
 
-                {/* =========================
-                    GRID
-                ========================= */}
                 <div className="p-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
                     {paginatedMaquinas.map((maquina, i) => (
@@ -284,23 +258,36 @@ export default function PageMaquinas({ maquinasIniciais }) {
                             key={maquina.id || i}
                             className="bg-white border rounded-2xl p-5 shadow-sm hover:shadow-lg transition"
                         >
-                            <div className="flex items-center gap-2 mb-3 text-gray-600">
-                                <Cpu size={18} />
-                                <span className="font-semibold text-sm">Máquina</span>
-                            </div>
+                            <div className='flex justify-between'>
+                                <div>
+                                    <div className="flex items-center gap-2 mb-3 text-gray-600">
+                                        <Cpu size={18} />
+                                        <span className="font-semibold text-sm">Máquina</span>
+                                    </div>
 
-                            <h1 className="text-lg font-bold">
-                                {maquina.nome}
-                            </h1>
+                                    <h1 className="text-lg font-bold">
+                                        {maquina.nome}
+                                    </h1>
 
-                            {maquina.descricao && (
-                                <p className="text-sm text-gray-500 mt-2">
-                                    {maquina.descricao}
-                                </p>
-                            )}
+                                    {maquina.descricao && (
+                                        <p className="text-sm text-gray-500 mt-2">
+                                            {maquina.descricao}
+                                        </p>
+                                    )}
 
-                            <div className="mt-4 text-xs text-gray-400">
-                                Código: {maquina.cod_maquina}
+                                    <div className="mt-4 text-xs text-gray-400">
+                                        Código: {maquina.cod_maquina}
+                                    </div>
+                                </div>
+
+                                <span
+                                    className={`inline-flex w-fit h-fit px-3 py-1 rounded-full text-sm font-medium ${maquina.status
+                                        ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300"
+                                        : "bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300"
+                                        }`}
+                                >
+                                    {maquina.status ? "Ativo" : "Inativo"}
+                                </span>
                             </div>
                         </div>
                     ))}

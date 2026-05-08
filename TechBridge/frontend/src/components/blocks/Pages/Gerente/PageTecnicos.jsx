@@ -25,8 +25,6 @@ export default function PageTecnicos({
         fetchOnMount: tecnicosIniciais.length === 0
     })
 
-
-
     // Verificando se a página está sendo carregada pela primeira vez
     const isFirstLoad = loadingTecnicos.fetch && (tecnicos ?? []).length === 0;
 
@@ -44,7 +42,7 @@ export default function PageTecnicos({
     }
 
     // Se houve erro ao carregar
-    else if (errorTecnicos.fetch) {
+    if (errorTecnicos.fetch) {
         content = (
             <ErrorPage
                 errorTitle={"Erro ao carregar técnicos"}
@@ -57,7 +55,7 @@ export default function PageTecnicos({
     }
 
     // Se estiver recarregando os dados
-    else if (loadingTecnicos.fetch) {
+    if (loadingTecnicos.fetch) {
         content = (<></>)
     }
 
