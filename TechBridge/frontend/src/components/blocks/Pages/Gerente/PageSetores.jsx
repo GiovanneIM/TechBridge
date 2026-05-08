@@ -89,7 +89,7 @@ export default function PageSetores({ setoresIniciais }) {
                                 <div
                                     key={setor.id || i}
                                     onClick={() =>
-                                        (window.location.href = `/setores/${setor.id}`)
+                                        (window.location.href = `/gerente/setores/${setor.id}`)
                                     }
                                     className="
                                         group cursor-pointer rounded-2xl overflow-hidden

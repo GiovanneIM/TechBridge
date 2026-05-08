@@ -1,66 +1,218 @@
-import { useEffect, useState, useCallback } from 'react';
-import { apiFetch } from '@/lib/api';
-import { API_URL } from '@/lib/utils';
+import { useEffect, useState, useCallback } from "react";
 
-// URL base da API
-// const API_BASE_URL = 'http://localhost:3000/api/setores';
-const API_BASE_URL = '/setores';
+import { apiFetch } from "@/lib/api";
+
+// ========================================
+// BASE URL
+// ========================================
+
+const API_BASE_URL = "/setores";
+
+// ========================================
+// HOOK
+// ========================================
 
 export function useSetores({
     initialSetores = [],
-    fetchOnMount = false
-} = {}
-) {
-    // Estado com as setores
+    fetchOnMount = false,
+} = {}) {
+
+    // ========================================
+    // STATES
+    // ========================================
+
+    // Lista de setores
     const [setores, setSetores] = useState(initialSetores);
 
-    // Estado que indica se há uma requisição em andamento
-    const [loadingSetores, setLoading] = useState({
+    // Setor individual
+    const [setorAtual, setSetorAtual] = useState(null);
+
+    // Loading
+    const [loadingSetores, setLoadingSetores] = useState({
         fetch: false,
+        fetchOne: false,
     });
 
-    // Estado para armazenar mensagem de erro (se houver)
-    const [errorSetores, setError] = useState({
+    // Errors
+    const [errorSetores, setErrorSetores] = useState({
         fetch: null,
+        fetchOne: null,
     });
 
-    // Busca todas as setores
+    // ========================================
+    // BUSCAR TODOS OS SETORES
+    // ========================================
+
     const fetchSetores = useCallback(async () => {
-        setLoading((prev) => ({ ...prev, fetch: true }));
-        setError((prev) => ({ ...prev, fetch: null }));
+
+        setLoadingSetores((prev) => ({
+            ...prev,
+            fetch: true,
+        }));
+
+        setErrorSetores((prev) => ({
+            ...prev,
+            fetch: null,
+        }));
 
         try {
-            // Chamada à API
-            const data = await apiFetch(API_BASE_URL + '/buscar');
 
-            // Se a resposta veio com status de erro
-            if (!data.sucesso) {
-                setError((prev) => ({ ...prev, fetch: data.mensagem }))
+            // GET /setores/buscar
+            const data = await apiFetch(
+                `${API_BASE_URL}/buscar`
+            );
+
+            // API retornou erro
+            if (!data?.sucesso) {
+
+                setErrorSetores((prev) => ({
+                    ...prev,
+                    fetch:
+                        data?.mensagem ||
+                        "Erro ao buscar setores",
+                }));
+
+                return;
             }
-            else {
-                // Atualizando o estado das setores
-                setSetores(data.dados.setores)
-            }
+
+            // Atualiza lista
+            setSetores(
+                data?.dados?.setores || []
+            );
 
         } catch (err) {
-            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
-            setError((prev) => ({ ...prev, fetch: 'Erro ao buscar setores, tente novamente mais tarde.' }))
+
+            // Erro de rede / servidor
+            setErrorSetores((prev) => ({
+                ...prev,
+                fetch:
+                    "Erro ao buscar setores, tente novamente mais tarde.",
+            }));
 
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
-            setLoading((prev) => ({ ...prev, fetch: false }));
+
+            // Finaliza loading
+            setLoadingSetores((prev) => ({
+                ...prev,
+                fetch: false,
+            }));
+
         }
+
     }, []);
 
-    useEffect(() => {
-        if (!fetchOnMount) return;
+    // ========================================
+    // BUSCAR SETOR POR ID
+    // ========================================
+
+    const fetchSetorById = useCallback(async (id) => {
+
+        if (!id) return null;
+
+        setLoadingSetores((prev) => ({
+            ...prev,
+            fetchOne: true,
+        }));
+
+        setErrorSetores((prev) => ({
+            ...prev,
+            fetchOne: null,
+        }));
+
+        try {
+
+            // GET /setores/:idSetor
+            const data = await apiFetch(
+                `${API_BASE_URL}/${id}`
+            );
+
+            // API retornou erro
+            if (!data?.sucesso) {
+
+                setErrorSetores((prev) => ({
+                    ...prev,
+                    fetchOne:
+                        data?.mensagem ||
+                        "Erro ao buscar setor",
+                }));
+
+                return null;
+            }
+
+            // Atualiza setor atual
+            const setor =
+                data?.dados?.setor || null;
+
+            setSetorAtual(setor);
+
+            return setor;
+
+        } catch (err) {
+
+            // Erro de rede / servidor
+            setErrorSetores((prev) => ({
+                ...prev,
+                fetchOne:
+                    "Erro ao buscar setor, tente novamente mais tarde.",
+            }));
+
+            return null;
+
+        } finally {
+
+            // Finaliza loading
+            setLoadingSetores((prev) => ({
+                ...prev,
+                fetchOne: false,
+            }));
+
+        }
+
+    }, []);
+
+    // ========================================
+    // REFETCH
+    // ========================================
+
+    const refetchSetores = () => {
         fetchSetores();
-    }, [fetchOnMount]);
+    };
+
+    // ========================================
+    // AUTO FETCH
+    // ========================================
+
+    useEffect(() => {
+
+        if (!fetchOnMount) return;
+
+        fetchSetores();
+
+    }, [fetchOnMount, fetchSetores]);
+
+    // ========================================
+    // RETURN
+    // ========================================
 
     return {
+
+        // Dados
         setores,
+        setorAtual,
+
+        // Loading
         loadingSetores,
+
+        // Errors
         errorSetores,
-        refetchSetores: fetchSetores
+
+        // Actions
+        fetchSetores,
+        fetchSetorById,
+        refetchSetores,
+
+        // Setters
+        setSetores,
+        setSetorAtual,
     };
 }
