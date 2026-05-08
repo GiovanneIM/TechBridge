@@ -17,12 +17,16 @@ export function useEmpresa() {
     // Membros de uma empresa
     const [membros, setMembros] = useState(null);
 
+    // Setores de uma empresa
+    const [setores, setSetores] = useState(null);
+
     // Loading
     const [loading, setLoading] = useState({
         obterEmpresas: null,
         criarEmpresa: null,
         obterEmpresa: null,
         obterMembros: null,
+        obterSetores: null,
     });
 
     // Erros
@@ -31,6 +35,7 @@ export function useEmpresa() {
         criarEmpresa: null,
         obterEmpresa: null,
         obterMembros: null,
+        obterSetores: null,
     });
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -169,7 +174,7 @@ export function useEmpresa() {
 
         try {
             console.log(id_empresa);
-            
+
             // REQUISIÇÃO
             const data = await apiFetch(`/empresas/${id_empresa}/membros`, {
                 method: 'GET'
@@ -203,17 +208,56 @@ export function useEmpresa() {
         }
     }, []);
 
+    // OBTER SETORES
+    const obterSetores = useCallback(async (id_empresa) => {
+        setLoading((prev) => ({ ...prev, obterSetores: true }));
+        setError((prev) => ({ ...prev, obterSetores: null }));
+
+        try {
+            console.log(id_empresa);
+
+            // REQUISIÇÃO
+            const data = await apiFetch(`/empresas/${id_empresa}/setores`, {
+                method: 'GET'
+            });
+
+            console.log(data);
+
+
+            // ERRO
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, obterSetores: data.mensagem }))
+            }
+
+            // SUCESSO
+            else {
+                // ATUALIZAR MEMBROS
+                setSetores(data.dados.membros)
+            }
+        } catch (err) {
+            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
+            if (err.message === 'Sessão expirada') return;
+
+            setError((prev) => ({
+                ...prev,
+                obterSetores: 'Erro ao obter membros, tente novamente mais tarde.'
+            }));
+
+        } finally {
+            // Independente de sucesso ou erro, o loading termina aqui
+            setLoading((prev) => ({ ...prev, obterSetores: false }));
+        }
+    }, []);
+
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     return {
         loading,
         error,
-        empresas,
-        empresa,
-        membros,
-        obterEmpresas,
+        empresas, obterEmpresas,
+        empresa, obterEmpresa,
+        membros, obterMembros,
+        setores, obterSetores,
         criarEmpresa,
-        obterEmpresa,
-        obterMembros,
     };
 }

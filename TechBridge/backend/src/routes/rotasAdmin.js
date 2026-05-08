@@ -5,6 +5,10 @@ import { validateZod } from '../middlewares/validate.js';
 import { paginacaoSchema } from '../schemas/query/paginacao.js';
 import { createEmpresaSchema } from '../schemas/body/empresa/createEmpresa.schema.js';
 
+console.log('validateZod:', typeof validateZod);
+console.log('schema:', typeof paginacaoSchema);
+console.log('controller:', typeof EmpresasController?.listar);
+
 const router = express.Router();
 
 /**
@@ -56,7 +60,7 @@ const router = express.Router();
  *       500:
  *         description: Não foi possível listar as empresas
  */
-router.get('/empresas', validateZod(paginacaoSchema, 'query'), EmpresasController.listarEmpresas)
+router.get('/empresas', validateZod(paginacaoSchema, 'query'), EmpresasController.listar)
 
 // CRIAR UMA EMPRESA
 /**
@@ -85,7 +89,7 @@ router.get('/empresas', validateZod(paginacaoSchema, 'query'), EmpresasControlle
  *       500:
  *         description: Não foi possível registrar a empresa
  */
-router.post('/empresas', validateZod(createEmpresaSchema, 'body'), EmpresasController.criarEmpresa);
+router.post('/empresas', validateZod(createEmpresaSchema, 'body'), EmpresasController.criar);
 
 // EXCLUIR UMA EMPRESA (E seus dados associados)
 /**

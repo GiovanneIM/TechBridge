@@ -4,13 +4,13 @@ import UserModel from './User.js';
 class EmpresasModel {
 
     // REGISTRAR EMPRESA 
-    static async criarEmpresa(empresa, gerente) {
+    static async criar(empresa, gerente) {
         try {
             // REGISTRAR NOVA EMPRESA
             const id_empresa = await create('empresas', empresa);
 
             // REGISTRAR O 1º GERENTE PRINCIPAL DA EMPRESA
-            const id_gerente = await UserModel.criar(gerente)
+            const id_gerente = await UserModel.criar(gerente, id_empresa);
 
             // RETORNANDO O ID DA EMPRESA E DO GERENTE
             return { id_empresa, id_gerente }
@@ -22,7 +22,7 @@ class EmpresasModel {
     }
 
     // LISTAR TODAS AS EMPRESAS (Com paginação)
-    static async listarEmpresas(limit, offset, page, where, like, likeOr) {
+    static async listar(limit, offset, page, where, like, likeOr) {
         try {
             // OBTER AS EMPRESAS
             const empresas = await read('empresas', {

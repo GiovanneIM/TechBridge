@@ -1,15 +1,15 @@
 import { create, read, update, deleteRecord, comparePassword, hashPassword, getConnection } from '../config/database.js';
 
-// Model para operações com usuários
 class UserModel {
     // CRIAR USUÁRIO
-    static async criar(dadosUsuario) {
+    static async criar(dadosUsuario, id_empresa) {
         try {
             // CRIPTOGRAFAR A SENHA
             const senhaHash = await hashPassword(dadosUsuario.senha);
             const dadosComHash = {
                 ...dadosUsuario,
-                senha: senhaHash
+                senha: senhaHash,
+                id_empresa
             };
 
             return await create('usuarios', dadosComHash);
@@ -66,10 +66,10 @@ class UserModel {
             const dados = rows[0] || null;
 
             // REMOVER A SENHA DOS DADOS OBTIDO
-            const { senha: _, ...dadosSemSenha } = dados;
+            // const { senha: _, ...dadosSemSenha } = dados;
 
             // RETORNAR OS DADOS SEM SENHA
-            return dadosSemSenha;
+            return dados;
         } catch (error) {
             console.error('Erro ao buscar usuário por email:', error);
             throw error;
@@ -104,7 +104,7 @@ class UserModel {
 
 
     // LISTAR USUÁRIOS DE UMA EMPRESA
-    static async obterMembros(id_empresa) {
+    static async listar(id_empresa) {
         try {
             // FAZER A CONSULTA
             const usuarios = await read("usuarios", {

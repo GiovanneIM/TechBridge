@@ -19,6 +19,8 @@ import { createUserSchema } from '../schemas/body/user/createUser.schema.js';
 // CONTROLLERS
 import EmpresasController from '../controllers/Empresas.js';
 import UserController from '../controllers/User.js';
+import SetoresController from '../controllers/Setores.js';
+import { createSetorSchema } from '../schemas/body/setor/createSetor.schema.js';
 
 const router = express.Router();
 
@@ -53,7 +55,7 @@ const router = express.Router();
 router.get(
     '/:id_empresa',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
-    EmpresasController.obterEmpresa             // Controller empresa - Obter Empresa
+    EmpresasController.obter                    // Controller empresa - Obter
 );
 
 /**
@@ -95,7 +97,7 @@ router.patch(
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
     validateZod(updateEmpresaSchema, 'body'),   // Body - Dados para atualizar
     gerentePrincipalMiddleware,                 // Gerente principal
-    EmpresasController.atualizarEmpresa         // Controller empresa - Atualizar
+    EmpresasController.atualizar                // Controller empresas - Atualizar
 );
 
 
@@ -129,7 +131,7 @@ router.get(
     '/:id_empresa/membros',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
     gerenteMiddleware,                          // Gerente
-    UserController.obterMembros                 // Controller empresa - Obter membros
+    UserController.listar                       // Controller users - Listar
 );
 
 /**
@@ -159,9 +161,10 @@ router.get(
  */
 router.post(
     '/:id_empresa/membros',
-    validateZod(params_Empresa, 'params'),
-    validateZod(createUserSchema, 'body'),
-    () => { }
+    validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    validateZod(createUserSchema, 'body'),      // Body - Dados do usuário
+    gerenteMiddleware,                          // Gerente
+    UserController.criar                        // Controller users - Criar
 );
 
 /**
@@ -197,9 +200,10 @@ router.post(
  *         description: Não foi possível listar o usuário da empresa
  */
 router.get(
-    '/:id_empresa/membros/:id_membro',
-    validateZod(params_EmpresaUsuario, 'params'),
-    () => { }
+    '/:id_empresa/membros/:id_usuario',
+    validateZod(params_EmpresaUsuario, 'params'),   // Params - ID da empresa, ID do usuário
+    gerenteMiddleware,                              // Gerente
+    UserController.obter                            // Controller users - Obter
 );
 
 /**
@@ -235,7 +239,7 @@ router.get(
  *         description: Não foi possível atualizar o usuário da empresa
  */
 router.patch(
-    '/:id_empresa/membros/:id_membro',
+    '/:id_empresa/membros/:id_usuario',
     validateZod(params_EmpresaUsuario, 'params'),
     () => { }
 );
@@ -267,7 +271,11 @@ router.patch(
  *       500:
  *         description: Não foi possível listar os setores da empresa
  */
-router.get('/:id_empresa/setores', () => { });
+router.get(
+    '/:id_empresa/setores',
+    validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    SetoresController.listar                    // Controller setores - listar
+);
 
 /**
  * @swagger
@@ -294,7 +302,13 @@ router.get('/:id_empresa/setores', () => { });
  *       500:
  *         description: Não foi possível registrar o setor para a empresa
  */
-router.post('/:id_empresa/setores', () => { });
+router.post(
+    '/:id_empresa/setores',
+    validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    validateZod(createSetorSchema, 'params'),   // Body - Dados do setor
+    gerenteMiddleware,                          // Gerente
+    SetoresController.criar                     // Controller Setores - Criar
+);
 
 /**
  * @swagger
@@ -328,7 +342,11 @@ router.post('/:id_empresa/setores', () => { });
  *       500:
  *         description: Não foi possível listado o setor da empresa
  */
-router.get('/:id_empresa/setores/:id_setor', () => { });
+router.get(
+    '/:id_empresa/setores/:cod_setor',
+    validateZod(params_EmpresaSetor, 'params'), // Params - ID da empresa, Código do setor
+    SetoresController.obter                     // Controller Setores - Obter
+);
 
 /**
  * @swagger
@@ -362,7 +380,10 @@ router.get('/:id_empresa/setores/:id_setor', () => { });
  *       500:
  *         description: Não foi possível atualizar o setor da empresa
  */
-router.patch('/:id_empresa/setores/:id_setor', () => { });
+router.patch(
+    '/:id_empresa/setores/:cod_setor',
+    () => { }
+);
 
 
 
@@ -391,7 +412,10 @@ router.patch('/:id_empresa/setores/:id_setor', () => { });
  *       500:
  *         description: Não foi possível listar as maquinas da empresa
  */
-router.get('/:id_empresa/maquinas', () => { });
+router.get(
+    '/:id_empresa/maquinas',
+    () => { }
+);
 
 /**
  * @swagger
@@ -423,7 +447,10 @@ router.get('/:id_empresa/maquinas', () => { });
  *       500:
  *         description: Não foi possível registrar a máquina para a empresa
  */
-router.post('/:id_empresa/setores/:id_setor/maquinas', () => { });
+router.post(
+    '/:id_empresa/setores/:cod_setor/maquinas',
+    () => { }
+);
 
 /**
  * @swagger
@@ -455,7 +482,10 @@ router.post('/:id_empresa/setores/:id_setor/maquinas', () => { });
  *       500:
  *         description: Não foi possível listar as maquinas do setor
  */
-router.get('/:id_empresa/setores/:id_setor/maquinas', () => { });
+router.get(
+    '/:id_empresa/setores/:cod_setor/maquinas',
+    () => { }
+);
 
 /**
  * @swagger
@@ -496,7 +526,10 @@ router.get('/:id_empresa/setores/:id_setor/maquinas', () => { });
  *       500:
  *         description: Não foi possível listar a máquina da empresa
  */
-router.get('/:id_empresa/setores/:id_setor/maquinas/:id_maquina', () => { });
+router.get(
+    '/:id_empresa/setores/:cod_setor/maquinas/:id_maquina',
+    () => { }
+);
 
 /**
  * @swagger
@@ -537,7 +570,10 @@ router.get('/:id_empresa/setores/:id_setor/maquinas/:id_maquina', () => { });
  *       500:
  *         description: Não foi possível atualizar a máquina
  */
-router.patch('/:id_empresa/setores/:id_setor/maquinas/:id_maquina', () => { });
+router.patch(
+    '/:id_empresa/setores/:cod_setor/maquinas/:id_maquina',
+    () => { }
+);
 
 
 export default router;
