@@ -28,10 +28,10 @@ const icones = {
 const coresFixas = [
     "bg-gradient-to-r from-blue-600 to-indigo-600",
     "bg-gradient-to-r from-emerald-600 to-teal-600",
+    "bg-gradient-to-r from-rose-600 to-red-600",
+    "bg-gradient-to-r from-amber-500 to-orange-500",
     "bg-gradient-to-r from-purple-600 to-pink-600",
-    "bg-gradient-to-r from-orange-500 to-red-500",
     "bg-gradient-to-r from-slate-600 to-slate-800",
-    "bg-gradient-to-r from-cyan-600 to-blue-600",
 ];
 
 // pega cor pelo índice
@@ -74,7 +74,7 @@ export default function PageSetores({ setoresIniciais }) {
         );
     } else {
         content = (
-            <div className="flex-1 px-6 py-6 bg-gray-50 dark:bg-slate-950">
+            <div className="flex-1 px-6 py-6 bg-gray-50 dark:bg-sidebar">
                 <div className="max-w-10xl mx-auto">
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -93,7 +93,7 @@ export default function PageSetores({ setoresIniciais }) {
                                     }
                                     className="
                                         group cursor-pointer rounded-2xl overflow-hidden
-                                        bg-white dark:bg-slate-900
+                                        bg-white dark:bg-sidebar
                                         border border-gray-200 dark:border-slate-800
                                         shadow-sm hover:shadow-xl
                                         transition-all duration-300
@@ -137,7 +137,7 @@ export default function PageSetores({ setoresIniciais }) {
 
                                     {/* FOOTER */}
                                     <div className="px-5 pb-4">
-                                        <span className="text-sm text-blue-600 font-medium opacity-0 group-hover:opacity-100 transition">
+                                        <span className="text-sm text-blue-600 dark:text-white font-medium opacity-0 group-hover:opacity-100 transition">
                                             Ver detalhes →
                                         </span>
                                     </div>

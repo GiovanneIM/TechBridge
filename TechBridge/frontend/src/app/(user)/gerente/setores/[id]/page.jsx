@@ -46,8 +46,8 @@ const icones = {
 const cores = {
     Azul: "bg-gradient-to-r from-blue-600 to-indigo-600",
     Verde: "bg-gradient-to-r from-emerald-600 to-teal-600",
-    Vermelho: "bg-gradient-to-r from-rose-600 to-red-600",
     Amarelo: "bg-gradient-to-r from-amber-500 to-orange-500",
+    Vermelho: "bg-gradient-to-r from-rose-600 to-red-600",
     Roxo: "bg-gradient-to-r from-purple-600 to-pink-600",
     Cinza: "bg-gradient-to-r from-slate-600 to-slate-800",
 };
@@ -112,7 +112,7 @@ export default function PageSetorId() {
     const cor = getCor(setorAtual.cor);
 
     return (
-        <div className="flex flex-col min-h-screen min-w-full bg-gray-50 dark:bg-slate-950">
+        <div className="flex flex-col min-h-screen min-w-full bg-gray-50 dark:bg-sidebar">
 
             {/* HEADER */}
             <HeaderPage
@@ -180,7 +180,7 @@ export default function PageSetorId() {
                         {/* INFO PRINCIPAL */}
                         <div className="lg:col-span-2 space-y-6">
 
-                            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border shadow-sm">
+                            <div className="bg-white dark:bg-sidebar rounded-2xl p-6 border shadow-sm">
                                 <div className="flex items-center gap-3 mb-4">
                                     <Info className="text-blue-500" />
                                     <h2 className="text-xl font-bold">
@@ -194,7 +194,7 @@ export default function PageSetorId() {
                             </div>
 
                             {/* RESPONSÁVEL */}
-                            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border shadow-sm space-y-4">
+                            <div className="bg-white dark:bg-sidebar rounded-2xl p-6 border shadow-sm space-y-4">
                                 <h2 className="text-xl font-bold">
                                     Responsável
                                 </h2>
@@ -216,7 +216,7 @@ export default function PageSetorId() {
                             </div>
 
                             {/* LOCALIZAÇÃO */}
-                            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border shadow-sm">
+                            <div className="bg-white dark:bg-sidebar rounded-2xl p-6 border shadow-sm">
                                 <h2 className="text-xl font-bold mb-4">
                                     Localização
                                 </h2>
@@ -233,7 +233,7 @@ export default function PageSetorId() {
                         <div className="space-y-6">
 
                             {/* STATUS */}
-                            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border shadow-sm">
+                            <div className="bg-white dark:bg-sidebar rounded-2xl p-6 border shadow-sm">
 
                                 <h2 className="text-xl font-bold mb-4">
                                     Status
@@ -262,7 +262,7 @@ export default function PageSetorId() {
                             </div>
 
                             {/* CONTROLE */}
-                            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border shadow-sm">
+                            <div className="bg-white dark:bg-sidebar rounded-2xl p-6 border shadow-sm">
 
                                 <h2 className="text-xl font-bold mb-4">
                                     Controle

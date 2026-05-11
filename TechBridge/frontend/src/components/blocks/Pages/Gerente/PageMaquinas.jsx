@@ -126,7 +126,7 @@ export default function PageMaquinas({ maquinasIniciais }) {
     }
 
     return (
-        <div className="flex-1 flex flex-col bg-gray-50">
+        <div className="flex-1 flex flex-col bg-gray-50 dark:bg-sidebar">
             <HeaderPage
                 icon={Grid2X2}
                 title="Máquinas em Operação"
@@ -256,13 +256,13 @@ export default function PageMaquinas({ maquinasIniciais }) {
                     {paginatedMaquinas.map((maquina, i) => (
                         <div
                             key={maquina.id || i}
-                            className="bg-white border rounded-2xl p-5 shadow-sm hover:shadow-lg transition"
+                            className="bg-white dark:bg-sidebar border rounded-2xl p-5 shadow-sm hover:shadow-lg transition"
                         >
                             <div className='flex justify-between'>
                                 <div>
                                     <div className="flex items-center gap-2 mb-3 text-gray-600">
-                                        <Cpu size={18} />
-                                        <span className="font-semibold text-sm">Máquina</span>
+                                        <Cpu className='dark:text-white' size={18} />
+                                        <span className="font-semibold dark:text-white text-sm">Máquina</span>
                                     </div>
 
                                     <h1 className="text-lg font-bold">
