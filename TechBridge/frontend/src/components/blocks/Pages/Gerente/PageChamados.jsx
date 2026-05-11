@@ -28,7 +28,7 @@ export default function PageChamados({
 
     // Conteúdo da página
     let content;
-
+    
     // Se estiver sendo carregada pela 1ª vez
     if (isFirstLoad) {
         content = (

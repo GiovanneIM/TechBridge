@@ -31,7 +31,9 @@ export function useUsers({
             // Chamada à API
             const data = await apiFetch(API_BASE_URL + '/tecnicos');
 
-            // Se a resposta veio com status de erro
+            console.log(data);
+
+            // Se a resposta veio com status de erroc
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, fetch: data.mensagem }))
             }
