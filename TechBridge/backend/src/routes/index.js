@@ -8,6 +8,7 @@ import authRotas from './rotasAuth.js';
 import adminRotas from './rotasAdmin.js'
 import empresasRotas from './rotasEmpresas.js';
 
+import testeRotas from './rotasTeste.js'
 
 // ROTAS PARA CONSERTAR
 import criptografiaRotas from './criptografia/rotasCripto.js';
@@ -25,6 +26,7 @@ router.use('/criptografia', criptografiaRotas);
 
 router.use('/empresas', authMiddleware, empresasRotas);
 
+router.use('/teste', testeRotas);
 
 
 
