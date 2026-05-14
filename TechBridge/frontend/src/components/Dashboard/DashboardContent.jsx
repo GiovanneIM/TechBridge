@@ -545,17 +545,6 @@ export default function DashboardContent({ dashboard }) {
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div className="flex gap-3">
-
-                                        <div className="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm text-zinc-600 backdrop-blur-xl dark:border-white/10 dark:bg-black/20 dark:text-zinc-400">
-                                            Últimos 30 dias
-                                        </div>
-
-                                        <div className="rounded-2xl border border-violet-200 bg-violet-50 px-5 py-3 text-sm text-violet-600 backdrop-blur-xl dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-300">
-                                            Tempo Real
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div className="rounded-[28px] border border-slate-200 bg-white p-5 backdrop-blur-2xl dark:border-white/10 dark:bg-black/20">
