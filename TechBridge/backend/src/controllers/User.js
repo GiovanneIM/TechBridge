@@ -68,7 +68,7 @@ class UserController {
 
         try {
             // REQUISIÇÃO
-            const membros = await UserModel.listar(id_empresa);
+            const membros = await UserModel.listarUsuarios(id_empresa);
 
             // SUCESSO: ENVIAR USUÁRIOS
             return res.status(200).json({
