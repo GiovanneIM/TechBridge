@@ -1,13 +1,11 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
@@ -16,17 +14,6 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-
-export const description = "A linear line chart"
-
-// const chartData = [
-//     { month: "January", desktop: 186 },
-//     { month: "February", desktop: 305 },
-//     { month: "March", desktop: 237 },
-//     { month: "April", desktop: 73 },
-//     { month: "May", desktop: 209 },
-//     { month: "June", desktop: 214 },
-// ]
 
 const chartConfig = {
     abertos: {
@@ -43,19 +30,15 @@ const chartConfig = {
     },
 }
 
-export default function LinhaEstados({
-    chamadosPorDia = []
-}) {
-
+export default function LinhaEstados({ chamadosPorDia = [] }) {
     const chartData = chamadosPorDia?.map((item, index, arr) => {
         const abertos = Number(item.abertos)
         const concluidos = Number(item.concluidos)
-        
-        const prev = arr[index - 1]
 
+        const prev = arr[index - 1]
         const prevBacklog = prev?.backlog || 0
 
-        const sobrecarga = prevBacklog + abertos - concluidos;
+        const sobrecarga = prevBacklog + abertos - concluidos
 
         return {
             data: new Date(item.data).toLocaleDateString("pt-BR"),
@@ -67,32 +50,36 @@ export default function LinhaEstados({
     })
 
     return (
-        <Card className="w-full xl:w-1/2">
-            <CardHeader>
+        <Card className="w-full h-[480px] flex flex-col">
+            <CardHeader className="shrink-0">
                 <CardTitle>Chamados por dia</CardTitle>
-                <CardDescription>Fluxo diário de chamados: abertos, atendidos e concluídos</CardDescription>
+                <CardDescription>
+                    Fluxo diário de chamados: abertos, atendidos e concluídos
+                </CardDescription>
             </CardHeader>
-            <CardContent>
-                <ChartContainer config={chartConfig}>
+
+            <CardContent className="flex-1 p-0 h-full">
+                <ChartContainer config={chartConfig} className="w-full h-full">
                     <LineChart
-                        accessibilityLayer
                         data={chartData}
-                        margin={{
-                            left: 12,
-                            right: 12,
-                        }}
+                        height={320}
+                        margin={{ left: 12, right: 12, top: 10, bottom: 10 }}
                     >
                         <CartesianGrid vertical={false} />
+
                         <XAxis
                             dataKey="data"
                             tickLine={false}
                             axisLine={false}
                             tickMargin={8}
                         />
+
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent hideLabel />}
                         />
+
+                        {/* 🔵 LINHAS SUAVES */}
                         <Line
                             dataKey="abertos"
                             type="monotone"
