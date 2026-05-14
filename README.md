@@ -39,10 +39,19 @@ O backend segue o padrão **MVC (Model-View-Controller)**:
 ### 📂 Estrutura Detalhada do Backend
 ```
 backend/
-├── config/
-│   ├── database.js         # Configuração de conexão com MySQL
-│   └── jwt.js              # Configuração JWT (secret, expiração)
-│
+├── migrations/
+├── src/
+│   ├── config/                 
+│   │   ├── database.js         # Configuração de conexão com MySQL
+│   │   └── jwt.js              # Configuração JWT (secret, expiração)
+│   ├── controllers/            # Controladores - Recebem os dados da requisição, realizam a validação e os passam aos models
+│   ├── middlewares/            # Funções para controle das requisições
+│   ├── models/                 # Modelos para acesso ao banco de dados
+│   ├── routes/                 # Definição das rotas 
+│   ├── schemas/                # Configuração dos esquemas do ZOD
+│   └── utils/                  # Definição de funções e variáveis úteis
+├── uploads/                # Pasta de imagens e documentos dos usuários
+│   app.js                  # Arquivo de configuração e inicialização do banckend
 ```
 
 ## 🎨 Arquitetura do Frontend
