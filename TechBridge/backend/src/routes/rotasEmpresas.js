@@ -24,6 +24,8 @@ import { createSetorSchema } from '../schemas/body/setor/createSetor.schema.js';
 import { updateUserSchema } from '../schemas/body/user/updateUser.schema.js';
 import { updateSetorSchema } from '../schemas/body/setor/updateSetor.schema.js';
 import MaquinaController from '../controllers/Maquinas.js';
+import { createMaquinaSchema } from '../schemas/body/maquina/createMaquina.schema.js';
+import { updateMaquinaSchema } from '../schemas/body/maquina/updateMaquina.schema.js';
 
 const router = express.Router();
 
@@ -458,6 +460,9 @@ router.get(
  */
 router.post(
     '/:id_empresa/setores/:cod_setor/maquinas',
+    validateZod(params_Empresa, 'params'),
+    validateZod(createMaquinaSchema, 'body'),
+    gerenteMiddleware,
     () => { }
 );
 
@@ -538,8 +543,8 @@ router.get(
  */
 router.get(
     '/:id_empresa/setores/:cod_setor/maquinas/:cod_maquina',
-    validateZod(params_EmpresaMaquina, 'params'),
-    MaquinaController.obter
+    validateZod(params_EmpresaMaquina, 'params'),               // Params - ID da empresa, Código do setor e Código da máquina
+    MaquinaController.obter                                     // Controller Maquinas - Obter
 );
 
 /**
@@ -583,6 +588,9 @@ router.get(
  */
 router.patch(
     '/:id_empresa/setores/:cod_setor/maquinas/:id_maquina',
+    validateZod(params_EmpresaMaquina, 'params'),
+    validateZod(updateMaquinaSchema, 'body'),
+    gerenteMiddleware,
     () => { }
 );
 
