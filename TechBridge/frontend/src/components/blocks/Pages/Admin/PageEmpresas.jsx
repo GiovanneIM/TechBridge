@@ -151,7 +151,7 @@ export default function PageEmpresas() {
                     </FieldContent>
 
                     {/* STATUS */}
-                    <FieldContent className="w-[320px]">
+                    <FieldContent className="w-xs">
                         <FieldLabel>Status</FieldLabel>
 
                         <Tabs
