@@ -9,7 +9,7 @@ import authRotas from './rotasAuth.js';
 import adminRotas from './rotasAdmin.js'
 import empresasRotas from './rotasEmpresas.js';
 
-import testeRotas from './rotasTeste.js'
+import testeRotas from './rotas_consertar/rotasTeste.js'
 
 // ROTAS PARA CONSERTAR
 

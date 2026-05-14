@@ -21,6 +21,8 @@ import EmpresasController from '../controllers/Empresas.js';
 import UserController from '../controllers/User.js';
 import SetoresController from '../controllers/Setores.js';
 import { createSetorSchema } from '../schemas/body/setor/createSetor.schema.js';
+import { updateUserSchema } from '../schemas/body/user/updateUser.schema.js';
+import { updateSetorSchema } from '../schemas/body/setor/updateSetor.schema.js';
 
 const router = express.Router();
 
@@ -241,6 +243,8 @@ router.get(
 router.patch(
     '/:id_empresa/membros/:id_usuario',
     validateZod(params_EmpresaUsuario, 'params'),
+    validateZod(updateUserSchema, 'body'),
+    gerenteMiddleware,
     () => { }
 );
 
@@ -305,7 +309,7 @@ router.get(
 router.post(
     '/:id_empresa/setores',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
-    validateZod(createSetorSchema, 'params'),   // Body - Dados do setor
+    validateZod(createSetorSchema, 'body'),     // Body - Dados do setor
     gerenteMiddleware,                          // Gerente
     SetoresController.criar                     // Controller Setores - Criar
 );
@@ -382,6 +386,9 @@ router.get(
  */
 router.patch(
     '/:id_empresa/setores/:cod_setor',
+    validateZod(params_EmpresaSetor, 'params'),
+    validateZod(updateSetorSchema, 'body'),
+    gerenteMiddleware,
     () => { }
 );
 
