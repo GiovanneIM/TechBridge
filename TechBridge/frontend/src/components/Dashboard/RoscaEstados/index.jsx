@@ -31,40 +31,42 @@ const chartConfig = {
     }
 }
 
-export default function RoscaEstados({
-    chamadosPorEstados
-}) {
-    // Construindo array com os dados do gráfico
+export default function RoscaEstados({ chamadosPorEstados }) {
     const chartData = []
+
     for (const estado in chamadosPorEstados) {
         chartData.push({
-            estado: estado,
+            estado,
             total: chamadosPorEstados[estado],
             fill: `var(--color-${estado})`
         })
     }
 
     return (
-        <Card className="flex flex-col w-full md:w-1/2 py-4" >
-            <CardHeader className="items-center pb-0" >
-                <CardTitle className="text-md">Distribuição de chamados por estado </CardTitle>
-                {/* <CardDescription>Distribuição de chamados por estado</CardDescription> */}
+        <Card className="flex flex-col w-full h-full py-4">
+            <CardHeader className="items-center pb-0">
+                <CardTitle className="text-md">
+                    Distribuição de chamados por estado
+                </CardTitle>
             </CardHeader>
-            < CardContent className="flex-1 pb-0" >
+
+            <CardContent className="flex-1 flex items-center justify-center">
                 <ChartContainer
                     config={chartConfig}
-                    className="mx-auto aspect-square max-h-[300px]"
+                    className="w-full h-full"
                 >
                     <PieChart>
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent />}
                         />
-                        < Pie
+
+                        <Pie
                             data={chartData}
                             dataKey="total"
                             nameKey="estado"
-                            innerRadius={60}
+                            innerRadius="60%"
+                            outerRadius="90%"
                             strokeWidth={5}
                         />
                     </PieChart>
