@@ -40,13 +40,13 @@ class UserController {
 
         } catch (error) {
             // ERROS:
-            console.error('Erro ao obter os membros da empresa:', error);
+            console.error('Erro ao registrar um membro na empresa:', error);
 
             // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível obter os membros da empresa'
+                mensagem: 'Não foi possível registrar o membros na empresa'
             });
         }
 

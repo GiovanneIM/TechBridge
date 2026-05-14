@@ -4,6 +4,7 @@ import { adminMiddleware, authMiddleware } from '../middlewares/authMiddleware.j
 const router = express.Router();
 
 // IMPORTAR AS ROTAS
+import criptografiaRotas from './criptografia/rotasCripto.js';
 import authRotas from './rotasAuth.js';
 import adminRotas from './rotasAdmin.js'
 import empresasRotas from './rotasEmpresas.js';
@@ -11,7 +12,6 @@ import empresasRotas from './rotasEmpresas.js';
 import testeRotas from './rotasTeste.js'
 
 // ROTAS PARA CONSERTAR
-import criptografiaRotas from './criptografia/rotasCripto.js';
 
 import userRotas from './rotas_consertar/rotasUser.js';
 import chamadosRotas from './rotas_consertar/rotasChamados.js';
@@ -20,16 +20,17 @@ import setoresRotas from './rotas_consertar/rotasSetores.js';
 import painelRotas from './rotas_consertar/rotasPainel.js';
 
 // ATIVAR AS ROTAS
+router.use('/criptografia', criptografiaRotas);
 router.use('/auth', authRotas);
 router.use('/admin', authMiddleware, adminMiddleware, adminRotas);
-router.use('/criptografia', criptografiaRotas);
 
+// ROTAS PARA FINALIZAR
 router.use('/empresas', authMiddleware, empresasRotas);
 
+// ROTAS DE TESTE
 router.use('/teste', testeRotas);
 
-
-
+// ROTAS PARA CONSERTAR
 router.use('/user', userRotas);
 router.use('/chamados', chamadosRotas);
 router.use('/maquinas', maquinasRotas);
