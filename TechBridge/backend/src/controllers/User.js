@@ -120,19 +120,19 @@ class UserController {
             // SUCESSO: ENVIAR USUARIO
             return res.status(200).json({
                 sucesso: true,
-                mensagem: `Empresa ${id_empresa} - Membros obtido com sucesso`,
+                mensagem: `Empresa ${id_empresa} - Membro obtido com sucesso`,
                 dados: { membro },
             });
         }
         catch (error) {
             // ERROS:
-            console.error('Erro ao obter os membros da empresa:', error);
+            console.error('Erro ao obter membro da empresa:', error);
 
             // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível obter os membros da empresa'
+                mensagem: 'Não foi possível obter o membro da empresa'
             });
         }
     }

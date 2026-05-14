@@ -25,7 +25,7 @@ class SetoresController {
             // CÓDIGO EM USO NA EMPRESA
             const setorCod = await SetoresModel.buscarCodigo(id_empresa, dados.codigo);
             if (setorCod) {
-                return res.status(403).json({
+                return res.status(409).json({
                     sucesso: false,
                     erro: 'Código em uso',
                     mensagem: 'O código já está em uso por outro setor'
@@ -113,6 +113,15 @@ class SetoresController {
         try {
             // BUSCAR SETOR
             const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor);
+
+            // SETOR NAO ENCONTRADO
+            if (!setor) {
+                return res.status(404).json({
+                    sucesso: false,
+                    erro: 'Setor não encontrado',
+                    mensagem: `O setor procurado não foi encontrado`,
+                });
+            }
 
             // SUCESSO: ENVIAR SETORES
             res.status(200).json({
