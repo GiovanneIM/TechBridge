@@ -5,10 +5,6 @@ import { validateZod } from '../middlewares/validate.js';
 import { paginacaoSchema } from '../schemas/query/paginacao.js';
 import { createEmpresaSchema } from '../schemas/body/empresa/createEmpresa.schema.js';
 
-console.log('validateZod:', typeof validateZod);
-console.log('schema:', typeof paginacaoSchema);
-console.log('controller:', typeof EmpresasController?.listar);
-
 const router = express.Router();
 
 /**

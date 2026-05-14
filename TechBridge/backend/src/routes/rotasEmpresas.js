@@ -11,21 +11,22 @@ import {
 // ZOD
 import { validateZod } from '../middlewares/validate.js';
 import { params_Empresa } from '../schemas/params/empresa.schema.js';
-import { params_EmpresaUsuario } from '../schemas/params/empresa_usuario.schema.js';
-import { params_EmpresaSetor } from '../schemas/params/empresa_setor.schema.js';
-import { params_EmpresaMaquina } from '../schemas/params/empresa_setor_maquina.schema.js';
 import { updateEmpresaSchema } from '../schemas/body/empresa/updateEmpresa.schema.js';
+import { params_EmpresaUsuario } from '../schemas/params/empresa_usuario.schema.js';
 import { createUserSchema } from '../schemas/body/user/createUser.schema.js';
+import { updateUserSchema } from '../schemas/body/user/updateUser.schema.js';
+import { params_EmpresaSetor } from '../schemas/params/empresa_setor.schema.js';
+import { createSetorSchema } from '../schemas/body/setor/createSetor.schema.js';
+import { updateSetorSchema } from '../schemas/body/setor/updateSetor.schema.js';
+import { params_EmpresaMaquina } from '../schemas/params/empresa_setor_maquina.schema.js';
+import { createMaquinaSchema } from '../schemas/body/maquina/createMaquina.schema.js';
+import { updateMaquinaSchema } from '../schemas/body/maquina/updateMaquina.schema.js';
 // CONTROLLERS
 import EmpresasController from '../controllers/Empresas.js';
 import UserController from '../controllers/User.js';
 import SetoresController from '../controllers/Setores.js';
-import { createSetorSchema } from '../schemas/body/setor/createSetor.schema.js';
-import { updateUserSchema } from '../schemas/body/user/updateUser.schema.js';
-import { updateSetorSchema } from '../schemas/body/setor/updateSetor.schema.js';
 import MaquinaController from '../controllers/Maquinas.js';
-import { createMaquinaSchema } from '../schemas/body/maquina/createMaquina.schema.js';
-import { updateMaquinaSchema } from '../schemas/body/maquina/updateMaquina.schema.js';
+
 
 const router = express.Router();
 
@@ -425,7 +426,7 @@ router.patch(
 router.get(
     '/:id_empresa/maquinas',
     validateZod(params_Empresa, 'params'),          // Params - ID da empresa
-    MaquinaController.listarDaEmpresa               // Controller Maquinas - Listar da empresa
+    MaquinaController.listarDaEmpresa               // Controller Maquinas - Listar máquinas da empresa
 );
 
 /**
@@ -460,10 +461,10 @@ router.get(
  */
 router.post(
     '/:id_empresa/setores/:cod_setor/maquinas',
-    validateZod(params_Empresa, 'params'),
-    validateZod(createMaquinaSchema, 'body'),
-    gerenteMiddleware,
-    () => { }
+    validateZod(params_Empresa, 'params'),          // Params - ID da empresa e Código do chamado
+    validateZod(createMaquinaSchema, 'body'),       // Body - Dados da máquina
+    gerenteMiddleware,                              // Gerente
+    MaquinaController.criar                         // Controller Maquinas - Criar
 );
 
 /**
@@ -499,7 +500,7 @@ router.post(
 router.get(
     '/:id_empresa/setores/:cod_setor/maquinas',
     validateZod(params_EmpresaSetor, 'params'),     // Params - ID da empresa, Código do setor
-    MaquinaController.listarDoSetor                 // Controller Maquinas - Listar do setor
+    MaquinaController.listarDoSetor                 // Controller Maquinas - Listar máquinas do setores
 );
 
 /**

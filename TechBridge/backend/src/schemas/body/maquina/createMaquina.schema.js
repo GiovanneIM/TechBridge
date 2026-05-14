@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { cod_maquina, descricao, nome } from '../../dados/maquina';
+import { cod_maquina, descricao, nome } from '../../dados/maquina.js';
 
 // ESQUEMA DE CRIAÇÃO DE MÁQUINA
 export const createMaquinaSchema = z.object({

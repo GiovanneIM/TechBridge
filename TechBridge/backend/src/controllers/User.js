@@ -136,6 +136,9 @@ class UserController {
             });
         }
     }
+
+    // ATUALIZAR UM USUÁRIO
+    static async atualizar(req, res) { }
 }
 
 export default UserController;

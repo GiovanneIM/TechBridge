@@ -1,4 +1,3 @@
-
 import SetoresModel from "../models/Setores.js";
 import { pertenceAEmpresa } from "../utils/validacoes.js";
 
@@ -143,6 +142,8 @@ class SetoresController {
         }
     }
 
+    // ATUALIZAR UM SETOR
+    static async atualizar(req, res) { }
 }
 
 export default SetoresController;

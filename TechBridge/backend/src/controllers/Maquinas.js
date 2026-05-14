@@ -4,7 +4,59 @@ import { pertenceAEmpresa } from "../utils/validacoes.js";
 
 class MaquinaController {
     // REGISTRAR UMA NOVA MÁQUINA
-    static async criar(req, res) { }
+    static async criar(req, res) {
+        // OBTER O ID DA EMPRESA E CÓDIGO DO SETOR
+        const { id_empresa, cod_setor } = req.params;
+
+        // OBTER DADOS DA MÁQUINA
+        const dados = req.body;
+
+        // VERIFICANDO SE O USUÁRIO TEM ACESSO
+        const acesso = pertenceAEmpresa(req, id_empresa);
+        if (!acesso) {
+            return res.status(403).json({
+                sucesso: false,
+                erro: 'Permissão insuficiente',
+                mensagem: 'Você não pertence a esssa empresa'
+            });
+        }
+
+        try {
+            // PROCURAR PELO SETOR PARA OBTER O ID
+            const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor);
+
+            // SETOR NAO ENCONTRADO
+            if (!setor) {
+                return res.status(404).json({
+                    sucesso: false,
+                    erro: 'Setor não encontrado',
+                    mensagem: `O setor não foi encontrado`,
+                });
+            }
+
+            // REGISTRAR A MÁQUINA
+            const resultado = await MaquinasModel.criar(setor.id, dados);
+
+            // SUCESSO: ENVIAR ID DA MAQUINA
+            res.status(201).json({
+                sucesso: true,
+                mensagem: `Máquina registrada com sucesso - ID ${resultado.id_setor}`,
+                dados: resultado
+            });
+
+        } catch (error) {
+            // ERROS:
+            console.error('Erro ao registrar uma máquina:', error);
+
+            // ERRO DO SERVIDOR
+            return res.status(500).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Não foi possível registrar a máquina na empresa'
+            });
+        }
+
+    }
 
     // LISTAR MAQUINAS DE UMA EMPRESA
     static async listarDaEmpresa(req, res) {
@@ -143,6 +195,9 @@ class MaquinaController {
             });
         }
     }
+
+    // ATUALIZAR UMA MÁQUINA
+    static async atualizar(req, res) { }
 }
 
 export default MaquinaController;
