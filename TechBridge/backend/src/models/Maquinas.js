@@ -20,7 +20,7 @@ class MaquinasModel {
     }
 
     // LISTAR MÁQUINAS DE UMA EMPRESA
-    static async listar(id_empresa) {
+    static async listarDaEmpresa(id_empresa) {
         try {
             // FAZER A CONSULTA
             const maquinas = await read("maquinas m", {
@@ -40,12 +40,28 @@ class MaquinasModel {
         }
     }
 
+    // LISTAR MÁQUINAS DE UM SETOR
+    static async listarDoSetor(id_setor) {
+        try {
+            // FAZER A CONSULTA
+            const maquinas = await read("maquinas", {
+                where: { id_setor },
+            })
+
+            // RETORNANDO AS MÁQUINAS
+            return maquinas
+        } catch (error) {
+            console.error('Erro ao listar máquinas:', error);
+            throw error;
+        }
+    }
+
     // BUSCAR POR CÓDIGO
-    static async buscarCodigo(id_empresa, cod_setor, codigo) {
+    static async buscarCodigo(id_setor, codigo) {
         try {
             // FAZER A CONSULTA
             const maquina = await read("maquinas", {
-                where: { id_empresa, id_setor, codigo }
+                where: { id_setor, codigo }
             })
 
             // RETORNANDO O SETOR

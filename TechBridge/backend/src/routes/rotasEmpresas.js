@@ -23,6 +23,7 @@ import SetoresController from '../controllers/Setores.js';
 import { createSetorSchema } from '../schemas/body/setor/createSetor.schema.js';
 import { updateUserSchema } from '../schemas/body/user/updateUser.schema.js';
 import { updateSetorSchema } from '../schemas/body/setor/updateSetor.schema.js';
+import MaquinaController from '../controllers/Maquinas.js';
 
 const router = express.Router();
 
@@ -421,7 +422,8 @@ router.patch(
  */
 router.get(
     '/:id_empresa/maquinas',
-    () => { }
+    validateZod(params_Empresa, 'params'),          // Params - ID da empresa
+    MaquinaController.listarDaEmpresa               // Controller Maquinas - Listar da empresa
 );
 
 /**
@@ -491,7 +493,8 @@ router.post(
  */
 router.get(
     '/:id_empresa/setores/:cod_setor/maquinas',
-    () => { }
+    validateZod(params_EmpresaSetor, 'params'),     // Params - ID da empresa, Código do setor
+    MaquinaController.listarDoSetor                 // Controller Maquinas - Listar do setor
 );
 
 /**
