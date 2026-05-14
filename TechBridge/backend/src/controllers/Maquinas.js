@@ -22,13 +22,13 @@ class MaquinaController {
 
         try {
             // REQUISIÇÃO
-            const membros = await MaquinasModel.listarDaEmpresa(id_empresa);
+            const maquinas = await MaquinasModel.listarDaEmpresa(id_empresa);
 
-            // SUCESSO: ENVIAR USUÁRIOS
+            // SUCESSO: ENVIAR MÁQUINAS
             return res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Máquinas listadas com sucesso`,
-                dados: { membros },
+                dados: { maquinas },
             });
         }
         catch (error) {
@@ -46,7 +46,7 @@ class MaquinaController {
 
     // LISTAR MAQUINAS DE UM SETOR
     static async listarDoSetor(req, res) {
-        // OBTER O ID DA EMPRESA
+        // OBTER O ID DA EMPRESA E CÓDIGO DO SETOR
         const { id_empresa, cod_setor } = req.params;
 
         // VERIFICANDO SE O USUÁRIO TEM ACESSO
@@ -72,13 +72,13 @@ class MaquinaController {
             }
 
             // REQUISIÇÃO
-            const membros = await MaquinasModel.listarDoSetor(setor.id);
+            const maquinas = await MaquinasModel.listarDoSetor(setor.id);
 
             // SUCESSO: ENVIAR MÁQUINAS
             return res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Máquinas listadas com sucesso`,
-                dados: { membros },
+                dados: { maquinas },
             });
         }
         catch (error) {
@@ -95,7 +95,54 @@ class MaquinaController {
     }
 
     // OBTER UMA MÁQUINA DA EMPRESA
-    static async obter(req, res) { }
+    static async obter(req, res) {
+        // OBTER O ID DA EMPRESA, CÓDIGO DO SETOR E CÓDIGO DA MÁQUINA
+        const { id_empresa, cod_setor, cod_maquina } = req.params;
+
+        // VERIFICANDO SE O USUÁRIO TEM ACESSO
+        const acesso = pertenceAEmpresa(req, id_empresa);
+        if (!acesso) {
+            return res.status(403).json({
+                sucesso: false,
+                mensagem: 'Você não tem acesso a essa rota'
+            });
+        }
+
+        try {
+            // PROCURAR PELO SETOR PARA OBTER O ID
+            const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor);
+
+            // SETOR NAO ENCONTRADO
+            if (!setor) {
+                return res.status(404).json({
+                    sucesso: false,
+                    erro: 'Setor não encontrado',
+                    mensagem: `O setor não foi encontrado`,
+                });
+            }
+
+            // REQUISIÇÃO
+            const maquina = await MaquinasModel.buscarCodigo(setor.id, cod_maquina);
+
+            // SUCESSO: ENVIAR MÁQUINAS
+            return res.status(200).json({
+                sucesso: true,
+                mensagem: `Empresa ${id_empresa} - Máquina listada com sucesso`,
+                dados: { maquina },
+            });
+        }
+        catch (error) {
+            // ERROS:
+            console.error('Erro ao obter a máquina da empresa:', error);
+
+            // ERRO DO SERVIDOR
+            return res.status(500).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Não foi possível obter a máquina da empresa'
+            });
+        }
+    }
 }
 
 export default MaquinaController;

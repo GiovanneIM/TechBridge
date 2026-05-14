@@ -1,4 +1,5 @@
-import { bio, email, nome, telefone } from "../../dados/usuario";
+import { z } from 'zod';
+import { bio, email, nome, telefone } from "../../dados/usuario.js";
 
 // ESQUEMA DE ATUALIZAÇÃO DE USUÁRIO (Exceto senha e foto)
 export const updateUserSchema = z.object({

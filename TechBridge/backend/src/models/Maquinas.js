@@ -57,11 +57,15 @@ class MaquinasModel {
     }
 
     // BUSCAR POR CÓDIGO
-    static async buscarCodigo(id_setor, codigo) {
+    static async buscarCodigo(id_setor, cod_maquina) {
         try {
+            console.log(id_setor);
+            console.log(cod_maquina);
+            
+            
             // FAZER A CONSULTA
             const maquina = await read("maquinas", {
-                where: { id_setor, codigo }
+                where: { id_setor, cod_maquina }
             })
 
             // RETORNANDO O SETOR

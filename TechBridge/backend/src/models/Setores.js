@@ -36,11 +36,11 @@ class SetoresModel {
     }
 
     // BUSCAR POR CÓDIGO
-    static async buscarCodigo(id_empresa, codigo) {
+    static async buscarCodigo(id_empresa, cod_setor) {
         try {
             // FAZER A CONSULTA
             const setor = await read("setores", {
-                where: { id_empresa, codigo }
+                where: { id_empresa, cod_setor }
             })
 
             // RETORNANDO O SETOR

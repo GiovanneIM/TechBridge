@@ -537,8 +537,9 @@ router.get(
  *         description: Não foi possível listar a máquina da empresa
  */
 router.get(
-    '/:id_empresa/setores/:cod_setor/maquinas/:id_maquina',
-    () => { }
+    '/:id_empresa/setores/:cod_setor/maquinas/:cod_maquina',
+    validateZod(params_EmpresaMaquina, 'params'),
+    MaquinaController.obter
 );
 
 /**
