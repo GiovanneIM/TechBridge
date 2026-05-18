@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
+import { useChamados } from "@/hooks/hooks2/useChamados"
+import { useMaquinas } from "@/hooks/hooks2/useMaquina"
+import { useSetores } from "@/hooks/hooks2/useSetores"
 import {
     Activity,
     AlertTriangle,
@@ -20,20 +23,70 @@ import {
     Sun,
     Moon,
 } from "lucide-react"
-
-import LinhaUm from "./LinhaUm"
 import CardsEstados from "./CardsEstados"
 import RoscaEstados from "./RoscaEstados"
 import LinhaEstados from "./LinhaEstados"
 
 export default function DashboardContent({ dashboard }) {
 
+    // =====================================================
+    // CHAMADOS (HOOK)
+    // =====================================================
+    const {
+        chamados,
+        loadingChamados,
+        errorChamados,
+        refetchChamados
+    } = useChamados()
+
+    const {
+        maquinas,
+        loading,
+        error,
+        refetchMaquinas
+    } = useMaquinas()
+
+    const {
+        setores,
+        loadingSetores,
+        errorSetores,
+        refetchSetores
+    } = useSetores()
+
+    // =====================================================
+    // RESUMO DOS CHAMADOS (CALCULADO NO FRONTEND)
+    // =====================================================
+    const chamadosAbertos = useMemo(
+        () => chamados.filter(c => c.estado === "aberto").length,
+        [chamados]
+    )
+
+    const chamadosAndamento = useMemo(
+        () => chamados.filter(c => c.estado === "andamento").length,
+        [chamados]
+    )
+
+    const chamadosConcluidos = useMemo(
+        () => chamados.filter(c => c.estado === "concluido").length,
+        [chamados]
+    )
+
+    // =====================================================
+    // OUTROS DADOS (dashboard já existente)
+    // =====================================================
     const empresasAtivas = dashboard?.empresasAtivas ?? 7
-    const setoresAtivos = dashboard?.setoresAtivos ?? 4
-    const maquinasAtivas = dashboard?.maquinasAtivas ?? 3
-    const chamadosAbertos = dashboard?.chamadosAbertos ?? 2
-    const chamadosAndamento = dashboard?.chamadosAndamento ?? 4
-    const chamadosConcluidos = dashboard?.chamadosConcluidos ?? 2
+
+    const setoresAtivos = useMemo(
+        () => setores?.filter(s => s.id)?.length ?? 0,
+        [setores]
+    );
+
+
+    const maquinasAtivas = useMemo(
+        () => maquinas.filter(m => m.status === "ativa").length,
+        [maquinas]
+    )
+
 
     // Tema: 'light' | 'dark'
     const [theme, setTheme] = useState(() => {
@@ -47,7 +100,7 @@ export default function DashboardContent({ dashboard }) {
     useEffect(() => {
         try {
             localStorage.setItem("theme", theme)
-        } catch {}
+        } catch { }
         if (typeof document !== "undefined") {
             if (theme === "dark") {
                 document.documentElement.classList.add("dark")
@@ -96,6 +149,13 @@ export default function DashboardContent({ dashboard }) {
                 <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 
                     <div className="space-y-4">
+
+                        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-50 px-4 py-2 text-sm text-cyan-600 backdrop-blur-xl dark:border-cyan-500/20 dark:bg-cyan-500/10 dark:text-cyan-300">
+
+                            <Sparkles className="h-4 w-4" />
+
+                            Sistema Inteligente de Gestão Industrial
+                        </div>
 
                         <div>
 
