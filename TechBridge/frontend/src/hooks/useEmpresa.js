@@ -20,6 +20,9 @@ export function useEmpresa() {
     // Setores de uma empresa
     const [setores, setSetores] = useState(null);
 
+    // Maquinas de uma empresa
+    const [maquinas, setMaquinas] = useState(null);
+
     // Loading
     const [loading, setLoading] = useState({
         obterEmpresas: null,
@@ -27,6 +30,7 @@ export function useEmpresa() {
         obterEmpresa: null,
         obterMembros: null,
         obterSetores: null,
+        obterMaquinas: null
     });
 
     // Erros
@@ -36,6 +40,7 @@ export function useEmpresa() {
         obterEmpresa: null,
         obterMembros: null,
         obterSetores: null,
+        obterMaquinas: null
     });
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -249,6 +254,47 @@ export function useEmpresa() {
         }
     }, []);
 
+    // OBTER MÁQUINAS
+    const obterMaquinas = useCallback(async (id_empresa) => {
+        setLoading((prev) => ({ ...prev, obterMaquinas: true }));
+        setError((prev) => ({ ...prev, obterMaquinas: null }));
+
+        try {
+            console.log(id_empresa);
+
+            // REQUISIÇÃO
+            const data = await apiFetch(`/empresas/${id_empresa}/maquinas`, {
+                method: 'GET'
+            });
+
+            console.log(data);
+
+
+            // ERRO
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, obterMaquinas: data.mensagem }))
+            }
+
+            // SUCESSO
+            else {
+                // ATUALIZAR MEMBROS
+                setMaquinas(data.dados.membros)
+            }
+        } catch (err) {
+            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
+            if (err.message === 'Sessão expirada') return;
+
+            setError((prev) => ({
+                ...prev,
+                obterMaquinas: 'Erro ao obter membros, tente novamente mais tarde.'
+            }));
+
+        } finally {
+            // Independente de sucesso ou erro, o loading termina aqui
+            setLoading((prev) => ({ ...prev, obterMaquinas: false }));
+        }
+    }, []);
+
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     return {
@@ -258,6 +304,7 @@ export function useEmpresa() {
         empresa, obterEmpresa,
         membros, obterMembros,
         setores, obterSetores,
+        maquinas, obterMaquinas,
         criarEmpresa,
     };
 }

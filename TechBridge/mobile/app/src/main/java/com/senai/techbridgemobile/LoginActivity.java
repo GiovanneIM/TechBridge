@@ -14,7 +14,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText etEmail, etSenha;
+    EditText edtEmail, edtSenha;
     Button btnLogin;
 
     @Override
@@ -22,16 +22,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        etEmail = findViewById(R.id.etEmail);
-        etSenha = findViewById(R.id.etSenha);
+        edtEmail = findViewById(R.id.edtEmail);
+        edtSenha = findViewById(R.id.edtSenha);
         btnLogin = findViewById(R.id.btnLogin);
 
         btnLogin.setOnClickListener(v -> fazerLogin());
     }
 
     private void fazerLogin() {
-        String email = etEmail.getText().toString();
-        String senha = etSenha.getText().toString();
+        String email = edtEmail.getText().toString();
+        String senha = edtSenha.getText().toString();
 
         LoginRequest request = new LoginRequest(email, senha);
 

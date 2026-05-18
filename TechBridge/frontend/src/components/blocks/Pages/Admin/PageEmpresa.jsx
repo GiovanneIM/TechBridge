@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { useEmpresa } from "@/hooks/useEmpresa";
 import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
 
 export default function PageEmpresa() {
     const params = useParams();
@@ -14,7 +15,8 @@ export default function PageEmpresa() {
     const {
         empresa, obterEmpresa,
         membros, obterMembros,
-        setores, obterSetores
+        setores, obterSetores,
+        maquinas, obterMaquinas,
     } = useEmpresa()
 
     useEffect(() => {
@@ -29,6 +31,10 @@ export default function PageEmpresa() {
         if (!setores) obterSetores(id_empresa)
     }, [membros, obterSetores])
 
+    useEffect(() => {
+        if (!maquinas) obterMaquinas(id_empresa)
+    }, [maquinas, obterMaquinas])
+
 
     let content;
 
@@ -42,7 +48,7 @@ export default function PageEmpresa() {
                 }
             </pre>
 
-            <Skeleton/>
+            <Separator />
 
             <p>INTEGRANTES DA EMPRESA</p>
             <pre>
@@ -51,12 +57,19 @@ export default function PageEmpresa() {
                 }
             </pre>
 
-            <Skeleton/>
+            <Separator />
 
-            <p>Setores DA EMPRESA</p>
+            <p>SETORES DA EMPRESA</p>
             <pre>
                 {
                     JSON.stringify(setores, null, 2)
+                }
+            </pre>
+
+            <p>MAQUINAS DA EMPRESA</p>
+            <pre>
+                {
+                    JSON.stringify(maquinas, null, 2)
                 }
             </pre>
         </>)
