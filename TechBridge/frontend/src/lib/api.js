@@ -21,7 +21,7 @@ async function API_LOGIN(user) {
     // VERIFICAR SE HOUVE SUCESSO
     if (response.status === 200) {
         // SALVAR TOKEN
-        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('token', data.dados.token);
     }
 
     // RETORNAR A RESPOSTA
@@ -65,12 +65,15 @@ async function API_FETCH(ENDPOINT, options = {}) {
 
 // Função para padronizar as requisições à API (Sempre envia os cookies)
 export async function apiFetch(endpoint, options = {}) {
+    const token = sessionStorage.getItem('token');
+
     const { ignoreAuthError, ...fetchOptions } = options;
 
     const response = await fetch(API_URL + endpoint, {
         ...fetchOptions,
         credentials: 'include',
         headers: {
+            'authorization': `bearer ${token}`,
             'Content-Type': 'application/json',
             ...fetchOptions.headers
         },

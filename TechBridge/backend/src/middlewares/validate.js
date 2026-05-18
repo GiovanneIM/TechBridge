@@ -20,8 +20,6 @@ export const validateZod =
 	(schema, source = 'body') =>
 		(req, res, next) => {
 			try {
-				console.log(req);
-				
 				const data = schema.parse(req[source]);
 
 				req.validated = req.validated || {};
