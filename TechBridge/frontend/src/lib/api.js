@@ -105,6 +105,5 @@ export async function apiFetch(endpoint, options = {}) {
 export {
     API_URL,
     API_FETCH,
-    API_LOGIN,
-    API_REGISTER
+    API_LOGIN
 }
