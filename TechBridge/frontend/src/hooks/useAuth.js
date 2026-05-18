@@ -34,12 +34,10 @@ export function useAuth({
         setError((prev) => ({ ...prev, login: null }));
 
         try {
+            console.log(dadosLogin);
+            
             // Chamada à API
-            const data = await API_LOGIN(`${API_BASE_URL}/login`, {
-                method: 'POST',
-                body: JSON.stringify(dadosLogin),
-                ignoreAuthError: true
-            });
+            const data = await API_LOGIN(dadosLogin);
 
             // Se a resposta veio com status de erro
             if (!data.sucesso) {

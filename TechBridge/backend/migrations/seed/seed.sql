@@ -15,7 +15,7 @@ VALUES
 INSERT INTO empresas (cnpj, razao_social, nome_fantasia)
 VALUES 
     ('00000000000000', 'TechBridge - Softwares e Hardwares para Andons', 'TechBridge'),
-	('12345678000190', 'Empresa Cliente 01', 'EC 01')
+	('12345678000190', 'Empresa Cliente 01', 'EC 01'),
     ('00000000000011', 'Empresa Cliente 02', 'EC 02')
 ;
 UPDATE empresas SET status = 0 WHERE id = 3;
@@ -23,7 +23,7 @@ UPDATE empresas SET status = 0 WHERE id = 3;
 
 -- Inserindo os usuários de exemplo
 INSERT INTO usuarios 
-(nome, email, senha, tipo_usuario, id_empresa, telefone, bio, departamento, nacionalidade)
+(nome, email, senha, tipo_usuario, id_empresa, telefone, bio)
 VALUES 
     (
     'Kim Minji', 

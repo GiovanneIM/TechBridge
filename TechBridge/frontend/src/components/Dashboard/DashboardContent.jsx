@@ -60,7 +60,7 @@ export default function DashboardContent({ dashboard }) {
     const toggleTheme = () => setTheme(prev => (prev === "dark" ? "light" : "dark"))
 
     return (
-        <div className="relative min-h-screen overflow-hidden bg-white text-slate-900 dark:bg-[#020617] dark:text-white transition-colors duration-300">
+        <div className="relative min-h-screen overflow-hidden bg-white text-slate-900 dark:bg-sidebar dark:text-white transition-colors duration-300">
 
             {/* ===================================================== */}
             {/* BACKGROUND */}
@@ -96,13 +96,6 @@ export default function DashboardContent({ dashboard }) {
                 <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 
                     <div className="space-y-4">
-
-                        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-50 px-4 py-2 text-sm text-cyan-600 backdrop-blur-xl dark:border-cyan-500/20 dark:bg-cyan-500/10 dark:text-cyan-300">
-
-                            <Sparkles className="h-4 w-4" />
-
-                            Sistema Inteligente de Gestão Industrial
-                        </div>
 
                         <div>
 

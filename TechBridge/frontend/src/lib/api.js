@@ -1,5 +1,5 @@
 // URL base da API
-export const API_URL = 'http://10.84.7.5:3000/techbridge'
+export const API_URL = 'http://localhost:3000/techbridge'
 
 // REALIZAR LOGIN
 async function API_LOGIN(user) {
@@ -19,7 +19,7 @@ async function API_LOGIN(user) {
     }
 
     // RETORNAR A RESPOSTA
-    return response;
+    return data;
 }
 
 // REALIZAR REGISTRO
