@@ -71,7 +71,8 @@ export default function CardsPorSetor({
 
     // 3) fallback: chamada interna à API (ajuste a rota conforme sua API)
     try {
-      const res = await apiFetch(`/chamados/contagem?setorId=${encodeURIComponent(setorId)}`);
+      const res = await apiFetch(`/chamados/buscar`);
+      
       // espera que a API retorne { sucesso: true, dados: { contagem: { aberto, andamento, concluido } } }
       const cont = res?.dados?.contagem ?? res?.dados ?? null;
       return {
@@ -148,10 +149,6 @@ export default function CardsPorSetor({
     };
   }, [pollInterval, loadAllContadores]);
 
-  // Refresh manual
-  const handleRefresh = async () => {
-    await loadAllContadores();
-  };
 
   return (
     <div className="w-full h-fit gap-4 grid grid-flow-row grid-cols-1 xl:grid-cols-2">
@@ -208,11 +205,6 @@ export default function CardsPorSetor({
                 <div className="text-2xl font-bold">{cont.concluido ?? 0}</div>
               </div>
             </CardContent>
-
-            <CardFooter className="flex items-center justify-between text-xs text-muted-foreground">
-              <div>{setor.descricao ? setor.descricao : "—"}</div>
-              <div>{/* espaço para ícone ou ação futura */}</div>
-            </CardFooter>
           </Card>
         );
       })}

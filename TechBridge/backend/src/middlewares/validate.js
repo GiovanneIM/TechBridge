@@ -1,4 +1,6 @@
+import { log } from 'console';
 import { ZodError } from 'zod';
+import { da } from 'zod/v4/locales';
 
 // export const validateZod =
 // 	(schema, source = 'body') =>
@@ -18,6 +20,8 @@ export const validateZod =
 	(schema, source = 'body') =>
 		(req, res, next) => {
 			try {
+				console.log(req);
+				
 				const data = schema.parse(req[source]);
 
 				req.validated = req.validated || {};

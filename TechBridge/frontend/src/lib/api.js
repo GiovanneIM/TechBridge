@@ -5,9 +5,13 @@ export const API_URL = 'http://localhost:3000/techbridge'
 
 // REALIZAR LOGIN
 async function API_LOGIN(user) {
+
     // FAZER A REQUISIÇÃO
     const response = await fetch(API_URL + '/auth/login', {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify(user)
     });
 
