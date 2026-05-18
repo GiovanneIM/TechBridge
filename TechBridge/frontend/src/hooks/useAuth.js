@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { apiFetch } from '@/lib/api';
+import { API_LOGIN, apiFetch } from '@/lib/api';
 
 
 // URL base da API
@@ -35,7 +35,7 @@ export function useAuth({
 
         try {
             // Chamada à API
-            const data = await apiFetch(`${API_BASE_URL}/login`, {
+            const data = await API_LOGIN(`${API_BASE_URL}/login`, {
                 method: 'POST',
                 body: JSON.stringify(dadosLogin),
                 ignoreAuthError: true
