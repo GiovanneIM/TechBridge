@@ -56,23 +56,23 @@ CREATE TABLE chamados (
 -- Criando chamados
 INSERT INTO chamados (datahora_abertura, id_empresa, id_setor, id_maquina, cod_chamado)
 VALUES 
-(DATE_SUB(NOW(), INTERVAL 1 DAY), 1, 1, 1, 1),
-(DATE_SUB(NOW(), INTERVAL 1 DAY), 1, 1, 1, 2),
-(DATE_SUB(NOW(), INTERVAL 1 DAY), 1, 1, 2, 1);
+    (DATE_SUB(NOW(), INTERVAL 1 DAY), 2, 1, 1, 1),
+    (DATE_SUB(NOW(), INTERVAL 1 DAY), 2, 1, 1, 2),
+    (DATE_SUB(NOW(), INTERVAL 1 DAY), 2, 1, 2, 1)
+;
 
 INSERT INTO chamados (id_empresa, id_setor, id_maquina, cod_chamado)
 VALUES 
-(1, 1, 1, 3),
-(1, 1, 1, 4),
-(1, 1, 2, 2);
+    (2, 1, 1, 3),
+    (2, 1, 1, 4),
+    (2, 1, 2, 2)
+;
 
 INSERT INTO chamados (datahora_abertura, id_empresa, id_setor, id_maquina, cod_chamado)
-VALUES 
-(DATE_SUB(NOW(), INTERVAL 10 DAY), 1, 1, 1, 7);
+VALUES (DATE_SUB(NOW(), INTERVAL 10 DAY), 2, 1, 1, 7);
 
 INSERT INTO chamados (datahora_abertura, id_empresa, id_setor, id_maquina, cod_chamado)
-VALUES 
-(DATE_SUB(NOW(), INTERVAL 10 DAY), 1, 1, 1, 6);
+VALUES (DATE_SUB(NOW(), INTERVAL 10 DAY), 2, 1, 1, 6);
 
 -- Atendendo chamados
 UPDATE chamados    

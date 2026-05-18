@@ -1,5 +1,5 @@
 // URL base da API
-export const API_URL = 'http://localhost:3000/techbridge'
+export const API_URL = 'http://10.84.7.5:3000/techbridge'
 
 // Função para padronizar as requisições à API (Sempre envia os cookies)
 export async function apiFetch(endpoint, options = {}) {

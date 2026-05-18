@@ -7,7 +7,7 @@
 USE TECHBRIDGE;
 
 
--- Criando a tabela de tipos de usuários
+-- Criando a tabela de usuários
 CREATE TABLE IF NOT EXISTS usuarios (
     id 				    INT 			AUTO_INCREMENT PRIMARY KEY,
 	data_criacao 	    DATETIME 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que o usuário foi registrado
@@ -19,11 +19,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
     email			VARCHAR(255) 	NOT NULL UNIQUE,				-- E-mail do usuário
     senha			VARCHAR(255) 	NOT NULL,						-- Senha do usuário
     foto_perfil 	VARCHAR(255),									-- Foto de perfil
-    bio				VARCHAR(300), 			            			-- Breve biografia do usuário
-    cargo           VARCHAR(255)    NOT NULL,					    -- Número do telefone do usuário (com DDD)
+    bio				VARCHAR(300), 			            			-- Biografia do usuário
     telefone		VARCHAR(15), 					            	-- Número do telefone do usuário (com DDD)
-    departamento	VARCHAR(100)	NOT NULL,						-- Departamento do funcionário
-    nacionalidade	VARCHAR(50)		NOT NULL,						-- Nacionalidade do usuário manter padrão Cidade, Sigla país
     
     -- Chaves estrangeiras
     tipo_usuario	INT				NOT NULL,						-- Tipo de usuário
@@ -43,64 +40,40 @@ CREATE TABLE IF NOT EXISTS usuarios (
 INSERT INTO usuarios 
 (nome, email, senha, tipo_usuario, id_empresa, telefone, bio, departamento, nacionalidade)
 VALUES 
-(
-'Kim Minji', 
-'admin@tb.com', 
-'$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
-1, 
-1, 
-'(11) 95989-9539', 
-'Administradora de sistemas com foco em organização, segurança e eficiência operacional. Atua garantindo o bom funcionamento das plataformas e suporte estratégico para a equipe.',
-'Administração',
-'Seul, KOR'
-),
-(
-'Poliwag Gomez', 
-'gerentePrincipal@email.com', 
-'$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
-2, 
-2, 
-'(11) 98921-8798', 
-'Gerente de produção experiente, especializado em otimização de processos e liderança de equipes. Trabalha para aumentar a produtividade e garantir a qualidade nas entregas.',
-'Produção',
-'São Paulo, BR'
-),
-(
-'The Rock', 
-'gerente@email.com', 
-'$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
-3, 
-2, 
-'(11) 97548-1367', 
-'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.',
-'Manutenção',
-'Chicago, US'
-),
-(
-'Izuku Midoriya', 
-'tecnico@email.com', 
-'$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
-4, 
-2, 
-'(11) 97548-1367', 
-'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.',
-'Manutenção Central',
-'Tóquio, JP'
-);
-
--- Alterando as fotos do usuário
-UPDATE usuarios 
-SET foto_perfil = 'https://images-news.now.com/newsimage/NewsImage/2025-02-07-15-22-5103GxLf4N.jpg'
-WHERE id = 1;
-
-UPDATE usuarios 
-SET foto_perfil = 'https://tse2.mm.bing.net/th/id/OIP.nzFhNGOabtBPZxm6pqLL3wHaHO?rs=1&pid=ImgDetMain&o=7&rm=3'
-WHERE id = 2;
-
-UPDATE usuarios 
-SET foto_perfil = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Dwayne_Johnson-1809_%28cropped%29.jpg/960px-Dwayne_Johnson-1809_%28cropped%29.jpg'
-WHERE id = 3;
-
-UPDATE usuarios 
-SET foto_perfil = 'https://i.pinimg.com/736x/2a/f1/12/2af1129122bc8118735dfaae9df21d10.jpg'
-WHERE id = 3;
+    (
+    'Kim Minji', 
+    'admin@tb.com', 
+    '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
+    1, 
+    1, 
+    '(11) 95989-9539', 
+    'Administradora de sistemas com foco em organização, segurança e eficiência operacional. Atua garantindo o bom funcionamento das plataformas e suporte estratégico para a equipe.'
+    ),
+    (
+    'Poliwag Gomez', 
+    'gerentePrincipal@email.com', 
+    '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
+    2, 
+    2, 
+    '(11) 98921-8798', 
+    'Gerente de produção experiente, especializado em otimização de processos e liderança de equipes. Trabalha para aumentar a produtividade e garantir a qualidade nas entregas.'
+    ),
+    (
+    'The Rock', 
+    'gerente@email.com', 
+    '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
+    3, 
+    2, 
+    '(11) 97548-1367', 
+    'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.'
+    ),
+    (
+    'Izuku Midoriya', 
+    'tecnico@email.com', 
+    '$2a$10$BLAcJu1irAzg06WbtoLoPe0RA.hkfZ0oJ25KYARPkHWRweJuWBALy', 
+    4, 
+    2, 
+    '(11) 97548-1367', 
+    'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.'
+    )
+;
