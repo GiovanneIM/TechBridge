@@ -1,4 +1,6 @@
 // URL base da API
+// PC DO ARTHUT -> localhost
+// OUTROS -> 10.84.7.5
 export const API_URL = 'http://localhost:3000/techbridge'
 
 // REALIZAR LOGIN
