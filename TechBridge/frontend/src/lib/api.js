@@ -24,21 +24,6 @@ async function API_LOGIN(user) {
     return data;
 }
 
-// REALIZAR REGISTRO
-async function API_REGISTER(user) {
-    // FAZER A REQUISIÇÃO
-    const response = await fetch(API_URL + '/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(user)
-    });
-
-    // OBTER OS DADOS
-    const data = await response.json();
-
-    // RETORNAR A RESPOSTA
-    return data;
-}
-
 // FAZER REQUISIÇÃO À API (Usuário já logado)
 async function API_FETCH(ENDPOINT, options = {}) {
     // OBTER TOKEN
