@@ -48,7 +48,8 @@ app.use(
 app.use(cors({
     origin: [
         'http://localhost:3001',
-        'http://10.84.7.3:3001'
+        'http://10.84.7.3:3001',
+        'http://10.84.7.2:3001',
     ],                                 // Permitindo acesso do Frontend
     credentials: true,                                               // Permitindo receber cookies do navegador
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],   // Metódos permitidos
