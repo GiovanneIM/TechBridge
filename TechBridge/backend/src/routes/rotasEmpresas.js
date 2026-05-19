@@ -26,6 +26,7 @@ import EmpresasController from '../controllers/Empresas.js';
 import UserController from '../controllers/User.js';
 import SetoresController from '../controllers/Setores.js';
 import MaquinaController from '../controllers/Maquinas.js';
+import { handleUploadError, setUploadTipo, TIPOS_UPLOAD, upload } from '../middlewares/uploadMiddleware.js';
 
 
 const router = express.Router();
@@ -53,6 +54,8 @@ const router = express.Router();
  *         description: Dados da empresa listados com sucesso
  *       401:
  *         description: Autorização negada
+ *       403:
+ *         description: Acesso proibido
  *       404:
  *         description: Empresa não encontrada
  *       500:
@@ -93,6 +96,8 @@ router.get(
  *         description: Dados inválidos
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       404:
  *         description: Empresa não encontrada
  *       500:
@@ -104,6 +109,41 @@ router.patch(
     validateZod(updateEmpresaSchema, 'body'),   // Body - Dados para atualizar
     gerentePrincipalMiddleware,                 // Gerente principal
     EmpresasController.atualizar                // Controller empresas - Atualizar
+);
+
+/**
+ * @swagger
+ * /empresas/{empresa}:
+ *   patch:
+ *     summary: Atualizar a logo de uma empresa (Admin / Gerente Principal)
+ *     tags: [Empresas]
+ * 
+ *     parameters:
+ * 
+ *     requestBody:
+ * 
+ *     responses:
+ *       200:
+ *         description: Logo da empresa atualizados com sucesso
+ *       400: 
+ *         description: Dados inválidos
+ *       401:
+ *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
+ *       404:
+ *         description: Empresa não encontrada
+ *       500:
+ *         description: Não foi possível atualizar a logo da empresa
+ */
+router.patch(
+    '/:id_empresa/logo',
+    validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    setUploadTipo(TIPOS_UPLOAD.EMPRESA_LOGO),
+    upload.single("imagem"),
+    handleUploadError,
+    gerentePrincipalMiddleware,                 // Gerente principal
+    EmpresasController.atualizarLogo            // Controller empresas - Atualizar
 );
 
 
@@ -130,6 +170,8 @@ router.patch(
  *         description: Membros listados com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       500:
  *         description: Não foi possível listar os membros da empresa
  */
@@ -160,6 +202,8 @@ router.get(
  *         description: Usuário criado com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       404:
  *         description: Setor não encontrado
  *       500:
@@ -200,6 +244,8 @@ router.post(
  *         description: Usuário listado com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       404:
  *         description: Usuário não encontrado
  *       500:
@@ -239,6 +285,8 @@ router.get(
  *         description: Usuário atualizado com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       404:
  *         description: Usuário não encontrado
  *       500:
@@ -276,6 +324,8 @@ router.patch(
  *         description: Setores listados com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       500:
  *         description: Não foi possível listar os setores da empresa
  */
@@ -305,6 +355,8 @@ router.get(
  *         description: Setor criado com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       404:
  *         description: Setor não encontrado
  *       500:
@@ -345,6 +397,8 @@ router.post(
  *         description: Setor listado com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       404:
  *         description: Setor não encontrado
  *       500:
@@ -383,6 +437,8 @@ router.get(
  *         description: Setor atualizado com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       404:
  *         description: Setor não encontrado
  *       500:
@@ -420,6 +476,8 @@ router.patch(
  *         description: Maquinas listados com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       500:
  *         description: Não foi possível listar as maquinas da empresa
  */
@@ -456,6 +514,8 @@ router.get(
  *         description: Maquina criada com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       500:
  *         description: Não foi possível registrar a máquina para a empresa
  */
@@ -494,6 +554,8 @@ router.post(
  *         description: Maquinas listados com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       500:
  *         description: Não foi possível listar as maquinas do setor
  */
@@ -537,6 +599,8 @@ router.get(
  *         description: Máquina listado com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       404:
  *         description: Máquina não encontrado
  *       500:
@@ -582,13 +646,15 @@ router.get(
  *         description: Máquina atualizada com sucesso
  *       401:
  *         description: Permissão negada
+ *       403:
+ *         description: Acesso proibido
  *       404:
  *         description: Máquina não encontrada
  *       500:
  *         description: Não foi possível atualizar a máquina
  */
 router.patch(
-    '/:id_empresa/setores/:cod_setor/maquinas/:id_maquina',
+    '/:id_empresa/setores/:cod_setor/maquinas/:cod_maquina',
     validateZod(params_EmpresaMaquina, 'params'),
     validateZod(updateMaquinaSchema, 'body'),
     gerenteMiddleware,

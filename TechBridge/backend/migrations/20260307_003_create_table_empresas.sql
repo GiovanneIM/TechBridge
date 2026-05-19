@@ -18,7 +18,8 @@ CREATE TABLE empresas (
     cnpj			CHAR(14)		NOT NULL UNIQUE,				-- CNPJ da empresa
  	razao_social	VARCHAR(200)	NOT NULL,						-- Nome oficial da empresa
     nome_fantasia	VARCHAR(200) 	NOT NULL,						-- Nome que a empresa usa popularmente
-    
+    logo            VARCHAR(255)    NOT NULL,                       -- Logo da empresa
+
     -- Endereço da empresa
     cep 			VARCHAR(8),
     rua 			VARCHAR(150),

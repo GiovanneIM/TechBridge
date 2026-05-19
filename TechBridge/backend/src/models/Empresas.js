@@ -100,6 +100,20 @@ class EmpresasModel {
             throw error;
         }
     }
+
+    // ATUALIZAR LOGO
+    static async atualizarLogo(id, logoNova) {
+        try {
+            return await update(
+                'empresas',
+                { logo: logoNova },
+                { id }
+            );
+        } catch (error) {
+            console.error('Erro ao atualizar empresa:', error);
+            throw error;
+        }
+    }
 }
 
 export default EmpresasModel;

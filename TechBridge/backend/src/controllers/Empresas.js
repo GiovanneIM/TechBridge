@@ -167,7 +167,7 @@ class EmpresasController {
         }
     }
 
-    // ATUALIZAR UM EMPRESA
+    // ATUALIZAR UMA EMPRESA
     static async atualizar(req, res) {
         const {
             cnpj,
@@ -241,6 +241,58 @@ class EmpresasController {
 
     }
 
+    // ATUALIZAR A LOGO DE UMA EMPRESA
+    static async atualizarLogo(req, res) {
+        try {
+            // OBTER O ID DA EMPRESA
+            const { id_empresa } = req.params;
+
+            // CASO IMAGEM NÃO TENHA SIDO ENVIADA
+            if (!req.file) {
+                return res.status(400).json({
+                    sucesso: false,
+                    mensagem: "Nenhuma imagem enviada"
+                });
+            }
+
+            // EXIBIR INFORMAÇÕES DA IMAGEM
+            console.log({
+                original: req.file.originalname,
+                salvo: req.file.filename,
+                tipo: req.file.mimetype,
+                tamanho: req.file.size
+            });
+
+            // OBTER O NOME DA FOTO
+            const nomeFoto = req.file.filename;
+
+            // OBTER A LOGO ANTES DE ATUALIZAR (Para excluir a logo antiga)
+            const empresa = await EmpresasModel.buscarPorId(id_empresa)
+
+            // ATUALIZAR A LOGO DA EMPRESA NO BANCO
+            await EmpresasModel.atualizarLogo(id_empresa, nomeFoto)
+
+            // REMOVER A LOGO ANTIGA DA EMPRESA
+            if (usuario.foto_perfil && usuario.foto_perfil !== nomeFoto) {
+                await removerArquivoAntigo(usuario.foto_perfil, idUsuario, TIPOS_PASTA.IMAGENS);
+            }
+
+            // SUCESSO
+            return res.json({
+                sucesso: true,
+                mensagem: 'Foto atualizada com sucesso',
+                foto: nomeFoto
+            });
+
+        } catch (error) {
+            // Erro do servidor
+            console.error('Erro ao atualizar a foto do usuário:', error);
+            return res.status(500).json({
+                sucesso: false,
+                mensagem: 'Erro ao atualizar a foto do usuário'
+            });
+        }
+    }
 
 }
 
