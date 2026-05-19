@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.senai.techbridgemobile.model.Chamado;
 import com.senai.techbridgemobile.model.ChamadoResponse;
 
@@ -22,7 +23,7 @@ import com.senai.techbridgemobile.adapter.ChamadosAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnCarregar;
+    FloatingActionButton btnCarregar;
     String token;
 
     RecyclerView recyclerChamados;
