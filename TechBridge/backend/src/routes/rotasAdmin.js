@@ -1,9 +1,10 @@
 import express from 'express';
 import EmpresasController from '../controllers/Empresas.js';
-import { authMiddleware } from '../middlewares/authMiddleware.js';
+import { adminMiddleware, authMiddleware } from '../middlewares/authMiddleware.js';
 import { validateZod } from '../middlewares/validate.js';
 import { paginacaoSchema } from '../schemas/query/paginacao.js';
 import { createEmpresaSchema } from '../schemas/body/empresa/createEmpresa.schema.js';
+import LogModel from '../models/Logs.js';
 
 const router = express.Router();
 
@@ -147,5 +148,15 @@ router.delete('/empresas/:empresa', () => { });
  */
 router.delete('/usuarios/:usuario', () => { });
 
+/**
+ * @swagger
+ * /admin/log/total:
+ *   GET:
+ *     summary: Obter total de Logs
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ */
+router.get('/log/total', LogModel.total)
 
 export default router;
