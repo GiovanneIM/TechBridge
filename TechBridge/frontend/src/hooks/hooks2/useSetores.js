@@ -8,8 +8,11 @@ export function useSetores({
     fetchOnMount = false,
 } = {}) {
 
-    const [setores, setSetores] = useState(initialSetores);
+    // ========================================
+    // STATES
+    // ========================================
 
+    const [setores, setSetores] = useState(initialSetores);
     const [setorAtual, setSetorAtual] = useState(null);
 
     const [loading, setLoading] = useState({
@@ -27,28 +30,54 @@ export function useSetores({
     // ========================================
 
     const fetchSetores = useCallback(async () => {
-        setLoading((prev) => ({ ...prev, fetch: true }));
-        setError((prev) => ({ ...prev, fetch: null }));
+        setLoading((prev) => ({
+            ...prev,
+            fetch: true,
+        }));
+
+        setError((prev) => ({
+            ...prev,
+            fetch: null,
+        }));
 
         try {
-            const data = await apiFetch(`${API_BASE_URL}/buscar`);
+            const response = await apiFetch(`${API_BASE_URL}/buscar`);
 
-            if (!data?.sucesso) {
+
+            if (!response?.sucesso) {
                 setError((prev) => ({
                     ...prev,
-                    fetch: data?.mensagem || "Erro ao buscar setores",
+                    fetch: response?.mensagem || "Erro ao buscar setores",
                 }));
-            } else {
-                setSetores(data?.dados?.setores ?? []);
+
+                setSetores([]);
+                return [];
             }
 
+            // ARRAY CORRETO DA API
+            const setoresData = response?.dados?.setores ?? [];
+
+            setSetores(setoresData);
+
+            return setoresData;
+
         } catch (err) {
+            console.error("ERRO FETCH SETORES:", err);
+
             setError((prev) => ({
                 ...prev,
-                fetch: "Erro ao buscar setores, tente novamente mais tarde.",
+                fetch: "Erro ao buscar setores",
             }));
+
+            setSetores([]);
+
+            return [];
+
         } finally {
-            setLoading((prev) => ({ ...prev, fetch: false }));
+            setLoading((prev) => ({
+                ...prev,
+                fetch: false,
+            }));
         }
     }, []);
 
@@ -59,51 +88,61 @@ export function useSetores({
     const fetchSetorById = useCallback(async (id) => {
         if (!id) return null;
 
-        setLoading((prev) => ({ ...prev, fetchOne: true }));
-        setError((prev) => ({ ...prev, fetchOne: null }));
+        setLoading((prev) => ({
+            ...prev,
+            fetchOne: true,
+        }));
+
+        setError((prev) => ({
+            ...prev,
+            fetchOne: null,
+        }));
 
         try {
-            const data = await apiFetch(`${API_BASE_URL}/${id}`);
+            const response = await apiFetch(`${API_BASE_URL}/${id}`);
 
-            if (!data?.sucesso) {
+            if (!response?.sucesso) {
                 setError((prev) => ({
                     ...prev,
-                    fetchOne: data?.mensagem || "Erro ao buscar setor",
+                    fetchOne: response?.mensagem || "Erro ao buscar setor",
                 }));
+
                 return null;
             }
 
-            const setor = data?.dados?.setor ?? null;
+            const setor = response?.dados?.setor ?? null;
+
             setSetorAtual(setor);
 
             return setor;
 
         } catch (err) {
+            console.error("ERRO FETCH SETOR:", err);
+
             setError((prev) => ({
                 ...prev,
-                fetchOne: "Erro ao buscar setor, tente novamente mais tarde.",
+                fetchOne: "Erro ao buscar setor",
             }));
+
             return null;
 
         } finally {
-            setLoading((prev) => ({ ...prev, fetchOne: false }));
+            setLoading((prev) => ({
+                ...prev,
+                fetchOne: false,
+            }));
         }
     }, []);
 
     // ========================================
-    // REFETCH (MESMO PADRÃO)
-    // ========================================
-
-    const refetchSetores = fetchSetores;
-
-    // ========================================
-    // AUTO FETCH (MESMO PADRÃO DO SEU MAQUINAS)
+    // AUTO FETCH
     // ========================================
 
     useEffect(() => {
-        if (!fetchOnMount) return;
-        fetchSetores();
-    }, [fetchOnMount]);
+        if (fetchOnMount) {
+            fetchSetores();
+        }
+    }, [fetchOnMount, fetchSetores]);
 
     // ========================================
     // RETURN
@@ -112,11 +151,14 @@ export function useSetores({
     return {
         setores,
         setorAtual,
+
         loadingSetores: loading,
         errorSetores: error,
+
         fetchSetores,
         fetchSetorById,
-        refetchSetores,
+        refetchSetores: fetchSetores,
+
         setSetores,
         setSetorAtual,
     };
