@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { API_LOGIN, apiFetch } from '@/lib/api';
+import { API_FETCH, API_LOGIN, apiFetch } from '@/lib/api';
 
 
 // URL base da API
@@ -10,25 +10,24 @@ export function useAuth({
     fetchOnMount = true
 } = {}
 ) {
-    // Estado com o usuário
+    // USUÁRIO
     const [user, setUser] = useState(initialUser)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const [checkedAuth, setCheckedAuth] = useState(false);
 
-    // Estado que indica se há uma requisição em andamento
+    // LOADING
     const [loading, setLoading] = useState({
         login: false,
         perfil: false,
         logout: false,
     });
 
-    // Estado para armazenar mensagem de erro (se houver)
+    // ERRO
     const [error, setError] = useState({
         login: null,
         perfil: null,
     });
 
-    // Função para fazer login
+    // FAZER LOGIN
     const login = useCallback(async (dadosLogin) => {
         setLoading((prev) => ({ ...prev, login: true }));
         setError((prev) => ({ ...prev, login: null }));
@@ -36,15 +35,16 @@ export function useAuth({
         try {
             console.log(dadosLogin);
             
-            // Chamada à API
+            // REQUISIÇÃO
             const data = await API_LOGIN(dadosLogin);
 
-            // Se a resposta veio com status de erro
+            // ERRO
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, login: data.mensagem }))
             }
+
+            // SUCESSO
             else {
-                // Atualizando o estado dos dados
                 setUser(data.dados.usuario)
                 setIsAuthenticated(true)
             }
@@ -58,30 +58,30 @@ export function useAuth({
             }));
 
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
+            // ENCERRANDO LOADING
             setLoading((prev) => ({ ...prev, login: false }));
         }
     }, []);
 
-    // Função para obter o perfil do usuário logado
+    // OBTER PERFIL
     const perfil = useCallback(async () => {
         setLoading((prev) => ({ ...prev, perfil: true }));
         setError((prev) => ({ ...prev, perfil: null }));
 
         try {
-            // Chamada à API
-            const data = await apiFetch(`${API_BASE_URL}/perfil`, {
-                method: 'GET',
-                credentials: 'include'
+            // REQUISIÇÃO
+            const data = await API_FETCH(`${API_BASE_URL}/perfil`, {
+                method: 'GET'
             });
 
-            // Se a resposta veio com status de erro
+            // ERRO
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, perfil: data.mensagem }))
                 setUser(null)
             }
+
+            // SUCESSO
             else {
-                // Atualizando o estado do usuário
                 setUser(data.dados.usuario)
                 setIsAuthenticated(true)
             }
@@ -91,28 +91,29 @@ export function useAuth({
             setError((prev) => ({ ...prev, perfil: 'Erro ao solicitar perfil, tente novamente mais tarde.' }))
 
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
+            // ENCERRANDO LOADING
             setLoading((prev) => ({ ...prev, perfil: false }));
-            setCheckedAuth(true);
         }
     }, []);
 
-    // Função para fazer logout
+    // FAZER LOGOUT
     const logout = async () => {
         setLoading((prev) => ({ ...prev, logout: true }));
 
         try {
-            await apiFetch(`${API_BASE_URL}/logout`, {
+            // REQUISIÇÃO
+            await API_FETCH(`${API_BASE_URL}/logout`, {
                 method: 'POST',
                 credentials: 'include'
             });
 
-            // Limpando estados locais
+            // LIMPANDO USUÁRIO
             setUser(null);
             setIsAuthenticated(false)
         } catch (err) {
             console.error(err);
         } finally {
+            // ENCERRANDO LOADING
             setLoading((prev) => ({ ...prev, logout: false }));
         }
     };
@@ -126,7 +127,6 @@ export function useAuth({
     return {
         user,
         isAuthenticated,
-        checkedAuth,
         loading,
         setLoading,
         error,

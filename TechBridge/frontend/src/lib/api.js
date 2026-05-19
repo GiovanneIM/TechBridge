@@ -56,9 +56,6 @@ async function API_FETCH(ENDPOINT, options = {}) {
 
     // RETORNAR A RESPOSTA
     return data;
-
-    // RETORNAR A RESPOSTA
-    // return response;
 }
 
 

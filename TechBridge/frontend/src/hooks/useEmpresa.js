@@ -1,29 +1,29 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react';
-import { apiFetch } from '@/lib/api';
+import { API_FETCH, apiFetch } from '@/lib/api';
 import { nestErrors } from '@/lib/zodErrors';
 
 // ENDPOINT BASE DA API
 const API_BASE_URL = '/empresas';
 
 export function useEmpresa() {
-    // Lista de empresas
+    // LISTA DE EMPRESAS
     const [empresas, setEmpresas] = useState(null);
 
-    // Empresa
+    // EMPRESA
     const [empresa, setEmpresa] = useState(null);
 
-    // Membros de uma empresa
+    // MEMBROS DE UMA EMPRESA
     const [membros, setMembros] = useState(null);
 
-    // Setores de uma empresa
+    // SETORES DE UMA EMPRESA
     const [setores, setSetores] = useState(null);
 
-    // Maquinas de uma empresa
+    // MAQUINAS DE UMA EMPRESA
     const [maquinas, setMaquinas] = useState(null);
 
-    // Loading
+    // LOADING
     const [loading, setLoading] = useState({
         obterEmpresas: null,
         criarEmpresa: null,
@@ -33,7 +33,7 @@ export function useEmpresa() {
         obterMaquinas: null
     });
 
-    // Erros
+    // ERROS
     const [error, setError] = useState({
         obterEmpresas: null,
         criarEmpresa: null,
@@ -62,7 +62,7 @@ export function useEmpresa() {
             const query = params.toString();
 
             // REQUISIÇÃO
-            const data = await apiFetch(`/admin/empresas?${query}`, {
+            const data = await API_FETCH(`/admin/empresas?${query}`, {
                 method: 'GET'
             });
 
@@ -98,7 +98,7 @@ export function useEmpresa() {
 
         try {
             // REQUISIÇÃO
-            const data = await apiFetch(`/admin/empresas`, {
+            const data = await API_FETCH(`/admin/empresas`, {
                 method: 'POST',
                 body: JSON.stringify(novaEmpresa)
             });
@@ -143,7 +143,7 @@ export function useEmpresa() {
 
         try {
             // REQUISIÇÃO
-            const data = await apiFetch(`/empresas/${id_empresa}`, {
+            const data = await API_FETCH(`/empresas/${id_empresa}`, {
                 method: 'GET'
             });
 
@@ -181,7 +181,7 @@ export function useEmpresa() {
             console.log(id_empresa);
 
             // REQUISIÇÃO
-            const data = await apiFetch(`/empresas/${id_empresa}/membros`, {
+            const data = await API_FETCH(`/empresas/${id_empresa}/membros`, {
                 method: 'GET'
             });
 
@@ -222,7 +222,7 @@ export function useEmpresa() {
             console.log(id_empresa);
 
             // REQUISIÇÃO
-            const data = await apiFetch(`/empresas/${id_empresa}/setores`, {
+            const data = await API_FETCH(`/empresas/${id_empresa}/setores`, {
                 method: 'GET'
             });
 
@@ -263,7 +263,7 @@ export function useEmpresa() {
             console.log(id_empresa);
 
             // REQUISIÇÃO
-            const data = await apiFetch(`/empresas/${id_empresa}/maquinas`, {
+            const data = await API_FETCH(`/empresas/${id_empresa}/maquinas`, {
                 method: 'GET'
             });
 
