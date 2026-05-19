@@ -4,7 +4,7 @@ import { adminMiddleware, authMiddleware } from '../middlewares/authMiddleware.j
 import { validateZod } from '../middlewares/validate.js';
 import { paginacaoSchema } from '../schemas/query/paginacao.js';
 import { createEmpresaSchema } from '../schemas/body/empresa/createEmpresa.schema.js';
-import LogModel from '../models/Logs.js';
+import LogController from '../controllers/Log.js';
 
 const router = express.Router();
 
@@ -151,12 +151,12 @@ router.delete('/usuarios/:usuario', () => { });
 /**
  * @swagger
  * /admin/log/total:
- *   GET:
+ *   get:
  *     summary: Obter total de Logs
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  */
-router.get('/log/total', LogModel.total)
+router.get('/log/total', LogController.total)
 
 export default router;

@@ -15,8 +15,6 @@ import testeRotas from './rotas_consertar/rotasTeste.js'
 
 import userRotas from './rotas_consertar/rotasUser.js';
 import chamadosRotas from './rotas_consertar/rotasChamados.js';
-import maquinasRotas from './rotas_consertar/rotasMaquinas.js';
-import setoresRotas from './rotas_consertar/rotasSetores.js';
 import painelRotas from './rotas_consertar/rotasPainel.js';
 
 // ATIVAR AS ROTAS
@@ -33,8 +31,6 @@ router.use('/teste', testeRotas);
 // ROTAS PARA CONSERTAR
 router.use('/user', userRotas);
 router.use('/chamados', chamadosRotas);
-router.use('/maquinas', maquinasRotas);
-router.use('/setores', setoresRotas);
 router.use('/painel', painelRotas);
 
 export default router;
