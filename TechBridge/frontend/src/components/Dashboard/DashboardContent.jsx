@@ -2,6 +2,9 @@ import { useEffect, useState, useMemo } from "react"
 import { useChamados } from "@/hooks/hooks2/useChamados"
 import { useMaquinas } from "@/hooks/hooks2/useMaquina"
 import { useSetores } from "@/hooks/hooks2/useSetores"
+import CardsEstados from "./CardsEstados"
+import RoscaEstados from "./RoscaEstados"
+import LinhaEstados from "./LinhaEstados"
 import {
     Activity,
     AlertTriangle,
@@ -23,15 +26,13 @@ import {
     Sun,
     Moon,
 } from "lucide-react"
-import CardsEstados from "./CardsEstados"
-import RoscaEstados from "./RoscaEstados"
-import LinhaEstados from "./LinhaEstados"
 
 export default function DashboardContent({ dashboard }) {
 
     // =====================================================
-    // CHAMADOS (HOOK)
+    // CONSTANTES (HOOKS DE DADOS)
     // =====================================================
+
     const {
         chamados,
         loadingChamados,
@@ -51,11 +52,26 @@ export default function DashboardContent({ dashboard }) {
         loadingSetores,
         errorSetores,
         refetchSetores
-    } = useSetores()
+    } = useSetores({
+        fetchOnMount: true
+    })
 
     // =====================================================
-    // RESUMO DOS CHAMADOS (CALCULADO NO FRONTEND)
+    // KPIs DERIVADOS (MÉTRICAS CALCULADAS A PARTIR DOS DADOS)
     // =====================================================
+
+    const maquinasParadas = useMemo(
+        () => maquinas.filter(m => m.status === "inativa" || m.status === "em_manutencao").length,
+        [maquinas]
+    )
+
+    const setoresAtivos = setores?.length ?? 0
+
+    const maquinasAtivas = useMemo(
+        () => maquinas.filter(m => m.status === "ativa").length,
+        [maquinas]
+    )
+
     const chamadosAbertos = useMemo(
         () => chamados.filter(c => c.estado === "aberto").length,
         [chamados]
@@ -71,46 +87,77 @@ export default function DashboardContent({ dashboard }) {
         [chamados]
     )
 
-    // =====================================================
-    // OUTROS DADOS (dashboard já existente)
-    // =====================================================
-    const empresasAtivas = dashboard?.empresasAtivas ?? 7
+    const tempoMedioMinutos = useMemo(() => {
+        if (!Array.isArray(chamados) || chamados.length === 0) return 0
 
-    const setoresAtivos = useMemo(
-        () => setores?.filter(s => s.id)?.length ?? 0,
-        [setores]
-    );
+        const parseDate = (d) => new Date(d.replace(" ", "T"))
 
+        const unicos = Object.values(
+            chamados.reduce((acc, c) => {
+                acc[c.id] = c
+                return acc
+            }, {})
+        )
 
-    const maquinasAtivas = useMemo(
-        () => maquinas.filter(m => m.status === "ativa").length,
-        [maquinas]
-    )
+        const tempos = unicos
+            .filter(c => c.datahora_conclusao)
+            .map(c => {
+                const inicio = c.datahora_abertura
+                const fim = c.datahora_conclusao
 
+                if (!inicio || !fim) return null
 
-    // Tema: 'light' | 'dark'
-    const [theme, setTheme] = useState(() => {
-        try {
-            return localStorage.getItem("theme") || "dark"
-        } catch {
-            return "dark"
-        }
-    })
+                const diff = parseDate(fim) - parseDate(inicio)
+                if (isNaN(diff) || diff < 0) return null
 
-    useEffect(() => {
-        try {
-            localStorage.setItem("theme", theme)
-        } catch { }
-        if (typeof document !== "undefined") {
-            if (theme === "dark") {
-                document.documentElement.classList.add("dark")
-            } else {
-                document.documentElement.classList.remove("dark")
-            }
-        }
-    }, [theme])
+                return diff / 60000 // minutos
+            })
+            .filter(Boolean)
 
-    const toggleTheme = () => setTheme(prev => (prev === "dark" ? "light" : "dark"))
+        if (tempos.length === 0) return 0
+
+        return tempos.reduce((a, b) => a + b, 0) / tempos.length
+    }, [chamados])
+
+    const tempoMedioFormatado = useMemo(() => {
+        if (!tempoMedioMinutos || tempoMedioMinutos <= 0) return "0 min"
+
+        const h = Math.floor(tempoMedioMinutos / 60)
+        const m = Math.round(tempoMedioMinutos % 60)
+
+        if (h <= 0) return `${m} min`
+
+        return `${h}h ${m}min`
+    }, [tempoMedioMinutos])
+
+    const disponibilidade = useMemo(() => {
+        if (!Array.isArray(chamados) || chamados.length === 0) return 100
+
+        const agora = new Date()
+        const inicioPeriodo = new Date()
+        inicioPeriodo.setDate(agora.getDate() - 30)
+
+        // tempo total do período em minutos
+        const tempoTotal = (agora - inicioPeriodo) / 60000
+
+        const tempoParado = chamados
+            .filter(c => c.datahora_abertura && c.datahora_conclusao)
+            .map(c => {
+                const inicio = new Date(c.datahora_abertura.replace(" ", "T"))
+                const fim = new Date(c.datahora_conclusao.replace(" ", "T"))
+
+                if (isNaN(inicio) || isNaN(fim)) return 0
+                if (fim < inicioPeriodo) return 0
+
+                const inicioAjustado = inicio < inicioPeriodo ? inicioPeriodo : inicio
+                return (fim - inicioAjustado) / 60000
+            })
+            .reduce((a, b) => a + b, 0)
+
+        const disponivel = ((tempoTotal - tempoParado) / tempoTotal) * 100
+
+        return Math.max(0, Math.min(100, disponivel))
+    }, [chamados])
 
     return (
         <div className="relative min-h-screen overflow-hidden bg-white text-slate-900 dark:bg-sidebar dark:text-white transition-colors duration-300">
@@ -174,18 +221,6 @@ export default function DashboardContent({ dashboard }) {
 
                     {/* STATUS + THEME TOGGLE */}
                     <div className="flex flex-wrap items-center gap-4">
-
-                        {/* THEME TOGGLE */}
-                        <button
-                            onClick={toggleTheme}
-                            aria-label="Alternar tema"
-                            className="flex items-center gap-2 rounded-full border px-3 py-2 text-sm transition-colors duration-200 border-slate-200 bg-white text-slate-900 hover:bg-slate-50 dark:border-white/10 dark:bg-[#0b1220] dark:text-white"
-                        >
-                            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                            <span className="hidden sm:inline">
-                                {theme === "dark" ? "Modo Escuro" : "Modo Claro"}
-                            </span>
-                        </button>
 
                         {/* SISTEMA */}
                         <div className="group relative overflow-hidden rounded-3xl border border-emerald-200 bg-emerald-50 p-5 backdrop-blur-2xl transition-all duration-500 hover:border-emerald-300 dark:border-emerald-500/20 dark:bg-emerald-500/5">
@@ -307,7 +342,7 @@ export default function DashboardContent({ dashboard }) {
                                             <div className="flex items-center gap-2">
 
                                                 <span className="text-lg font-bold text-slate-900 dark:text-white">
-                                                    99.2%
+                                                    {disponibilidade.toFixed(1)}%
                                                 </span>
                                             </div>
                                         </div>
@@ -351,7 +386,7 @@ export default function DashboardContent({ dashboard }) {
                                             <div className="flex items-center gap-2">
 
                                                 <span className="text-lg font-bold text-slate-900 dark:text-white">
-                                                    12 min
+                                                    {tempoMedioFormatado}
                                                 </span>
                                             </div>
                                         </div>
@@ -371,11 +406,11 @@ export default function DashboardContent({ dashboard }) {
                                     <div>
 
                                         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                            Empresas Ativas
+                                            Máquinas Paradas
                                         </p>
 
                                         <h3 className="mt-3 text-4xl font-black text-slate-900 dark:text-white">
-                                            {empresasAtivas}
+                                            {maquinasParadas}
                                         </h3>
                                     </div>
 
@@ -682,7 +717,7 @@ export default function DashboardContent({ dashboard }) {
                                         </p>
 
                                         <h3 className="mt-2 text-2xl font-black text-cyan-600 dark:text-cyan-300">
-                                            12 min
+                                            {tempoMedioFormatado}
                                         </h3>
                                     </div>
 
@@ -693,7 +728,7 @@ export default function DashboardContent({ dashboard }) {
                                         </p>
 
                                         <h3 className="mt-2 text-2xl font-black text-violet-600 dark:text-violet-300">
-                                            99.2%
+                                            {disponibilidade.toFixed(1)}%
                                         </h3>
                                     </div>
                                 </div>
