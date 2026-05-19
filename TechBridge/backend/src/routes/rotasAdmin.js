@@ -148,15 +148,4 @@ router.delete('/empresas/:empresa', () => { });
  */
 router.delete('/usuarios/:usuario', () => { });
 
-/**
- * @swagger
- * /admin/log/total:
- *   get:
- *     summary: Obter total de Logs
- *     tags: [Admin]
- *     security:
- *       - bearerAuth: []
- */
-router.get('/log/total', LogController.total)
-
 export default router;
