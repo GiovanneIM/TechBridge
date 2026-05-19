@@ -4,7 +4,6 @@ import { adminMiddleware, authMiddleware } from '../middlewares/authMiddleware.j
 import { validateZod } from '../middlewares/validate.js';
 import { paginacaoSchema } from '../schemas/query/paginacao.js';
 import { createEmpresaSchema } from '../schemas/body/empresa/createEmpresa.schema.js';
-import LogController from '../controllers/Log.js';
 
 const router = express.Router();
 

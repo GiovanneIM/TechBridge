@@ -1,11 +1,12 @@
 import { z } from 'zod';
 import { helperCodigo } from '../helpers/helperCodigo.js';
+import { helperId } from '../helpers/helperId.js';
 
 // CÓDIGO DE MÁQUINA
 export const cod_maquina = helperCodigo('Código da máquina');
 
-// CÓDIGO DE SETOR
-export const cod_setor = helperCodigo('Código da máquina');
+// ID DE SETOR
+export const id_setor = helperId('Código da máquina');
 
 // NOME
 export const nome = z
