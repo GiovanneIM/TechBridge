@@ -12,7 +12,6 @@ import { Settings, User, LogOut, Grid2X2, KanbanSquare, CircleQuestionMark, User
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import ItemSidebar from "./items/itemSidebar";
-import Dashboard from "@/app/(user)/gerente/dashboard/page";
 import TemaSidebar from "./items/temaSidebar";
 import LogoutSidebar from "./items/logoutSidebar";
 
@@ -50,7 +49,7 @@ export default function SidebarBase({ children, suporte }) {
 
             {/* Perfil */}
             <div className="px-2 py-2 md:px-1 md:py-1">
-                <ItemSidebar icon={User} label={"Perfil"} href={`/${user.cargo}/perfil`} active={pathname.startsWith(`/${user.cargo}/perfil`) && nav_active} />
+                <ItemSidebar icon={User} label={"Perfil"} href={`/${user?.cargo}/perfil`} active={pathname.startsWith(`/${user?.cargo}/perfil`) && nav_active} />
             </div>
 
             <Separator />

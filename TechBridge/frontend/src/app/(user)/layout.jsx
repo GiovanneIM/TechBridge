@@ -27,10 +27,10 @@ export default function UserLayout({ children }) {
 
 
 	// CARREGANDO PERFIL
-    if (loading.perfil) return null;
+    // if (loading.perfil) return null;
 
 	// NÃO HÁ USUÁRIO LOGADO
-    if (!isAuthenticated) return null;
+    // if (!isAuthenticated) return null;
 
 
 	// HÁ UM USUÁRIO LOGADO

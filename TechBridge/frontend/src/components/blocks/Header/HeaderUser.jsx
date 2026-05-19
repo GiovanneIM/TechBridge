@@ -34,7 +34,7 @@ export default function HeaderUser() {
 
                     {/* LOGO */}
                     <Link
-                        href={`/${user.cargo}/dashboard`}
+                        href={`/${user?.cargo}/dashboard`}
                         className="hidden md:flex items-center order-1 w-fit sm:w-1/2 lg:w-auto"
                     >
                         <img
@@ -68,13 +68,13 @@ export default function HeaderUser() {
                         {/* Usuário */}
                         <div className="flex items-center gap-2">
                             <div className="flex flex-col items-end">
-                                <div className="font-genty text-foreground text-md">{user.nome}</div>
-                                <div className="font-genty text-muted-foreground text-sm">{user.cargo[0].toUpperCase() + user.cargo.slice(1,20)} - {user.empresa}</div>
+                                <div className="font-genty text-foreground text-md">{user?.nome}</div>
+                                <div className="font-genty text-muted-foreground text-sm">{user?.cargo[0].toUpperCase() + user?.cargo.slice(1,20)} - {user?.empresa}</div>
                             </div>
 
                             <Avatar size="lg">
-                                <AvatarImage src={user.foto_perfil} />
-                                <AvatarFallback>{user.nome.split(' ').map((n) => (n[0]))}</AvatarFallback>
+                                <AvatarImage src={user?.foto_perfil} />
+                                <AvatarFallback>{user?.nome.split(' ').map((n) => (n[0]))}</AvatarFallback>
                             </Avatar>
                         </div>
                     </div>

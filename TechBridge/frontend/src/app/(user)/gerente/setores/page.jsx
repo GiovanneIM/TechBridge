@@ -1,4 +1,4 @@
-import PageSetores from "@/components/blocks/Pages/Gerente/PageSetores";
+import PageSetores from "@/components/blocks/Pages/Gerente/setores/PageList";
 import { cookies } from "next/headers";
 
 async function getSetores(token) {

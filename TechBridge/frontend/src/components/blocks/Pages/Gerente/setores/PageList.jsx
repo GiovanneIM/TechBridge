@@ -1,8 +1,8 @@
 "use client";
 
-import ErrorPage from "../../Holders/ErrorPage";
-import LoadingPage from "../../Holders/LoadingPage";
-import HeaderPage from "../../Header/HeaderPage";
+import ErrorPage from "../../../Holders/ErrorPage";
+import LoadingPage from "../../../Holders/LoadingPage";
+import HeaderPage from "../../../Header/HeaderPage";
 
 import {
     BriefcaseBusiness,
@@ -11,10 +11,13 @@ import {
     Warehouse,
     Wrench,
     RotateCw,
+    Plus,
 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import { useSetores } from "@/hooks/hooks2/useSetores";
+import { useState } from "react";
+import ModalAddSetor from "@/components/modals/addSetor";
 
 // ===============================
 // ÍCONES
@@ -53,6 +56,7 @@ export default function PageSetores({
 }) {
     const router = useRouter();
 
+    // HOOK
     const {
         setores = [],
         loadingSetores = {},
@@ -60,25 +64,24 @@ export default function PageSetores({
         refetchSetores,
     } = useSetores({
         setoresIniciais,
-
-        // faz fetch corretamente
-        fetchOnMount:
-            !setoresIniciais ||
-            setoresIniciais.length === 0,
+        fetchOnMount: true
     });
 
-    // ===============================
-    // LOADING
-    // ===============================
+
+    // CONTROLE DO MODAL DE REGISTRO DE SETOR
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    function abrirModal() {
+        setIsModalOpen(true)
+    }
+
+
     const isFirstLoad =
         loadingSetores?.fetch &&
         (setores ?? []).length === 0;
 
     let content;
 
-    // ===============================
     // PRIMEIRO LOAD
-    // ===============================
     if (isFirstLoad) {
         content = (
             <LoadingPage
@@ -90,24 +93,20 @@ export default function PageSetores({
         );
     }
 
-    // ===============================
     // ERRO
-    // ===============================
-    else if (errorSetores?.fetch) {
-        content = (
-            <ErrorPage
-                errorTitle="Erro ao carregar setores"
-                errorSubtitle={[
-                    "Houve um erro ao carregar setores",
-                    "Por favor recarregue a página para tentar novamente",
-                ]}
-            />
-        );
-    }
+    // else if (errorSetores?.fetch) {
+    //     content = (
+    //         <ErrorPage
+    //             errorTitle="Erro ao carregar setores"
+    //             errorSubtitle={[
+    //                 "Houve um erro ao carregar setores",
+    //                 "Por favor recarregue a página para tentar novamente",
+    //             ]}
+    //         />
+    //     );
+    // }
 
-    // ===============================
     // CONTEÚDO
-    // ===============================
     else {
         content = (
             <div className="flex-1 px-6 py-6 bg-gray-50 dark:bg-sidebar">
@@ -119,7 +118,7 @@ export default function PageSetores({
                             (setor, i) => {
                                 const icone =
                                     icones[
-                                        setor?.icone
+                                    setor?.icone
                                     ] || icones.default;
 
                                 const cor = getCor(i);
@@ -204,13 +203,15 @@ export default function PageSetores({
                         )}
                     </div>
                 </div>
+
+
+                <ModalAddSetor/>
+
             </div>
         );
     }
 
-    // ===============================
     // PAGE
-    // ===============================
     return (
         <div className="flex-1 flex flex-col bg-gray-50 dark:bg-slate-950">
 
@@ -220,18 +221,26 @@ export default function PageSetores({
                 actions={[
                     loadingSetores?.fetch
                         ? {
-                              icon: (
-                                  <RotateCw className="animate-spin" />
-                              ),
-                              text: "Carregando",
-                              disabled: true,
-                          }
+                            icon: (
+                                <RotateCw className="animate-spin" />
+                            ),
+                            text: "Carregando",
+                            disabled: true,
+                        }
                         : {
-                              icon: <RotateCw />,
-                              text: "Recarregar",
-                              onClick:
-                                  refetchSetores,
-                          },
+                            icon: <RotateCw />,
+                            text: "Recarregar",
+                            onClick:
+                                refetchSetores,
+                        },
+                    {
+                        icon: (
+                            <Plus />
+                        ),
+                        text: "Novo setor",
+                        disabled: loadingSetores?.fetch,
+                        onclick: () => {}
+                    }
                 ]}
             />
 

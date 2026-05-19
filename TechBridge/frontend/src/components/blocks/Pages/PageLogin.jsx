@@ -17,7 +17,6 @@ import {
 	FieldSeparator,
 	FieldSet,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../../ui/input-group";
 import { KeyRound, Mail } from "lucide-react";
@@ -25,7 +24,7 @@ import { KeyRound, Mail } from "lucide-react";
 export default function PageLogin() {
 	const router = useRouter()
 
-	// Obtendo o usuário e a função de login
+	// HOOK
 	const {
 		user,
 		loading,
@@ -34,25 +33,39 @@ export default function PageLogin() {
 		isAuthenticated
 	} = useAuth()
 
-	// Se houver um usuário logado, o redireciona até a página dashboard
+	// SE HOUVER UM USUÁRIO LOGADO, O DIRECIONA PARA O DASHBOARD
 	useEffect(() => {
 		if (isAuthenticated && user?.cargo) {
 			router.replace(`/${user.cargo}/dashboard`);
 		}
 	}, [user, isAuthenticated, router]);
 
-	// Controlando o estado dos inputs
+	// VARIÁVEIS DOS DADOS DE LOGIN
 	const [email, setEmail] = useState('');
 	const [senha, setSenha] = useState('');
 
+	// FUNÇÃO DE ENVIO DO FORMULÁRIO
+	const fazerLogin = async (e) => {
+		e.preventDefault();
 
+		const dadosLogin = { email, senha }
+
+		try {
+			await login(dadosLogin);
+		} catch (err) {
+			console.error(err);
+		}
+	}
+
+
+	// SE HOUVER UM USUÁRIO LOGADO
 	if (isAuthenticated) return null;
 
+	// EXIBINDO O FORMULÁRIO
 	return (
 		<div className="w-vw h-svh flex justify-center items-center flex-wrap">
-			{/* Background */}
+			{/* BACKGROUND */}
 			<div className="absolute w-full z-0 bottom-0">
-				{/* Ondas */}
 				<svg className="wave" viewBox="0 0 1440 320">
 					<path fill="#5170ff" fillOpacity="1"
 						d="M0,160 
@@ -66,51 +79,46 @@ export default function PageLogin() {
 				</svg>
 			</div>
 
-			{/* Card */}
+			{/* CARD */}
 			<div className="w-full max-w-md h-fit z-10 opacity-95 border p-4 rounded-md bg-card">
 
-				{/* Logo da TechBridge*/}
+				{/* LOGO*/}
 				<div className="w-full flex justify-center">
-					<Link href="/" className="flex flex-col items-center gap-2">
+					<Link href="/" className="flex flex-col items-center gap-1">
 						<img
 							src="/TechBridge/Logo.svg"
-							className="mr-3 h-12"
+							className=" h-18"
 							alt="TechBridge logo"
 						/>
 
-						<p className="text-3xl font-genty">
-							Tech
-							<span className="text-techbridge">Bridge</span>
-						</p>
+						<img
+							src="/TechBridge/TechBridgeText.svg"
+							className="h-12"
+							alt="TechBridge logo"
+						/>
 					</Link>
 				</div>
 
 				<Separator className="my-4" />
 
-				{/* Formulário de login */}
-				<form onSubmit={async (e) => {
-					e.preventDefault();
-
-					const dadosLogin = { email, senha }
-
-					try {
-						await login(dadosLogin);
-					} catch (err) {
-						console.error(err);
-					}
-				}}>
-					<FieldGroup className="">
+				{/* FORMULÁRIO */}
+				<form onSubmit={fazerLogin}>
+					<FieldGroup className="px-2 gap-4">
 						<FieldSet>
-							<FieldLegend variant="" className="text-2xl font-genty">Login</FieldLegend>
+							<FieldLegend variant="" className="text-2xl font-genty">
+								Login
+							</FieldLegend>
 
 							<FieldGroup className="px-4">
+								{/* INPUT EMAIL */}
 								<Field >
-									<FieldLabel htmlFor="emailLogin" className="font-semibold text-muted-foreground">
+									<FieldLabel htmlFor="email" className="font-semibold text-muted-foreground">
 										E-mail
 									</FieldLabel>
-									<InputGroup className='w-1/2'>
+
+									<InputGroup>
 										<InputGroupInput
-											id="emailLogin"
+											id="email"
 											placeholder="E-mail"
 											type="email"
 											disabled={loading.login}
@@ -119,19 +127,22 @@ export default function PageLogin() {
 											value={email}
 											onChange={(e) => setEmail(e.target.value)}
 										/>
+
 										<InputGroupAddon>
 											<Mail />
 										</InputGroupAddon>
 									</InputGroup>
 								</Field>
 
+								{/* INPUT SENHA */}
 								<Field>
-									<FieldLabel htmlFor="senhaLogin" className="font-semibold text-muted-foreground">
+									<FieldLabel htmlFor="senha" className="font-semibold text-muted-foreground">
 										Senha
 									</FieldLabel>
-									<InputGroup className='w-1/2'>
+
+									<InputGroup>
 										<InputGroupInput
-											id="senhaLogin"
+											id="senha"
 											placeholder="Senha"
 											type="password"
 											disabled={loading.login}
@@ -140,6 +151,7 @@ export default function PageLogin() {
 											value={senha}
 											onChange={(e) => setSenha(e.target.value)}
 										/>
+
 										<InputGroupAddon>
 											<KeyRound />
 										</InputGroupAddon>
@@ -150,14 +162,14 @@ export default function PageLogin() {
 
 						<FieldSeparator />
 
-						{/* Mensagem de erro */}
+						{/* MENSAGEM DE ERRO */}
 						{error.login && <p className="text-red-500 font-bold text-center">{error.login}</p>}
 
-						{/* Botão de Login */}
+						{/* BOTÃO - LOGIN */}
 						<Field orientation="horizontal" className="justify-center">
 							<Button
-								type="submit" 
-								size="lg" 
+								type="submit"
+								size="lg"
 								disabled={loading.login}
 								className="bg-techbridge text-white w-35 font-bold text-md"
 							>

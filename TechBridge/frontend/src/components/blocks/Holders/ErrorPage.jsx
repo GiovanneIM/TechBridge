@@ -5,7 +5,7 @@ export default function ErrorPage({
     errorSubtitle
 }) {
     return (
-        <div className="flex-1 bg-blue-50 flex flex-col items-center justify-center">
+        <div className="flex-1 bg-blue-50 dark:bg-background flex flex-col items-center justify-center">
             <div className="relative flex flex-col justify-center items-center gap-8">
                 <div className="relative w-fit h-fit">
                     <div className="w-40 h-40 -z-10 absolute top-1/2 left-1/2 -translate-1/2 rounded-full animate-ping"></div>

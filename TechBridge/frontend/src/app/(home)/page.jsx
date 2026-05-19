@@ -13,7 +13,6 @@ import {
 	Card,
 	CardAction,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
@@ -247,7 +246,7 @@ function Cards() {
 					<Card className="relative w-full max-w-sm overflow-hidden pt-0 pb-4 gap-4" key={i}>
 						<div>
 							{/* Overlay sobre a imagem */}
-							<div className="absolute inset-0 z-30 aspect-video bg-techbridge/35 dark:bg-techbridge/35" />
+							<div className="absolute inset-0 z-30 aspect-video bg-techbridge/35 dark:bg-techbridge/20" />
 							{/* Imagem */}
 							<img
 								src={cont.image}
@@ -259,18 +258,18 @@ function Cards() {
 						<div>
 							{/* Header do card */}
 							<CardHeader className="px-4">
+								<CardTitle className="text-foreground dark:text-techbridge font-genty text-2xl ">
+									{cont.title}
+								</CardTitle>
+
 								<CardAction>
 									<Badge variant="secondary" className="font-genty">{cont.badge}</Badge>
 								</CardAction>
-
-								<CardTitle className="text-techbridge font-genty text-2xl ">
-									{cont.title}
-								</CardTitle>
 							</CardHeader>
 
 							{/* Conteúdo do card */}
 							<CardContent className="px-4">
-								<ul className="text-muted-foreground text-justify font-semibold text-sm">
+								<ul className="text-muted-foreground text-justify text-sm font-semibold">
 									{cont.list.map((l, j) => {
 										return (<li key={j} className="mt-3">{l}</li>)
 									})}
