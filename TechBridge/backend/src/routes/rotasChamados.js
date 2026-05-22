@@ -22,9 +22,8 @@ const router = express.Router();
 // LISTAR CHAMADOS DE UMA EMPRESA
 router.get(
     '/empresas/:id_empresa/chamados',
-    validateZod(paginacaoSchema, 'query'),      // Query - Paginação
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
-    () => {}
+    ChamadosController.listar
 )
 
 // LISTAR CHAMADO ESPECÍFICO

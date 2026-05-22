@@ -7,6 +7,8 @@ class ChamadosModel {
         const chamados = read("chamados", {
             where: { id_empresa }
         })
+
+        return chamados;
     }
 }
 
