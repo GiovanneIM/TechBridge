@@ -9,6 +9,8 @@ import authRotas from './rotasAuth.js';
 import adminRotas from './rotasAdmin.js'
 import empresasRotas from './rotasEmpresas.js';
 
+import chamadosRotas2 from './rotasChamados.js';
+
 import testeRotas from './rotas_consertar/rotasTeste.js'
 
 // ROTAS PARA CONSERTAR
@@ -31,6 +33,7 @@ router.use('/teste', testeRotas);
 // ROTAS PARA CONSERTAR
 router.use('/user', userRotas);
 router.use('/chamados', chamadosRotas);
+router.use('/chamados2', chamadosRotas2);
 router.use('/painel', painelRotas);
 
 export default router;
