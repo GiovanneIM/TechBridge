@@ -13,6 +13,7 @@ import EmpresasController from '../controllers/Empresas.js';
 import UserController from '../controllers/User.js';
 import SetoresController from '../controllers/Setores.js';
 import MaquinaController from '../controllers/Maquinas.js';
+import ChamadosController from '../controllers/Chamados.js';
 import { handleUploadError, setUploadTipo, TIPOS_UPLOAD, upload } from '../middlewares/uploadMiddleware.js';
 // ZOD
 import { validateZod } from '../middlewares/validate.js';
@@ -661,5 +662,13 @@ router.patch(
     () => { }
 );
 
+// CHAMADOS
+
+// LISTAR CHAMADOS DE UMA EMPRESA
+router.get(
+    '/:id_empresa/chamados',
+    validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    ChamadosController.listar
+)
 
 export default router;

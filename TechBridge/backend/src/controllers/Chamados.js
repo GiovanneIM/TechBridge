@@ -1,4 +1,6 @@
-import ChamadosModel from "../models/Chamados";
+import ChamadosModel from "../models/Chamados.js";
+import EmpresasModel from "../models/Empresas.js";
+import { pertenceAEmpresa } from "../utils/validacoes.js";
 
 class ChamadosController {
 
@@ -55,41 +57,50 @@ class ChamadosController {
         }
     }
 
-    // LISTAR CHAMADO ESPECÍFICO
-    static async obter(req, res) {
+    // OBTER CHAMADO POR ID
+    static async obterPorID(req, res) {
         // OBTER O ID DA EMPRESA
         const { id_chamado } = req.params;
 
-        // VERIFICANDO SE O USUÁRIO TEM ACESSO
-        const acesso = pertenceAEmpresa(req, id_empresa);
-        if (!acesso) {
-            return res.status(403).json({
-                sucesso: false,
-                erro: 'Erro interno do servidor',
-                mensagem: 'Você não tem acesso a essa rota'
-            });
-        }
-
         try {
             // BUSCAR CHAMADOS
-            const chamados = await ChamadosModel.listar(id_empresa);
+            const chamado = await ChamadosModel.buscarPorId(id_chamado);
+
+            // VERIFICAR SE O CHAMADO FOI ENCONTRADO
+            if (!chamado) {
+                return res.status(404).json({
+                    sucesso: false,
+                    erro: 'Erro ao buscar chamado',
+                    mensagem: 'Chamado não foi encontrado'
+                });
+            }
+
+            // VERIFICAR SE O USUÁRIO TEM ACESSO
+            const acesso = pertenceAEmpresa(req, chamado.id_empresa);
+            if (!acesso) {
+                return res.status(403).json({
+                    sucesso: false,
+                    erro: 'Erro de permissão',
+                    mensagem: 'Você não tem acesso a essa rota'
+                });
+            }
 
             // SUCESSO: ENVIAR SETORES
             res.status(200).json({
                 sucesso: true,
-                mensagem: `Empresa ${id_empresa} - Chamados listados com sucesso`,
-                dados: { chamados },
+                mensagem: `Chamado listado com sucesso`,
+                dados: { chamado },
             });
         }
         catch (error) {
             // ERROS:
-            console.error('Erro ao obter os chamados da empresa:', error);
+            console.error('Erro ao obter o chamado da empresa:', error);
 
             // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível obter os chamados da empresa'
+                mensagem: 'Não foi possível obter o chamado da empresa'
             });
         }
     }

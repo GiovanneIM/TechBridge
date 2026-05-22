@@ -17,19 +17,12 @@ import { params_Empresa } from '../schemas/params/empresa.schema.js';
 const router = express.Router();
 
 
-// CHAMADOS
 
-// LISTAR CHAMADOS DE UMA EMPRESA
-router.get(
-    '/empresas/:id_empresa/chamados',
-    validateZod(params_Empresa, 'params'),      // Params - ID da empresa
-    ChamadosController.listar
-)
 
 // LISTAR CHAMADO ESPECÍFICO
 router.get(
-    '/chamados/:id_chamado',
-    () => {}
+    '/:id_chamado',
+    ChamadosController.obterPorID
 )
 
 // CRIAR CHAMADO
@@ -49,3 +42,5 @@ router.patch(
     '/chamados/:id_chamado/concluir',
     () => {}
 )
+
+export default router;
