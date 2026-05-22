@@ -34,7 +34,7 @@ export function useAuth({
 
         try {
             console.log(dadosLogin);
-            
+
             // REQUISIÇÃO
             const data = await API_LOGIN(dadosLogin);
 
@@ -106,6 +106,9 @@ export function useAuth({
                 method: 'POST',
                 credentials: 'include'
             });
+
+            // APAGAR TOKEN
+            sessionStorage.removeItem('token');
 
             // LIMPANDO USUÁRIO
             setUser(null);

@@ -9,6 +9,7 @@ async function API_LOGIN(user) {
     // FAZER A REQUISIÇÃO
     const response = await fetch(API_URL + '/auth/login', {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
