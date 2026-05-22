@@ -12,11 +12,17 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import com.senai.techbridgemobile.model.ChamadoResponse;
 public interface ApiService {
-    @GET("techbridge/chamados/buscar")
+    // FAZER LOGIN
+    @POST("/techbridge/auth/login")
+    Call<LoginResponse> login(
+            @Body LoginRequest request
+    );
+
+    // OBTER CHAMADOS ABERTOS
+    @GET("/techbridge/chamados/abertos")
     Call<ChamadoResponse> carregarChamados(
             @Header("Authorization") String token
     );
 
-    @POST("techbridge/auth/login")
-    Call<LoginResponse> login(@Body LoginRequest request);
+
 }

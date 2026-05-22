@@ -8,6 +8,12 @@ import {
     gerentePrincipalMiddleware,
     gerenteMiddleware
 } from '../middlewares/authMiddleware.js';
+// CONTROLLERS
+import EmpresasController from '../controllers/Empresas.js';
+import UserController from '../controllers/User.js';
+import SetoresController from '../controllers/Setores.js';
+import MaquinaController from '../controllers/Maquinas.js';
+import { handleUploadError, setUploadTipo, TIPOS_UPLOAD, upload } from '../middlewares/uploadMiddleware.js';
 // ZOD
 import { validateZod } from '../middlewares/validate.js';
 import { params_Empresa } from '../schemas/params/empresa.schema.js';
@@ -21,12 +27,6 @@ import { updateSetorSchema } from '../schemas/body/setor/updateSetor.schema.js';
 import { params_EmpresaMaquina } from '../schemas/params/empresa_setor_maquina.schema.js';
 import { createMaquinaSchema } from '../schemas/body/maquina/createMaquina.schema.js';
 import { updateMaquinaSchema } from '../schemas/body/maquina/updateMaquina.schema.js';
-// CONTROLLERS
-import EmpresasController from '../controllers/Empresas.js';
-import UserController from '../controllers/User.js';
-import SetoresController from '../controllers/Setores.js';
-import MaquinaController from '../controllers/Maquinas.js';
-import { handleUploadError, setUploadTipo, TIPOS_UPLOAD, upload } from '../middlewares/uploadMiddleware.js';
 
 
 const router = express.Router();

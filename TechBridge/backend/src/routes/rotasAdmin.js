@@ -4,7 +4,6 @@ import { adminMiddleware, authMiddleware } from '../middlewares/authMiddleware.j
 import { validateZod } from '../middlewares/validate.js';
 import { paginacaoSchema } from '../schemas/query/paginacao.js';
 import { createEmpresaSchema } from '../schemas/body/empresa/createEmpresa.schema.js';
-import LogController from '../controllers/Log.js';
 
 const router = express.Router();
 
@@ -147,16 +146,5 @@ router.delete('/empresas/:empresa', () => { });
  *         description: Não foi possível excluir o usuário
  */
 router.delete('/usuarios/:usuario', () => { });
-
-/**
- * @swagger
- * /admin/log/total:
- *   get:
- *     summary: Obter total de Logs
- *     tags: [Admin]
- *     security:
- *       - bearerAuth: []
- */
-router.get('/log/total', LogController.total)
 
 export default router;

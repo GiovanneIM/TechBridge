@@ -1,4 +1,4 @@
-import LogModel from '../models/Logs.js';
+import LogModel from '../../models/Logs.js';
 
 
 class LogController {
