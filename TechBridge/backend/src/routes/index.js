@@ -9,14 +9,14 @@ import authRotas from './rotasAuth.js';
 import adminRotas from './rotasAdmin.js'
 import empresasRotas from './rotasEmpresas.js';
 
-import chamadosRotas2 from './rotasChamados.js';
+import chamadosRotas from './rotasChamados.js';
 
 import testeRotas from './rotas_consertar/rotasTeste.js'
 
 // ROTAS PARA CONSERTAR
 
 import userRotas from './rotas_consertar/rotasUser.js';
-import chamadosRotas from './rotas_consertar/rotasChamados.js';
+import chamadosRotas2 from './rotas_consertar/rotasChamados.js';
 import painelRotas from './rotas_consertar/rotasPainel.js';
 
 // ATIVAR AS ROTAS
@@ -26,13 +26,13 @@ router.use('/admin', authMiddleware, adminMiddleware, adminRotas);
 
 // ROTAS PARA FINALIZAR
 router.use('/empresas', authMiddleware, empresasRotas);
+router.use('/chamados', authMiddleware, chamadosRotas);
 
 // ROTAS DE TESTE
 router.use('/teste', testeRotas);
 
 // ROTAS PARA CONSERTAR
 router.use('/user', userRotas);
-router.use('/chamados', chamadosRotas);
 router.use('/chamados2', chamadosRotas2);
 router.use('/painel', painelRotas);
 
