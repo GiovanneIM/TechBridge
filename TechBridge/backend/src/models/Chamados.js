@@ -1,5 +1,13 @@
 import { read, update, create, deleteRecord } from "../config/database";
 
-class ChamadosModel {}
+class ChamadosModel {
+
+    // LISTAR CHAMADOS DE UMA EMPRESA
+    static async listar(id_empresa) {
+        const chamados = read("chamados", {
+            where: { id_empresa }
+        })
+    }
+}
 
 export default ChamadosModel;
