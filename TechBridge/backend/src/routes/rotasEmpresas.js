@@ -522,7 +522,7 @@ router.get(
  */
 router.post(
     '/:id_empresa/setores/:cod_setor/maquinas',
-    validateZod(params_Empresa, 'params'),          // Params - ID da empresa e Código do chamado
+    validateZod(params_EmpresaSetor, 'params'),     // Params - ID da empresa, Código do setor
     validateZod(createMaquinaSchema, 'body'),       // Body - Dados da máquina
     gerenteMiddleware,                              // Gerente
     MaquinaController.criar                         // Controller Maquinas - Criar
@@ -662,6 +662,8 @@ router.patch(
     () => { }
 );
 
+
+
 // CHAMADOS
 
 // LISTAR CHAMADOS DE UMA EMPRESA
@@ -676,20 +678,20 @@ router.get(
 router.get(
     '/:id_empresa/setores/:cod_setor/chamados',
     validateZod(params_EmpresaSetor, 'params'),      // Params - ID da empresa
-    () => { }
+    ChamadosController.listarDoSetor
 )
 
 // LISTAR CHAMADOS DE UMA MÁQUINA
 router.get(
     '/:id_empresa/setores/:cod_setor/maquinas/:cod_maquina/chamados',
     validateZod(params_EmpresaMaquina, 'params'),      // Params - ID da empresa
-    () => { }
+    ChamadosController.listarDaMaquina
 )
 
-// LISTAR CHAMADO ESPECÍFICO 
+// LISTAR CHAMADO ESPECÍFICO (A partir ds códigos)
 router.get(
     '/:id_empresa/setores/:cod_setor/maquinas/:cod_maquina/chamados/:cod_chamado',
-    () => { }
+    ChamadosController.obterPorCodigo
 )
 
 export default router;

@@ -35,7 +35,7 @@ class ChamadosController {
 
         try {
             // BUSCAR CHAMADOS
-            const chamados = await ChamadosModel.listar(id_empresa);
+            const chamados = await ChamadosModel.listar({ id_empresa });
 
             // SUCESSO: ENVIAR SETORES
             res.status(200).json({
@@ -53,6 +53,144 @@ class ChamadosController {
                 sucesso: false,
                 erro: 'Erro interno do servidor',
                 mensagem: 'Não foi possível obter os chamados da empresa'
+            });
+        }
+    }
+
+    // LISTAR CHAMADOS DE UM SETOR
+    static async listarDoSetor(req, res) {
+        // OBTER O ID DA EMPRESA E O CÓDIGO DO SETOR
+        const { id_empresa, cod_setor } = req.params;
+
+        // VERIFICANDO SE O USUÁRIO TEM ACESSO
+        const acesso = pertenceAEmpresa(req, id_empresa);
+        if (!acesso) {
+            return res.status(403).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Você não tem acesso a essa rota'
+            });
+        }
+
+        try {
+            // BUSCAR CHAMADOS
+            const chamados = await ChamadosModel.listar({
+                id_empresa,
+                cod_setor
+            });
+
+            // SUCESSO: ENVIAR SETORES
+            res.status(200).json({
+                sucesso: true,
+                mensagem: `Empresa ${id_empresa} - Chamados listados com sucesso`,
+                dados: { chamados },
+            });
+        }
+        catch (error) {
+            // ERROS:
+            console.error('Erro ao obter os chamados do setor:', error);
+
+            // ERRO DO SERVIDOR
+            return res.status(500).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Não foi possível obter os chamados do setor'
+            });
+        }
+    }
+
+    // LISTAR CHAMADOS DE UMA MAQUINA
+    static async listarDaMaquina(req, res) {
+        // OBTER O ID DA EMPRESA, O CÓDIGO DO SETOR E O CÓDIGO DA MÁQUINA
+        const { id_empresa, cod_setor, cod_maquina } = req.params;
+
+        // VERIFICANDO SE O USUÁRIO TEM ACESSO
+        const acesso = pertenceAEmpresa(req, id_empresa);
+        if (!acesso) {
+            return res.status(403).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Você não tem acesso a essa rota'
+            });
+        }
+
+        try {
+            // BUSCAR CHAMADOS
+            const chamados = await ChamadosModel.listar({
+                id_empresa,
+                cod_setor,
+                cod_maquina
+            });
+
+            // SUCESSO: ENVIAR SETORES
+            res.status(200).json({
+                sucesso: true,
+                mensagem: `Empresa ${id_empresa} - Chamados listados com sucesso`,
+                dados: { chamados },
+            });
+        }
+        catch (error) {
+            // ERROS:
+            console.error('Erro ao obter os chamados da maquina:', error);
+
+            // ERRO DO SERVIDOR
+            return res.status(500).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Não foi possível obter os chamados da maquina'
+            });
+        }
+    }
+
+    // OBTER CHAMADO POR CÓDIGO
+    static async obterPorCodigo(req, res) {
+        // OBTER O ID DA EMPRESA, O CÓDIGO DO SETOR, O CÓDIGO DA MÁQUINA E O CÓDIGO DO CHAMADO
+        const { id_empresa, cod_setor, cod_maquina, cod_chamado } = req.params;
+
+        // VERIFICAR SE O USUÁRIO TEM ACESSO
+        const acesso = pertenceAEmpresa(req, id_empresa);
+        if (!acesso) {
+            return res.status(403).json({
+                sucesso: false,
+                erro: 'Erro de permissão',
+                mensagem: 'Você não tem acesso a essa rota'
+            });
+        }
+
+        try {
+            // BUSCAR CHAMADOS
+            const chamado = await ChamadosModel.buscarPorCodigo({
+                id_empresa,
+                cod_setor,
+                cod_maquina,
+                cod_chamado
+            });
+
+            // VERIFICAR SE O CHAMADO FOI ENCONTRADO
+            if (!chamado) {
+                return res.status(404).json({
+                    sucesso: false,
+                    erro: 'Erro ao buscar chamado',
+                    mensagem: 'Chamado não foi encontrado'
+                });
+            }
+
+            // SUCESSO: ENVIAR SETORES
+            res.status(200).json({
+                sucesso: true,
+                mensagem: `Chamado listado com sucesso`,
+                dados: { chamado },
+            });
+        }
+        catch (error) {
+            // ERROS:
+            console.error('Erro ao obter o chamado da empresa:', error);
+
+            // ERRO DO SERVIDOR
+            return res.status(500).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Não foi possível obter o chamado da empresa'
             });
         }
     }
