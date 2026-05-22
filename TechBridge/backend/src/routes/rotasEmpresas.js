@@ -671,4 +671,25 @@ router.get(
     ChamadosController.listar
 )
 
+
+// LISTAR CHAMADOS DE UM SETOR
+router.get(
+    '/:id_empresa/setores/:cod_setor/chamados',
+    validateZod(params_EmpresaSetor, 'params'),      // Params - ID da empresa
+    () => { }
+)
+
+// LISTAR CHAMADOS DE UMA MÁQUINA
+router.get(
+    '/:id_empresa/setores/:cod_setor/maquinas/:cod_maquina/chamados',
+    validateZod(params_EmpresaMaquina, 'params'),      // Params - ID da empresa
+    () => { }
+)
+
+// LISTAR CHAMADO ESPECÍFICO 
+router.get(
+    '/:id_empresa/setores/:cod_setor/maquinas/:cod_maquina/chamados/:cod_chamado',
+    () => { }
+)
+
 export default router;
