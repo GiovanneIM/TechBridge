@@ -2,12 +2,14 @@
 
 import { useMemo, useState, useEffect } from 'react';
 
+import { useEmpresa } from '@/hooks/useEmpresa';
+import { useAuth } from '@/context/AuthContext';
+
 import ErrorPage from '../../Holders/ErrorPage';
 import LoadingPage from '../../Holders/LoadingPage';
 import HeaderPage from '../../Header/HeaderPage';
 
 import { Grid2X2, RotateCw, Cpu } from 'lucide-react';
-import { useMaquinas } from "@/hooks/hooks2/useMaquina";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,19 +27,26 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination";
 
-export default function PageMaquinas({ maquinasIniciais }) {
+
+
+export default function PageMaquinas() {
 
     const {
-        maquinas,
-        loading,
-        error,
-        refetchMaquinas,
-    } = useMaquinas({
-        initialMachines: maquinasIniciais,
-        fetchOnMount: maquinasIniciais?.length === 0,
-    });
+        user
+    } = useAuth()
 
-    const isFirstLoad = loading.fetch && (maquinas ?? []).length === 0;
+    const {
+        loading, error,
+        maquinas, obterMaquinas,
+    } = useEmpresa({});
+
+    useEffect(() => {
+        if (!maquinas && !loading.obterMaquinas && user.id_empresa) obterMaquinas(user.id_empresa)
+    }, [maquinas, loading.obterMaquinas, obterMaquinas, user?.id_empresa])
+
+
+
+    const isFirstLoad = loading.obterMaquinas && (maquinas ?? []).length === 0;
 
     const [filtro, setFiltro] = useState({
         nome_maquina: '',
@@ -113,7 +122,7 @@ export default function PageMaquinas({ maquinasIniciais }) {
         );
     }
 
-    if (error.fetch) {
+    if (error.obterMaquinas) {
         return (
             <ErrorPage
                 errorTitle={"Erro ao carregar máquinas"}
@@ -132,9 +141,9 @@ export default function PageMaquinas({ maquinasIniciais }) {
                 title="Máquinas em Operação"
                 actions={[
                     {
-                        icon: <RotateCw className={loading.fetch ? "animate-spin" : ""} />,
+                        icon: <RotateCw className={loading.obterMaquinas ? "animate-spin" : ""} />,
                         text: loading.fetch ? "Atualizando..." : "Recarregar",
-                        onClick: refetchMaquinas,
+                        onClick: () => obterMaquinas(user?.id_empresa),
                         disabled: loading.fetch,
                     },
                 ]}

@@ -237,7 +237,7 @@ export function useEmpresa() {
             // SUCESSO
             else {
                 // ATUALIZAR MEMBROS
-                setSetores(data.dados.membros)
+                setSetores(data.dados.setores)
             }
         } catch (err) {
             // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
@@ -278,7 +278,7 @@ export function useEmpresa() {
             // SUCESSO
             else {
                 // ATUALIZAR MEMBROS
-                setMaquinas(data.dados.membros)
+                setMaquinas(data.dados.maquinas)
             }
         } catch (err) {
             // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`

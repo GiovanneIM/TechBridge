@@ -13,6 +13,7 @@ export default function PageEmpresa() {
     const id_empresa = params.id;
 
     const {
+        loading, error,
         empresa, obterEmpresa,
         membros, obterMembros,
         setores, obterSetores,
