@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState, useEffect } from 'react';
 
 import { useEmpresa } from '@/hooks/useEmpresa';
@@ -41,8 +42,8 @@ export default function PageMaquinas() {
     } = useEmpresa({});
 
     useEffect(() => {
-        if (!maquinas && !loading.obterMaquinas && user.id_empresa) obterMaquinas(user.id_empresa)
-    }, [maquinas, loading.obterMaquinas, obterMaquinas, user?.id_empresa])
+        if (!maquinas) obterMaquinas(user.id_empresa)
+    }, [maquinas, obterMaquinas])
 
 
 
@@ -113,6 +114,9 @@ export default function PageMaquinas() {
         setFiltro((prev) => ({ ...prev, page: 1 }));
     };
 
+    let content
+
+    // FIRST LOAD
     if (isFirstLoad) {
         return (
             <LoadingPage
@@ -122,7 +126,8 @@ export default function PageMaquinas() {
         );
     }
 
-    if (error.obterMaquinas) {
+    // ERROR
+    else if (error.obterMaquinas) {
         return (
             <ErrorPage
                 errorTitle={"Erro ao carregar máquinas"}
@@ -134,21 +139,18 @@ export default function PageMaquinas() {
         );
     }
 
-    return (
-        <div className="flex-1 flex flex-col bg-gray-50 dark:bg-sidebar">
-            <HeaderPage
-                icon={Grid2X2}
-                title="Máquinas em Operação"
-                actions={[
-                    {
-                        icon: <RotateCw className={loading.obterMaquinas ? "animate-spin" : ""} />,
-                        text: loading.fetch ? "Atualizando..." : "Recarregar",
-                        onClick: () => obterMaquinas(user?.id_empresa),
-                        disabled: loading.fetch,
-                    },
-                ]}
+    // RELOADING
+    else if (loading.obterSetores) {
+        content = (
+            <LoadingPage
+                loadingTitle="Carregando maquinas"
+                loadingSubtitle={[]}
             />
+        );
+    }
 
+    else {
+        content = (
             <div className="p-4 flex-1 flex flex-col gap-4">
                 <Field
                     orientation="horizontal"
@@ -303,6 +305,25 @@ export default function PageMaquinas() {
 
                 </div>
             </div>
+        )
+    }
+
+    return (
+        <div className="flex-1 flex flex-col bg-gray-50 dark:bg-sidebar">
+            <HeaderPage
+                icon={Grid2X2}
+                title="Máquinas em Operação"
+                actions={[
+                    {
+                        icon: <RotateCw className={loading.obterMaquinas ? "animate-spin" : ""} />,
+                        text: loading.fetch ? "Atualizando..." : "Recarregar",
+                        onClick: () => obterMaquinas(user?.id_empresa),
+                        disabled: loading.fetch,
+                    },
+                ]}
+            />
+
+            {content}
         </div>
     );
 }

@@ -1,5 +1,11 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import { useAuth } from "@/context/AuthContext";
+import { useEmpresa } from "@/hooks/useEmpresa";
+
 import ErrorPage from "../../../Holders/ErrorPage";
 import LoadingPage from "../../../Holders/LoadingPage";
 import HeaderPage from "../../../Header/HeaderPage";
@@ -14,10 +20,9 @@ import {
     Plus,
 } from "lucide-react";
 
-import { useRouter } from "next/navigation";
-import { useSetores } from "@/hooks/hooks2/useSetores";
-import { useState } from "react";
+
 import ModalAddSetor from "@/components/modals/addSetor";
+
 
 // ===============================
 // ÍCONES
@@ -51,37 +56,28 @@ function getCor(index) {
     return coresFixas[index % coresFixas.length];
 }
 
-export default function PageSetores({
-    setoresIniciais = [],
-}) {
+export default function PageSetores() {
     const router = useRouter();
 
-    // HOOK
     const {
-        setores = [],
-        loadingSetores = {},
-        errorSetores = {},
-        refetchSetores,
-    } = useSetores({
-        setoresIniciais,
-        fetchOnMount: true
-    });
+        user
+    } = useAuth()
+
+    const {
+        loading, error,
+        setores, obterSetores,
+    } = useEmpresa({});
+
+    useEffect(() => {
+        if (!setores) obterSetores(user.id_empresa)
+    }, [setores, obterSetores])
 
 
-    // CONTROLE DO MODAL DE REGISTRO DE SETOR
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    function abrirModal() {
-        setIsModalOpen(true)
-    }
-
-
-    const isFirstLoad =
-        loadingSetores?.fetch &&
-        (setores ?? []).length === 0;
+    const isFirstLoad = loading.obterSetores && (setores ?? []).length === 0;
 
     let content;
 
-    // PRIMEIRO LOAD
+    // FIRST LOAD
     if (isFirstLoad) {
         content = (
             <LoadingPage
@@ -93,18 +89,28 @@ export default function PageSetores({
         );
     }
 
-    // ERRO
-    // else if (errorSetores?.fetch) {
-    //     content = (
-    //         <ErrorPage
-    //             errorTitle="Erro ao carregar setores"
-    //             errorSubtitle={[
-    //                 "Houve um erro ao carregar setores",
-    //                 "Por favor recarregue a página para tentar novamente",
-    //             ]}
-    //         />
-    //     );
-    // }
+    // ERROR
+    else if (error.obterSetores) {
+        content = (
+            <ErrorPage
+                errorTitle="Erro ao carregar setores"
+                errorSubtitle={[
+                    "Houve um erro ao carregar setores",
+                    "Por favor recarregue a página para tentar novamente",
+                ]}
+            />
+        );
+    }
+
+    // RELOADING
+    else if (loading.obterSetores) {
+        content = (
+            <LoadingPage
+                loadingTitle="Carregando setores"
+                loadingSubtitle={[]}
+            />
+        );
+    }
 
     // CONTEÚDO
     else {
@@ -205,7 +211,7 @@ export default function PageSetores({
                 </div>
 
 
-                <ModalAddSetor/>
+                <ModalAddSetor />
 
             </div>
         );
@@ -219,7 +225,7 @@ export default function PageSetores({
                 icon={Warehouse}
                 title="Setores"
                 actions={[
-                    loadingSetores?.fetch
+                    loading.obterSetores
                         ? {
                             icon: (
                                 <RotateCw className="animate-spin" />
@@ -230,16 +236,15 @@ export default function PageSetores({
                         : {
                             icon: <RotateCw />,
                             text: "Recarregar",
-                            onClick:
-                                refetchSetores,
+                            onClick: () => obterSetores(user.id_empresa),
                         },
                     {
                         icon: (
                             <Plus />
                         ),
                         text: "Novo setor",
-                        disabled: loadingSetores?.fetch,
-                        onclick: () => {}
+                        disabled: loading.obterSetores,
+                        onclick: () => { }
                     }
                 ]}
             />
