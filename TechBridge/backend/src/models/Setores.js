@@ -50,6 +50,22 @@ class SetoresModel {
             throw error;
         }
     }
+
+    // BUSCAR POR ID
+    static async buscarPorId(id_setor) {
+        try {
+            // FAZER A CONSULTA
+            const setor = await read("setores", {
+                where: { id_setor }
+            })
+
+            // RETORNANDO O SETOR
+            return setor[0] || null
+        } catch (error) {
+            console.error('Erro ao buscar setor por id:', error);
+            throw error;
+        }
+    }
 }
 
 export default SetoresModel;

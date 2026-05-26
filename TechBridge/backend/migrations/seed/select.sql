@@ -91,3 +91,9 @@ SELECT u.*, tu.descricao, e.nome_fantasia
 FROM usuarios u
 INNER JOIN tipos_usuarios tu ON tu.id = u.tipo_usuario
 LEFT JOIN empresas e ON e.id = u.id_empresa;
+
+
+
+SELECT max(c.cod_chamado)
+FROM chamados c
+WHERE c.id_maquina = 2

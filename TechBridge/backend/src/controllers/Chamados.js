@@ -3,6 +3,7 @@ import EmpresasModel from "../models/Empresas.js";
 import SetoresModel from "../models/Setores.js";
 import MaquinasModel from "../models/Maquinas.js";
 import { pertenceAEmpresa } from "../utils/validacoes.js";
+import { id_setor } from "../schemas/dados/maquina.js";
 
 class ChamadosController {
 
@@ -240,7 +241,7 @@ class ChamadosController {
         }
     }
 
-    // CRIAR UM CHAMADOS
+    // CRIAR UM CHAMADO
     static async chamar(req, res) {
         /**
          * RECEBER:
@@ -250,19 +251,55 @@ class ChamadosController {
         const { id_maquina } = req.params;
 
         try {
-            const maquina = MaquinasModel.obterPorID(id_maquina)
+            const maquina = await MaquinasModel.buscarPorId(id_maquina)
+            const setor = await SetoresModel.buscarPorId(maquina.id_setor)
+            const empresa = await EmpresasModel.buscarPorId(req.id_empresa)
+
+            const chamado = {
+                id_empresa: empresa.id,
+                id_setor: setor.id,
+                id_maquina,
+            }
+
+            const id_chamado = await ChamadosModel.chamar(chamado);
+
+            return id_chamado;
         } catch (error) {
-            
+
         }
     }
 
     // ATENDER UM CHAMADOS
     static async atender(req, res) {
+        const { id_chamado } = req.params;
+        const { id_tecnico } = req.body;
 
+        const datahora_atendimento = new Date();
+
+        const affectedRows = await ChamadosModel.atualizar(
+            id_chamado,
+            {
+                id_tecnico,
+                datahora_atendimento
+            }
+        );
+
+        if (!affectedRows) {
+            return res.status(404).json({
+                sucesso: false,
+                mensagem: "Chamado não encontrado"
+            });
+        }
+
+        return res.status(200).json({
+            sucesso: true,
+            mensagem: "Chamado atendido com sucesso"
+        });
     }
 
     // CONCLUIR UM CHAMADO
     static async concluir(req, res) {
+        const { id_chamado } = req.params;
 
     }
 }

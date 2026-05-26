@@ -61,8 +61,8 @@ class MaquinasModel {
         try {
             console.log(id_setor);
             console.log(cod_maquina);
-            
-            
+
+
             // FAZER A CONSULTA
             const maquina = await read("maquinas", {
                 where: { id_setor, cod_maquina }
@@ -72,6 +72,22 @@ class MaquinasModel {
             return maquina[0] || null
         } catch (error) {
             console.error('Erro ao buscar maquina por código:', error);
+            throw error;
+        }
+    }
+
+    // BUSCAR POR ID
+    static async buscarPorId(id_maquina) {
+        try {
+            // FAZER A CONSULTA
+            const setor = await read("maquinas", {
+                where: { id_maquina }
+            })
+
+            // RETORNANDO O SETOR
+            return setor[0] || null
+        } catch (error) {
+            console.error('Erro ao buscar maquina por id:', error);
             throw error;
         }
     }

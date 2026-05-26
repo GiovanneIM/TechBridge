@@ -28,7 +28,7 @@ router.get(
 // CRIAR CHAMADO
 router.post(
     '/chamados/:id_maquina',
-    () => {}
+    ChamadosController.chamar
 )
 
 // ATENDER CHAMADO
