@@ -1,5 +1,7 @@
 import ChamadosModel from "../models/Chamados.js";
 import EmpresasModel from "../models/Empresas.js";
+import MaquinasModel from "../models/Maquinas.js";
+import SetoresModel from "../models/Setores.js";
 import { pertenceAEmpresa } from "../utils/validacoes.js";
 
 class ChamadosController {
@@ -59,10 +61,13 @@ class ChamadosController {
         }
 
         try {
+            // OBTENDO O SETOR
+            const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor)
+
             // BUSCAR CHAMADOS
             const chamados = await ChamadosModel.listar({
                 id_empresa,
-                cod_setor
+                id_setor : setor.id
             });
 
             // SUCESSO: ENVIAR SETORES
@@ -101,11 +106,14 @@ class ChamadosController {
         }
 
         try {
+            const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor)
+            const maquina = await MaquinasModel.buscarCodigo(setor.id, cod_maquina)
+
             // BUSCAR CHAMADOS
             const chamados = await ChamadosModel.listar({
                 id_empresa,
-                cod_setor,
-                cod_maquina
+                id_setor: setor.id,
+                id_maquina: maquina.id
             });
 
             // SUCESSO: ENVIAR SETORES
@@ -144,13 +152,14 @@ class ChamadosController {
         }
 
         try {
-            // 
+            const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor)
+            const maquina = await MaquinasModel.buscarCodigo(setor.id, cod_maquina)
 
             // BUSCAR CHAMADOS
             const chamado = await ChamadosModel.buscarPorCodigo({
                 id_empresa,
-                cod_setor,
-                cod_maquina,
+                id_setor: setor.id,
+                id_maquina: maquina.id,
                 cod_chamado
             });
 
