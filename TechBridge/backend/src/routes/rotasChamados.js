@@ -19,7 +19,7 @@ const router = express.Router();
 
 
 
-// LISTAR CHAMADO ESPECÍFICO
+// LISTAR CHAMADO ESPECÍFICO (POR ID)
 router.get(
     '/:id_chamado',
     ChamadosController.obterPorID
@@ -27,7 +27,7 @@ router.get(
 
 // CRIAR CHAMADO
 router.post(
-    '/chamados',
+    '/chamados/:id_maquina',
     () => {}
 )
 

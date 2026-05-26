@@ -67,6 +67,8 @@ export default function PageEmpresa() {
                 }
             </pre>
 
+            <Separator />
+
             <p>MAQUINAS DA EMPRESA</p>
             <pre>
                 {

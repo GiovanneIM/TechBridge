@@ -1,7 +1,7 @@
 import ChamadosModel from "../models/Chamados.js";
 import EmpresasModel from "../models/Empresas.js";
-import MaquinasModel from "../models/Maquinas.js";
 import SetoresModel from "../models/Setores.js";
+import MaquinasModel from "../models/Maquinas.js";
 import { pertenceAEmpresa } from "../utils/validacoes.js";
 
 class ChamadosController {
@@ -67,7 +67,7 @@ class ChamadosController {
             // BUSCAR CHAMADOS
             const chamados = await ChamadosModel.listar({
                 id_empresa,
-                id_setor : setor.id
+                id_setor: setor.id
             });
 
             // SUCESSO: ENVIAR SETORES
@@ -160,7 +160,7 @@ class ChamadosController {
                 id_empresa,
                 id_setor: setor.id,
                 id_maquina: maquina.id,
-                cod_chamado
+                cod_chamado,
             });
 
             // VERIFICAR SE O CHAMADO FOI ENCONTRADO
@@ -238,6 +238,32 @@ class ChamadosController {
                 mensagem: 'Não foi possível obter o chamado da empresa'
             });
         }
+    }
+
+    // CRIAR UM CHAMADOS
+    static async chamar(req, res) {
+        /**
+         * RECEBER:
+         * id_maquina
+         */
+
+        const { id_maquina } = req.params;
+
+        try {
+            const maquina = MaquinasModel.obterPorID(id_maquina)
+        } catch (error) {
+            
+        }
+    }
+
+    // ATENDER UM CHAMADOS
+    static async atender(req, res) {
+
+    }
+
+    // CONCLUIR UM CHAMADO
+    static async concluir(req, res) {
+
     }
 }
 

@@ -16,12 +16,12 @@ import {
 
 export default function UserLayout({ children }) {
 	const router = useRouter()
-	const { loading, user } = useAuth()
+	const { loading, error, user } = useAuth()
 
 	// VERIFICANDO SE HÁ UM USUÁRIO LOGADO
 	useEffect(() => {
-		if (!loading.perfil && !user) {
-			router.replace('/acesso-negado');
+		if (!error.perfil && !user) {
+			// router.replace('/acesso-negado');
 		}
 	}, [loading.perfil, user]);
 
