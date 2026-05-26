@@ -19,20 +19,6 @@ class ChamadosController {
             });
         }
 
-
-        // // OBTER PAGINAÇÃO
-        // const { page, limit, status, nome_empresa, estado } = req.validated.query;
-
-        // // FILTROS
-        // const where = {}
-
-        // if (cod_setor) { }
-        // if (cod_maquina) { }
-        // if (id_tecnico) { }
-        // if (datahora_abertura) { }
-        // if (datahora_atendimento) { }
-        // if (datahora_conclusao) { }
-
         try {
             // BUSCAR CHAMADOS
             const chamados = await ChamadosModel.listar({ id_empresa });
@@ -158,6 +144,8 @@ class ChamadosController {
         }
 
         try {
+            // 
+
             // BUSCAR CHAMADOS
             const chamado = await ChamadosModel.buscarPorCodigo({
                 id_empresa,

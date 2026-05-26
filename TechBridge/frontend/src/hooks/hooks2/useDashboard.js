@@ -3,7 +3,7 @@ import { apiFetch } from '@/lib/api';
 
 
 // URL base da API
-// const API_BASE_URL = 'http://localhost:3000/api/chamados/dashboard';
+// const API_BASE_URL = 'http://localhost:3000/api/chamados2/dashboard';
 const API_BASE_ENDPOINT = '/chamados/dashboard';
 
 export function useDashboard({
