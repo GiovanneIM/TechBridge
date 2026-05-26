@@ -49,7 +49,7 @@ async function read(table, options = {}) {
     // Criando conexão
     const connection = await getConnection();
     let hasWhere = false;
-    
+
     try {
         // Formando o comando
         let sql = "SELECT ";
@@ -145,19 +145,18 @@ async function read(table, options = {}) {
 
         // LIMIT
         if (options.limit !== undefined) {
-            sql += ` LIMIT ?`;
-            values.push(options.limit);
+            sql += ` LIMIT ${Number(options.limit)}`;
         }
-
 
         // OFFSET
         if (options.offset !== undefined) {
-            sql += ` OFFSET ?`;
-            values.push(options.offset);
+            sql += ` OFFSET ${Number(options.offset)}`;
         }
 
 
         console.log(sql);
+        console.log(values);
+
 
         // Executando o comando
         const [rows] = await connection.execute(sql, values);

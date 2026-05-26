@@ -25,10 +25,8 @@ import {
 export default function PageEmpresas() {
 
     const {
-        empresas,
-        loading,
-        error,
-        obterEmpresas
+        loading, error,
+        empresas, obterEmpresas
     } = useEmpresa()
 
     const [filtro, setFiltro] = useState({
@@ -37,6 +35,12 @@ export default function PageEmpresas() {
         limit: 10,
         page: 1,
     })
+
+    useEffect(() => {
+        if (!empresas) {
+            obterEmpresas()
+        }
+    }, [empresas, obterEmpresas])
 
     // FETCH AUTOMÁTICO
     useEffect(() => {
@@ -96,12 +100,12 @@ export default function PageEmpresas() {
                 icon={Warehouse}
                 title="Procurar Empresa"
             />
+            
+            {loading.obterEmpresas && <div>Obtendo empresas</div>}
+            {error.obterEmpresas && <div>{error.obterEmpresas}</div>}
 
             <div className="p-4 flex-1 flex flex-col gap-4">
 
-                {/* =========================
-                    FILTROS (AJUSTADO VISUAL)
-                ========================= */}
                 <Field
                     orientation="horizontal"
                     className="border bg-card p-3 rounded gap-3 items-end flex-wrap"
@@ -180,9 +184,7 @@ export default function PageEmpresas() {
 
                 </Field>
 
-                {/* =========================
-                    PAGINAÇÃO TOPO
-                ========================= */}
+                {/* PAGINAÇÃO SUPERIOR */}
                 <Pagination>
                     <PaginationContent>
 
@@ -218,15 +220,7 @@ export default function PageEmpresas() {
                     </PaginationContent>
                 </Pagination>
 
-                {/* =========================
-                    ESTADOS
-                ========================= */}
-                {loading.obterEmpresas && <div>Obtendo empresas</div>}
-                {error.obterEmpresas && <div>{error.obterEmpresas}</div>}
-
-                {/* =========================
-                    GRID
-                ========================= */}
+                {/* DISPLAY */}
                 <div className="h-full border bg-card p-3 rounded grid grid-cols-4 gap-3 items-start overflow-y-auto">
 
                     {empresas?.lista?.map((e) => (
@@ -274,9 +268,7 @@ export default function PageEmpresas() {
                     ))}
                 </div>
 
-                {/* =========================
-                    PAGINAÇÃO FINAL
-                ========================= */}
+                {/* PAGINAÇÃO INFERIOR */}
                 <Pagination>
                     <PaginationContent>
 
