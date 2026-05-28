@@ -1,4 +1,4 @@
-package com.senai.techbridgemobile;
+package com.senai.techbridgemobile.database;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     // URL DA API
-    private static final String BASE_URL = "http://10.84.7.6:3000";
+    private static final String BASE_URL = "http://10.84.7.4:3000";
 
     // INSTÂNCIA DO BANCO DE DADOS
     private static Retrofit retrofit = null;
@@ -18,6 +18,7 @@ public class RetrofitClient {
             // CRIA A INSTÂNCIA
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
+                    // TRANSFORMA JSON EM OBJETO JAVA
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

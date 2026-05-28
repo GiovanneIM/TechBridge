@@ -23,7 +23,16 @@ class ChamadosModel {
 
     // LISTAR CHAMADOS DE UMA EMPRESA
     static async listar(where) {
-        const chamados = await read("chamados", {
+        const chamados = await read("chamados c", {
+            columns: [
+                "c.*",
+                "s.cod_setor as cod_setor",
+                "m.cod_maquina as cod_maquina",
+            ],
+            join: [
+                { type: "INNER", table: "setores s", on: "s.id = c.id_setor" },
+                { type: "INNER", table: "maquinas m", on: "m.id = c.id_maquina" }
+            ],
             where
         })
 
@@ -32,7 +41,16 @@ class ChamadosModel {
 
     // BUSCAR POR CODIGO
     static async buscarPorCodigo(where) {
-        const rows = await read("chamados", {
+        const rows = await read("chamados c", {
+            columns: [
+                "c.*",
+                "s.cod_setor as cod_setor",
+                "m.cod_maquina as cod_maquina",
+            ],
+            join: [
+                { type: "INNER", table: "setores s", on: "s.id = c.id_setor" },
+                { type: "INNER", table: "maquinas m", on: "m.id = c.id_maquina" }
+            ],
             where
         })
 
@@ -42,7 +60,16 @@ class ChamadosModel {
     // BUSCAR POR ID
     static async buscarPorId(id) {
         const rows = await read("chamados", {
-            where: { id }
+            columns: [
+                "c.*",
+                "s.cod_setor as cod_setor",
+                "m.cod_maquina as cod_maquina",
+            ],
+            join: [
+                { type: "INNER", table: "setores s", on: "s.id = c.id_setor" },
+                { type: "INNER", table: "maquinas m", on: "m.id = c.id_maquina" }
+            ],
+            where: { "c.id": id }
         })
 
         return rows[0];

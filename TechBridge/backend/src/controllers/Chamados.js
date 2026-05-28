@@ -11,6 +11,7 @@ class ChamadosController {
     static async listar(req, res) {
         // OBTER O ID DA EMPRESA
         const { id_empresa } = req.params;
+        const { estado } = req.query;
 
         // VERIFICANDO SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
@@ -23,8 +24,12 @@ class ChamadosController {
         }
 
         try {
+            const where = { "c.id_empresa": id_empresa };
+
+            if (estado) { where.estado = estado }
+
             // BUSCAR CHAMADOS
-            const chamados = await ChamadosModel.listar({ id_empresa });
+            const chamados = await ChamadosModel.listar(where);
 
             // SUCESSO: ENVIAR SETORES
             res.status(200).json({
@@ -158,10 +163,10 @@ class ChamadosController {
 
             // BUSCAR CHAMADOS
             const chamado = await ChamadosModel.buscarPorCodigo({
-                id_empresa,
-                id_setor: setor.id,
-                id_maquina: maquina.id,
-                cod_chamado,
+                "c.id_empresa": id_empresa ,
+                "c.id_setor": setor.id,
+                "c.id_maquina": maquina.id,
+                "c.cod_chamado": cod_chamado
             });
 
             // VERIFICAR SE O CHAMADO FOI ENCONTRADO
