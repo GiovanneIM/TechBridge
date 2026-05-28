@@ -384,51 +384,58 @@ export default function PageEmpresas() {
                         </div>
                     }
 
-                    {empresas?.lista?.map((e) => (
-                        <div key={e.id} className="w-md">
-                            <div
-                                key={e.id}
-                                className="items-center bg-card border rounded shadow-xl p-3 text-xs"
-                            >
-                                <div className="flex gap-3">
+                    {!loading.obterEmpresas && !error.obterEmpresas &&
+                        <div className="
+                            h-full w-full 
+                            flex flex-wrap items-center justify-center gap-4
+                        ">
+                            {empresas?.lista?.map((e) => (
+                                <div key={e.id} className="w-md">
+                                    <div
+                                        key={e.id}
+                                        className="items-center bg-card border rounded shadow-xl p-3 text-xs"
+                                    >
+                                        <div className="flex gap-3">
 
-                                    <div className="flex items-center justify-center relative border p-2 w-40 h-40">
-                                        <Building2 size={40} />
+                                            <div className="flex items-center justify-center relative border p-2 w-40 h-40">
+                                                <Building2 size={40} />
 
-                                        <div className={`absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center ${e.status ? 'bg-ativo' : 'bg-inativo'}`}>
-                                            <div className="w-2 h-2 rounded-full bg-white"></div>
-                                        </div>
-                                    </div>
-
-                                    <div className="h-30 flex flex-col flex-1 overflow-y-auto">
-                                        <div className="font-bold text-xl">{e.nome_fantasia}</div>
-
-                                        <div className="my-1">
-                                            Registro em {format(new Date(e.data_criacao), 'dd/MM/yyyy', { locale: ptBR })}
-                                        </div>
-
-                                        {!e.status && (
-                                            <div className="my-1">
-                                                desativada em {format(new Date(e.data_desativacao), 'dd/MM/yyyy', { locale: ptBR })}
+                                                <div className={`absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center ${e.status ? 'bg-ativo' : 'bg-inativo'}`}>
+                                                    <div className="w-2 h-2 rounded-full bg-white"></div>
+                                                </div>
                                             </div>
-                                        )}
 
-                                        <div className="my-1 text-muted-foreground flex-1 text-md">
-                                            {e.razao_social}
+                                            <div className="h-30 flex flex-col flex-1 overflow-y-auto">
+                                                <div className="font-bold text-xl">{e.nome_fantasia}</div>
+
+                                                <div className="my-1">
+                                                    Registro em {format(new Date(e.data_criacao), 'dd/MM/yyyy', { locale: ptBR })}
+                                                </div>
+
+                                                {!e.status && (
+                                                    <div className="my-1">
+                                                        desativada em {format(new Date(e.data_desativacao), 'dd/MM/yyyy', { locale: ptBR })}
+                                                    </div>
+                                                )}
+
+                                                <div className="my-1 text-muted-foreground flex-1 text-md">
+                                                    {e.razao_social}
+                                                </div>
+                                            </div>
+
                                         </div>
+
+                                        <Button asChild className='text-white mt-3 w-full'>
+                                            <Link href={`/admin/empresas/${e.id}`}>
+                                                Ver empresa
+                                            </Link>
+                                        </Button>
+
                                     </div>
-
                                 </div>
-
-                                <Button asChild className='text-white mt-3 w-full'>
-                                    <Link href={`/admin/empresas/${e.id}`}>
-                                        Ver empresa
-                                    </Link>
-                                </Button>
-
-                            </div>
+                            ))}
                         </div>
-                    ))}
+                    }
                 </div>
             </div>
         </div>
