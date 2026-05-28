@@ -385,7 +385,7 @@ export default function PageEmpresas() {
                     }
 
                     {empresas?.lista?.map((e) => (
-                        <div>
+                        <div key={e.id} className="w-md">
                             <div
                                 key={e.id}
                                 className="items-center bg-card border rounded shadow-xl p-3 text-xs"
