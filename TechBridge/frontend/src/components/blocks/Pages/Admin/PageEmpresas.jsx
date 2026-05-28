@@ -21,6 +21,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+import Image from "next/image";
 
 export default function PageEmpresas() {
 
@@ -117,16 +118,16 @@ export default function PageEmpresas() {
                     orientation="horizontal"
                     className="
                         border bg-card p-4 rounded-lg gap-4
-                        grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5
+                        grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5
                         items-end
                     "
                 >
 
                     {/* NOME */}
-                    <FieldContent className="">
+                    <FieldContent>
                         <FieldLabel>Procurar Empresa</FieldLabel>
                         <Input
-                            className="w-full h-10"
+                            className="w-full h-11"
                             value={filtro.nome_empresa}
                             onChange={(e) =>
                                 setFiltro((prev) => ({
@@ -139,7 +140,7 @@ export default function PageEmpresas() {
                     </FieldContent>
 
                     {/* LIMIT */}
-                    <FieldContent className="">
+                    <FieldContent>
                         <FieldLabel>Empresas por página</FieldLabel>
 
                         <Tabs
@@ -164,7 +165,7 @@ export default function PageEmpresas() {
                     </FieldContent>
 
                     {/* STATUS */}
-                    <FieldContent className="">
+                    <FieldContent>
                         <FieldLabel>Status</FieldLabel>
 
                         <Tabs
@@ -187,7 +188,7 @@ export default function PageEmpresas() {
                     </FieldContent>
 
                     {/* ESTADO */}
-                    <FieldContent>
+                    <FieldContent className="h-full">
                         <FieldLabel>Estado</FieldLabel>
 
                         <Select
@@ -200,52 +201,113 @@ export default function PageEmpresas() {
                                 }))
                             }
                         >
-                            <SelectTrigger className="w-full h-10">
+                            <SelectTrigger className="w-full h-full">
                                 <SelectValue placeholder="Selecione um estado" />
                             </SelectTrigger>
 
                             <SelectContent className="" position="popper">
-                                <SelectItem value="all border-b">Todos</SelectItem>
+                                <SelectItem value="all" className="border">Todos</SelectItem>
 
                                 {/* GRID */}
-                                <div className="grid grid-rows-2 gap-4 p-2">
-                                    {Object.entries(estadosPorRegiao).map(([regiao, estados]) => (
-                                        <div key={regiao}>
-                                            {/* REGIÃO */}
+                                <div className="grid grid-cols-2 gap-4 pt-2">
+                                    <div>
+                                        <div>
                                             <p className="
                                                 text-xs font-semibold mb-1
                                                 text-foreground/70 tracking-wide
+                                                border-b py-1.5 pr-8 pl-2
                                             ">
-                                                {regiao}
+                                                Norte
                                             </p>
 
-                                            {/* ESTADOS */}
-                                            <div className="flex flex-col">
-                                                {estados.map((uf) => (
-                                                    <SelectItem key={uf} value={uf}>
-                                                        {uf}
-                                                    </SelectItem>
-                                                ))}
-                                            </div>
+                                            {estadosPorRegiao["Norte"].map((uf) => (
+                                                <SelectItem key={uf} value={uf}>
+                                                    {uf}
+                                                </SelectItem>
+                                            ))}
                                         </div>
-                                    ))}
+
+                                        <div>
+                                            <p className="
+                                                text-xs font-semibold mb-1
+                                                text-foreground/70 tracking-wide
+                                                border-b py-1.5 pr-8 pl-2
+                                            ">
+                                                Nordeste
+                                            </p>
+
+                                            {estadosPorRegiao["Nordeste"].map((uf) => (
+                                                <SelectItem key={uf} value={uf}>
+                                                    {uf}
+                                                </SelectItem>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div>
+                                            <p className="
+                                                text-xs font-semibold mb-1
+                                                text-foreground/70 tracking-wide
+                                                border-b py-1.5 pr-8 pl-2
+                                            ">
+                                                Centro-Oeste
+                                            </p>
+
+                                            {estadosPorRegiao["Centro-Oeste"].map((uf) => (
+                                                <SelectItem key={uf} value={uf}>
+                                                    {uf}
+                                                </SelectItem>
+                                            ))}
+                                        </div>
+
+                                        <div>
+                                            <p className="
+                                                text-xs font-semibold mb-1
+                                                text-foreground/70 tracking-wide
+                                                border-b py-1.5 pr-8 pl-2
+                                            ">
+                                                Sul
+                                            </p>
+
+                                            {estadosPorRegiao["Sul"].map((uf) => (
+                                                <SelectItem key={uf} value={uf}>
+                                                    {uf}
+                                                </SelectItem>
+                                            ))}
+                                        </div>
+
+                                        <div>
+                                            <p className="
+                                                text-xs font-semibold mb-1
+                                                text-foreground/70 tracking-wide
+                                                border-b py-1.5 pr-8 pl-2
+                                            ">
+                                                Sudeste
+                                            </p>
+
+                                            {estadosPorRegiao["Sudeste"].map((uf) => (
+                                                <SelectItem key={uf} value={uf}>
+                                                    {uf}
+                                                </SelectItem>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </SelectContent>
                         </Select>
                     </FieldContent>
 
-
-
-
-                    {/* BOTÃO */}
-                    <Button className="text-white h-10 w-full lg:w-auto px-6" onClick={filtrar}>
-                        Procurar
-                    </Button>
-
+                    <div className="w-full h-full flex items-end">
+                        {/* BOTÃO */}
+                        <Button className="text-white w-full h-10 px-6" onClick={filtrar}>
+                            Procurar
+                        </Button>
+                    </div>
                 </Field>
 
                 {/* PAGINAÇÃO SUPERIOR */}
-                <Pagination className="flex-col items-center">
+                <Pagination className="flex-col items-center gap-2">
                     <PaginationContent>
 
                         <PaginationItem>
@@ -285,55 +347,95 @@ export default function PageEmpresas() {
                 </Pagination>
 
                 {/* DISPLAY */}
-                <div className="h-full border bg-card p-3 rounded grid grid-cols-4 gap-3 items-start overflow-y-auto">
+                <div className="h-full border bg-card p-3 rounded gap-3 items-start overflow-y-auto">
 
-                    {loading.obterEmpresas && <div>Obtendo empresas</div>}
+                    {loading.obterEmpresas &&
+                        <div className="
+                            h-full w-full 
+                            flex flex-col items-center justify-center gap-4
+                            text-muted-foreground font-semibold text-center
+                        ">
+                            <Image
+                                height={128}
+                                width={128}
+                                alt="Logo Erro"
+                                src="/TechBridge/Logo.svg"
+                                className="animate-pulse"
+                            />
 
-                    {error.obterEmpresas && <div>{error.obterEmpresas}</div>}
-
-                    {empresas?.lista?.map((e) => (
-                        <div
-                            key={e.id}
-                            className="items-center bg-card border rounded shadow-xl p-3 text-xs"
-                        >
-                            <div className="flex gap-3">
-
-                                <div className="flex items-center justify-center relative border p-2 w-40 h-40">
-                                    <Building2 size={40} />
-
-                                    <div className={`absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center ${e.status ? 'bg-ativo' : 'bg-inativo'}`}>
-                                        <div className="w-2 h-2 rounded-full bg-white"></div>
-                                    </div>
-                                </div>
-
-                                <div className="h-30 flex flex-col flex-1 overflow-y-auto">
-                                    <div className="font-bold text-xl">{e.nome_fantasia}</div>
-
-                                    <div className="my-1">
-                                        Registro em {format(new Date(e.data_criacao), 'dd/MM/yyyy', { locale: ptBR })}
-                                    </div>
-
-                                    {!e.status && (
-                                        <div className="my-1">
-                                            desativada em {format(new Date(e.data_desativacao), 'dd/MM/yyyy', { locale: ptBR })}
-                                        </div>
-                                    )}
-
-                                    <div className="my-1 text-muted-foreground flex-1 text-md">
-                                        {e.razao_social}
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <Button asChild className='text-white mt-3 w-full'>
-                                <Link href={`/admin/empresas/${e.id}`}>
-                                    Ver empresa
-                                </Link>
-                            </Button>
-
+                            <p>Obtendo empresas</p>
                         </div>
-                    ))}
+                    }
+
+                    {error.obterEmpresas &&
+                        <div className="
+                            h-full w-full 
+                            flex flex-col items-center justify-center gap-4
+                            text-muted-foreground font-semibold text-center
+                        ">
+                            <Image
+                                height={128}
+                                width={128}
+                                alt="Logo Erro"
+                                src="/TechBridge/LogoError.svg"
+                            />
+
+                            <p>{error.obterEmpresas}</p>
+                        </div>
+                    }
+
+                    {!loading.obterEmpresas && !error.obterEmpresas &&
+                        <div className="
+                            h-full w-full 
+                            flex flex-wrap justify-center gap-4
+                        ">
+                            {empresas?.lista?.map((e) => (
+                                <div key={e.id} className="w-sm">
+                                    <div
+                                        key={e.id}
+                                        className="items-center bg-card border rounded shadow-xl p-3 text-xs"
+                                    >
+                                        <div className="flex gap-3">
+
+                                            <div className="flex items-center justify-center relative border p-2 w-40 h-40">
+                                                <Building2 size={40} />
+
+                                                <div className={`absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center ${e.status ? 'bg-ativo' : 'bg-inativo'}`}>
+                                                    <div className="w-2 h-2 rounded-full bg-white"></div>
+                                                </div>
+                                            </div>
+
+                                            <div className="h-30 flex flex-col flex-1 overflow-y-auto">
+                                                <div className="font-bold text-xl">{e.nome_fantasia}</div>
+
+                                                <div className="my-1">
+                                                    Registro em {format(new Date(e.data_criacao), 'dd/MM/yyyy', { locale: ptBR })}
+                                                </div>
+
+                                                {!e.status && (
+                                                    <div className="my-1">
+                                                        desativada em {format(new Date(e.data_desativacao), 'dd/MM/yyyy', { locale: ptBR })}
+                                                    </div>
+                                                )}
+
+                                                <div className="my-1 text-muted-foreground flex-1 text-md">
+                                                    {e.razao_social}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <Button asChild className='text-white mt-3 w-full'>
+                                            <Link href={`/admin/empresas/${e.id}`}>
+                                                Ver empresa
+                                            </Link>
+                                        </Button>
+
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    }
                 </div>
             </div>
         </div>
