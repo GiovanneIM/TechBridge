@@ -387,7 +387,7 @@ export default function PageEmpresas() {
                     {!loading.obterEmpresas && !error.obterEmpresas &&
                         <div className="
                             h-full w-full 
-                            flex flex-wrap items-center justify-center gap-4
+                            flex flex-wrap items-center gap-4
                         ">
                             {empresas?.lista?.map((e) => (
                                 <div key={e.id} className="w-md">
