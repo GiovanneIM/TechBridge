@@ -390,7 +390,7 @@ export default function PageEmpresas() {
                             flex flex-wrap justify-center gap-4
                         ">
                             {empresas?.lista?.map((e) => (
-                                <div key={e.id} className="w-md">
+                                <div key={e.id} className="w-sm">
                                     <div
                                         key={e.id}
                                         className="items-center bg-card border rounded shadow-xl p-3 text-xs"
