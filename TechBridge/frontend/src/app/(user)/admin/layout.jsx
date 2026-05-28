@@ -21,18 +21,18 @@ export default function LayoutAdmin({ children }) {
     const { user, loading } = useAuth()
 
     // VERIFICANDO SE O USUÁRIO É UM ADMIN
-    useEffect(() => {
-        if (!loading.perfil && user?.cargo !== "admin") {
-            router.replace('/permissao-negada');
-        }
-    }, [user, loading.perfil]);
+    // useEffect(() => {
+    //     if (!loading.perfil && user?.cargo !== "admin") {
+    //         router.replace('/permissao-negada');
+    //     }
+    // }, [user, loading.perfil]);
 
 
     // CARREGANDO PERFIL
-    if (loading.perfil) return null;
+    // if (loading.perfil) return null;
 
     // USUÁRIO NÃO É UM ADMIN
-    if (user?.cargo !== "admin") return null;
+    // if (user?.cargo !== "admin") return null;
 
 
     // O USUÁRIO É UM ADMIN

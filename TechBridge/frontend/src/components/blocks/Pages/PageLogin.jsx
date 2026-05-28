@@ -105,7 +105,7 @@ export default function PageLogin() {
 				<form onSubmit={fazerLogin}>
 					<FieldGroup className="px-2 gap-4">
 						<FieldSet>
-							<FieldLegend variant="" className="text-2xl font-genty">
+							<FieldLegend variant="" className="text-2xl font-bold">
 								Login
 							</FieldLegend>
 

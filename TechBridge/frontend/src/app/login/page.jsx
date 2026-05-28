@@ -1,5 +1,5 @@
 import PageLogin from "@/components/blocks/Pages/PageLogin";
 
-export default async function Login() {
+export default function Login() {
 	return <PageLogin />;
 }

@@ -24,16 +24,25 @@ import {
 
 export default function PageEmpresas() {
 
+    const estadosPorRegiao = {
+        "Norte": ["AC", "AP", "AM", "PA", "RO", "RR", "TO"],
+        "Centro-Oeste": ["DF", "GO", "MT", "MS"],
+        "Nordeste": ["AL", "BA", "CE", "MA", "PB", "PE", "PI", "RN", "SE"],
+        "Sudeste": ["ES", "MG", "RJ", "SP"],
+        "Sul": ["PR", "RS", "SC"]
+    };
+
     const {
         loading, error,
         empresas, obterEmpresas
     } = useEmpresa()
 
     const [filtro, setFiltro] = useState({
-        nome_empresa: '',
+        nome_empresa: "",
         status: null,
         limit: 10,
         page: 1,
+        estado: null,
     })
 
     useEffect(() => {
@@ -100,22 +109,24 @@ export default function PageEmpresas() {
                 icon={Warehouse}
                 title="Procurar Empresa"
             />
-            
-            {loading.obterEmpresas && <div>Obtendo empresas</div>}
-            {error.obterEmpresas && <div>{error.obterEmpresas}</div>}
+
 
             <div className="p-4 flex-1 flex flex-col gap-4">
-
+                {/* FILTRO */}
                 <Field
                     orientation="horizontal"
-                    className="border bg-card p-3 rounded gap-3 items-end flex-wrap"
+                    className="
+                        border bg-card p-4 rounded-lg gap-4
+                        grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5
+                        items-end
+                    "
                 >
 
                     {/* NOME */}
-                    <FieldContent className="w-[280px]">
+                    <FieldContent className="">
                         <FieldLabel>Procurar Empresa</FieldLabel>
                         <Input
-                            className="w-full"
+                            className="w-full h-10"
                             value={filtro.nome_empresa}
                             onChange={(e) =>
                                 setFiltro((prev) => ({
@@ -128,9 +139,10 @@ export default function PageEmpresas() {
                     </FieldContent>
 
                     {/* LIMIT */}
-                    <FieldContent className="w-[180px]">
+                    <FieldContent className="">
                         <FieldLabel>Empresas por página</FieldLabel>
-                        <Select
+
+                        <Tabs
                             value={String(filtro.limit)}
                             onValueChange={(value) =>
                                 setFiltro((prev) => ({
@@ -139,23 +151,20 @@ export default function PageEmpresas() {
                                     page: 1
                                 }))
                             }
-                        >
-                            <SelectTrigger className="w-full">
-                                <SelectValue />
-                            </SelectTrigger>
 
-                            <SelectContent>
-                                <SelectItem value="5">5</SelectItem>
-                                <SelectItem value="10">10</SelectItem>
-                                <SelectItem value="25">25</SelectItem>
-                                <SelectItem value="50">50</SelectItem>
-                                <SelectItem value="100">100</SelectItem>
-                            </SelectContent>
-                        </Select>
+                            className="w-full bg-muted p-1 rounded-md"
+                        >
+                            <TabsList className="w-full">
+                                <TabsTrigger value="10" className="flex-1">10</TabsTrigger>
+                                <TabsTrigger value="25" className="flex-1">25</TabsTrigger>
+                                <TabsTrigger value="50" className="flex-1">50</TabsTrigger>
+                                <TabsTrigger value="100" className="flex-1">100</TabsTrigger>
+                            </TabsList>
+                        </Tabs>
                     </FieldContent>
 
                     {/* STATUS */}
-                    <FieldContent className="w-xs">
+                    <FieldContent className="">
                         <FieldLabel>Status</FieldLabel>
 
                         <Tabs
@@ -167,7 +176,7 @@ export default function PageEmpresas() {
                                     page: 1
                                 }))
                             }
-                            className="w-full"
+                            className="w-full bg-muted p-1 rounded-md"
                         >
                             <TabsList className="w-full">
                                 <TabsTrigger value="all" className="flex-1">Todas</TabsTrigger>
@@ -177,15 +186,66 @@ export default function PageEmpresas() {
                         </Tabs>
                     </FieldContent>
 
+                    {/* ESTADO */}
+                    <FieldContent>
+                        <FieldLabel>Estado</FieldLabel>
+
+                        <Select
+                            value={filtro.estado ?? 'all'}
+                            onValueChange={(value) =>
+                                setFiltro((prev) => ({
+                                    ...prev,
+                                    estado: value === 'all' ? null : value,
+                                    page: 1
+                                }))
+                            }
+                        >
+                            <SelectTrigger className="w-full h-10">
+                                <SelectValue placeholder="Selecione um estado" />
+                            </SelectTrigger>
+
+                            <SelectContent className="" position="popper">
+                                <SelectItem value="all border-b">Todos</SelectItem>
+
+                                {/* GRID */}
+                                <div className="grid grid-rows-2 gap-4 p-2">
+                                    {Object.entries(estadosPorRegiao).map(([regiao, estados]) => (
+                                        <div key={regiao}>
+                                            {/* REGIÃO */}
+                                            <p className="
+                                                text-xs font-semibold mb-1
+                                                text-foreground/70 tracking-wide
+                                            ">
+                                                {regiao}
+                                            </p>
+
+                                            {/* ESTADOS */}
+                                            <div className="flex flex-col">
+                                                {estados.map((uf) => (
+                                                    <SelectItem key={uf} value={uf}>
+                                                        {uf}
+                                                    </SelectItem>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </SelectContent>
+                        </Select>
+                    </FieldContent>
+
+
+
+
                     {/* BOTÃO */}
-                    <Button className="text-white h-10" onClick={filtrar}>
+                    <Button className="text-white h-10 w-full lg:w-auto px-6" onClick={filtrar}>
                         Procurar
                     </Button>
 
                 </Field>
 
                 {/* PAGINAÇÃO SUPERIOR */}
-                <Pagination>
+                <Pagination className="flex-col items-center">
                     <PaginationContent>
 
                         <PaginationItem>
@@ -218,10 +278,18 @@ export default function PageEmpresas() {
                         </PaginationItem>
 
                     </PaginationContent>
+
+                    <p className="text-muted-foreground font-semibold text-xs">
+                        Exibindo {empresas?.lista.lenght ?? 0} de {empresas?.paginacao?.total ?? 0} resultados
+                    </p>
                 </Pagination>
 
                 {/* DISPLAY */}
                 <div className="h-full border bg-card p-3 rounded grid grid-cols-4 gap-3 items-start overflow-y-auto">
+
+                    {loading.obterEmpresas && <div>Obtendo empresas</div>}
+
+                    {error.obterEmpresas && <div>{error.obterEmpresas}</div>}
 
                     {empresas?.lista?.map((e) => (
                         <div
@@ -267,43 +335,6 @@ export default function PageEmpresas() {
                         </div>
                     ))}
                 </div>
-
-                {/* PAGINAÇÃO INFERIOR */}
-                <Pagination>
-                    <PaginationContent>
-
-                        <PaginationItem>
-                            <PaginationPrevious
-                                onClick={() => changePage(filtro.page - 1)}
-                                className={filtro.page === 1 ? "pointer-events-none opacity-50" : ""}
-                            />
-                        </PaginationItem>
-
-                        {pages.map((p, i) => (
-                            <PaginationItem key={i}>
-                                {p === '...' ? (
-                                    <PaginationEllipsis />
-                                ) : (
-                                    <PaginationLink
-                                        isActive={p === filtro.page}
-                                        onClick={() => changePage(p)}
-                                    >
-                                        {p}
-                                    </PaginationLink>
-                                )}
-                            </PaginationItem>
-                        ))}
-
-                        <PaginationItem>
-                            <PaginationNext
-                                onClick={() => changePage(filtro.page + 1)}
-                                className={filtro.page === totalPages ? "pointer-events-none opacity-50" : ""}
-                            />
-                        </PaginationItem>
-
-                    </PaginationContent>
-                </Pagination>
-
             </div>
         </div>
     )

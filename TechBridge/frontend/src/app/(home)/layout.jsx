@@ -2,11 +2,14 @@
 
 import HeaderHome from "@/components/blocks/Header/HeaderHome";
 import Footer from "@/components/blocks/Footer/page";
+import NavigateToTop from "@/components/btnNav/ToTop";
 
 export default function HomeLayout({ children }) {
 	return (<>
-		<HeaderHome/>
+		<HeaderHome />
+		<NavigateToTop />
+
 		{children}
-		<Footer/>
+		<Footer />
 	</>);
 }

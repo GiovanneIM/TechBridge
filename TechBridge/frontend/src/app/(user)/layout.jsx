@@ -11,6 +11,7 @@ import HeaderUser from "@/components/blocks/Header/HeaderUser";
 import {
 	SidebarProvider
 } from "@/components/ui/sidebar"
+import NavigateToTop from "@/components/btnNav/ToTop";
 
 
 
@@ -27,15 +28,16 @@ export default function UserLayout({ children }) {
 
 
 	// CARREGANDO PERFIL
-	if (loading.perfil) return null;
+	// if (loading.perfil) return null;
 
 	// NÃO HÁ USUÁRIO LOGADO
-	if (!user) return null;
+	// if (!user) return null;
 
 
 	// HÁ UM USUÁRIO LOGADO
 	return (
 		<div className="w-full">
+			<NavigateToTop />
 			<SessionHandler>
 				<SidebarProvider>
 					<div className="flex flex-col min-h-screen w-full">
