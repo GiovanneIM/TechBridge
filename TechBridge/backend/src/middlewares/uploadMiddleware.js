@@ -205,7 +205,7 @@ const TIPOS_PASTA = {
 const getUploadPath = (req, file) => {
     const tipo = req.uploadTipo;
     const userId = req.usuario?.id;
-    const empresaId = req.usuario?.empresaId || req.params.empresaId;
+    const empresaId = req.usuario?.id_empresa || req.params.id_empresa;
 
     if (!userId && tipo.includes('USER')) {
         throw new Error('Usuário não identificado');
@@ -271,9 +271,9 @@ const setUploadTipo = (tipo) => (req, res, next) => {
 };
 
 
-export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = TIPOS_PASTA.IMAGENS) => {
+export const removerArquivoAntigo = async (nomeArquivo, usuariosOuEmpresas, idUserOuEmpresa, tipo = TIPOS_PASTA.IMAGENS) => {
     try {
-        if (!nomeArquivo || !idUsuario) return;
+        if (!nomeArquivo || !idUserOuEmpresa) return;
 
         const caminhoArquivo = path.join(
             __dirname,
@@ -281,8 +281,8 @@ export const removerArquivoAntigo = async (nomeArquivo, idUsuario, tipo = TIPOS_
             '..',
             'uploads',
             tipo,
-            'usuarios',
-            idUsuario.toString(),
+            usuariosOuEmpresas,
+            idUserOuEmpresa.toString(),
             nomeArquivo
         );
         console.log(caminhoArquivo);

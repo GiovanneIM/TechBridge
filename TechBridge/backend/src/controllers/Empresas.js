@@ -1,3 +1,4 @@
+import { removerArquivoAntigo, TIPOS_PASTA } from "../middlewares/uploadMiddleware.js";
 import EmpresasModel from "../models/Empresas.js";
 import UserModel from "../models/User.js";
 import { pertenceAEmpresa } from "../utils/validacoes.js";
@@ -92,6 +93,10 @@ class EmpresasController {
             // OBTER AS EMPRESAS
             const resultado = await EmpresasModel.listar(limit, offset, page, where, like, likeOr)
 
+            // for (const empresa of resultado.lista) {
+            //     empresa.logo = `http://localhost:3000/uploads/imagens/empresas/${empresa.id}/logo/${empresa.logo}`
+            // }
+
             // SUCESSO: ENVIAR EMPRESAS
             res.status(200).json({
                 sucesso: true,
@@ -149,7 +154,10 @@ class EmpresasController {
                 sucesso: true,
                 mensagem: 'Empresa obtida com sucesso',
                 dados: {
-                    empresa
+                    empresa: {
+                        ...empresa,
+                        logo: `http://localhost:3000/uploads/imagens/empresas/${empresa.id}/logo/${empresa.logo}`
+                    }
                 }
             });
 
@@ -273,23 +281,23 @@ class EmpresasController {
             await EmpresasModel.atualizarLogo(id_empresa, nomeFoto)
 
             // REMOVER A LOGO ANTIGA DA EMPRESA
-            if (usuario.foto_perfil && usuario.foto_perfil !== nomeFoto) {
-                await removerArquivoAntigo(usuario.foto_perfil, idUsuario, TIPOS_PASTA.IMAGENS);
+            if (empresa.logo && empresa.logo !== nomeFoto) {
+                await removerArquivoAntigo(empresa.logo, id_empresa, TIPOS_PASTA.IMAGENS);
             }
 
             // SUCESSO
             return res.json({
                 sucesso: true,
-                mensagem: 'Foto atualizada com sucesso',
+                mensagem: 'Logo atualizada com sucesso',
                 foto: nomeFoto
             });
 
         } catch (error) {
             // Erro do servidor
-            console.error('Erro ao atualizar a foto do usuário:', error);
+            console.error('Erro ao atualizar a logo do usuário:', error);
             return res.status(500).json({
                 sucesso: false,
-                mensagem: 'Erro ao atualizar a foto do usuário'
+                mensagem: 'Erro ao atualizar a logo do usuário'
             });
         }
     }
