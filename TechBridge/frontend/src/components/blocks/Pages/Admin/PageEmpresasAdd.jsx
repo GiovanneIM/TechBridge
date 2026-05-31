@@ -8,10 +8,11 @@ import { Card } from "@/components/ui/card";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { InputGroup, InputGroupInput } from "@/components/ui/input-group";
 import { useEmpresa } from "@/hooks/useEmpresa";
+import { Separator } from "@/components/ui/separator";
 
 export default function PageEmpresasAdd() {
     // HOOK EMPRESA
-    const { criarEmpresa, loading, error } = useEmpresa();
+    const { criarEmpresa, loading, error, mensagem } = useEmpresa();
 
     // ESTADO DE EMPRESA
     const [empresa, setEmpresa] = useState({
@@ -38,19 +39,6 @@ export default function PageEmpresasAdd() {
 
     // LOADING - CEP
     const [loadingCep, setLoadingCep] = useState(false)
-
-    // HANDLER EMPRESA
-    function handleEmpresaChange(field, value) {
-        setEmpresa(prev => ({ ...prev, [field]: value }))
-    }
-
-    // HANDLER ENDEREÇO
-    function handleEnderecoChange(field, value) {
-        setEmpresa(prev => ({
-            ...prev,
-            endereco: { ...prev.endereco, [field]: value }
-        }))
-    }
 
     // BUSCAR ENDEREÇO VIA CEP
     async function buscarCEP(cep) {
@@ -336,13 +324,17 @@ export default function PageEmpresasAdd() {
 
             </div>
 
+            <Separator/>
+
             <div className="flex justify-between">
-                <div className="text-red-500">{error.criarEmpresa?.mensagem}</div>
+                <div className="text-red-500 font-semibold">{error.criarEmpresa?.mensagem}</div>
+                <div className="text-emerald-600 font-semibold">{mensagem?.criarEmpresa}</div>
 
                 <Button className="px-6 bg-techbridge text-white"
                     onClick={() => {
                         criarEmpresa({ empresa, gerente })
                     }}
+                    disabled={loading.criarEmpresa}
                 >
                     <PlusCircle className="inline" />
                     Registrar empresa

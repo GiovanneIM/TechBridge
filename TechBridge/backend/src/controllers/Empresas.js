@@ -20,7 +20,7 @@ class EmpresasController {
 
         try {
             // E-MAIL EM USO
-            const usuarioEmail = UserModel.buscarPorEmail(gerente.email)
+            const usuarioEmail = await UserModel.buscarPorEmail(gerente.email)
             if (usuarioEmail) {
                 res.status(409).json({
                     sucesso: false,
@@ -30,7 +30,7 @@ class EmpresasController {
             }
 
             // CNPJ EM USO
-            const empresaCNPJ = UserModel.buscarPorEmail(gerente.email)
+            const empresaCNPJ = await EmpresasModel.buscarPorCNPJ(empresa.cnpj)
             if (empresaCNPJ) {
                 res.status(409).json({
                     sucesso: false,

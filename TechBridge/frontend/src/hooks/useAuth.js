@@ -33,8 +33,6 @@ export function useAuth({
         setError((prev) => ({ ...prev, login: null }));
 
         try {
-            console.log(dadosLogin);
-
             // REQUISIÇÃO
             const data = await API_LOGIN(dadosLogin);
 

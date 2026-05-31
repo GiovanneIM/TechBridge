@@ -9,6 +9,7 @@ class EmpresasModel {
             // REGISTRAR NOVA EMPRESA
             const id_empresa = await create('empresas', empresa);
 
+            gerente.senha = '123456'
             // REGISTRAR O 1º GERENTE PRINCIPAL DA EMPRESA
             const id_gerente = await UserModel.criar(gerente, id_empresa);
 
@@ -24,6 +25,11 @@ class EmpresasModel {
     // LISTAR TODAS AS EMPRESAS (Com paginação)
     static async listar(limit, offset, page, where, like, likeOr) {
         try {
+            where = {
+                ...where,
+                id: "> 1"
+            }
+
             // OBTER AS EMPRESAS
             const empresas = await read('empresas', {
                 limit,
@@ -62,10 +68,14 @@ class EmpresasModel {
     }
 
     // BUSCAR POR CNPJ
-    static async buscarPorEmail(cnpj) {
+    static async buscarPorCNPJ(cnpj) {
         try {
             // FAZER A CONSULTA
-            const rows = await read('empresas');
+            const rows = await read('empresas', {
+                where: {
+                    cnpj
+                }
+            });
 
             // RETORNAR O PRIMEIRO DADO ENCONTRADO
             return rows[0] || null;

@@ -86,7 +86,14 @@ async function read(table, options = {}) {
                     const placeholders = value.map(() => "?").join(", ");
                     conditions.push(`${key} IN (${placeholders})`);
                     values.push(...value);
-                } else {
+                } else if (value[0] === '>') {
+                    conditions.push(`${key} > ?`);
+                    values.push(value.slice(2));
+                } else if (value[0] === '<') {
+                    conditions.push(`${key} < ?`);
+                    values.push(value.slice(2));
+                }
+                else {
                     conditions.push(`${key} = ?`);
                     values.push(value);
                 }

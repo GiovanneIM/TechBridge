@@ -12,14 +12,30 @@ VALUES
 
 
 -- Inserindo empresa cliente de exemplo
+INSERT INTO empresas (cnpj, razao_social, nome_fantasia, logo)
+VALUES 
+    ('00000000000000', 'TechBridge - Softwares e Hardwares para Andons', 'TechBridge', 'logo.png')
+;
+
 INSERT INTO empresas (cnpj, razao_social, nome_fantasia)
 VALUES 
-    ('00000000000000', 'TechBridge - Softwares e Hardwares para Andons', 'TechBridge'),
-	('12345678000190', 'Empresa Cliente 01', 'EC 01'),
-    ('00000000000011', 'Empresa Cliente 02', 'EC 02')
+	('00000000000001', 'Empresa Cliente 01', 'EC 01'),
+    ('00000000000002', 'Empresa Cliente 02', 'EC 02'),
+    ('00000000000003', 'Empresa Cliente 03', 'EC 03'),
+	('00000000000004', 'Empresa Cliente 04', 'EC 04'),
+    ('00000000000005', 'Empresa Cliente 05', 'EC 05'),
+    ('00000000000006', 'Empresa Cliente 06', 'EC 06'),
+	('00000000000007', 'Empresa Cliente 07', 'EC 07'),
+    ('00000000000008', 'Empresa Cliente 08', 'EC 08'),
+    ('00000000000009', 'Empresa Cliente 09', 'EC 09'),
+	('00000000000010', 'Empresa Cliente 10', 'EC 10'),
+    ('00000000000011', 'Empresa Cliente 11', 'EC 11'),
+    ('00000000000012', 'Empresa Cliente 12', 'EC 12'),
+    ('00000000000013', 'Empresa Cliente 13', 'EC 13'),
+    ('00000000000014', 'Empresa Cliente 14', 'EC 14'),
+    ('00000000000015', 'Empresa Cliente 15', 'EC 15')
 ;
 UPDATE empresas SET status = 0 WHERE id = 3;
-
 
 -- Inserindo os usuários de exemplo
 INSERT INTO usuarios 

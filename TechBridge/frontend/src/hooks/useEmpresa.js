@@ -43,6 +43,16 @@ export function useEmpresa() {
         obterMaquinas: null
     });
 
+    // MENSAGENS
+    const [mensagem, setMensagem] = useState({
+        obterEmpresas: null,
+        criarEmpresa: null,
+        obterEmpresa: null,
+        obterMembros: null,
+        obterSetores: null,
+        obterMaquinas: null
+    });
+
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     // OBTER TODAS AS EMPRESAS (Admin)
@@ -97,10 +107,15 @@ export function useEmpresa() {
         setError((prev) => ({ ...prev, criarEmpresa: null }));
 
         try {
+            console.log(novaEmpresa);
+
             // REQUISIÇÃO
             const data = await API_FETCH(`/admin/empresas`, {
                 method: 'POST',
-                body: JSON.stringify(novaEmpresa)
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(novaEmpresa),
             });
 
             // ERRO
@@ -117,7 +132,9 @@ export function useEmpresa() {
             // SUCESSO
             else {
                 // MENSAGEM
-                setEmpresas(data.dados)
+                setMensagem((prev) => ({ ...prev, criarEmpresa: data.mensagem }))
+                setEmpresa(data.dados)
+
             }
         } catch (err) {
             // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
@@ -298,8 +315,7 @@ export function useEmpresa() {
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     return {
-        loading,
-        error,
+        loading, error, mensagem,
         empresas, obterEmpresas,
         empresa, obterEmpresa,
         membros, obterMembros,

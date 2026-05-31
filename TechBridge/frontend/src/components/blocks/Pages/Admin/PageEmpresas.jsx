@@ -34,7 +34,7 @@ export default function PageEmpresas() {
 
     // HOOK
     const {
-        loading, error,
+        loading, error, mensagem,
         empresas, obterEmpresas
     } = useEmpresa()
 
@@ -49,7 +49,7 @@ export default function PageEmpresas() {
     const [filtro, setFiltro] = useState({
         nome_empresa: "",
         status: null,
-        limit: 10,
+        limit: 12,
         page: 1,
         estado: null,
     })
@@ -57,7 +57,7 @@ export default function PageEmpresas() {
     // FETCH AUTOMÁTICO PARA FILTRAGEM
     useEffect(() => {
         obterEmpresas(filtro)
-    }, [filtro.page, filtro.limit, filtro.status])
+    }, [filtro.page, filtro.limit, filtro.status, filtro.estado])
 
     // FILTRO MANUAL (Busca por nome)
     const filtrar = () => {
@@ -167,10 +167,10 @@ export default function PageEmpresas() {
                             className="w-full bg-muted p-1 rounded-md"
                         >
                             <TabsList className="w-full">
-                                <TabsTrigger value="10" className="flex-1">10</TabsTrigger>
-                                <TabsTrigger value="25" className="flex-1">25</TabsTrigger>
-                                <TabsTrigger value="50" className="flex-1">50</TabsTrigger>
-                                <TabsTrigger value="100" className="flex-1">100</TabsTrigger>
+                                <TabsTrigger value="8" className="flex-1">8</TabsTrigger>
+                                <TabsTrigger value="12" className="flex-1">12</TabsTrigger>
+                                <TabsTrigger value="24" className="flex-1">24</TabsTrigger>
+                                <TabsTrigger value="48" className="flex-1">48</TabsTrigger>
                             </TabsList>
                         </Tabs>
                     </FieldContent>
@@ -311,7 +311,7 @@ export default function PageEmpresas() {
 
                     <div className="w-full h-full flex items-end">
                         {/* BOTÃO */}
-                        <Button className="text-white w-full h-10 px-6" onClick={filtrar}>
+                        <Button className="text-white w-full h-10 px-6 bg-techbridge" onClick={filtrar}>
                             Procurar
                         </Button>
                     </div>
@@ -398,16 +398,35 @@ export default function PageEmpresas() {
                     }
 
                     {/* EMPRESAS CARREGADAS COM SUCESSO */}
-                    {!loading.obterEmpresas && !error.obterEmpresas &&
-                        <div className="
-                            h-full w-full 
-                            flex flex-wrap justify-center gap-4
-                        ">
-                            {/* LISTANDO EMPRESAS */}
-                            {empresas?.lista?.map((empresa) => (
-                                <CardEmpresas key={empresa.id} empresa={empresa} />
-                            ))}
-                        </div>
+                    {!loading.obterEmpresas && !error.obterEmpresas && (
+                        empresas?.lista.length > 0
+                            ? <div
+                                className="
+                                        grid gap-4
+                                        [grid-template-columns:repeat(auto-fill,minmax(320px,1fr))]
+                                        items-start
+                                    "
+                            >
+                                {/* LISTANDO EMPRESAS */}
+                                {empresas?.lista?.map((empresa) => (
+                                    <CardEmpresas key={empresa.id} empresa={empresa} />
+                                ))}
+                            </div>
+                            : <div className="
+                                    h-full w-full 
+                                    flex flex-col items-center justify-center gap-4
+                                    text-muted-foreground font-semibold text-center
+                                ">
+                                <Image
+                                    height={128}
+                                    width={128}
+                                    alt="Logo Erro"
+                                    src="/TechBridge/Logo.svg"
+                                />
+
+                                <p>Nenhum resultado encontrado para a busca</p>
+                            </div>
+                    )
                     }
                 </div>
             </div>
