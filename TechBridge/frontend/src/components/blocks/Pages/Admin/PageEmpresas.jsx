@@ -1,16 +1,13 @@
 'use client'
 
-import { Building2, Warehouse } from "lucide-react";
+import { Warehouse } from "lucide-react";
 import HeaderPage from "../../Header/HeaderPage";
 import { useEffect, useState } from "react";
 import { useEmpresa } from "@/hooks/useEmpresa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Link from "next/link";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
     Pagination,
@@ -22,6 +19,7 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination"
 import Image from "next/image";
+import CardEmpresas from "@/components/card/CardEmpresas/page";
 
 export default function PageEmpresas() {
 
@@ -342,13 +340,14 @@ export default function PageEmpresas() {
                     </PaginationContent>
 
                     <p className="text-muted-foreground font-semibold text-xs">
-                        Exibindo {empresas?.lista.lenght ?? 0} de {empresas?.paginacao?.total ?? 0} resultados
+                        Exibindo {empresas?.lista.length ?? 0} de {empresas?.paginacao?.total ?? 0} resultados
                     </p>
                 </Pagination>
 
                 {/* DISPLAY */}
                 <div className="h-full border bg-card p-3 rounded gap-3 items-start overflow-y-auto">
 
+                    {/* CARREGANDO EMPRESAS */}
                     {loading.obterEmpresas &&
                         <div className="
                             h-full w-full 
@@ -367,6 +366,7 @@ export default function PageEmpresas() {
                         </div>
                     }
 
+                    {/* ERRO AO OBTER EMPRESAS */}
                     {error.obterEmpresas &&
                         <div className="
                             h-full w-full 
@@ -384,55 +384,15 @@ export default function PageEmpresas() {
                         </div>
                     }
 
+                    {/* EMPRESAS CARREGADAS COM SUCESSO */}
                     {!loading.obterEmpresas && !error.obterEmpresas &&
                         <div className="
                             h-full w-full 
                             flex flex-wrap justify-center gap-4
                         ">
-                            {empresas?.lista?.map((e) => (
-                                <div key={e.id} className="w-sm">
-                                    <div
-                                        key={e.id}
-                                        className="items-center bg-card border rounded shadow-xl p-3 text-xs"
-                                    >
-                                        <div className="flex gap-3">
-
-                                            <div className="flex items-center justify-center relative border p-2 w-40 h-40">
-                                                <Building2 size={40} />
-
-                                                <div className={`absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center ${e.status ? 'bg-ativo' : 'bg-inativo'}`}>
-                                                    <div className="w-2 h-2 rounded-full bg-white"></div>
-                                                </div>
-                                            </div>
-
-                                            <div className="h-30 flex flex-col flex-1 overflow-y-auto">
-                                                <div className="font-bold text-xl">{e.nome_fantasia}</div>
-
-                                                <div className="my-1">
-                                                    Registro em {format(new Date(e.data_criacao), 'dd/MM/yyyy', { locale: ptBR })}
-                                                </div>
-
-                                                {!e.status && (
-                                                    <div className="my-1">
-                                                        desativada em {format(new Date(e.data_desativacao), 'dd/MM/yyyy', { locale: ptBR })}
-                                                    </div>
-                                                )}
-
-                                                <div className="my-1 text-muted-foreground flex-1 text-md">
-                                                    {e.razao_social}
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <Button asChild className='text-white mt-3 w-full'>
-                                            <Link href={`/admin/empresas/${e.id}`}>
-                                                Ver empresa
-                                            </Link>
-                                        </Button>
-
-                                    </div>
-                                </div>
+                            {/* LISTANDO EMPRESAS */}
+                            {empresas?.lista?.map((empresa) => (
+                                <CardEmpresas key={empresa.id} empresa={empresa} />
                             ))}
                         </div>
                     }

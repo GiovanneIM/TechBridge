@@ -260,7 +260,7 @@ class AuthController {
 
             // REMOVER A IMAGEM ANTIGA DO USUÁRIO
             if (usuario.foto_perfil && usuario.foto_perfil !== nomeFoto) {
-                await removerArquivoAntigo(usuario.foto_perfil, idUsuario, TIPOS_PASTA.IMAGENS);
+                await removerArquivoAntigo(usuario.foto_perfil, "usuarios", idUsuario, TIPOS_PASTA.IMAGENS);
             }
 
             return res.json({
