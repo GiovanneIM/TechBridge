@@ -25,6 +25,7 @@ import Image from "next/image";
 
 export default function PageEmpresas() {
 
+    // OBJETO COM OS ESTADOS AGRUPADOS POR REGIÃO
     const estadosPorRegiao = {
         "Norte": ["AC", "AP", "AM", "PA", "RO", "RR", "TO"],
         "Centro-Oeste": ["DF", "GO", "MT", "MS"],
@@ -33,11 +34,20 @@ export default function PageEmpresas() {
         "Sul": ["PR", "RS", "SC"]
     };
 
+    // HOOK
     const {
         loading, error,
         empresas, obterEmpresas
     } = useEmpresa()
 
+    // OBTENDO EMPRESAS INICIAIS
+    useEffect(() => {
+        if (!empresas) {
+            obterEmpresas()
+        }
+    }, [empresas, obterEmpresas])
+
+    // ESTADO PARA FILTROS E PAGINAÇÃO
     const [filtro, setFiltro] = useState({
         nome_empresa: "",
         status: null,
@@ -46,18 +56,12 @@ export default function PageEmpresas() {
         estado: null,
     })
 
-    useEffect(() => {
-        if (!empresas) {
-            obterEmpresas()
-        }
-    }, [empresas, obterEmpresas])
-
-    // FETCH AUTOMÁTICO
+    // FETCH AUTOMÁTICO PARA FILTRAGEM
     useEffect(() => {
         obterEmpresas(filtro)
     }, [filtro.page, filtro.limit, filtro.status])
 
-    // FILTRO MANUAL
+    // FILTRO MANUAL (Busca por nome)
     const filtrar = () => {
         setFiltro((prev) => ({
             ...prev,
@@ -70,15 +74,18 @@ export default function PageEmpresas() {
         })
     }
 
+    // TOTAL DE PÁGINAS
     const totalPages = empresas?.paginacao?.total_paginas || 1
 
+    // GERA VETOR COM O NÚMERO DAS PÁGINAS NA PAGINAÇÃO
     function gerarPaginas(page, total) {
         const pages = []
-        const delta = 2
+        const delta = 2     // DISTÂNCIA DE EXIBIÇÃO (Mostra delta páginas antes da atual e delta páginas depois da atual)
 
-        const inicio = Math.max(1, page - delta)
-        const fim = Math.min(total, page + delta)
+        const inicio = Math.max(1, page - delta)        // PÁGINA INICIAL DA PAGINAÇÃO
+        const fim = Math.min(total, page + delta)       // PÁGINA FINAL DA PAGINAÇÃO
 
+        // FORMANDO O ARRAY COM O NÚMERO DAS PÁGINAS
         if (inicio > 1) {
             pages.push(1)
             if (inicio > 2) pages.push('...')
@@ -93,13 +100,19 @@ export default function PageEmpresas() {
             pages.push(total)
         }
 
+        // RETORNA O ARRAY
         return pages
     }
 
+    // ARRAY COM O NÚMERO DAS PÁGINAS
     const pages = gerarPaginas(filtro.page, totalPages)
 
+    // FUNÇÃO PARA MUDAR A PÁGINA
     const changePage = (page) => {
+        // SE O NÚMERO DA PÁGINA ESTIVER FORA DO ESCOPO
         if (page < 1 || page > totalPages) return
+
+        // ALTERA O FILTRO
         setFiltro((prev) => ({ ...prev, page }))
     }
 
