@@ -200,10 +200,12 @@ export function useEmpresa() {
                 method: 'GET'
             });
 
+            console.log(data)
+
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterMembros: data.mensagem }))
             } else {
-                setMembros(data.dados)
+                setMembros(data.dados.lista || data.dados)
             }
         } catch (err) {
             if (err.message === 'Sessão expirada') return;

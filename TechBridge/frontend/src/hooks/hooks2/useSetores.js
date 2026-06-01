@@ -85,8 +85,8 @@ export function useSetores({
     // FETCH POR ID
     // ========================================
 
-    const fetchSetorById = useCallback(async (id) => {
-        if (!id) return null;
+    const fetchSetorById = useCallback(async (codSetor, idEmpresa) => {
+        if (!codSetor) return null;
 
         setLoading((prev) => ({
             ...prev,
@@ -99,7 +99,7 @@ export function useSetores({
         }));
 
         try {
-            const response = await apiFetch(`${API_BASE_URL}/${id}`);
+            const response = await apiFetch(`/empresas/${idEmpresa}/setores/${codSetor}`);
 
             if (!response?.sucesso) {
                 setError((prev) => ({
@@ -109,6 +109,8 @@ export function useSetores({
 
                 return null;
             }
+
+            console.log("RESPOSTA DA API DO SETOR:", response);
 
             const setor = response?.dados?.setor ?? null;
 

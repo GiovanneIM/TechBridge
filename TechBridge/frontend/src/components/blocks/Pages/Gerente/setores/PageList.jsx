@@ -136,10 +136,10 @@ export default function PageSetores() {
                                         }
                                         onClick={() => {
                                             if (
-                                                setor?.id
+                                                setor?.cod_setor
                                             ) {
                                                 router.push(
-                                                    `/gerente/${user.id_empresa}/setores/${setor.id}`
+                                                    `/gerente/setores/${setor.cod_setor}`
                                                 );
                                             }
                                         }}

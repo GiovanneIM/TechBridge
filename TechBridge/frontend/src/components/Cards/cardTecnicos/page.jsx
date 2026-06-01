@@ -24,9 +24,6 @@ export function CardTecnico({nome, empresa, email, imagem}) {
             <CardHeader>
                 <CardTitle>{nome}</CardTitle>
                 <CardDescription>
-                    {empresa}
-                </CardDescription>
-                <CardDescription>
                     {email}
                 </CardDescription>
             </CardHeader>

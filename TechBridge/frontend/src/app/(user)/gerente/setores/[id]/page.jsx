@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 
 import { useSetores } from "@/hooks/hooks2/useSetores";
+import { useAuth } from "@/context/AuthContext";
 
 // =========================
 // ICONES
@@ -63,6 +64,7 @@ function getCor(cor) {
 export default function PageSetorId() {
 
     const params = useParams();
+    const { user } = useAuth();
 
     const {
         setorAtual,
@@ -72,10 +74,10 @@ export default function PageSetorId() {
     } = useSetores();
 
     useEffect(() => {
-        if (params?.id) {
-            fetchSetorById(params.id);
+        if (params?.id && user?.id_empresa) {
+            fetchSetorById(params.id, user.id_empresa);
         }
-    }, [params?.id]);
+    }, [params?.id, user?.id_empresa, fetchSetorById]);
 
     // LOADING
     if (loadingSetores.fetchOne) {
@@ -163,7 +165,7 @@ export default function PageSetorId() {
                                 </div>
 
                                 <div className="text-3xl font-bold mt-1">
-                                    #{setorAtual.id}
+                                    #{setorAtual.id_setor}
                                 </div>
 
                                 <div className="text-sm mt-2 text-white/80">
@@ -196,34 +198,41 @@ export default function PageSetorId() {
                             {/* RESPONSÁVEL */}
                             <div className="bg-white dark:bg-sidebar rounded-2xl p-6 border shadow-sm space-y-4">
                                 <h2 className="text-xl font-bold">
-                                    Responsável
+                                    Detalhes
                                 </h2>
 
                                 <div className="flex items-center gap-2">
                                     <User className="h-4 w-4 text-gray-500" />
-                                    {setorAtual.responsavel || "Não informado"}
+                                    <span>Empresa ID: {setorAtual.id_empresa}</span>
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                    <Mail className="h-4 w-4 text-gray-500" />
-                                    {setorAtual.email_responsavel || "-"}
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                    <Phone className="h-4 w-4 text-gray-500" />
-                                    {setorAtual.telefone_responsavel || "-"}
+                                    <Shield className="h-4 w-4 text-gray-500" />
+                                    <span>Status: {Number(setorAtual.status) ? "Ativo" : "Inativo"}</span>
                                 </div>
                             </div>
 
                             {/* LOCALIZAÇÃO */}
                             <div className="bg-white dark:bg-sidebar rounded-2xl p-6 border shadow-sm">
                                 <h2 className="text-xl font-bold mb-4">
-                                    Localização
+                                    Informações Adicionais
                                 </h2>
 
-                                <div className="flex items-center gap-2">
-                                    <MapPin className="h-4 w-4 text-gray-500" />
-                                    {setorAtual.bloco} - {setorAtual.andar}
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <MapPin className="h-4 w-4 text-gray-500" />
+                                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                                            Código: {setorAtual.cod_setor}
+                                        </span>
+                                    </div>
+                                    {setorAtual.data_criacao && (
+                                        <div className="flex items-center gap-2">
+                                            <CalendarDays className="h-4 w-4 text-gray-500" />
+                                            <span className="text-sm text-gray-600 dark:text-gray-400">
+                                                Criado em: {new Date(setorAtual.data_criacao).toLocaleDateString('pt-BR')}
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
