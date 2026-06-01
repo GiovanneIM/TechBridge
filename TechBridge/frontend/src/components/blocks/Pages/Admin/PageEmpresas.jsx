@@ -19,7 +19,7 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination"
 import Image from "next/image";
-import CardEmpresas from "@/components/card/CardEmpresa/page";
+import CardEmpresas from "@/components/Cards/CardEmpresa/page";
 
 export default function PageEmpresas() {
 

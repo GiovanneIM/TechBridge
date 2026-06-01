@@ -19,9 +19,9 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination"
 import Image from "next/image";
-import CardEmpresas from "@/components/card/CardEmpresa/page";
+import CardEmpresas from "@/components/Cards/CardEmpresa/page";
 import { useParams } from "next/navigation";
-import { CardUsuario } from "@/components/card/CardUsuario/page";
+import { CardUsuario } from "@/components/Cards/CardUsuario/page";
 
 export default function PageMembros() {
     const params = useParams();
@@ -53,14 +53,14 @@ export default function PageMembros() {
         texto: "",
         status: null,
         cargo: null,
-        limit: 12,
+        limit: 6,
         page: 1,
     })
 
     // FETCH AUTOMÁTICO PARA FILTRAGEM
     useEffect(() => {
         obterMembros(id_empresa, filtro)
-    }, [filtro.page, filtro.limit, filtro.status, filtro.estado])
+    }, [filtro.page, filtro.limit, filtro.status, filtro.cargo])
 
     // FILTRO MANUAL (Busca por nome ou email)
     const filtrar = () => {
@@ -142,11 +142,11 @@ export default function PageMembros() {
                         <FieldLabel>Procurar usuário</FieldLabel>
                         <Input
                             className="w-full h-11"
-                            value={filtro.nome_empresa}
+                            value={filtro.texto}
                             onChange={(e) =>
                                 setFiltro((prev) => ({
                                     ...prev,
-                                    nome_empresa: e.target.value
+                                    texto: e.target.value
                                 }))
                             }
                             placeholder="Nome ou email"
@@ -170,7 +170,7 @@ export default function PageMembros() {
                             className="w-full bg-muted p-1 rounded-md"
                         >
                             <TabsList className="w-full">
-                                <TabsTrigger value="8" className="flex-1">8</TabsTrigger>
+                                <TabsTrigger value="6" className="flex-1">6</TabsTrigger>
                                 <TabsTrigger value="12" className="flex-1">12</TabsTrigger>
                                 <TabsTrigger value="24" className="flex-1">24</TabsTrigger>
                                 <TabsTrigger value="48" className="flex-1">48</TabsTrigger>
@@ -206,7 +206,7 @@ export default function PageMembros() {
                         <FieldLabel>Cargo</FieldLabel>
 
                         <Tabs
-                            value={filtro.status ?? 'all'}
+                            value={filtro.cargo ?? 'all'}
                             onValueChange={(value) =>
                                 setFiltro((prev) => ({
                                     ...prev,
