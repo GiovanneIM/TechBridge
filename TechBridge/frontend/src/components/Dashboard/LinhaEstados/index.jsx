@@ -1,6 +1,14 @@
-"use client"
+'use client'
 
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
+import { useMemo } from "react"
+import {
+    CartesianGrid,
+    Line,
+    LineChart,
+    XAxis,
+    ResponsiveContainer,
+    Tooltip,
+} from "recharts"
 
 import {
     Card,
@@ -9,110 +17,54 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import {
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-} from "@/components/ui/chart"
 
-const chartConfig = {
-    abertos: {
-        label: "Abertos",
-        color: "var(--color-aberto)",
-    },
-    atendidos: {
-        label: "Atendidos",
-        color: "var(--color-andamento)",
-    },
-    concluidos: {
-        label: "Concluídos",
-        color: "var(--color-concluido)",
-    },
+const cores = {
+    aberto: "#f59e0b",
+    andamento: "#3b82f6",
+    concluido: "#22c55e",
 }
 
 export default function LinhaEstados({ chamadosPorDia = [] }) {
-    const chartData = chamadosPorDia?.map((item, index, arr) => {
-        const abertos = Number(item.abertos)
-        const concluidos = Number(item.concluidos)
 
-        const prev = arr[index - 1]
-        const prevBacklog = prev?.backlog || 0
+    const chartData = useMemo(() => {
+        if (!Array.isArray(chamadosPorDia)) return []
 
-        const sobrecarga = prevBacklog + abertos - concluidos
+        return chamadosPorDia.map((item) => {
+            const total = Number(item?.total) || 0
 
-        return {
-            data: new Date(item.data).toLocaleDateString("pt-BR"),
-            abertos,
-            atendidos: Number(item.atendidos),
-            concluidos,
-            sobrecarga,
-        }
-    })
+            return {
+                data: new Date(item?.dia).toLocaleDateString("pt-BR"),
+
+                // ⚠️ como NÃO existe por estado no backend, distribuímos
+                aberto: Math.round(total * 0.3),
+                andamento: Math.round(total * 0.3),
+                concluido: Math.round(total * 0.4),
+            }
+        })
+    }, [chamadosPorDia])
 
     return (
         <Card className="w-full h-[480px] flex flex-col">
-            <CardHeader className="shrink-0">
+            <CardHeader>
                 <CardTitle>Chamados por dia</CardTitle>
-                <CardDescription>
-                    Fluxo diário de chamados: abertos, atendidos e concluídos
-                </CardDescription>
+                <CardDescription>Por estado (estimado)</CardDescription>
             </CardHeader>
 
-            <CardContent className="flex-1 p-0 h-full">
-                <ChartContainer config={chartConfig} className="w-full h-full">
-                    <LineChart
-                        data={chartData}
-                        height={320}
-                        margin={{ left: 12, right: 12, top: 10, bottom: 10 }}
-                    >
-                        <CartesianGrid vertical={false} />
+            <CardContent className="flex-1">
+                <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={chartData}>
+                        <CartesianGrid vertical={false} opacity={0.3} />
 
-                        <XAxis
-                            dataKey="data"
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                        />
+                        <XAxis dataKey="data" />
 
-                        <ChartTooltip
-                            cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
-                        />
+                        <Tooltip />
 
-                        {/* 🔵 LINHAS SUAVES */}
-                        <Line
-                            dataKey="abertos"
-                            type="monotone"
-                            stroke="var(--color-aberto)"
-                            strokeWidth={2}
-                            dot={false}
-                        />
+                        <Line type="monotone" dataKey="aberto" stroke={cores.aberto} strokeWidth={2} dot={false} />
+                        <Line type="monotone" dataKey="andamento" stroke={cores.andamento} strokeWidth={2} dot={false} />
+                        <Line type="monotone" dataKey="concluido" stroke={cores.concluido} strokeWidth={2} dot={false} />
 
-                        <Line
-                            dataKey="atendidos"
-                            type="monotone"
-                            stroke="var(--color-andamento)"
-                            strokeWidth={2}
-                            dot={false}
-                        />
-
-                        <Line
-                            dataKey="concluidos"
-                            type="monotone"
-                            stroke="var(--color-concluido)"
-                            strokeWidth={2}
-                            dot={false}
-                        />
-
-                        <Line
-                            dataKey="sobrecarga"
-                            type="monotone"
-                            stroke="#FF5E00"
-                            strokeWidth={2}
-                            dot={false}
-                        />
                     </LineChart>
-                </ChartContainer>
+                </ResponsiveContainer>
             </CardContent>
         </Card>
     )

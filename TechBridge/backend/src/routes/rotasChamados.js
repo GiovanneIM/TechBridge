@@ -34,13 +34,19 @@ router.post(
 // ATENDER CHAMADO
 router.patch(
     '/chamados/:id_chamado/atender',
-    () => {}
+    ChamadosController.atender
 )
 
 // CONCLUIR CHAMADO
 router.patch(
     '/chamados/:id_chamado/concluir',
-    () => {}
+    ChamadosController.concluir
+)
+
+// Obter dados para o dashboard
+router.post(
+    '/dashboard',
+    ChamadosController.obterDashboard
 )
 
 export default router;

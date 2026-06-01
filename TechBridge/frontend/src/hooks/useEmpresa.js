@@ -23,6 +23,9 @@ export function useEmpresa() {
     // MAQUINAS DE UMA EMPRESA
     const [maquinas, setMaquinas] = useState(null);
 
+    // CHAMADOS DE UMA EMPRESA
+    const [chamados, setChamados] = useState(null);
+
     // LOADING
     const [loading, setLoading] = useState({
         obterEmpresas: null,
@@ -31,6 +34,7 @@ export function useEmpresa() {
         obterMembros: null,
         obterSetores: null,
         obterMaquinas: null,
+        obterChamados: null,
         atualizarEmpresa: null,
         atualizarLogo: null,
         obterInfosGerais: null,
@@ -44,6 +48,7 @@ export function useEmpresa() {
         obterMembros: null,
         obterSetores: null,
         obterMaquinas: null,
+        obterChamados: null,
         atualizarEmpresa: null,
         atualizarLogo: null,
         obterInfosGerais: null,
@@ -79,31 +84,23 @@ export function useEmpresa() {
 
             const query = params.toString();
 
-            // REQUISIÇÃO
             const data = await API_FETCH(`/admin/empresas?${query}`, {
                 method: 'GET'
             });
 
-            // ERRO
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterEmpresas: data.mensagem }))
-            }
-            // SUCESSO
-            else {
-                // ATUALIZAR EMPRESAS
+            } else {
                 setEmpresas(data.dados)
             }
         } catch (err) {
-            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
             if (err.message === 'Sessão expirada') return;
 
             setError((prev) => ({
                 ...prev,
                 obterEmpresas: 'Erro ao obter empresas, tente novamente mais tarde.'
             }));
-
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, obterEmpresas: false }));
         }
     }, []);
@@ -117,7 +114,6 @@ export function useEmpresa() {
         try {
             console.log(novaEmpresa);
 
-            // REQUISIÇÃO
             const data = await API_FETCH(`/admin/empresas`, {
                 method: 'POST',
                 headers: {
@@ -126,35 +122,25 @@ export function useEmpresa() {
                 body: JSON.stringify(novaEmpresa),
             });
 
-            // ERRO
             if (!data.sucesso) {
                 if (data.mensagem) {
                     setError((prev) => ({ ...prev, criarEmpresa: { mensagem: data.mensagem } }))
-                }
-                else {
+                } else {
                     const nestedErrors = nestErrors(data.erros_zod);
-
                     setError((prev) => ({ ...prev, criarEmpresa: { zod: nestedErrors } }))
                 }
-            }
-            // SUCESSO
-            else {
-                // MENSAGEM
+            } else {
                 setMensagem((prev) => ({ ...prev, criarEmpresa: data.mensagem }))
                 setEmpresa(data.dados)
-
             }
         } catch (err) {
-            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
             if (err.message === 'Sessão expirada') return;
 
             setError((prev) => ({
                 ...prev,
                 criarEmpresa: 'Erro ao obter empresas, tente novamente mais tarde.'
             }));
-
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, criarEmpresa: false }));
         }
     }, []);
@@ -167,32 +153,23 @@ export function useEmpresa() {
         setError((prev) => ({ ...prev, obterEmpresa: null }));
 
         try {
-            // REQUISIÇÃO
             const data = await API_FETCH(`/empresas/${id_empresa}`, {
                 method: 'GET'
             });
 
-            // ERRO
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterEmpresa: data.mensagem }))
-            }
-
-            // SUCESSO
-            else {
-                // ATUALIZAR EMPRESA
+            } else {
                 setEmpresa(data.dados.empresa)
             }
         } catch (err) {
-            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
             if (err.message === 'Sessão expirada') return;
 
             setError((prev) => ({
                 ...prev,
                 obterEmpresa: 'Erro ao obter empresas, tente novamente mais tarde.'
             }));
-
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, obterEmpresa: false }));
         }
     }, []);
@@ -213,32 +190,23 @@ export function useEmpresa() {
 
             const query = params.toString();
 
-            // REQUISIÇÃO
             const data = await API_FETCH(`/empresas/${id_empresa}/membros?${query}`, {
                 method: 'GET'
             });
 
-            // ERRO
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterMembros: data.mensagem }))
-            }
-
-            // SUCESSO
-            else {
-                // ATUALIZAR MEMBROS
+            } else {
                 setMembros(data.dados)
             }
         } catch (err) {
-            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
             if (err.message === 'Sessão expirada') return;
 
             setError((prev) => ({
                 ...prev,
                 obterMembros: 'Erro ao obter membros, tente novamente mais tarde.'
             }));
-
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, obterMembros: false }));
         }
     }, []);
@@ -249,35 +217,25 @@ export function useEmpresa() {
         setError((prev) => ({ ...prev, obterSetores: null }));
 
         try {
-            // REQUISIÇÃO
             const data = await API_FETCH(`/empresas/${id_empresa}/setores`, {
                 method: 'GET'
             });
 
             console.log(data);
 
-
-            // ERRO
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterSetores: data.mensagem }))
-            }
-
-            // SUCESSO
-            else {
-                // ATUALIZAR MEMBROS
+            } else {
                 setSetores(data.dados.setores)
             }
         } catch (err) {
-            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
             if (err.message === 'Sessão expirada') return;
 
             setError((prev) => ({
                 ...prev,
                 obterSetores: 'Erro ao obter membros, tente novamente mais tarde.'
             }));
-
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, obterSetores: false }));
         }
     }, []);
@@ -288,36 +246,64 @@ export function useEmpresa() {
         setError((prev) => ({ ...prev, obterMaquinas: null }));
 
         try {
-            // REQUISIÇÃO
             const data = await API_FETCH(`/empresas/${id_empresa}/maquinas`, {
                 method: 'GET'
             });
 
             console.log(data);
 
-
-            // ERRO
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterMaquinas: data.mensagem }))
-            }
-
-            // SUCESSO
-            else {
-                // ATUALIZAR MEMBROS
+            } else {
                 setMaquinas(data.dados.maquinas)
             }
         } catch (err) {
-            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
             if (err.message === 'Sessão expirada') return;
 
             setError((prev) => ({
                 ...prev,
                 obterMaquinas: 'Erro ao obter membros, tente novamente mais tarde.'
             }));
-
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, obterMaquinas: false }));
+        }
+    }, []);
+
+    // OBTER CHAMADOS
+    const obterChamados = useCallback(async (id_empresa, filtro = {}) => {
+        setLoading((prev) => ({ ...prev, obterChamados: true }));
+        setError((prev) => ({ ...prev, obterChamados: null }));
+
+        try {
+            const params = new URLSearchParams();
+
+            Object.entries(filtro).forEach(([key, value]) => {
+                if (value !== null && value !== undefined && value !== '') {
+                    params.append(key, value);
+                }
+            });
+
+            const query = params.toString();
+
+            const data = await API_FETCH(
+                `/empresas/${id_empresa}/chamados?${query}`,
+                { method: 'GET' }
+            );
+
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, obterChamados: data.mensagem }));
+            } else {
+                setChamados(data.dados.chamados);
+            }
+        } catch (err) {
+            if (err.message === 'Sessão expirada') return;
+
+            setError((prev) => ({
+                ...prev,
+                obterChamados: 'Erro ao obter chamados, tente novamente mais tarde.'
+            }));
+        } finally {
+            setLoading((prev) => ({ ...prev, obterChamados: false }));
         }
     }, []);
 
@@ -327,32 +313,25 @@ export function useEmpresa() {
         setError((prev) => ({ ...prev, obterInfosGerais: null }));
 
         try {
-            // REQUISIÇÃO
             const data = await API_FETCH(`/empresas/${id_empresa}/infosGerais`, {
                 method: 'GET'
             });
 
             console.log(data);
 
-            // ERRO
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterInfosGerais: data.mensagem }));
-            }
-            // SUCESSO
-            else {
+            } else {
                 return data.dados.infosGerais;
             }
         } catch (err) {
-            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
             if (err.message === 'Sessão expirada') return;
 
             setError((prev) => ({
                 ...prev,
                 obterInfosGerais: 'Erro ao obter informações gerais, tente novamente mais tarde.'
             }));
-
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, obterInfosGerais: false }));
         }
     }, []);
@@ -365,7 +344,6 @@ export function useEmpresa() {
         setError((prev) => ({ ...prev, atualizarEmpresa: null }));
 
         try {
-            // REQUISIÇÃO
             const data = await API_FETCH(`/empresas/${id_empresa}`, {
                 method: 'PATCH',
                 headers: {
@@ -377,26 +355,19 @@ export function useEmpresa() {
 
             console.log(data);
 
-
-            // ERRO
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, atualizarEmpresa: data.mensagem }))
-            }
-            // SUCESSO
-            else {
+            } else {
                 setMensagem((prev) => ({ ...prev, atualizarEmpresa: data.mensagem }))
             }
         } catch (err) {
-            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
             if (err.message === 'Sessão expirada') return;
 
             setError((prev) => ({
                 ...prev,
                 atualizarEmpresa: 'Erro ao atualizar logo, tente novamente mais tarde.'
             }));
-
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, atualizarEmpresa: false }));
         }
     }, [])
@@ -414,7 +385,6 @@ export function useEmpresa() {
                 console.log(pair[0], pair[1]);
             }
 
-            // REQUISIÇÃO
             const data = await API_FETCH(`/empresas/${id_empresa}/logo`, {
                 method: 'PATCH',
                 body: formData,
@@ -423,26 +393,19 @@ export function useEmpresa() {
 
             console.log(data);
 
-
-            // ERRO
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, atualizarLogo: data.mensagem }))
-            }
-            // SUCESSO
-            else {
+            } else {
                 setMensagem((prev) => ({ ...prev, atualizarLogo: data.mensagem }))
             }
         } catch (err) {
-            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
             if (err.message === 'Sessão expirada') return;
 
             setError((prev) => ({
                 ...prev,
                 atualizarLogo: 'Erro ao atualizar logo, tente novamente mais tarde.'
             }));
-
         } finally {
-            // Independente de sucesso ou erro, o loading termina aqui
             setLoading((prev) => ({ ...prev, atualizarLogo: false }));
         }
     }, [])
@@ -456,8 +419,9 @@ export function useEmpresa() {
         membros, obterMembros,
         setores, obterSetores,
         maquinas, obterMaquinas,
-        criarEmpresa, 
-        atualizarEmpresa, 
+        chamados, obterChamados,
+        criarEmpresa,
+        atualizarEmpresa,
         atualizarLogo,
         obterInfosGerais,
     };

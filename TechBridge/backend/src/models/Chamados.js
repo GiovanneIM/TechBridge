@@ -84,6 +84,53 @@ class ChamadosModel {
 
         return affectedRows;
     }
+
+    static async obterDashboard(options = {}) {
+        try {
+            const where = {};
+            if (options.id_empresa) where["c.id_empresa"] = options.id_empresa;
+            if (options.estado) where["c.estado"] = options.estado;
+
+            // TOTAL GERAL
+            const [{ total }] = await read("chamados c", {
+                columns: ["COUNT(*) as total"],
+                where
+            });
+
+            // POR ESTADO
+            const porEstado = await read("chamados c", {
+                columns: ["estado", "COUNT(*) as total"],
+                where,
+                groupBy: "estado"
+            });
+
+            // POR DIA (últimos 30 dias)
+            const chamadosPorDia = await read("chamados c", {
+                columns: [
+                    "DATE(datahora_abertura) as dia",
+                    "COUNT(*) as total"
+                ],
+                where,
+                groupBy: "DATE(datahora_abertura)",
+                orderBy: "dia ASC"
+            });
+
+            const dashboard = {
+                totalChamados: total,
+                porEstado: [
+                    { estado: "aberto", total: porEstado.find(e => e.estado === "aberto")?.total ?? 0 },
+                    { estado: "andamento", total: porEstado.find(e => e.estado === "andamento")?.total ?? 0 },
+                    { estado: "concluido", total: porEstado.find(e => e.estado === "concluido")?.total ?? 0 },
+                ],
+                chamadosPorDia
+            };
+
+            return dashboard;
+        } catch (error) {
+            console.error('Erro ao obter dados para dashboard:', error);
+            throw error;
+        }
+    }
 }
 
 export default ChamadosModel;

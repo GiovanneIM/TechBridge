@@ -163,7 +163,7 @@ class ChamadosController {
 
             // BUSCAR CHAMADOS
             const chamado = await ChamadosModel.buscarPorCodigo({
-                "c.id_empresa": id_empresa ,
+                "c.id_empresa": id_empresa,
                 "c.id_setor": setor.id,
                 "c.id_maquina": maquina.id,
                 "c.cod_chamado": cod_chamado
@@ -307,6 +307,31 @@ class ChamadosController {
         const { id_chamado } = req.params;
 
     }
+
+    static async obterDashboard(req, res) {
+        try {
+            const { options = {} } = req.body;
+
+            const dashboard = await ChamadosModel.obterDashboard(options);
+
+            return res.status(200).json({
+                sucesso: true,
+                dados: {
+                    dashboard
+                }
+            });
+
+        } catch (error) {
+            console.error(error);
+
+            return res.status(500).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: error.message
+            });
+        }
+    }
+
 }
 
 

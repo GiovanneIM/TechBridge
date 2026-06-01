@@ -83,7 +83,7 @@ public class ChamadosAdapter extends RecyclerView.Adapter<ChamadosAdapter.ViewHo
             ).enqueue(new Callback<ApiResponse>() {
                 @Override
                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                    
+
                 }
 
                 // FALHA AO CONSULTAR

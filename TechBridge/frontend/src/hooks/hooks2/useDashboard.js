@@ -47,6 +47,7 @@ export function useDashboard({
                 // Atualizando o estado dos chamados
                 setDashboard(data.dados.dashboard)
             }
+                console.log(data.dados.dashboard)
 
         } catch (err) {
             if (err.message === 'Sessão expirada') return;
