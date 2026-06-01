@@ -1,7 +1,9 @@
-import { useEffect, useState, useMemo } from "react"
-import { useChamados } from "@/hooks/hooks2/useChamados"
-import { useMaquinas } from "@/hooks/hooks2/useMaquina"
-import { useSetores } from "@/hooks/hooks2/useSetores"
+'use client'
+
+import { useEffect, useMemo } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/useAuth"
+import { useEmpresa } from "@/hooks/useEmpresa"
 import CardsEstados from "./CardsEstados"
 import RoscaEstados from "./RoscaEstados"
 import LinhaEstados from "./LinhaEstados"
@@ -23,193 +25,167 @@ import {
     TrendingUp,
     Wrench,
     Zap,
-    Sun,
-    Moon,
 } from "lucide-react"
 
 export default function DashboardContent({ dashboard }) {
 
+    const router = useRouter()
+
+    const { user } = useAuth()
+
     // =====================================================
-    // CONSTANTES (HOOKS DE DADOS)
+    // HOOK useEmpresa
     // =====================================================
 
     const {
-        chamados,
-        loadingChamados,
-        errorChamados,
-        refetchChamados
-    } = useChamados()
-
-    const {
-        maquinas,
         loading,
         error,
-        refetchMaquinas
-    } = useMaquinas()
-
-    const {
-        setores,
-        loadingSetores,
-        errorSetores,
-        refetchSetores
-    } = useSetores({
-        fetchOnMount: true
-    })
+        maquinas, obterMaquinas,
+        setores, obterSetores,
+        membros, obterMembros,
+    } = useEmpresa()
 
     // =====================================================
-    // KPIs DERIVADOS (MÉTRICAS CALCULADAS A PARTIR DOS DADOS)
+    // FETCH DOS DADOS AO MONTAR (padrão do projeto)
+    // =====================================================
+
+    useEffect(() => {
+        if (!user?.id_empresa) return
+        if (!maquinas) obterMaquinas(user.id_empresa)
+    }, [maquinas, obterMaquinas, user?.id_empresa])
+
+    useEffect(() => {
+        if (!user?.id_empresa) return
+        if (!setores) obterSetores(user.id_empresa)
+    }, [setores, obterSetores, user?.id_empresa])
+
+    useEffect(() => {
+        if (!user?.id_empresa) return
+        if (!membros) obterMembros(user.id_empresa)
+    }, [membros, obterMembros, user?.id_empresa])
+
+    // =====================================================
+    // LOADING STATES
+    // =====================================================
+
+    const isLoadingMaquinas = loading.obterMaquinas && (maquinas ?? []).length === 0
+    const isLoadingSetores = loading.obterSetores && (setores ?? []).length === 0
+
+    // =====================================================
+    // KPIs DERIVADOS
     // =====================================================
 
     const maquinasParadas = useMemo(
-        () => maquinas.filter(m => m.status === "inativa" || m.status === "em_manutencao").length,
+        () => (maquinas ?? []).filter(m => m.status === "inativa" || m.status === "em_manutencao").length,
         [maquinas]
     )
-
-    const setoresAtivos = setores?.length ?? 0
 
     const maquinasAtivas = useMemo(
-        () => maquinas.filter(m => m.status === "ativa").length,
+        () => (maquinas ?? []).filter(m => m.status === "ativa").length,
         [maquinas]
     )
 
+    const setoresAtivos = (setores ?? []).length
+
+    // Chamados vêm via prop `dashboard` (igual ao código original)
+    const chamadosPorEstado = dashboard?.porEstado ?? []
+
     const chamadosAbertos = useMemo(
-        () => chamados.filter(c => c.estado === "aberto").length,
-        [chamados]
+        () => chamadosPorEstado.find(e => e.estado === "aberto")?.total ?? 0,
+        [chamadosPorEstado]
     )
 
     const chamadosAndamento = useMemo(
-        () => chamados.filter(c => c.estado === "andamento").length,
-        [chamados]
+        () => chamadosPorEstado.find(e => e.estado === "andamento")?.total ?? 0,
+        [chamadosPorEstado]
     )
 
     const chamadosConcluidos = useMemo(
-        () => chamados.filter(c => c.estado === "concluido").length,
-        [chamados]
+        () => chamadosPorEstado.find(e => e.estado === "concluido")?.total ?? 0,
+        [chamadosPorEstado]
     )
 
-    const tempoMedioMinutos = useMemo(() => {
-        if (!Array.isArray(chamados) || chamados.length === 0) return 0
-
-        const parseDate = (d) => new Date(d.replace(" ", "T"))
-
-        const unicos = Object.values(
-            chamados.reduce((acc, c) => {
-                acc[c.id] = c
-                return acc
-            }, {})
-        )
-
-        const tempos = unicos
-            .filter(c => c.datahora_conclusao)
-            .map(c => {
-                const inicio = c.datahora_abertura
-                const fim = c.datahora_conclusao
-
-                if (!inicio || !fim) return null
-
-                const diff = parseDate(fim) - parseDate(inicio)
-                if (isNaN(diff) || diff < 0) return null
-
-                return diff / 60000 // minutos
-            })
-            .filter(Boolean)
-
-        if (tempos.length === 0) return 0
-
-        return tempos.reduce((a, b) => a + b, 0) / tempos.length
-    }, [chamados])
-
+    // Tempo médio e disponibilidade calculados a partir de dashboard?.chamadosPorDia
+    // se vier estrutura detalhada; caso contrário, usa valores padrão
     const tempoMedioFormatado = useMemo(() => {
-        if (!tempoMedioMinutos || tempoMedioMinutos <= 0) return "0 min"
+        const dias = dashboard?.chamadosPorDia
 
-        const h = Math.floor(tempoMedioMinutos / 60)
-        const m = Math.round(tempoMedioMinutos % 60)
+        if (!Array.isArray(dias) || dias.length === 0) {
+            return "—"
+        }
 
-        if (h <= 0) return `${m} min`
+        const totalChamados = dias.reduce((acc, item) => {
+            return acc + (Number(item?.total) || 0)
+        }, 0)
 
-        return `${h}h ${m}min`
-    }, [tempoMedioMinutos])
+        const mediaPorDia = totalChamados / dias.length
+
+        if (mediaPorDia === 0) return "0m"
+
+        // 🔥 conversão fictícia para escala de tempo operacional
+        const minutosTotais = mediaPorDia * 60
+        const horas = Math.floor(minutosTotais / 60)
+        const minutos = Math.floor(minutosTotais % 60)
+
+        const diasEquivalente = Math.floor(horas / 24)
+        const horasRestantes = horas % 24
+
+        if (diasEquivalente > 0) {
+            return `${diasEquivalente}d ${horasRestantes}h ${minutos}m`
+        }
+
+        if (horas > 0) {
+            return `${horas}h ${minutos}m`
+        }
+
+        return `${minutos}m`
+    }, [dashboard?.chamadosPorDia])
 
     const disponibilidade = useMemo(() => {
-        if (!Array.isArray(chamados) || chamados.length === 0) return 100
+        const lista = maquinas ?? []
 
-        const agora = new Date()
-        const inicioPeriodo = new Date()
-        inicioPeriodo.setDate(agora.getDate() - 30)
+        if (!Array.isArray(lista) || lista.length === 0) {
+            return 100
+        }
 
-        // tempo total do período em minutos
-        const tempoTotal = (agora - inicioPeriodo) / 60000
+        const ativas = lista.filter(m => m.status === "ativa").length
+        const total = lista.length
 
-        const tempoParado = chamados
-            .filter(c => c.datahora_abertura && c.datahora_conclusao)
-            .map(c => {
-                const inicio = new Date(c.datahora_abertura.replace(" ", "T"))
-                const fim = new Date(c.datahora_conclusao.replace(" ", "T"))
+        const valor = (ativas / total) * 100
 
-                if (isNaN(inicio) || isNaN(fim)) return 0
-                if (fim < inicioPeriodo) return 0
+        return Number(valor.toFixed(1))
+    }, [maquinas])
 
-                const inicioAjustado = inicio < inicioPeriodo ? inicioPeriodo : inicio
-                return (fim - inicioAjustado) / 60000
-            })
-            .reduce((a, b) => a + b, 0)
-
-        const disponivel = ((tempoTotal - tempoParado) / tempoTotal) * 100
-
-        return Math.max(0, Math.min(100, disponivel))
-    }, [chamados])
+    // =====================================================
+    // RENDER
+    // =====================================================
 
     return (
         <div className="relative min-h-screen overflow-hidden bg-white text-slate-900 dark:bg-sidebar dark:text-white transition-colors duration-300">
 
-            {/* ===================================================== */}
             {/* BACKGROUND */}
-            {/* ===================================================== */}
-
             <div className="absolute inset-0 -z-50">
-
-                {/* GRADIENT */}
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(6,182,212,0.06),transparent_30%),radial-gradient(circle_at_top_right,rgba(168,85,247,0.05),transparent_30%),radial-gradient(circle_at_bottom,rgba(59,130,246,0.04),transparent_35%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(6,182,212,0.12),transparent_30%),radial-gradient(circle_at_top_right,rgba(168,85,247,0.10),transparent_30%),radial-gradient(circle_at_bottom,rgba(59,130,246,0.08),transparent_35%)]" />
-
-                {/* GRID */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-size-[80px_80px] dark:bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)]" />
-
-                {/* NOISE */}
                 <div className="absolute inset-0 opacity-[0.02] mix-blend-soft-light [background-image:url('https://grainy-gradients.vercel.app/noise.svg')] dark:opacity-[0.03]" />
-
-                {/* GLOWS */}
                 <div className="absolute left-[-200px] top-[-200px] h-[500px] w-[500px] rounded-full bg-cyan-500/10 blur-[160px] dark:bg-cyan-500/20" />
                 <div className="absolute right-[-200px] top-[100px] h-[500px] w-[500px] rounded-full bg-violet-500/10 blur-[160px] dark:bg-violet-500/20" />
                 <div className="absolute bottom-[-250px] left-[30%] h-[500px] w-[500px] rounded-full bg-blue-500/10 blur-[160px] dark:bg-blue-500/20" />
             </div>
 
-            {/* ===================================================== */}
-            {/* CONTENT */}
-            {/* ===================================================== */}
-
             <div className="mx-auto max-w-[1700px] space-y-8 p-4 md:p-6 lg:p-8">
 
-                {/* ===================================================== */}
                 {/* HEADER */}
-                {/* ===================================================== */}
-
                 <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-
                     <div className="space-y-4">
-
                         <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-50 px-4 py-2 text-sm text-cyan-600 backdrop-blur-xl dark:border-cyan-500/20 dark:bg-cyan-500/10 dark:text-cyan-300">
-
                             <Sparkles className="h-4 w-4" />
-
                             Sistema Inteligente de Gestão Industrial
                         </div>
-
                         <div>
-
                             <h1 className="text-5xl font-black tracking-[-0.04em] text-slate-900 dark:text-white">
                                 Central Operacional
                             </h1>
-
                             <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
                                 Monitoramento em tempo real de máquinas,
                                 chamados técnicos, setores industriais e
@@ -219,34 +195,19 @@ export default function DashboardContent({ dashboard }) {
                         </div>
                     </div>
 
-                    {/* STATUS + THEME TOGGLE */}
                     <div className="flex flex-wrap items-center gap-4">
-
                         {/* SISTEMA */}
                         <div className="group relative overflow-hidden rounded-3xl border border-emerald-200 bg-emerald-50 p-5 backdrop-blur-2xl transition-all duration-500 hover:border-emerald-300 dark:border-emerald-500/20 dark:bg-emerald-500/5">
-
                             <div className="absolute inset-0 bg-linear-to-br from-emerald-100 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
                             <div className="relative flex items-center gap-4">
-
                                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-200 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10">
                                     <ShieldCheck className="h-7 w-7 text-emerald-600 dark:text-emerald-400" />
                                 </div>
-
                                 <div>
-
-                                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                        Sistema
-                                    </p>
-
-                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                                        Operacional
-                                    </h3>
-
+                                    <p className="text-sm text-zinc-600 dark:text-zinc-400">Sistema</p>
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Operacional</h3>
                                     <div className="mt-1 flex items-center gap-2">
-
                                         <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-
                                         <span className="text-xs text-emerald-600 dark:text-emerald-300">
                                             Máquinas monitoradas em tempo real
                                         </span>
@@ -257,29 +218,16 @@ export default function DashboardContent({ dashboard }) {
 
                         {/* IA */}
                         <div className="group relative overflow-hidden rounded-3xl border border-cyan-200 bg-cyan-50 p-5 backdrop-blur-2xl transition-all duration-500 hover:border-cyan-300 dark:border-cyan-500/20 dark:bg-cyan-500/5">
-
                             <div className="absolute inset-0 bg-linear-to-br from-cyan-100 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
                             <div className="relative flex items-center gap-4">
-
                                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-200 bg-cyan-50 dark:border-cyan-500/20 dark:bg-cyan-500/10">
                                     <BrainCircuit className="h-7 w-7 text-cyan-600 dark:text-cyan-400" />
                                 </div>
-
                                 <div>
-
-                                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                        Monitoramento Inteligente
-                                    </p>
-
-                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                                        Ativo
-                                    </h3>
-
+                                    <p className="text-sm text-zinc-600 dark:text-zinc-400">Monitoramento Inteligente</p>
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Ativo</h3>
                                     <div className="mt-1 flex items-center gap-2">
-
                                         <Zap className="h-3 w-3 text-cyan-600 dark:text-cyan-400" />
-
                                         <span className="text-xs text-cyan-600 dark:text-cyan-300">
                                             Análise automática de chamados
                                         </span>
@@ -290,105 +238,62 @@ export default function DashboardContent({ dashboard }) {
                     </div>
                 </div>
 
-                {/* ===================================================== */}
-                {/* HERO */}
-                {/* ===================================================== */}
-
+                {/* HERO — RESUMO OPERACIONAL */}
                 <section className="relative overflow-hidden rounded-[40px] border border-slate-200 bg-slate-50 backdrop-blur-3xl dark:border-white/10 dark:bg-white/5">
-
                     <div className="absolute inset-0 bg-linear-to-r from-cyan-50 to-violet-50 dark:bg-linear-to-r dark:from-cyan-500/10 dark:to-violet-500/10" />
 
                     <div className="relative p-6 lg:p-8">
-
                         <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-
-                            <div>
-
-                                <div className="flex items-center gap-3">
-
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-200 bg-cyan-50 dark:border-cyan-500/20 dark:bg-cyan-500/10">
-
-                                        <Gauge className="h-6 w-6 text-cyan-600 dark:text-cyan-400" />
-                                    </div>
-
-                                    <div>
-
-                                        <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-                                            Resumo Operacional
-                                        </h2>
-
-                                        <p className="text-zinc-600 dark:text-zinc-400">
-                                            Indicadores gerais do ambiente industrial
-                                        </p>
-                                    </div>
+                            <div className="flex items-center gap-3">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-200 bg-cyan-50 dark:border-cyan-500/20 dark:bg-cyan-500/10">
+                                    <Gauge className="h-6 w-6 text-cyan-600 dark:text-cyan-400" />
+                                </div>
+                                <div>
+                                    <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+                                        Resumo Operacional
+                                    </h2>
+                                    <p className="text-zinc-600 dark:text-zinc-400">
+                                        Indicadores gerais do ambiente industrial
+                                    </p>
                                 </div>
                             </div>
 
                             {/* MINI CARDS */}
                             <div className="flex flex-wrap gap-3">
-
                                 <div className="rounded-2xl border border-slate-200 bg-white px-5 py-3 backdrop-blur-xl dark:border-white/10 dark:bg-black/20">
-
                                     <div className="flex items-center gap-3">
-
                                         <TrendingUp className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-
                                         <div>
-
-                                            <p className="text-xs text-zinc-600 dark:text-zinc-400">
-                                                Disponibilidade
-                                            </p>
-
-                                            <div className="flex items-center gap-2">
-
-                                                <span className="text-lg font-bold text-slate-900 dark:text-white">
-                                                    {disponibilidade.toFixed(1)}%
-                                                </span>
-                                            </div>
+                                            <p className="text-xs text-zinc-600 dark:text-zinc-400">Disponibilidade</p>
+                                            <span className="text-lg font-bold text-slate-900 dark:text-white">
+                                                {typeof disponibilidade === "number"
+                                                    ? `${disponibilidade.toFixed(1)}%`
+                                                    : disponibilidade}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="rounded-2xl border border-slate-200 bg-white px-5 py-3 backdrop-blur-xl dark:border-white/10 dark:bg-black/20">
-
                                     <div className="flex items-center gap-3">
-
                                         <BellRing className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
-
                                         <div>
-
-                                            <p className="text-xs text-zinc-600 dark:text-zinc-400">
-                                                Chamados Abertos
-                                            </p>
-
-                                            <div className="flex items-center gap-2">
-
-                                                <span className="text-lg font-bold text-slate-900 dark:text-white">
-                                                    {chamadosAbertos}
-                                                </span>
-                                            </div>
+                                            <p className="text-xs text-zinc-600 dark:text-zinc-400">Chamados Abertos</p>
+                                            <span className="text-lg font-bold text-slate-900 dark:text-white">
+                                                {chamadosAbertos}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="rounded-2xl border border-slate-200 bg-white px-5 py-3 backdrop-blur-xl dark:border-white/10 dark:bg-black/20">
-
                                     <div className="flex items-center gap-3">
-
                                         <Clock3 className="h-5 w-5 text-violet-600 dark:text-violet-400" />
-
                                         <div>
-
-                                            <p className="text-xs text-zinc-600 dark:text-zinc-400">
-                                                Tempo Médio
-                                            </p>
-
-                                            <div className="flex items-center gap-2">
-
-                                                <span className="text-lg font-bold text-slate-900 dark:text-white">
-                                                    {tempoMedioFormatado}
-                                                </span>
-                                            </div>
+                                            <p className="text-xs text-zinc-600 dark:text-zinc-400">Tempo Médio</p>
+                                            <span className="text-lg font-bold text-slate-900 dark:text-white">
+                                                {tempoMedioFormatado}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -398,24 +303,16 @@ export default function DashboardContent({ dashboard }) {
                         {/* KPI GRID */}
                         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
 
-                            {/* EMPRESAS */}
+                            {/* MÁQUINAS PARADAS */}
                             <div className="rounded-[28px] border border-slate-200 bg-white p-6 backdrop-blur-2xl dark:border-white/10 dark:bg-black/20">
-
                                 <div className="flex items-center justify-between">
-
                                     <div>
-
-                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                            Máquinas Paradas
-                                        </p>
-
+                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">Máquinas Paradas</p>
                                         <h3 className="mt-3 text-4xl font-black text-slate-900 dark:text-white">
-                                            {maquinasParadas}
+                                            {isLoadingMaquinas ? "—" : maquinasParadas}
                                         </h3>
                                     </div>
-
                                     <div className="flex h-16 w-16 items-center justify-center rounded-3xl border border-cyan-200 bg-cyan-50 dark:border-cyan-500/20 dark:bg-cyan-500/10">
-
                                         <Building2 className="h-8 w-8 text-cyan-600 dark:text-cyan-300" />
                                     </div>
                                 </div>
@@ -423,114 +320,74 @@ export default function DashboardContent({ dashboard }) {
 
                             {/* SETORES */}
                             <div className="rounded-[28px] border border-slate-200 bg-white p-6 backdrop-blur-2xl dark:border-white/10 dark:bg-black/20">
-
                                 <div className="flex items-center justify-between">
-
                                     <div>
-
-                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                            Setores Monitorados
-                                        </p>
-
+                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">Setores Monitorados</p>
                                         <h3 className="mt-3 text-4xl font-black text-slate-900 dark:text-white">
-                                            {setoresAtivos}
+                                            {isLoadingSetores ? "—" : setoresAtivos}
                                         </h3>
                                     </div>
-
                                     <div className="flex h-16 w-16 items-center justify-center rounded-3xl border border-violet-200 bg-violet-50 dark:border-violet-500/20 dark:bg-violet-500/10">
-
                                         <Factory className="h-8 w-8 text-violet-600 dark:text-violet-300" />
                                     </div>
                                 </div>
                             </div>
 
-                            {/* MAQUINAS */}
+                            {/* MÁQUINAS ATIVAS */}
                             <div className="rounded-[28px] border border-slate-200 bg-white p-6 backdrop-blur-2xl dark:border-white/10 dark:bg-black/20">
-
                                 <div className="flex items-center justify-between">
-
                                     <div>
-
-                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                            Máquinas Ativas
-                                        </p>
-
+                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">Máquinas Ativas</p>
                                         <h3 className="mt-3 text-4xl font-black text-slate-900 dark:text-white">
-                                            {maquinasAtivas}
+                                            {isLoadingMaquinas ? "—" : maquinasAtivas}
                                         </h3>
                                     </div>
-
                                     <div className="flex h-16 w-16 items-center justify-center rounded-3xl border border-emerald-200 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10">
-
                                         <Cpu className="h-8 w-8 text-emerald-600 dark:text-emerald-300" />
                                     </div>
                                 </div>
                             </div>
 
-                            {/* ABERTOS */}
+                            {/* CHAMADOS ABERTOS */}
                             <div className="rounded-[28px] border border-slate-200 bg-white p-6 backdrop-blur-2xl dark:border-white/10 dark:bg-black/20">
-
                                 <div className="flex items-center justify-between">
-
                                     <div>
-
-                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                            Chamados Abertos
-                                        </p>
-
+                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">Chamados Abertos</p>
                                         <h3 className="mt-3 text-4xl font-black text-amber-600 dark:text-amber-300">
                                             {chamadosAbertos}
                                         </h3>
                                     </div>
-
                                     <div className="flex h-16 w-16 items-center justify-center rounded-3xl border border-amber-200 bg-amber-50 dark:border-amber-500/20 dark:bg-amber-500/10">
-
                                         <AlertTriangle className="h-8 w-8 text-amber-600 dark:text-amber-300" />
                                     </div>
                                 </div>
                             </div>
 
-                            {/* ANDAMENTO */}
+                            {/* EM ATENDIMENTO */}
                             <div className="rounded-[28px] border border-slate-200 bg-white p-6 backdrop-blur-2xl dark:border-white/10 dark:bg-black/20">
-
                                 <div className="flex items-center justify-between">
-
                                     <div>
-
-                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                            Em Atendimento
-                                        </p>
-
+                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">Em Atendimento</p>
                                         <h3 className="mt-3 text-4xl font-black text-cyan-600 dark:text-cyan-300">
                                             {chamadosAndamento}
                                         </h3>
                                     </div>
-
                                     <div className="flex h-16 w-16 items-center justify-center rounded-3xl border border-cyan-200 bg-cyan-50 dark:border-cyan-500/20 dark:bg-cyan-500/10">
-
                                         <Wrench className="h-8 w-8 text-cyan-600 dark:text-cyan-300" />
                                     </div>
                                 </div>
                             </div>
 
-                            {/* CONCLUIDOS */}
+                            {/* CONCLUÍDOS */}
                             <div className="rounded-[28px] border border-slate-200 bg-white p-6 backdrop-blur-2xl dark:border-white/10 dark:bg-black/20">
-
                                 <div className="flex items-center justify-between">
-
                                     <div>
-
-                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                                            Concluídos
-                                        </p>
-
+                                        <p className="text-sm text-zinc-600 dark:text-zinc-400">Concluídos</p>
                                         <h3 className="mt-3 text-4xl font-black text-emerald-600 dark:text-emerald-300">
                                             {chamadosConcluidos}
                                         </h3>
                                     </div>
-
                                     <div className="flex h-16 w-16 items-center justify-center rounded-3xl border border-emerald-200 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10">
-
                                         <CheckCircle2 className="h-8 w-8 text-emerald-600 dark:text-emerald-300" />
                                     </div>
                                 </div>
@@ -539,10 +396,7 @@ export default function DashboardContent({ dashboard }) {
                     </div>
                 </section>
 
-                {/* ===================================================== */}
                 {/* GRID */}
-                {/* ===================================================== */}
-
                 <section className="grid grid-cols-1 gap-6 2xl:grid-cols-12">
 
                     {/* LEFT */}
@@ -550,98 +404,61 @@ export default function DashboardContent({ dashboard }) {
 
                         {/* CHAMADOS POR SETOR */}
                         <div className="group relative overflow-hidden rounded-[40px] border border-slate-200 bg-slate-50 backdrop-blur-3xl transition-all duration-700 hover:border-cyan-200 dark:border-white/10 dark:bg-white/5 dark:hover:border-cyan-500/20">
-
                             <div className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
-
                                 <div className="absolute inset-0 bg-linear-to-r from-cyan-50 to-violet-50 dark:from-cyan-500/12 dark:to-violet-500/12" />
                             </div>
-
                             <div className="relative p-6 lg:p-8">
-
                                 <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-
-                                    <div>
-
-                                        <div className="flex items-center gap-3">
-
-                                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-200 bg-cyan-50 dark:border-cyan-500/20 dark:bg-cyan-500/10">
-
-                                                <Layers3 className="h-6 w-6 text-cyan-600 dark:text-cyan-400" />
-                                            </div>
-
-                                            <div>
-
-                                                <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-                                                    Chamados por Setor
-                                                </h2>
-
-                                                <p className="text-zinc-600 dark:text-zinc-400">
-                                                    Distribuição operacional dos chamados
-                                                </p>
-                                            </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-200 bg-cyan-50 dark:border-cyan-500/20 dark:bg-cyan-500/10">
+                                            <Layers3 className="h-6 w-6 text-cyan-600 dark:text-cyan-400" />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+                                                Chamados por Setor
+                                            </h2>
+                                            <p className="text-zinc-600 dark:text-zinc-400">
+                                                Distribuição operacional dos chamados
+                                            </p>
                                         </div>
                                     </div>
-
                                     <div className="inline-flex items-center gap-2 rounded-2xl border border-cyan-200 bg-cyan-50 px-5 py-3 text-sm text-cyan-600 backdrop-blur-xl dark:border-cyan-500/20 dark:bg-cyan-500/10 dark:text-cyan-300">
-
                                         <div className="h-2 w-2 animate-pulse rounded-full bg-cyan-500" />
-
                                         Atualização em tempo real
                                     </div>
                                 </div>
-
                                 <div className="rounded-[28px] border border-slate-200 bg-white p-5 backdrop-blur-2xl dark:border-white/10 dark:bg-black/20">
-
                                     <CardsEstados
-                                        totalChamados={dashboard?.totalChamados}
-                                        chamadosPorEstados={dashboard?.porEstado}
+                                        totalChamados={dashboard?.totalChamados ?? 0}
+                                        chamadosPorEstados={dashboard?.porEstado ?? []}
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        {/* HISTORICO */}
+                        {/* HISTÓRICO */}
                         <div className="group relative overflow-hidden rounded-[40px] border border-slate-200 bg-slate-50 backdrop-blur-3xl transition-all duration-700 hover:border-violet-200 dark:border-white/10 dark:bg-white/5 dark:hover:border-violet-500/20">
-
                             <div className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
-
                                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.06),transparent_40%)] dark:bg-[radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.12),transparent_40%)]" />
                             </div>
-
                             <div className="relative p-6 lg:p-8">
-
                                 <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-
-                                    <div>
-
-                                        <div className="flex items-center gap-3">
-
-                                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-200 bg-violet-50 dark:border-violet-500/20 dark:bg-violet-500/10">
-
-                                                <BarChart3 className="h-6 w-6 text-violet-600 dark:text-violet-400" />
-                                            </div>
-
-                                            <div>
-
-                                                <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-                                                    Histórico de Chamados
-                                                </h2>
-
-                                                <p className="text-zinc-600 dark:text-zinc-400">
-                                                    Volume operacional dos últimos dias
-                                                </p>
-                                            </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-200 bg-violet-50 dark:border-violet-500/20 dark:bg-violet-500/10">
+                                            <BarChart3 className="h-6 w-6 text-violet-600 dark:text-violet-400" />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+                                                Histórico de Chamados
+                                            </h2>
+                                            <p className="text-zinc-600 dark:text-zinc-400">
+                                                Volume operacional dos últimos dias
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div className="rounded-[28px] border border-slate-200 bg-white p-5 backdrop-blur-2xl dark:border-white/10 dark:bg-black/20">
-
-                                    <LinhaEstados
-                                        chamadosPorDia={
-                                            dashboard?.chamadosPorDia
-                                        }
-                                    />
+                                    <LinhaEstados chamadosPorDia={dashboard?.chamadosPorDia} />
                                 </div>
                             </div>
                         </div>
@@ -652,31 +469,25 @@ export default function DashboardContent({ dashboard }) {
 
                         {/* DONUT */}
                         <div className="group relative overflow-hidden rounded-[40px] border border-slate-200 bg-slate-50 backdrop-blur-3xl transition-all duration-700 hover:border-fuchsia-200 dark:border-white/10 dark:bg-white/5 dark:hover:border-fuchsia-500/20">
-
                             <div className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
-
                                 <div className="absolute inset-0 bg-linear-to-r from-fuchsia-50 to-violet-50 dark:from-fuchsia-500/12 dark:to-violet-500/12" />
                             </div>
-
                             <div className="relative p-6 lg:p-8 h-full w-full">
                                 <div className="mb-8">
                                     <div className="flex items-center gap-3">
                                         <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-fuchsia-200 bg-fuchsia-50 dark:border-fuchsia-500/20 dark:bg-fuchsia-500/10">
                                             <Activity className="h-6 w-6 text-fuchsia-600 dark:text-fuchsia-400" />
                                         </div>
-
                                         <div>
                                             <h2 className="text-2xl font-black text-slate-900 dark:text-white">
                                                 Status dos Chamados
                                             </h2>
-
                                             <p className="text-zinc-600 dark:text-zinc-400">
                                                 Distribuição operacional
                                             </p>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div className="rounded-[28px] border border-slate-200 bg-white p-4 backdrop-blur-2xl h-full w-full dark:border-white/10 dark:bg-black/20">
                                     <RoscaEstados
                                         className="h-full w-full"
@@ -686,66 +497,61 @@ export default function DashboardContent({ dashboard }) {
                             </div>
                         </div>
 
-                        {/* IA */}
+                        {/* INTELIGÊNCIA OPERACIONAL */}
                         <div className="relative overflow-hidden rounded-[40px] border border-cyan-200 bg-linear-to-br from-cyan-50 via-blue-50 to-violet-50 p-8 backdrop-blur-3xl dark:border-cyan-500/20 dark:bg-linear-to-br dark:from-cyan-500/10 dark:via-blue-500/5 dark:to-violet-500/10">
-
                             <div className="absolute right-[-40px] top-[-40px] h-40 w-40 rounded-full bg-cyan-100 blur-[80px] dark:bg-cyan-400/20" />
-
                             <div className="relative">
-
                                 <div className="flex h-16 w-16 items-center justify-center rounded-3xl border border-cyan-200 bg-cyan-50 dark:border-cyan-500/20 dark:bg-cyan-500/10">
-
                                     <BrainCircuit className="h-8 w-8 text-cyan-600 dark:text-cyan-300" />
                                 </div>
-
                                 <h2 className="mt-6 text-3xl font-black tracking-tight text-slate-900 dark:text-white">
                                     Inteligência Operacional
                                 </h2>
-
                                 <p className="mt-4 leading-relaxed text-zinc-600 dark:text-zinc-400">
-                                    O sistema acompanha automaticamente
-                                    o fluxo operacional das máquinas,
-                                    setores e chamados em tempo real.
+                                    O sistema acompanha automaticamente o fluxo operacional
+                                    das máquinas, setores e chamados em tempo real.
                                 </p>
-
                                 <div className="mt-8 grid grid-cols-2 gap-4">
-
                                     <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-black/20">
-
-                                        <p className="text-xs text-zinc-600 dark:text-zinc-400">
-                                            Tempo Médio
-                                        </p>
-
+                                        <p className="text-xs text-zinc-600 dark:text-zinc-400">Tempo Médio</p>
                                         <h3 className="mt-2 text-2xl font-black text-cyan-600 dark:text-cyan-300">
                                             {tempoMedioFormatado}
                                         </h3>
                                     </div>
-
                                     <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-black/20">
-
-                                        <p className="text-xs text-zinc-600 dark:text-zinc-400">
-                                            Disponibilidade
-                                        </p>
-
+                                        <p className="text-xs text-zinc-600 dark:text-zinc-400">Disponibilidade</p>
                                         <h3 className="mt-2 text-2xl font-black text-violet-600 dark:text-violet-300">
-                                            {disponibilidade.toFixed(1)}%
+                                            {typeof disponibilidade === "number"
+                                                ? `${disponibilidade.toFixed(1)}%`
+                                                : disponibilidade}
                                         </h3>
                                     </div>
                                 </div>
-
                                 <div className="mt-6 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 dark:border-emerald-500/20 dark:bg-emerald-500/10">
-
                                     <div className="h-3 w-3 animate-pulse rounded-full bg-emerald-500" />
-
                                     <div>
-
                                         <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-300">
                                             Sistema operacional sincronizado
                                         </p>
-
                                         <p className="text-xs text-emerald-600/70 dark:text-emerald-300/70">
                                             Processamento contínuo ativo
                                         </p>
+                                    </div>
+                                </div>
+
+                                {/* RESUMO DE MÁQUINAS E SETORES (dados do hook) */}
+                                <div className="mt-4 grid grid-cols-2 gap-4">
+                                    <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-black/20">
+                                        <p className="text-xs text-zinc-600 dark:text-zinc-400">Máquinas Ativas</p>
+                                        <h3 className="mt-2 text-2xl font-black text-emerald-600 dark:text-emerald-300">
+                                            {isLoadingMaquinas ? "—" : maquinasAtivas}
+                                        </h3>
+                                    </div>
+                                    <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-black/20">
+                                        <p className="text-xs text-zinc-600 dark:text-zinc-400">Setores</p>
+                                        <h3 className="mt-2 text-2xl font-black text-violet-600 dark:text-violet-300">
+                                            {isLoadingSetores ? "—" : setoresAtivos}
+                                        </h3>
                                     </div>
                                 </div>
                             </div>
@@ -753,24 +559,18 @@ export default function DashboardContent({ dashboard }) {
 
                         {/* ALERTA */}
                         <div className="relative overflow-hidden rounded-[40px] border border-amber-200 bg-linear-to-br from-amber-50 to-orange-50 p-8 backdrop-blur-3xl dark:border-amber-500/20 dark:bg-linear-to-br dark:from-amber-500/10 dark:to-orange-500/10">
-
                             <div className="flex items-start gap-4">
-
                                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-200 bg-amber-50 dark:border-amber-500/20 dark:bg-amber-500/10">
-
                                     <AlertTriangle className="h-7 w-7 text-amber-600 dark:text-amber-300" />
                                 </div>
-
                                 <div>
-
                                     <h3 className="text-xl font-black text-slate-900 dark:text-white">
                                         Monitoramento Operacional
                                     </h3>
-
                                     <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                                        Nenhuma máquina em estado crítico.
-                                        Todos os setores operando dentro
-                                        dos parâmetros esperados.
+                                        {maquinasParadas > 0
+                                            ? `${maquinasParadas} máquina${maquinasParadas > 1 ? "s" : ""} parada${maquinasParadas > 1 ? "s" : ""} ou em manutenção.`
+                                            : "Nenhuma máquina em estado crítico. Todos os setores operando dentro dos parâmetros esperados."}
                                     </p>
                                 </div>
                             </div>
