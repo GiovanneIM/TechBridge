@@ -41,10 +41,10 @@ export default function ModalAddSetor() {
     return (<>
         <Button
             onClick={() => setIsOpen(true)}
-            className="bg-techbridge text-md cursor-pointer"
+            className="bg-techbridge text-md cursor-pointer mt-5"
             size='lg'
         >
-            <Plus className='inline' /> Novo tecnico
+            <Plus className='inline' /> Novo setor
         </Button>
 
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
