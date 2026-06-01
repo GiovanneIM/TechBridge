@@ -1,4 +1,5 @@
 import { create, read, update, deleteRecord, comparePassword, hashPassword, getConnection } from '../config/database.js';
+import { CARGOS_FORMATADOS } from '../utils/validacoes.js';
 
 class UserModel {
     // CRIAR USUÁRIO
@@ -107,7 +108,16 @@ class UserModel {
     static async listarUsuarios(id_empresa, limit, offset, page, where, like, likeOr) {
         try {
             // OBTER OS USUARIO
-            const usuarios = await read("usuarios", {
+            const usuarios = await read("usuarios u", {
+                columns: [
+                    "u.*",
+                    "tu.descricao as cargo",
+                    "e.nome_fantasia as empresa"
+                ],
+                join: [
+                    { type: 'INNER', table: 'tipos_usuarios tu', on: 'tu.id = u.tipo_usuario' },
+                    { type: 'INNER', table: 'empresas e', on: 'e.id = u.id_empresa' }
+                ],
                 limit,
                 offset,
                 where,
@@ -117,10 +127,16 @@ class UserModel {
 
             // REMOVER AS SENHAS DOS USUÁRIOS
             const usuariosSemSenha = usuarios.map(({ senha, ...user }) => user);
+            const usuariosFormatados = usuarios.map((prev) => ({ ...prev, cargo: CARGOS_FORMATADOS[prev.cargo] }));
 
             // TOTAL DE MEMBROS DA EMPRESA
-            const [{ total }] = await read('usuarios', {
+            const [{ total }] = await read('usuarios u', {
                 columns: ['COUNT(*) as total'],
+                join: [
+                    { type: 'INNER', table: 'tipos_usuarios tu', on: 'tu.id = u.tipo_usuario' },
+                    { type: 'INNER', table: 'empresas e', on: 'e.id = u.id_empresa' }
+                ],
+
                 where,
                 like,
                 likeOr
@@ -131,7 +147,7 @@ class UserModel {
 
             // RETORNANDO OS USUARIOS E INFORMAÇÕES DE PAGINAÇÃO
             return {
-                lista: usuariosSemSenha,
+                lista: usuariosFormatados,
                 paginacao: {
                     total,
                     page,

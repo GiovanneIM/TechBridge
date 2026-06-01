@@ -5,6 +5,14 @@ export const CARGOS = {
     TECNICO: 4,
 }
 
+export const CARGOS_FORMATADOS = {
+    'admin': 'Admin',
+    'gerente_principal': 'Gerente Principal',
+    'gerente': 'Gerente',
+    'tecnico': 'Técnico',
+}
+
+
 export function pertenceAEmpresa(req, id_empresa) {
     // VERIFICANDO SE O USUÁRIO É ADMIN
     if (req.usuario.tipo_usuario != CARGOS.ADMIN) {

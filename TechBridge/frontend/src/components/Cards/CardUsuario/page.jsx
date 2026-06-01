@@ -57,7 +57,7 @@ export function CardUsuario({ user }) {
                     {/* NOME */}
                     <div className="rounded-xl border bg-background p-3">
                         <p className="text-sm text-muted-foreground">
-                            cargo
+                            Cargo
                         </p>
 
                         <p className="font-semibold">

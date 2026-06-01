@@ -7,7 +7,7 @@ import HeaderPage from '../../Header/HeaderPage';
 import { useState } from "react";
 import { useUsers } from "@/hooks/hooks2/useUsers"
 
-import { CardTecnico } from "../../../card/cardTecnicos/page"
+import { CardTecnico } from "../../../Cards/cardTecnicos/page"
 import ModalNovoTecnico from '@/components/modals/addTecnico';
 
 import { UserCog2, RotateCw } from 'lucide-react';

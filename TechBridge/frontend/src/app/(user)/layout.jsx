@@ -20,6 +20,10 @@ export default function UserLayout({ children }) {
 	const router = useRouter()
 	const { loading, error, user, perfil } = useAuth()
 
+	useEffect(() => {
+		perfil()
+	}, [perfil])
+
 	// VERIFICANDO SE HÁ UM USUÁRIO LOGADO
 	useEffect(() => {
 		if (!loading.perfil && !user) {

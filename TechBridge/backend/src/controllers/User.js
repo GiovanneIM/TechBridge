@@ -1,3 +1,4 @@
+import { log } from "console";
 import UserModel from "../models/User.js";
 import { pertenceAEmpresa } from "../utils/validacoes.js";
 
@@ -73,26 +74,31 @@ class UserController {
         const offset = (page - 1) * limit;
 
         // FILTROS
-        const where = { id_empresa };
+        const where = { "u.id_empresa": id_empresa };
         const like = {};
         const likeOr = {};
 
         if (status && status !== 'all') {
             status === 'ativa'
-                ? where.status = true
-                : where.status = false
+                ? where["u.status"] = true
+                : where["u.status"] = false
         }
 
         if (cargo) {
-            like.cargo = cargo
+            like["tu.descricao"] = cargo;
         }
 
         if (texto) {
-            likeOr.nome = texto;
-            likeOr.email = texto;
+            likeOr["u.nome"] = texto;
+            likeOr["u.email"] = texto;
         }
 
         try {
+            console.log();
+            ({
+                id_empresa, limit, offset, page, where, like, likeOr
+            })
+
             // REQUISIÇÃO
             const resultado = await UserModel.listarUsuarios(id_empresa, limit, offset, page, where, like, likeOr);
 
