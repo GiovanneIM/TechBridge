@@ -1,9 +1,13 @@
 import { z } from 'zod';
 import { helperSenha } from '../helpers/helperSenha.js';
 import { helperId } from '../helpers/helperId.js';
+import { helperCodigo } from '../helpers/helperCodigo.js';
 
 // ID DO USUÁRIO
 export const id_usuario = helperId('ID do usuário');
+
+// CÓDIGO DO USUÁRIO
+export const cod_usuario = helperCodigo('Código do usuário')
 
 // NOME
 export const nome = z

@@ -235,7 +235,7 @@ router.post(
  *       required: true
  *       description: ID da empresa
  * 
- *     - in: path
+ *     - in: cod_usuario
  *       name: membro
  *       schema:
  *         type: string
@@ -255,7 +255,7 @@ router.post(
  *         description: Não foi possível listar o usuário da empresa
  */
 router.get(
-    '/:id_empresa/membros/:id_usuario',
+    '/:id_empresa/membros/:cod_usuario',
     validateZod(params_EmpresaUsuario, 'params'),   // Params - ID da empresa, ID do usuário
     gerenteMiddleware,                              // Gerente
     UserController.obter                            // Controller users - Obter

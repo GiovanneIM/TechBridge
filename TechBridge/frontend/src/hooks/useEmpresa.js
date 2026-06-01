@@ -17,6 +17,9 @@ export function useEmpresa() {
     // MEMBROS DE UMA EMPRESA
     const [membros, setMembros] = useState(null);
 
+    // MEMBRO DE UMA EMPRESA
+    const [membro, setMembro] = useState(null);
+
     // SETORES DE UMA EMPRESA
     const [setores, setSetores] = useState(null);
 
@@ -32,6 +35,7 @@ export function useEmpresa() {
         criarEmpresa: null,
         obterEmpresa: null,
         obterMembros: null,
+        obterMembro: null,
         obterSetores: null,
         obterMaquinas: null,
         obterChamados: null,
@@ -46,6 +50,7 @@ export function useEmpresa() {
         criarEmpresa: null,
         obterEmpresa: null,
         obterMembros: null,
+        obterMembro: null,
         obterSetores: null,
         obterMaquinas: null,
         obterChamados: null,
@@ -60,6 +65,7 @@ export function useEmpresa() {
         criarEmpresa: null,
         obterEmpresa: null,
         obterMembros: null,
+        obterMembro: null,
         obterSetores: null,
         obterMaquinas: null,
         atualizarEmpresa: null,
@@ -208,6 +214,34 @@ export function useEmpresa() {
             }));
         } finally {
             setLoading((prev) => ({ ...prev, obterMembros: false }));
+        }
+    }, []);
+
+    // OBTER MEMBRO (Gerente)
+    const obterMembro = useCallback(async (id_empresa, cod_usuario) => {
+        setLoading((prev) => ({ ...prev, obterMembro: true }));
+        setError((prev) => ({ ...prev, obterMembro: null }));
+
+        try {
+
+            const data = await API_FETCH(`/empresas/${id_empresa}/membros/${cod_usuario}`, {
+                method: 'GET'
+            });
+
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, obterMembro: data.mensagem }))
+            } else {
+                setMembro(data.dados.membro)
+            }
+        } catch (err) {
+            if (err.message === 'Sessão expirada') return;
+
+            setError((prev) => ({
+                ...prev,
+                obterMembro: 'Erro ao obter membro, tente novamente mais tarde.'
+            }));
+        } finally {
+            setLoading((prev) => ({ ...prev, obterMembro: false }));
         }
     }, []);
 
@@ -417,6 +451,7 @@ export function useEmpresa() {
         empresas, obterEmpresas,
         empresa, obterEmpresa,
         membros, obterMembros,
+        membro, obterMembro,
         setores, obterSetores,
         maquinas, obterMaquinas,
         chamados, obterChamados,

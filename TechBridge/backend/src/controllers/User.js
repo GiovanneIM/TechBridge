@@ -125,7 +125,7 @@ class UserController {
     // OBTER UM MEMBRO DA EMPRESA
     static async obter(req, res) {
         // OBTER O ID DA EMPRESA E DO USUÁRIO
-        const { id_empresa, id_usuario } = req.params;
+        const { id_empresa, cod_usuario } = req.params;
 
         // VERIFICANDO SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
@@ -138,7 +138,7 @@ class UserController {
 
         try {
             // REQUISIÇÃO
-            const membro = await UserModel.buscarPorId(id_usuario);
+            const membro = await UserModel.buscarPorCodigo(cod_usuario);
 
             // USUARIO NAO ENCONTRADO
             if (!membro) {

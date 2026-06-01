@@ -102,6 +102,39 @@ class UserModel {
         }
     }
 
+    // BUSCAR USUÁRIO POR CÓDIGO
+    static async buscarPorCodigo(cod_usuario) {
+        try {
+            // PROCURANDO USUARIO
+            const rows = await read('usuarios u', {
+                columns: [
+                    "u.*",
+                    "tu.descricao as cargo",
+                    "e.nome_fantasia as empresa"
+                ],
+                where: { 'u.cod_usuario': cod_usuario },
+                join: [
+                    { type: 'INNER', table: 'tipos_usuarios tu', on: 'tu.id = u.tipo_usuario' },
+                    { type: 'LEFT', table: 'empresas e', on: 'e.id = u.id_empresa' }
+                ]
+            });
+            const usuario = rows[0] || null
+
+            // 
+
+            // REMOVER AS SENHAS DOS USUÁRIOS
+            if (usuario) {
+                const usuarioSemSenha = { ...usuario, senha: null, cargo: CARGOS_FORMATADOS[usuario.cargo] };
+
+                return usuarioSemSenha
+            }
+            return null;
+        } catch (error) {
+            console.error('Erro ao buscar usuário por ID:', error);
+            throw error;
+        }
+    }
+
 
 
     // LISTAR USUÁRIOS DE UMA EMPRESA

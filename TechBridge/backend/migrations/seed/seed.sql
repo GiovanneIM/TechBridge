@@ -39,7 +39,7 @@ UPDATE empresas SET status = 0, data_desativacao = now() WHERE id = 3;
 
 -- Inserindo os usuários de exemplo
 INSERT INTO usuarios 
-(nome, email, senha, tipo_usuario, id_empresa, telefone, bio)
+(nome, email, senha, tipo_usuario, id_empresa, telefone, bio, cod_usuario)
 VALUES 
     (
     'Kim Minji', 
@@ -48,7 +48,8 @@ VALUES
     1, 
     1, 
     '(11) 95989-9539', 
-    'Administradora de sistemas com foco em organização, segurança e eficiência operacional. Atua garantindo o bom funcionamento das plataformas e suporte estratégico para a equipe.'
+    'Administradora de sistemas com foco em organização, segurança e eficiência operacional. Atua garantindo o bom funcionamento das plataformas e suporte estratégico para a equipe.',
+    'ADM1'
     ),
     (
     'Poliwag Gomez', 
@@ -57,7 +58,8 @@ VALUES
     2, 
     2, 
     '(11) 98921-8798', 
-    'Gerente de produção experiente, especializado em otimização de processos e liderança de equipes. Trabalha para aumentar a produtividade e garantir a qualidade nas entregas.'
+    'Gerente de produção experiente, especializado em otimização de processos e liderança de equipes. Trabalha para aumentar a produtividade e garantir a qualidade nas entregas.',
+    '2'
     ),
     (
     'The Rock', 
@@ -66,7 +68,8 @@ VALUES
     3, 
     2, 
     '(11) 97548-1367', 
-    'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.'
+    'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.',
+    'GER1'
     ),
     (
     'Izuku Midoriya', 
@@ -75,7 +78,8 @@ VALUES
     4, 
     2, 
     '(11) 97548-1367', 
-    'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.'
+    'Técnico de campo dedicado, com habilidade em manutenção e resolução de problemas. Comprometido em oferecer suporte ágil e eficaz diretamente no ambiente operacional.',
+    'TEC1'
     )
 ;
 
@@ -129,7 +133,7 @@ VALUES (DATE_SUB(NOW(), INTERVAL 10 DAY), 2, 1, 1, 6);
 UPDATE chamados    
 SET 
     estado = 'andamento',
-    id_tecnico = 3,
+    id_tecnico = 4,
     datahora_atendimento = DATE_ADD(NOW(), INTERVAL 1 DAY_HOUR)
 WHERE id % 4 > 1 OR id % 4 = 0 ;
 

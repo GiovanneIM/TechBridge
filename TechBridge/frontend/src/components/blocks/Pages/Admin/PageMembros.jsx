@@ -53,7 +53,7 @@ export default function PageMembros() {
         texto: "",
         status: null,
         cargo: null,
-        limit: 6,
+        limit: 10,
         page: 1,
     })
 
@@ -170,10 +170,10 @@ export default function PageMembros() {
                             className="w-full bg-muted p-1 rounded-md"
                         >
                             <TabsList className="w-full">
-                                <TabsTrigger value="6" className="flex-1">6</TabsTrigger>
-                                <TabsTrigger value="12" className="flex-1">12</TabsTrigger>
-                                <TabsTrigger value="24" className="flex-1">24</TabsTrigger>
-                                <TabsTrigger value="48" className="flex-1">48</TabsTrigger>
+                                <TabsTrigger value="5" className="flex-1">5</TabsTrigger>
+                                <TabsTrigger value="10" className="flex-1">10</TabsTrigger>
+                                <TabsTrigger value="25" className="flex-1">25</TabsTrigger>
+                                <TabsTrigger value="50" className="flex-1">50</TabsTrigger>
                             </TabsList>
                         </Tabs>
                     </FieldContent>
@@ -317,9 +317,9 @@ export default function PageMembros() {
                         membros?.lista.length > 0
                             ? <div
                                 className="
-                                        grid gap-4 items-start
-                                        [grid-template-columns:repeat(auto-fill,minmax(320px,1fr))]
-                                    "
+                                    grid gap-4 items-start
+                                    [grid-template-columns:repeat(auto-fill,minmax(320px,1fr))]
+                                "
                             >
                                 {/* LISTANDO EMPRESAS */}
                                 {membros?.lista?.map((membro) => (

@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
     -- Atributos do usuário
     nome			VARCHAR(255) 	NOT NULL,						-- Nome do usuário
+    cod_usuario		VARCHAR(50)		NOT NULL, 						-- Codigo de identificação (ID) interna na empresa
     email			VARCHAR(255) 	NOT NULL UNIQUE,				-- E-mail do usuário
     senha			VARCHAR(255) 	NOT NULL,						-- Senha do usuário
     foto_perfil 	VARCHAR(255),									-- Foto de perfil
