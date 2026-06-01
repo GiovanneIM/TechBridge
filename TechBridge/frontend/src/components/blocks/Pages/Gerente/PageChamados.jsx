@@ -1,92 +1,86 @@
-"use client"
+'use client'
+
+import { useEffect } from 'react';
+
+import { useEmpresa } from '@/hooks/useEmpresa';
+import { useAuth } from '@/context/AuthContext';
 
 import ErrorPage from '../../Holders/ErrorPage';
 import LoadingPage from '../../Holders/LoadingPage';
 import HeaderPage from '../../Header/HeaderPage';
 
-import { RotateCw, Siren } from "lucide-react";
-import { DataTable } from "../../../Dashboard/aaa/data-table";
-import { Separator } from "../../../ui/separator";
-import { Button } from "../../../ui/button";
-import { useChamados } from "@/hooks/hooks2/useChamados";
+import { RotateCw, Siren } from 'lucide-react';
 
-export default function PageChamados({
-    chamadosIniciais = []
-}) {
+import { DataTable } from '../../../Dashboard/aaa/data-table';
+
+export default function PageChamados() {
+
+    const { user } = useAuth();
+
     const {
+        loading,
+        error,
         chamados,
-        loadingChamados,
-        errorChamados,
-        refetchChamados
-    } = useChamados({
-        chamadosIniciais: chamadosIniciais,
-        fetchOnMount: chamadosIniciais?.length === 0
-    })
+        obterChamados,
+    } = useEmpresa();
 
-    // Verificando se a página está sendo carregada pela primeira vez
-    const isFirstLoad = loadingChamados.fetch && (chamados ?? []).length === 0;
+    useEffect(() => {
+        if (!user?.id_empresa) return;
 
-    // Conteúdo da página
+        if (!chamados) {
+            obterChamados(user.id_empresa);
+        }
+    }, [user?.id_empresa, chamados, obterChamados]);
+
+    const isFirstLoad =
+        loading.obterChamados && (!chamados || chamados.length === 0);
+
     let content;
-    
-    // Se estiver sendo carregada pela 1ª vez
+
     if (isFirstLoad) {
         content = (
             <LoadingPage
                 loadingTitle="Carregando Chamados"
                 loadingSubtitle={["Aguarde alguns segundos"]}
             />
-        )
+        );
     }
 
-    // Se houve erro ao carregar
-    else if (errorChamados.fetch) {
+    else if (error.obterChamados) {
         content = (
             <ErrorPage
-                errorTitle={"Erro ao carregar chamados"}
+                errorTitle="Erro ao carregar chamados"
                 errorSubtitle={[
-                    "Houve um erro ao carregar chamados",
-                    "Por favor recarregue a página para tentar novamente"
+                    error.obterChamados,
+                    "Recarregue a página para tentar novamente"
                 ]}
             />
-        )
+        );
     }
 
-    // Se estiver recarregando os dados
-    else if (loadingChamados.fetch) {
-        content = (<></>)
-    }
-
-    // Dados carregados e sem erro
     else {
-        content = (<div className='flex-1 flex flex-col'>
-
-            {/* <p>{JSON.stringify(chamados)}</p> */}
-
-            <div className="flex-1 flex flex-col gap-4 md:gap-6 p-4 lg:px-6  md:py-6">
-                <DataTable data={chamados} />
+        content = (
+            <div className='flex-1 flex flex-col'>
+                <div className="flex-1 flex flex-col gap-4 md:gap-6 p-4 lg:px-6 md:py-6">
+                    <DataTable data={chamados ?? []} />
+                </div>
             </div>
-        </div>)
+        );
     }
 
     return (
         <div className="flex-1 flex flex-col">
-            {/* Header da página */}
+
             <HeaderPage
                 icon={Siren}
                 title="Chamados"
                 actions={[
-                    loadingChamados.fetch
-                        ? {
-                            icon: <RotateCw />,
-                            text: "Carregando",
-                            disabled: true,
-                        }
-                        : {
-                            icon: <RotateCw />,
-                            text: "Recarregar Chamados",
-                            onClick: () => { refetchChamados() },
-                        },
+                    {
+                        icon: <RotateCw />,
+                        text: loading.obterChamados ? "Carregando" : "Recarregar",
+                        disabled: loading.obterChamados,
+                        onClick: () => obterChamados(user?.id_empresa),
+                    },
                 ]}
             />
 

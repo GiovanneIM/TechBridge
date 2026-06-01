@@ -139,7 +139,7 @@ export default function PageSetores() {
                                                 setor?.id
                                             ) {
                                                 router.push(
-                                                    `/gerente/setores/${setor.id}`
+                                                    `/gerente/${user.id_empresa}/setores/${setor.id}`
                                                 );
                                             }
                                         }}
