@@ -318,7 +318,7 @@ export default function PageMembros() {
                             ? <div
                                 className="
                                         grid gap-4 items-start
-                                        [grid-template-columns:repeat(auto-fill,minmax(640px,1fr))]
+                                        [grid-template-columns:repeat(auto-fill,minmax(320px,1fr))]
                                     "
                             >
                                 {/* LISTANDO EMPRESAS */}
