@@ -48,10 +48,8 @@ export default function PageLogin() {
 	const fazerLogin = async (e) => {
 		e.preventDefault();
 
-		const dadosLogin = { email, senha }
-
 		try {
-			await login(dadosLogin);
+			await login({ email, senha });
 		} catch (err) {
 			console.error(err);
 		}

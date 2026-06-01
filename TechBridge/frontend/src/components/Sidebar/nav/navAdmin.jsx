@@ -16,8 +16,6 @@ export default function SidebarNavAdmin() {
         <ItemSidebar icon={Grid2X2} label={"Dashboard"} href={"/admin/dashboard"} />
 
         <ItemColapsavel icon={Warehouse} label={"Clientes"} lista={listaClientes} />
-
-        <ItemSidebar icon={MessageCircle} label={"Mensagens"} href={"/admin/mensagens"} />
     </>);
 }
 

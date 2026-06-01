@@ -59,7 +59,7 @@ class ChamadosModel {
 
     // BUSCAR POR ID
     static async buscarPorId(id) {
-        const rows = await read("chamados", {
+        const rows = await read("chamados c", {
             columns: [
                 "c.*",
                 "s.cod_setor as cod_setor",
@@ -75,7 +75,7 @@ class ChamadosModel {
         return rows[0];
     }
 
-    // BUSCAR POR ID
+    // ATUALIZAR
     static async atualizar(id, data) {
         const affectedRows = await update("chamados",
             data,

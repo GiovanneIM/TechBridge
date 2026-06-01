@@ -55,7 +55,6 @@ export default function TesteIMG() {
         if (data.sucesso) perfil()
     }
 
-
     function handleChangeLogo(e) {
         const arquivo = e.target.files[0]
 

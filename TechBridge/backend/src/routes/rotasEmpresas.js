@@ -28,6 +28,7 @@ import { updateSetorSchema } from '../schemas/body/setor/updateSetor.schema.js';
 import { params_EmpresaMaquina } from '../schemas/params/empresa_setor_maquina.schema.js';
 import { createMaquinaSchema } from '../schemas/body/maquina/createMaquina.schema.js';
 import { updateMaquinaSchema } from '../schemas/body/maquina/updateMaquina.schema.js';
+import { paginacaoSchema } from '../schemas/query/paginacao.js';
 
 
 const router = express.Router();
@@ -179,6 +180,7 @@ router.patch(
 router.get(
     '/:id_empresa/membros',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    validateZod(paginacaoSchema, 'query'),      // Query - Paginação
     gerenteMiddleware,                          // Gerente
     UserController.listar                       // Controller users - Listar
 );
@@ -692,6 +694,13 @@ router.get(
 router.get(
     '/:id_empresa/setores/:cod_setor/maquinas/:cod_maquina/chamados/:cod_chamado',
     ChamadosController.obterPorCodigo
+)
+
+
+// INFORMAÇÕES GERAIS
+router.get(
+    '/:id_empresa/infosGerais',
+    EmpresasController.infosGerais
 )
 
 export default router;

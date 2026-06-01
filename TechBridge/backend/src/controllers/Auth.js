@@ -46,6 +46,8 @@ class AuthController {
                 maxAge: 1000 * 60 * 60 * 2
             });
 
+            console.log(usuario);
+
             // SUCESSO: ENVIAR DADOS DO USUÁRIO E TOKEN
             res.status(200).json({
                 sucesso: true,

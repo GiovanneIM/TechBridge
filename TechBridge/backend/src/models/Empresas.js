@@ -124,6 +124,95 @@ class EmpresasModel {
             throw error;
         }
     }
+
+    // OBTER DADOS DA EMPRESA
+    static async infosGerais(id) {
+        const usuarios = await read("usuarios", {
+            columns: [
+                "COUNT(*) AS total",
+                "COUNT(CASE WHEN status = true THEN 1 END) AS ativos",
+                "COUNT(CASE WHEN tipo_usuario IN (2, 3) THEN 1 END) AS gerentes",
+                "COUNT(CASE WHEN tipo_usuario = 4 THEN 1 END) AS tecnicos"
+            ],
+            where: {
+                id_empresa: id
+            }
+        });
+
+        const gerente = await read("usuarios", {
+            where: {
+                id_empresa: id,
+                tipo_usuario: 2
+            }
+        });
+
+        const setores = await read("setores", {
+            columns: [
+                "COUNT(*) AS total",
+                "COUNT(CASE WHEN status = TRUE THEN 1 END) AS ativos",
+                "COUNT(CASE WHEN status = FALSE THEN 1 END) AS inativos"
+            ],
+            where: {
+                id_empresa: id
+            }
+        });
+
+        const maquinas = await read("maquinas m", {
+            columns: [
+                "COUNT(*) AS total",
+                "COUNT(CASE WHEN m.status = 'ativa' THEN 1 END) AS ativas",
+                "COUNT(CASE WHEN m.status = 'inativa' THEN 1 END) AS inativas"
+            ],
+            join: [
+                {
+                    type: "INNER",
+                    table: "setores s",
+                    on: "s.id = m.id_setor"
+                }
+            ],
+            where: {
+                "s.id_empresa": 2
+            }
+        });
+
+        const chamados = await read("chamados", {
+            columns: [
+                "COUNT(*) AS total",
+                "COUNT(CASE WHEN estado = 'aberto' THEN 1 END) AS aguardando",
+                "COUNT(CASE WHEN estado = 'andamento' THEN 1 END) AS andamento",
+                "COUNT(CASE WHEN estado = 'concluido' THEN 1 END) AS concluidos"
+            ],
+            where: {
+                id_empresa: id
+            }
+        });
+
+        const ultimosChamados = await read("chamados c", {
+            columns: [
+                "c.*",
+                "s.cod_setor as cod_setor",
+                "m.cod_maquina as cod_maquina",
+            ],
+            where: {
+                "c.id_empresa": id
+            },
+            join: [
+                { type: "INNER", table: "setores s", on: "s.id = c.id_setor" },
+                { type: "INNER", table: "maquinas m", on: "m.id = c.id_maquina" }
+            ],
+            orderBy: "datahora_abertura DESC",
+            limit: 5
+        });
+
+        return {
+            usuarios: usuarios[0] || null,
+            gerente: gerente[0] || null,
+            setores: setores[0] || null,
+            maquinas: maquinas[0] || null,
+            chamados: chamados[0] || null,
+            ultimosChamados
+        }
+    }
 }
 
 export default EmpresasModel;

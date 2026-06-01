@@ -17,5 +17,7 @@ export const paginacaoSchema = z.object({
 
     status: z.string().optional(),
     nome_empresa: z.string().optional(),
-    estado: z.string().optional()
+    estado: z.string().optional(),
+    texto: z.string().optional(),
+    cargo: z.string().optional(),
 }).strict();

@@ -72,7 +72,6 @@ export default function PageEmpresasAdd() {
         }
     }
 
-
     let content;
 
     content = (<>
@@ -324,7 +323,7 @@ export default function PageEmpresasAdd() {
 
             </div>
 
-            <Separator/>
+            <Separator />
 
             <div className="flex justify-between">
                 <div className="text-red-500 font-semibold">{error.criarEmpresa?.mensagem}</div>

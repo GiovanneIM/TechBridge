@@ -25,7 +25,11 @@ export default function CardEmpresas({
         >
             <div className="flex-1 flex gap-2">
                 {/* LOGO */}
-                <div className=" relative w-28 h-28 shrink-0 border rounded-xl bg-muted flex items-center justify-center overflow-hidden " >
+                <div className=" 
+                    relative w-28 h-28 shrink-0 
+                    border rounded-xl bg-muted 
+                    flex items-center justify-center overflow-hidden 
+                " >
                     {empresa?.logo
                         ? (<img src={`http://localhost:3000/uploads/imagens/empresas/${empresa.id}/logo/${empresa.logo}`} alt={empresa.nome_fantasia} className="w-full h-full object-cover" />)
                         : (<Building2 size={40} className="text-muted-foreground" />)

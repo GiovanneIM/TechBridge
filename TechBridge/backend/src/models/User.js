@@ -49,11 +49,17 @@ class UserModel {
     static async buscarPorEmail(email) {
         try {
             // FAZER A CONSULTA
-            const rows = await read('usuarios', {
+            const rows = await read('usuarios u', {
                 columns: [
-                    "*",
+                    "u.*",
+                    "tu.descricao as cargo",
+                    "e.nome_fantasia as empresa"
                 ],
-                where: { email }
+                where: { email },
+                join: [
+                    { type: 'INNER', table: 'tipos_usuarios tu', on: 'tu.id = u.tipo_usuario' },
+                    { type: 'LEFT', table: 'empresas e', on: 'e.id = u.id_empresa' }
+                ]
             });
 
             // OBTER O PRIMEIRO DADO ENCONTRADO
@@ -98,18 +104,41 @@ class UserModel {
 
 
     // LISTAR USUÁRIOS DE UMA EMPRESA
-    static async listarUsuarios(id_empresa) {
+    static async listarUsuarios(id_empresa, limit, offset, page, where, like, likeOr) {
         try {
-            // FAZER A CONSULTA
+            // OBTER OS USUARIO
             const usuarios = await read("usuarios", {
-                where: { id_empresa }
+                limit,
+                offset,
+                where,
+                like,
+                likeOr
             })
 
             // REMOVER AS SENHAS DOS USUÁRIOS
             const usuariosSemSenha = usuarios.map(({ senha, ...user }) => user);
 
-            // RETORNANDO OS USUARIOS
-            return usuariosSemSenha
+            // TOTAL DE MEMBROS DA EMPRESA
+            const [{ total }] = await read('usuarios', {
+                columns: ['COUNT(*) as total'],
+                where,
+                like,
+                likeOr
+            });
+
+            // TOTAL DE PAGINAS
+            const total_paginas = Math.ceil(total / limit)
+
+            // RETORNANDO OS USUARIOS E INFORMAÇÕES DE PAGINAÇÃO
+            return {
+                lista: usuariosSemSenha,
+                paginacao: {
+                    total,
+                    page,
+                    limit,
+                    total_paginas,
+                }
+            }
         } catch (error) {
             console.error('Erro ao listar usuários:', error);
             throw error;

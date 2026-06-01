@@ -17,7 +17,7 @@ export function useAuth({
     // LOADING
     const [loading, setLoading] = useState({
         login: false,
-        perfil: false,
+        perfil: true,
         logout: false,
     });
 

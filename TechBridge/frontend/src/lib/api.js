@@ -34,12 +34,26 @@ async function API_FETCH(ENDPOINT, options = {}) {
     // OBTER TOKEN
     const token = sessionStorage.getItem('token');
 
+    const isFormData = options.body instanceof FormData;
+
     // FAZER A REQUISIÇÃO
+    // const response = await fetch(API_URL + ENDPOINT, {
+    //     ...options,
+    //     credentials: 'include',
+    //     headers: {
+    //         'authorization': `bearer ${token}`,
+    //         ...options.headers
+    //     }
+    // });
+
     const response = await fetch(API_URL + ENDPOINT, {
         ...options,
         credentials: 'include',
         headers: {
-            'authorization': `bearer ${token}`,
+            authorization: `bearer ${token}`,
+            ...(isFormData ? {} : {
+                'Content-Type': 'application/json'
+            }),
             ...options.headers
         }
     });
@@ -89,9 +103,9 @@ export async function apiFetch(endpoint, options = {}) {
     // Sessão expirada
     if (response.status === 401 && !ignoreAuthError) {
         if (typeof window !== "undefined") {
-            // window.dispatchEvent(new Event('sessionExpired'));
+            window.dispatchEvent(new Event('sessionExpired'));
         }
-        // throw new Error('Sessão expirada');
+        throw new Error('Sessão expirada');
     }
 
 

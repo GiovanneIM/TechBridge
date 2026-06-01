@@ -14,7 +14,7 @@ VALUES
 -- Inserindo empresa cliente de exemplo
 INSERT INTO empresas (cnpj, razao_social, nome_fantasia, logo)
 VALUES 
-    ('00000000000000', 'TechBridge - Softwares e Hardwares para Andons', 'TechBridge', 'logo.png')
+    ('00000000000000', 'TechBridge - Softwares e Hardwares para Andons', 'TechBridge', 'Logo.png')
 ;
 
 INSERT INTO empresas (cnpj, razao_social, nome_fantasia)
@@ -35,7 +35,7 @@ VALUES
     ('00000000000014', 'Empresa Cliente 14', 'EC 14'),
     ('00000000000015', 'Empresa Cliente 15', 'EC 15')
 ;
-UPDATE empresas SET status = 0 WHERE id = 3;
+UPDATE empresas SET status = 0, data_desativacao = now() WHERE id = 3;
 
 -- Inserindo os usuários de exemplo
 INSERT INTO usuarios 
@@ -92,9 +92,9 @@ VALUES
 -- Inserindo maquinas de exemplo
 INSERT INTO maquinas (cod_maquina, nome, descricao, id_setor)
 VALUES 
-    ('MK-1', 'Máquina 1', 'Máquina 1 do setor 1', 1),
-    ('MK-2', 'Máquina 2', 'Máquina 2 do setor 1', 1),
-    ('MK-1', 'Máquina 1', 'Máquina 1 do setor 2', 2)
+    ('MK1', 'Máquina 1', 'Máquina 1 do setor 1', 1),
+    ('MK2', 'Máquina 2', 'Máquina 2 do setor 1', 1),
+    ('MK1', 'Máquina 1', 'Máquina 1 do setor 2', 2)
 ;
 
 -- Inserindo as causas de exemplo

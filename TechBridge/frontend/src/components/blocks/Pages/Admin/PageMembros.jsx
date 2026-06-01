@@ -20,63 +20,63 @@ import {
 } from "@/components/ui/pagination"
 import Image from "next/image";
 import CardEmpresas from "@/components/card/CardEmpresa/page";
+import { useParams } from "next/navigation";
+import { CardUsuario } from "@/components/card/CardUsuario/page";
 
-export default function PageEmpresas() {
-
-    // OBJETO COM OS ESTADOS AGRUPADOS POR REGIÃO
-    const estadosPorRegiao = {
-        "Norte": ["AC", "AP", "AM", "PA", "RO", "RR", "TO"],
-        "Centro-Oeste": ["DF", "GO", "MT", "MS"],
-        "Nordeste": ["AL", "BA", "CE", "MA", "PB", "PE", "PI", "RN", "SE"],
-        "Sudeste": ["ES", "MG", "RJ", "SP"],
-        "Sul": ["PR", "RS", "SC"]
-    };
+export default function PageMembros() {
+    const params = useParams();
+    const id_empresa = params.id;
 
     // HOOK
     const {
         loading, error, mensagem,
-        empresas, obterEmpresas
+        empresa, obterEmpresa,
+        membros, obterMembros,
     } = useEmpresa()
 
-    // OBTENDO EMPRESAS INICIAIS
+    // OBTER EMPRESA
     useEffect(() => {
-        if (!empresas) {
-            obterEmpresas({
-                limit: 12,
-                page: 1
-            })
+        if (!empresa) {
+            obterEmpresa(id_empresa)
         }
-    }, [empresas, obterEmpresas])
+    }, [empresa, obterEmpresa])
+
+    // OBTER MEMBROS
+    useEffect(() => {
+        if (!membros) {
+            obterMembros(id_empresa)
+        }
+    }, [membros, obterMembros])
 
     // ESTADO PARA FILTROS E PAGINAÇÃO
     const [filtro, setFiltro] = useState({
-        nome_empresa: "",
+        texto: "",
         status: null,
+        cargo: null,
         limit: 12,
         page: 1,
-        estado: null,
     })
 
     // FETCH AUTOMÁTICO PARA FILTRAGEM
     useEffect(() => {
-        obterEmpresas(filtro)
+        obterMembros(id_empresa, filtro)
     }, [filtro.page, filtro.limit, filtro.status, filtro.estado])
 
-    // FILTRO MANUAL (Busca por nome)
+    // FILTRO MANUAL (Busca por nome ou email)
     const filtrar = () => {
         setFiltro((prev) => ({
             ...prev,
             page: 1
         }))
 
-        obterEmpresas({
+        obterMembros(id_empresa, {
             ...filtro,
             page: 1
         })
     }
 
     // TOTAL DE PÁGINAS
-    const totalPages = empresas?.paginacao?.total_paginas || 1
+    const totalPages = membros?.paginacao?.total_paginas || 1
 
     // GERA VETOR COM O NÚMERO DAS PÁGINAS NA PAGINAÇÃO
     function gerarPaginas(page, total) {
@@ -117,12 +117,12 @@ export default function PageEmpresas() {
         setFiltro((prev) => ({ ...prev, page }))
     }
 
-    return (
+    if (empresa) return (
         <div className="flex-1 flex flex-col">
 
             <HeaderPage
                 icon={Warehouse}
-                title="Procurar Empresa"
+                title={`Procurar Usuário - ${empresa.nome_fantasia}`}
             />
 
 
@@ -137,9 +137,9 @@ export default function PageEmpresas() {
                     "
                 >
 
-                    {/* NOME */}
+                    {/* NOME OU EMAIL*/}
                     <FieldContent>
-                        <FieldLabel>Procurar Empresa</FieldLabel>
+                        <FieldLabel>Procurar usuário</FieldLabel>
                         <Input
                             className="w-full h-11"
                             value={filtro.nome_empresa}
@@ -149,7 +149,7 @@ export default function PageEmpresas() {
                                     nome_empresa: e.target.value
                                 }))
                             }
-                            placeholder="Nome da empresa..."
+                            placeholder="Nome ou email"
                         />
                     </FieldContent>
 
@@ -195,121 +195,33 @@ export default function PageEmpresas() {
                         >
                             <TabsList className="w-full">
                                 <TabsTrigger value="all" className="flex-1">Todas</TabsTrigger>
-                                <TabsTrigger value="ativa" className="flex-1">Ativa</TabsTrigger>
-                                <TabsTrigger value="inativa" className="flex-1">Inativa</TabsTrigger>
+                                <TabsTrigger value="ativa" className="flex-1">Ativo</TabsTrigger>
+                                <TabsTrigger value="inativa" className="flex-1">Inativo</TabsTrigger>
                             </TabsList>
                         </Tabs>
                     </FieldContent>
 
-                    {/* ESTADO */}
-                    <FieldContent className="h-full">
-                        <FieldLabel>Estado</FieldLabel>
+                    {/* CARGO */}
+                    <FieldContent>
+                        <FieldLabel>Cargo</FieldLabel>
 
-                        <Select
-                            value={filtro.estado ?? 'all'}
+                        <Tabs
+                            value={filtro.status ?? 'all'}
                             onValueChange={(value) =>
                                 setFiltro((prev) => ({
                                     ...prev,
-                                    estado: value === 'all' ? null : value,
+                                    cargo: value === 'all' ? null : value,
                                     page: 1
                                 }))
                             }
+                            className="w-full bg-muted p-1 rounded-md"
                         >
-                            <SelectTrigger className="w-full h-full">
-                                <SelectValue placeholder="Selecione um estado" />
-                            </SelectTrigger>
-
-                            <SelectContent className="" position="popper">
-                                <SelectItem value="all" className="border">Todos</SelectItem>
-
-                                {/* GRID */}
-                                <div className="grid grid-cols-2 gap-4 pt-2">
-                                    <div>
-                                        <div>
-                                            <p className="
-                                                text-xs font-semibold mb-1
-                                                text-foreground/70 tracking-wide
-                                                border-b py-1.5 pr-8 pl-2
-                                            ">
-                                                Norte
-                                            </p>
-
-                                            {estadosPorRegiao["Norte"].map((uf) => (
-                                                <SelectItem key={uf} value={uf}>
-                                                    {uf}
-                                                </SelectItem>
-                                            ))}
-                                        </div>
-
-                                        <div>
-                                            <p className="
-                                                text-xs font-semibold mb-1
-                                                text-foreground/70 tracking-wide
-                                                border-b py-1.5 pr-8 pl-2
-                                            ">
-                                                Nordeste
-                                            </p>
-
-                                            {estadosPorRegiao["Nordeste"].map((uf) => (
-                                                <SelectItem key={uf} value={uf}>
-                                                    {uf}
-                                                </SelectItem>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <div>
-                                            <p className="
-                                                text-xs font-semibold mb-1
-                                                text-foreground/70 tracking-wide
-                                                border-b py-1.5 pr-8 pl-2
-                                            ">
-                                                Centro-Oeste
-                                            </p>
-
-                                            {estadosPorRegiao["Centro-Oeste"].map((uf) => (
-                                                <SelectItem key={uf} value={uf}>
-                                                    {uf}
-                                                </SelectItem>
-                                            ))}
-                                        </div>
-
-                                        <div>
-                                            <p className="
-                                                text-xs font-semibold mb-1
-                                                text-foreground/70 tracking-wide
-                                                border-b py-1.5 pr-8 pl-2
-                                            ">
-                                                Sul
-                                            </p>
-
-                                            {estadosPorRegiao["Sul"].map((uf) => (
-                                                <SelectItem key={uf} value={uf}>
-                                                    {uf}
-                                                </SelectItem>
-                                            ))}
-                                        </div>
-
-                                        <div>
-                                            <p className="
-                                                text-xs font-semibold mb-1
-                                                text-foreground/70 tracking-wide
-                                                border-b py-1.5 pr-8 pl-2
-                                            ">
-                                                Sudeste
-                                            </p>
-
-                                            {estadosPorRegiao["Sudeste"].map((uf) => (
-                                                <SelectItem key={uf} value={uf}>
-                                                    {uf}
-                                                </SelectItem>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </SelectContent>
-                        </Select>
+                            <TabsList className="w-full">
+                                <TabsTrigger value="all" className="flex-1">Todos</TabsTrigger>
+                                <TabsTrigger value="gerente" className="flex-1">Gerente</TabsTrigger>
+                                <TabsTrigger value="tecnico" className="flex-1">Tecnico</TabsTrigger>
+                            </TabsList>
+                        </Tabs>
                     </FieldContent>
 
                     <div className="w-full h-full flex items-end">
@@ -356,7 +268,7 @@ export default function PageEmpresas() {
                     </PaginationContent>
 
                     <p className="text-muted-foreground font-semibold text-xs">
-                        Exibindo {empresas?.lista.length ?? 0} de {empresas?.paginacao?.total ?? 0} resultados
+                        Exibindo {membros?.lista.length ?? 0} de {membros?.paginacao?.total ?? 0} resultados
                     </p>
                 </Pagination>
 
@@ -364,7 +276,7 @@ export default function PageEmpresas() {
                 <div className="h-full border bg-card p-3 rounded gap-3 items-start overflow-y-auto">
 
                     {/* CARREGANDO EMPRESAS */}
-                    {loading.obterEmpresas &&
+                    {loading.obterMembros &&
                         <div className="
                             h-full w-full 
                             flex flex-col items-center justify-center gap-4
@@ -378,12 +290,12 @@ export default function PageEmpresas() {
                                 className="animate-pulse"
                             />
 
-                            <p>Obtendo empresas</p>
+                            <p>Obtendo membros</p>
                         </div>
                     }
 
                     {/* ERRO AO OBTER EMPRESAS */}
-                    {error.obterEmpresas &&
+                    {error.obterMembros &&
                         <div className="
                             h-full w-full 
                             flex flex-col items-center justify-center gap-4
@@ -396,25 +308,25 @@ export default function PageEmpresas() {
                                 src="/TechBridge/LogoError.svg"
                             />
 
-                            <p>{error.obterEmpresas}</p>
+                            <p>{error.obterMembros}</p>
                         </div>
                     }
 
-                    {/* EMPRESAS CARREGADAS COM SUCESSO */}
-                    {!loading.obterEmpresas && !error.obterEmpresas && (
-                        empresas?.lista.length > 0
+                    {/* MEMBROS CARREGADAS COM SUCESSO */}
+                    {!loading.obterMembros && !error.obterMembros && (
+                        membros?.lista.length > 0
                             ? <div
                                 className="
-                                        grid gap-4
-                                        [grid-template-columns:repeat(auto-fill,minmax(320px,1fr))]
-                                        items-start
+                                        grid gap-4 items-start
+                                        [grid-template-columns:repeat(auto-fill,minmax(640px,1fr))]
                                     "
                             >
                                 {/* LISTANDO EMPRESAS */}
-                                {empresas?.lista?.map((empresa) => (
-                                    <CardEmpresas key={empresa.id} empresa={empresa} />
+                                {membros?.lista?.map((membro) => (
+                                    <CardUsuario key={membro.id} user={membro}/>
                                 ))}
                             </div>
+                            // SEM MEMBROS
                             : <div className="
                                     h-full w-full 
                                     flex flex-col items-center justify-center gap-4

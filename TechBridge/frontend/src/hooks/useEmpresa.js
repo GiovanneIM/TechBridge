@@ -30,7 +30,10 @@ export function useEmpresa() {
         obterEmpresa: null,
         obterMembros: null,
         obterSetores: null,
-        obterMaquinas: null
+        obterMaquinas: null,
+        atualizarEmpresa: null,
+        atualizarLogo: null,
+        obterInfosGerais: null,
     });
 
     // ERROS
@@ -40,7 +43,10 @@ export function useEmpresa() {
         obterEmpresa: null,
         obterMembros: null,
         obterSetores: null,
-        obterMaquinas: null
+        obterMaquinas: null,
+        atualizarEmpresa: null,
+        atualizarLogo: null,
+        obterInfosGerais: null,
     });
 
     // MENSAGENS
@@ -50,7 +56,9 @@ export function useEmpresa() {
         obterEmpresa: null,
         obterMembros: null,
         obterSetores: null,
-        obterMaquinas: null
+        obterMaquinas: null,
+        atualizarEmpresa: null,
+        obterInfosGerais: null,
     });
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -190,20 +198,25 @@ export function useEmpresa() {
     }, []);
 
     // OBTER MEMBROS (Gerente)
-    const obterMembros = useCallback(async (id_empresa) => {
+    const obterMembros = useCallback(async (id_empresa, filtro = {}) => {
         setLoading((prev) => ({ ...prev, obterMembros: true }));
         setError((prev) => ({ ...prev, obterMembros: null }));
 
         try {
-            console.log(id_empresa);
+            const params = new URLSearchParams();
 
-            // REQUISIÇÃO
-            const data = await API_FETCH(`/empresas/${id_empresa}/membros`, {
-                method: 'GET'
+            Object.entries(filtro).forEach(([key, value]) => {
+                if (value !== null && value !== undefined && value !== '') {
+                    params.append(key, value);
+                }
             });
 
-            console.log(data);
+            const query = params.toString();
 
+            // REQUISIÇÃO
+            const data = await API_FETCH(`/empresas/${id_empresa}/membros?${query}`, {
+                method: 'GET'
+            });
 
             // ERRO
             if (!data.sucesso) {
@@ -213,7 +226,7 @@ export function useEmpresa() {
             // SUCESSO
             else {
                 // ATUALIZAR MEMBROS
-                setMembros(data.dados.membros)
+                setMembros(data.dados)
             }
         } catch (err) {
             // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
@@ -236,8 +249,6 @@ export function useEmpresa() {
         setError((prev) => ({ ...prev, obterSetores: null }));
 
         try {
-            console.log(id_empresa);
-
             // REQUISIÇÃO
             const data = await API_FETCH(`/empresas/${id_empresa}/setores`, {
                 method: 'GET'
@@ -277,8 +288,6 @@ export function useEmpresa() {
         setError((prev) => ({ ...prev, obterMaquinas: null }));
 
         try {
-            console.log(id_empresa);
-
             // REQUISIÇÃO
             const data = await API_FETCH(`/empresas/${id_empresa}/maquinas`, {
                 method: 'GET'
@@ -312,6 +321,132 @@ export function useEmpresa() {
         }
     }, []);
 
+    // OBTER INFORMAÇÕES GERAIS
+    const obterInfosGerais = useCallback(async (id_empresa) => {
+        setLoading((prev) => ({ ...prev, obterInfosGerais: true }));
+        setError((prev) => ({ ...prev, obterInfosGerais: null }));
+
+        try {
+            // REQUISIÇÃO
+            const data = await API_FETCH(`/empresas/${id_empresa}/infosGerais`, {
+                method: 'GET'
+            });
+
+            console.log(data);
+
+            // ERRO
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, obterInfosGerais: data.mensagem }));
+            }
+            // SUCESSO
+            else {
+                return data.dados.infosGerais;
+            }
+        } catch (err) {
+            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
+            if (err.message === 'Sessão expirada') return;
+
+            setError((prev) => ({
+                ...prev,
+                obterInfosGerais: 'Erro ao obter informações gerais, tente novamente mais tarde.'
+            }));
+
+        } finally {
+            // Independente de sucesso ou erro, o loading termina aqui
+            setLoading((prev) => ({ ...prev, obterInfosGerais: false }));
+        }
+    }, []);
+
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+    // ATUALIZAR EMPRESA (GERENTE PRINCIPAL)
+    const atualizarEmpresa = useCallback(async (id_empresa, novosDados) => {
+        setLoading((prev) => ({ ...prev, atualizarEmpresa: true }));
+        setError((prev) => ({ ...prev, atualizarEmpresa: null }));
+
+        try {
+            // REQUISIÇÃO
+            const data = await API_FETCH(`/empresas/${id_empresa}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(novosDados),
+                credentials: 'include'
+            });
+
+            console.log(data);
+
+
+            // ERRO
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, atualizarEmpresa: data.mensagem }))
+            }
+            // SUCESSO
+            else {
+                setMensagem((prev) => ({ ...prev, atualizarEmpresa: data.mensagem }))
+            }
+        } catch (err) {
+            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
+            if (err.message === 'Sessão expirada') return;
+
+            setError((prev) => ({
+                ...prev,
+                atualizarEmpresa: 'Erro ao atualizar logo, tente novamente mais tarde.'
+            }));
+
+        } finally {
+            // Independente de sucesso ou erro, o loading termina aqui
+            setLoading((prev) => ({ ...prev, atualizarEmpresa: false }));
+        }
+    }, [])
+
+    // ATUALIZAR LOGO (GERENTE PRINCIPAL)
+    const atualizarLogo = useCallback(async (id_empresa, logo) => {
+        setLoading((prev) => ({ ...prev, atualizarLogo: true }));
+        setError((prev) => ({ ...prev, atualizarLogo: null }));
+
+        try {
+            const formData = new FormData()
+            formData.append('imagem', logo)
+
+            for (const pair of formData.entries()) {
+                console.log(pair[0], pair[1]);
+            }
+
+            // REQUISIÇÃO
+            const data = await API_FETCH(`/empresas/${id_empresa}/logo`, {
+                method: 'PATCH',
+                body: formData,
+                credentials: 'include'
+            });
+
+            console.log(data);
+
+
+            // ERRO
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, atualizarLogo: data.mensagem }))
+            }
+            // SUCESSO
+            else {
+                setMensagem((prev) => ({ ...prev, atualizarLogo: data.mensagem }))
+            }
+        } catch (err) {
+            // Caso dê erro de rede, CORS, servidor, etc, guardamos uma mensagem amigável em `error`
+            if (err.message === 'Sessão expirada') return;
+
+            setError((prev) => ({
+                ...prev,
+                atualizarLogo: 'Erro ao atualizar logo, tente novamente mais tarde.'
+            }));
+
+        } finally {
+            // Independente de sucesso ou erro, o loading termina aqui
+            setLoading((prev) => ({ ...prev, atualizarLogo: false }));
+        }
+    }, [])
+
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     return {
@@ -321,6 +456,9 @@ export function useEmpresa() {
         membros, obterMembros,
         setores, obterSetores,
         maquinas, obterMaquinas,
-        criarEmpresa,
+        criarEmpresa, 
+        atualizarEmpresa, 
+        atualizarLogo,
+        obterInfosGerais,
     };
 }

@@ -93,10 +93,6 @@ class EmpresasController {
             // OBTER AS EMPRESAS
             const resultado = await EmpresasModel.listar(limit, offset, page, where, like, likeOr)
 
-            // for (const empresa of resultado.lista) {
-            //     empresa.logo = `http://localhost:3000/uploads/imagens/empresas/${empresa.id}/logo/${empresa.logo}`
-            // }
-
             // SUCESSO: ENVIAR EMPRESAS
             res.status(200).json({
                 sucesso: true,
@@ -155,8 +151,7 @@ class EmpresasController {
                 mensagem: 'Empresa obtida com sucesso',
                 dados: {
                     empresa: {
-                        ...empresa,
-                        logo: `http://localhost:3000/uploads/imagens/empresas/${empresa.id}/logo/${empresa.logo}`
+                        ...empresa
                     }
                 }
             });
@@ -175,8 +170,51 @@ class EmpresasController {
         }
     }
 
+    // OBTER DADOS GERAIS DA EMPRESA
+    static async infosGerais(req, res) {
+        // OBTER O ID DA EMPRESA
+        const { id_empresa } = req.params;
+
+        try {
+            // VERIFICANDO SE O USUÁRIO TEM ACESSO
+            const acesso = pertenceAEmpresa(req, id_empresa);
+            if (!acesso) {
+                return res.status(403).json({
+                    sucesso: false,
+                    mensagem: 'Você não tem acesso a essa rota'
+                });
+            }
+
+            // FAZER A CONSULTA
+            const infosGerais = await EmpresasModel.infosGerais(id_empresa);
+
+            // SUCESSO: ENVIAR EMPRESA
+            return res.status(200).json({
+                sucesso: true,
+                mensagem: 'Informações gerais obtidos com sucesso',
+                dados: {
+                    infosGerais
+                }
+            });
+
+        }
+        catch (error) {
+            // ERROS:
+            console.error('Erro ao obter as informações gerais da empresa:', error);
+
+            // ERRO DO SERVIDOR
+            return res.status(500).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Não foi possível obter as informações gerais da empresa'
+            });
+        }
+    }
+
     // ATUALIZAR UMA EMPRESA
     static async atualizar(req, res) {
+        const { id_empresa } = req.params;
+
         const {
             cnpj,
             razao_social,
@@ -184,7 +222,7 @@ class EmpresasController {
             endereco
         } = req.body;
 
-        const dadosEmpresa = {}
+        let dadosEmpresa = {}
 
         if (cnpj) {
             dadosEmpresa = {
@@ -225,7 +263,7 @@ class EmpresasController {
             }
 
             // ATUALIZAR EMPRESA
-            const resultado = await EmpresasModel.atualizar(id, dadosAtualizacao);
+            const resultado = await EmpresasModel.atualizar(id_empresa, dadosEmpresa);
 
             // SUCESSO
             res.status(200).json({

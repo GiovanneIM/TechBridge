@@ -23,13 +23,33 @@ export default function LayoutAdmin({ children }) {
     // VERIFICANDO SE O USUÁRIO É UM ADMIN
     useEffect(() => {
         if (!loading.perfil && user?.cargo !== "admin") {
-            router.replace('/permissao-negada');
+            router.replace(`/permissao-negada`);
         }
     }, [user, loading.perfil]);
 
 
     // CARREGANDO PERFIL
-    if (loading.perfil) return null;
+    if (loading.perfil) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center gap-8">
+                <div className="relative w-fit h-fit">
+                    <div className="w-40 h-40 -z-10 bg-techbridge absolute top-1/2 left-1/2 -translate-1/2 rounded-full animate-ping"></div>
+                    <Image
+                        src="/TechBridge/Logo.svg"
+                        width={200}
+                        height={200}
+                        alt="Logo TechBridge"
+                        priority
+                    />
+                </div>
+
+                <div>
+                    <p className="font-genty text-3xl">Carregando página</p>
+                    <p className="font-bold text-muted-foreground">Por favor, aguarde alguns instantes</p>
+                </div>
+            </div>
+        )
+    }
 
     // USUÁRIO NÃO É UM ADMIN
     if (user?.cargo !== "admin") return null;

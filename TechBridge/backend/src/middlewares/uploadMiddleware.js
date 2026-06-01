@@ -205,7 +205,7 @@ const TIPOS_PASTA = {
 const getUploadPath = (req, file) => {
     const tipo = req.uploadTipo;
     const userId = req.usuario?.id;
-    const empresaId = req.usuario?.id_empresa || req.params.id_empresa;
+    const empresaId = req.params.id_empresa;
 
     if (!userId && tipo.includes('USER')) {
         throw new Error('Usuário não identificado');

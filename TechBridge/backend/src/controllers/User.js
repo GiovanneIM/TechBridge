@@ -54,6 +54,9 @@ class UserController {
 
     // LISTAR MEMBROS DE UMA EMPRESA
     static async listar(req, res) {
+        // OBTER PAGINAÇÃO
+        const { page, limit, texto, status, cargo } = req.validated.query;
+
         // OBTER O ID DA EMPRESA
         const { id_empresa } = req.params;
 
@@ -66,15 +69,38 @@ class UserController {
             });
         }
 
+        // CALCULANDO OFFSET
+        const offset = (page - 1) * limit;
+
+        // FILTROS
+        const where = { id_empresa };
+        const like = {};
+        const likeOr = {};
+
+        if (status && status !== 'all') {
+            status === 'ativa'
+                ? where.status = true
+                : where.status = false
+        }
+
+        if (cargo) {
+            like.cargo = cargo
+        }
+
+        if (texto) {
+            likeOr.nome = texto;
+            likeOr.email = texto;
+        }
+
         try {
             // REQUISIÇÃO
-            const membros = await UserModel.listarUsuarios(id_empresa);
+            const resultado = await UserModel.listarUsuarios(id_empresa, limit, offset, page, where, like, likeOr);
 
             // SUCESSO: ENVIAR USUÁRIOS
             return res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Membros listados com sucesso`,
-                dados: { membros },
+                dados: resultado
             });
         }
         catch (error) {
