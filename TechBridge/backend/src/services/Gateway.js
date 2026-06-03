@@ -1,9 +1,9 @@
 import { SerialPort } from 'serialport';
 import { ReadlineParser } from '@serialport/parser-readline';
 
-const SERIAL_PORT = process.env.SERIAL_PORT || "COM6";
+const SERIAL_PORT = process.env.SERIAL_PORT || "COM12";
 const BAUD_RATE   = parseInt(process.env.SERIAL_BAUD) || 115200;
-const API_URL     = `${process.env.API_URL || "http://localhost:3000"}/techbridge/chamados`;
+const API_URL     = `${process.env.API_URL || "http://localhost:3000"}/techbridge/chamados2`;
 const API_HEADERS = { "Content-Type": "application/json" };
 
 const RECONNECT_MS = 5000;

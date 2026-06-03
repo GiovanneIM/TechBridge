@@ -1,10 +1,10 @@
-import express from 'express';              // 
-import cors from 'cors';                    // Controla quais domínios podem acessar a API
-import helmet from 'helmet';                // Complemento de segurança, realiza tratativas de seguranças nas requisições HTTP
-import dotenv from 'dotenv';                // Variáveis de ambiente - Utilizado para as informações locais que não serão compartilhadas no GitHub
-import path from 'path';                    // 
-import { fileURLToPath } from 'url';        // 
-import cookieParser from 'cookie-parser';   // Permite interpretar cookies das requições
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import cookieParser from 'cookie-parser';
 
 import swaggerUi from 'swagger-ui-express'
 import { swaggerSpec } from './src/config/swagger.js';
@@ -23,28 +23,21 @@ import { logMiddleware } from './src/middlewares/logMiddleware.js';
 import { errorMiddleware } from './src/middlewares/errorMiddleware.js';
 import { handleUploadError } from './src/middlewares/uploadMiddleware.js';
 
-// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-// CONFIGURANDO SERVIDOR E MIDDLEWARES
+// IMPORTAR GATEWAY SERIAL
+import { startSerialGateway } from './src/services/Gateway.js'; // ← novo
 
-// Carregando variáveis do arquivo .env
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
 dotenv.config();
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Configurações do servidor
 const PORT = process.env.PORT || 3000;
 
-// Middlewares globais
-//app.use(helmet()); // Segurança HTTP headers
-app.use(
-    helmet({
-        crossOriginResourcePolicy: false
-    })
-);
+app.use(helmet({ crossOriginResourcePolicy: false }));
 
-// Configurar CORS para permitir que rotas OPTIONS específicas sejam processadas
 app.use(cors({
     origin: [
         'http://localhost:3001',
@@ -60,36 +53,17 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Servir arquivos estáticos (imagens)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// Middleware para log de requisições (salva no banco de dados)
 app.use(logMiddleware);
-
-// Middlewate para obter cookies
 app.use(cookieParser());
 
-// Swagger - Documentação
-app.use(
-    '/api-docs',
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerSpec)
-)
-
-
-// Middleware para simular atraso em TODAS as requisições
-// app.use(async (req, res, next) => {
-//     await new Promise((resolve) => setTimeout(resolve, 3000));
-//     next();
-// });
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // ATIVAR AS ROTAS
 app.use('/techbridge', rotas);
 
-// Rota raiz
 app.get('/', (req, res) => {
     res.json({
         sucesso: true,
@@ -116,7 +90,6 @@ app.get('/', (req, res) => {
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-// Middleware para tratar rotas não encontradas
 app.use((req, res) => {
     res.status(404).json({
         sucesso: false,
@@ -126,20 +99,20 @@ app.use((req, res) => {
 });
 
 app.use(handleUploadError);
-
-// Middleware global de tratamento de erros (deve ser o último)
 app.use(errorMiddleware);
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 // INICIAR SERVIDOR
-
 app.listen(PORT, () => {
     console.log(negrito(azul('🌉 TECHBRIDGE - Backend')));
     console.log(`• Porta: ${negrito(verde(PORT))}`);
     console.log(`• Endereço: ${negrito(verde(`http://localhost:${PORT}`))}`);
     console.log(`• Documentação Swagger: ${negrito(azul(`http://localhost:${PORT}/api-docs`))}`);
     console.log(`• Ambiente: ${process.env.NODE_ENV || 'development'}`);
+
+    // Inicia o gateway serial após o servidor subir
+    startSerialGateway(); // ← novo
 });
 
 export default app;
