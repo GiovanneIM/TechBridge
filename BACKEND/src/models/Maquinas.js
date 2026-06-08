@@ -81,7 +81,7 @@ class MaquinasModel {
         try {
             // FAZER A CONSULTA
             const setor = await read("maquinas", {
-                where: { id:id_maquina }
+                where: { id_maquina }
             })
 
             // RETORNANDO O SETOR
