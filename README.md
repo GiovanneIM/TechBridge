@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./TechBridge/frontend/public/TechBridge/Logo.svg" alt="Logo DriveOn" width="200"/>
+  <img src="./Logo.svg" alt="Logo DriveOn" width="200"/>
 </p>
 
 <h1 align="center">TechBridge</h1>

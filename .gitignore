@@ -2,7 +2,7 @@
 # 🌉 TECHBRIDGE - FULLSTACK GITIGNORE #
 ########################################
 
-########## 📦 DEPENDÊNCIAS ##########
+########## DEPENDÊNCIAS ##########
 node_modules/
 .pnp
 .pnp.*
@@ -12,7 +12,7 @@ node_modules/
 !.yarn/releases
 !.yarn/versions
 
-########## 🧪 LOGS ##########
+########## LOGS ##########
 logs/
 *.log
 npm-debug.log*
@@ -20,61 +20,59 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-########## 🔐 VARIÁVEIS DE AMBIENTE ##########
+########## VARIÁVEIS DE AMBIENTE ##########
 .env
-.env.*
-!.env.example
 
-########## 🧠 CACHE / TEMP ##########
+########## CACHE / TEMP ##########
 .cache/
 .tmp/
 temp/
 *.tmp
 *.pid
 
-########## 🏗️ BUILD / PRODUÇÃO ##########
+########## BUILD / PRODUÇÃO ##########
 dist/
 build/
 .next/
 .next/cache/
 out/
 
-########## 📊 COVERAGE ##########
+########## COVERAGE ##########
 coverage/
 
-########## 📂 UPLOADS ##########
+########## UPLOADS ##########
 uploads/**
 !uploads/.gitkeep
 
-########## 🗄️ BANCO / DADOS LOCAIS ##########
+########## BANCO / DADOS LOCAIS ##########
 *.sqlite
 *.db
 
-########## 🔑 SEGURANÇA ##########
+########## SEGURANÇA ##########
 *.pem
 *.key
 *.secret
 
-########## 🖥️ SISTEMA ##########
+########## SISTEMA ##########
 .DS_Store
 Thumbs.db
 
-########## 💻 IDE / EDITOR ##########
+########## IDE / EDITOR ##########
 .vscode/
 .idea/
 *.swp
 *.swo
 
-########## ⚙️ TYPESCRIPT ##########
+########## TYPESCRIPT ##########
 *.tsbuildinfo
 next-env.d.ts
 
-########## 🚀 DEPLOY ##########
+########## DEPLOY ##########
 .vercel
 
-########## 📁 BACKUPS ##########
+########## ACKUPS ##########
 *.bak
 *.backup
 
-########## 🧰 UTILITÁRIOS DEV ##########
+########## UTILITÁRIOS DEV ##########
 dev-utils/
