@@ -42,6 +42,8 @@ export function useEmpresa() {
         atualizarEmpresa: null,
         atualizarLogo: null,
         obterInfosGerais: null,
+        editarChamado: null,
+        excluirChamado: null,
     });
 
     // ERROS
@@ -57,6 +59,8 @@ export function useEmpresa() {
         atualizarEmpresa: null,
         atualizarLogo: null,
         obterInfosGerais: null,
+        editarChamado: null,
+        excluirChamado: null,
     });
 
     // MENSAGENS
@@ -70,6 +74,8 @@ export function useEmpresa() {
         obterMaquinas: null,
         atualizarEmpresa: null,
         obterInfosGerais: null,
+        editarChamado: null,
+        excluirChamado: null,
     });
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -305,7 +311,8 @@ export function useEmpresa() {
         }
     }, []);
 
-    // OBTER CHAMADOS
+    // useEmpresa.js (APENAS PARTE DE CHAMADOS CORRIGIDA)
+
     const obterChamados = useCallback(async (id_empresa, filtro = {}) => {
         setLoading((prev) => ({ ...prev, obterChamados: true }));
         setError((prev) => ({ ...prev, obterChamados: null }));
@@ -329,17 +336,85 @@ export function useEmpresa() {
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterChamados: data.mensagem }));
             } else {
-                setChamados(data.dados.chamados);
+                setChamados(data.dados.chamados || []);
             }
         } catch (err) {
-            if (err.message === 'Sessão expirada') return;
-
             setError((prev) => ({
                 ...prev,
-                obterChamados: 'Erro ao obter chamados, tente novamente mais tarde.'
+                obterChamados: 'Erro ao obter chamados.'
             }));
         } finally {
             setLoading((prev) => ({ ...prev, obterChamados: false }));
+        }
+    }, []);
+
+    // EDITAR
+    const editarChamado = useCallback(async (id_chamado, novosDados) => {
+        setLoading((prev) => ({ ...prev, editarChamado: true }));
+        setError((prev) => ({ ...prev, editarChamado: null }));
+
+        try {
+            const data = await API_FETCH(`/chamados/${id_chamado}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(novosDados),
+            });
+
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, editarChamado: data.mensagem }));
+                return false;
+            }
+
+            setChamados((prev) =>
+                (prev || []).map((c) =>
+                    c.id.toString() === id_chamado.toString()
+                        ? { ...c, ...novosDados }
+                        : c
+                )
+            );
+
+            return true;
+        } catch (err) {
+            setError((prev) => ({
+                ...prev,
+                editarChamado: 'Erro ao editar chamado.'
+            }));
+            return false;
+        } finally {
+            setLoading((prev) => ({ ...prev, editarChamado: false }));
+        }
+    }, []);
+
+    // EXCLUIR
+    const excluirChamado = useCallback(async (id_chamado) => {
+        setLoading((prev) => ({ ...prev, excluirChamado: true }));
+        setError((prev) => ({ ...prev, excluirChamado: null }));
+
+        try {
+            const data = await API_FETCH(`/chamados/${id_chamado}`, {
+                method: 'DELETE',
+            });
+
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, excluirChamado: data.mensagem }));
+                return false;
+            }
+
+            setChamados((prev) =>
+                (prev || []).filter(
+                    (c) => c.id.toString() !== id_chamado.toString()
+                )
+            );
+
+            return true;
+        } catch (err) {
+            setError((prev) => ({
+                ...prev,
+                excluirChamado: 'Erro ao excluir chamado.'
+            }));
+            return false;
+        } finally {
+            setLoading((prev) => ({ ...prev, excluirChamado: false }));
         }
     }, []);
 
@@ -371,7 +446,7 @@ export function useEmpresa() {
             setLoading((prev) => ({ ...prev, obterInfosGerais: false }));
         }
     }, []);
-
+    
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     // ATUALIZAR EMPRESA (GERENTE PRINCIPAL)
@@ -461,5 +536,7 @@ export function useEmpresa() {
         atualizarEmpresa,
         atualizarLogo,
         obterInfosGerais,
+        editarChamado,
+        excluirChamado,
     };
 }

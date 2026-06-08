@@ -703,7 +703,19 @@ router.get(
     EmpresasController.infosGerais
 )
 
+// EDITAR CHAMADO
+router.patch(
+    '/:id_chamado',
+    authMiddleware,
+    ChamadosController.editar
+);
 
+// EXCLUIR CHAMADO
+router.delete(
+    '/:id_chamado',
+    authMiddleware,
+    ChamadosController.excluir
+);
 
 
 export default router;

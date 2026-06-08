@@ -19,9 +19,7 @@ const pool = mysql.createPool({
     connectionLimit: 10,
     queueLimit: 0,
 
-    ssl: {
-        rejectUnauthorized: false
-    }
+    ssl: false  // 👈 era { rejectUnauthorized: false }, isso ainda tentava SSL
 });
 
 
@@ -242,37 +240,52 @@ async function create(table, data) {
 
 // UPDATE - Função para atualizar um registro
 async function update(table, data, where) {
-    // Criando a conexão
     const connection = await getConnection();
 
     try {
-        // Colunas a serem alteradas
-        const set = Object.keys(data)
-            .map(column => `${column} = ?`)
-            .join(', ');
+        if (!where || Object.keys(where).length === 0) {
+            throw new Error("WHERE obrigatório no update");
+        }
 
+        // 🔥 REMOVE undefined/null (EVITA SUMIR CAMPOS)
+        const cleanData = Object.fromEntries(
+            Object.entries(data).filter(([_, v]) =>
+                v !== undefined && v !== null
+            )
+        );
 
-        // Where
+        if (Object.keys(cleanData).length === 0) {
+            throw new Error("Nada para atualizar");
+        }
+
+        // SET
+        const set = Object.keys(cleanData)
+            .map(col => `${col} = ?`)
+            .join(", ");
+
+        // WHERE
         const conditions = Object.keys(where)
-            .map(column => `${column} = ?`)
+            .map(col => `${col} = ?`)
             .join(" AND ");
 
-        // Montando o comando
         const sql = `UPDATE ${table} SET ${set} WHERE ${conditions}`;
 
-        // Obtendo os valores do registro e do where
         const values = [
-            ...Object.values(data),
+            ...Object.values(cleanData),
             ...Object.values(where)
         ];
 
-        // Executando a conexão
+        console.log("🔧 SQL UPDATE:", sql);
+        console.log("📦 VALUES:", values);
+
         const [result] = await connection.execute(sql, values);
 
-        // Retornando as linhas afetadas
         return result.affectedRows;
+
+    } catch (err) {
+        console.error("❌ ERRO UPDATE:", err);
+        throw err;
     } finally {
-        // Encerrando a conexão
         connection.release();
     }
 }
@@ -280,7 +293,6 @@ async function update(table, data, where) {
 
 // DELETE - Função para excluir um registro
 async function deleteRecord(table, where) {
-    // Criando a conexão
     const connection = await getConnection();
 
     try {
@@ -288,25 +300,22 @@ async function deleteRecord(table, where) {
             throw new Error("Where clause cannot be empty");
         }
 
-        // Where
         const conditions = Object.keys(where)
-            .map(column => `${column} = ?`)
+            .map(col => `${col} = ?`)
             .join(" AND ");
 
-
-        // Criando o comando
         const sql = `DELETE FROM ${table} WHERE ${conditions}`;
 
-        // Obtendo os valores do where
         const values = Object.values(where);
 
-        // Executando o comando
-        const [result] = await connection.execute(sql);
+        const [result] = await connection.execute(sql, values);
 
-        // Retornando as linahs afetadas
         return result.affectedRows;
+
+    } catch (error) {
+        console.error("❌ DELETE ERROR:", error); // 🔥 ESSENCIAL
+        throw error;
     } finally {
-        // Encerrando a conexão
         connection.release();
     }
 }

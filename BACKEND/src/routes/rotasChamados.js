@@ -1,49 +1,32 @@
 import express from 'express';
-// MIDDLEWARES
-import {
-    authMiddleware,
-    adminMiddleware,
-    gerentePrincipalMiddleware,
-    gerenteMiddleware
-} from '../middlewares/authMiddleware.js';
-//CONTROLLER
 import ChamadosController from '../controllers/Chamados.js';
-// ZOD
-import { validateZod } from '../middlewares/validate.js';
-import { paginacaoSchema } from '../schemas/query/paginacao.js';
-import { params_Empresa } from '../schemas/params/empresa.schema.js';
-
+import { authMiddleware } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
+// LISTAR POR ID
+router.get('/:id_chamado', ChamadosController.obterPorID);
 
+// CRIAR
+router.post('/:id_maquina', ChamadosController.chamar);
 
+// ATENDER
+router.patch('/:id_chamado/atender', ChamadosController.atender);
 
-// LISTAR CHAMADO ESPECÍFICO (POR ID)
-router.get(
+// CONCLUIR
+router.patch('/:id_chamado/concluir', ChamadosController.concluir);
+
+// EDITAR (🔴 ESSA É A SUA ROTA DO FRONT)
+router.patch(
     '/:id_chamado',
-    ChamadosController.obterPorID
-)
+    authMiddleware,
+    ChamadosController.editar
+);
 
-// CRIAR CHAMADO
-router.post(
-    '/chamados/:id_maquina',
-    ChamadosController.chamar
-)
+// EXCLUIR
+router.delete('/:id_chamado', authMiddleware, ChamadosController.excluir);
 
-// ATENDER CHAMADO
-router.patch(
-    '/chamados/:id_chamado/atender',
-    ChamadosController.atender
-)
-
-// CONCLUIR CHAMADO
-router.patch(
-    '/chamados/:id_chamado/concluir',
-    ChamadosController.concluir
-)
-
-// Obter dados para o dashboard
+// DASHBOARD
 router.post(
     '/dashboard',
     ChamadosController.obterDashboard
