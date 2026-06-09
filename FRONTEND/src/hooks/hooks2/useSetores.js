@@ -1,167 +1,141 @@
-import { useEffect, useState, useCallback } from "react";
-import { apiFetch } from "@/lib/api";
+'use client';
 
-const API_BASE_URL = "/setores";
+import { useState, useCallback } from "react";
+import { API_FETCH } from "@/lib/api";
 
-export function useSetores({
-    initialSetores = [],
-    fetchOnMount = false,
-} = {}) {
+export function useSetores() {
+  const [setorAtual, setSetorAtual] = useState(null);
 
-    // ========================================
-    // STATES
-    // ========================================
+  const [loadingSetores, setLoadingSetores] = useState(false);
+  const [errorSetores, setErrorSetores] = useState({ fetchOne: null });
 
-    const [setores, setSetores] = useState(initialSetores);
-    const [setorAtual, setSetorAtual] = useState(null);
+  const [maquinasSetor, setMaquinasSetor] = useState([]);
+  const [loadingMaquinas, setLoadingMaquinas] = useState(false);
+  const [errorMaquinas, setErrorMaquinas] = useState(null);
 
-    const [loading, setLoading] = useState({
-        fetch: false,
-        fetchOne: false,
-    });
+  // =========================
+  // SETOR BY ID
+  // =========================
+  const fetchSetorById = useCallback(async (cod_setor, id_empresa) => {
+    setLoadingSetores(true);
+    setErrorSetores((prev) => ({ ...prev, fetchOne: null }));
 
-    const [error, setError] = useState({
-        fetch: null,
-        fetchOne: null,
-    });
+    try {
+      const res = await API_FETCH(
+        `/empresas/${id_empresa}/setores/${cod_setor}`,
+        { method: "GET" }
+      );
 
-    // ========================================
-    // FETCH TODOS
-    // ========================================
+      if (!res.sucesso) {
+        setErrorSetores((prev) => ({ ...prev, fetchOne: res.mensagem }));
+        return;
+      }
 
-    const fetchSetores = useCallback(async () => {
-        setLoading((prev) => ({
-            ...prev,
-            fetch: true,
-        }));
+      setSetorAtual(res.dados.setor || res.dados);
+    } catch {
+      setErrorSetores((prev) => ({
+        ...prev,
+        fetchOne: "Erro ao carregar setor",
+      }));
+    } finally {
+      setLoadingSetores(false);
+    }
+  }, []);
 
-        setError((prev) => ({
-            ...prev,
-            fetch: null,
-        }));
+  // =========================
+  // MÁQUINAS DO SETOR
+  // =========================
+  const fetchMaquinasDoSetor = useCallback(async (id_empresa, cod_setor) => {
+    setLoadingMaquinas(true);
+    setErrorMaquinas(null);
 
-        try {
-            const response = await apiFetch(`${API_BASE_URL}/buscar`);
+    try {
+      const res = await API_FETCH(
+        `/empresas/${id_empresa}/setores/${cod_setor}/maquinas`,
+        { method: "GET" }
+      );
 
+      if (!res.sucesso) {
+        setErrorMaquinas(res.mensagem);
+        return;
+      }
 
-            if (!response?.sucesso) {
-                setError((prev) => ({
-                    ...prev,
-                    fetch: response?.mensagem || "Erro ao buscar setores",
-                }));
+      setMaquinasSetor(res.dados.maquinas || []);
+    } catch {
+      setErrorMaquinas("Erro ao carregar máquinas");
+    } finally {
+      setLoadingMaquinas(false);
+    }
+  }, []);
 
-                setSetores([]);
-                return [];
-            }
-
-            // ARRAY CORRETO DA API
-            const setoresData = response?.dados?.setores ?? [];
-
-            setSetores(setoresData);
-
-            return setoresData;
-
-        } catch (err) {
-            console.error("ERRO FETCH SETORES:", err);
-
-            setError((prev) => ({
-                ...prev,
-                fetch: "Erro ao buscar setores",
-            }));
-
-            setSetores([]);
-
-            return [];
-
-        } finally {
-            setLoading((prev) => ({
-                ...prev,
-                fetch: false,
-            }));
+  // =========================
+  // ADD MÁQUINA
+  // =========================
+  const addMaquinaToSetor = useCallback(async (id_empresa, cod_setor, id_maquina) => {
+    try {
+      const res = await API_FETCH(
+        `/empresas/${id_empresa}/maquinas/${id_maquina}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_setor: cod_setor, // 🔥 IMPORTANTE (era isso que quebrava)
+          }),
         }
-    }, []);
+      );
 
-    // ========================================
-    // FETCH POR ID
-    // ========================================
+      if (!res.sucesso) {
+        throw new Error(res.mensagem);
+      }
 
-    const fetchSetorById = useCallback(async (codSetor, idEmpresa) => {
-        if (!codSetor) return null;
+      await fetchMaquinasDoSetor(id_empresa, cod_setor);
+    } catch (err) {
+      setErrorMaquinas(err.message || "Erro ao adicionar máquina");
+    }
+  }, []);
 
-        setLoading((prev) => ({
-            ...prev,
-            fetchOne: true,
-        }));
-
-        setError((prev) => ({
-            ...prev,
-            fetchOne: null,
-        }));
-
-        try {
-            const response = await apiFetch(`/empresas/${idEmpresa}/setores/${codSetor}`);
-
-            if (!response?.sucesso) {
-                setError((prev) => ({
-                    ...prev,
-                    fetchOne: response?.mensagem || "Erro ao buscar setor",
-                }));
-
-                return null;
-            }
-
-            console.log("RESPOSTA DA API DO SETOR:", response);
-
-            const setor = response?.dados?.setor ?? null;
-
-            setSetorAtual(setor);
-
-            return setor;
-
-        } catch (err) {
-            console.error("ERRO FETCH SETOR:", err);
-
-            setError((prev) => ({
-                ...prev,
-                fetchOne: "Erro ao buscar setor",
-            }));
-
-            return null;
-
-        } finally {
-            setLoading((prev) => ({
-                ...prev,
-                fetchOne: false,
-            }));
+  // =========================
+  // REMOVE MÁQUINA
+  // =========================
+  const removeMaquinaFromSetor = useCallback(async (id_empresa, cod_setor, id_maquina) => {
+    try {
+      const res = await API_FETCH(
+        `/empresas/${id_empresa}/maquinas/${id_maquina}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_setor: null, // remove do setor
+          }),
         }
-    }, []);
+      );
 
-    // ========================================
-    // AUTO FETCH
-    // ========================================
+      if (!res.sucesso) {
+        throw new Error(res.mensagem);
+      }
 
-    useEffect(() => {
-        if (fetchOnMount) {
-            fetchSetores();
-        }
-    }, [fetchOnMount, fetchSetores]);
+      await fetchMaquinasDoSetor(id_empresa, cod_setor);
+    } catch (err) {
+      setErrorMaquinas(err.message || "Erro ao remover máquina");
+    }
+  }, []);
 
-    // ========================================
-    // RETURN
-    // ========================================
+  return {
+    setorAtual,
+    fetchSetorById,
+    loadingSetores,
+    errorSetores,
 
-    return {
-        setores,
-        setorAtual,
+    maquinasSetor,
+    fetchMaquinasDoSetor,
+    loadingMaquinas,
+    errorMaquinas,
 
-        loadingSetores: loading,
-        errorSetores: error,
-
-        fetchSetores,
-        fetchSetorById,
-        refetchSetores: fetchSetores,
-
-        setSetores,
-        setSetorAtual,
-    };
+    addMaquinaToSetor,
+    removeMaquinaFromSetor,
+  };
 }

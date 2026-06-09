@@ -1,9 +1,10 @@
-import PageDashboard from "@/components/blocks/Pages/Gerente/PageDashboard"
+import PageDashboard from "@/components/blocks/Pages/Gerente/PageDashboard";
 
 export default async function Dashboard() {
-	const dashboard = {}
-		
+	// aqui você pode futuramente buscar no backend
+	const dashboardInicial = null;
+
 	return (
-		<PageDashboard dashboardInicial={dashboard}/>
-	)
+		<PageDashboard dashboardInicial={dashboardInicial} />
+	);
 }

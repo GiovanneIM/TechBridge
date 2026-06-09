@@ -14,16 +14,19 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { InputGroup, InputGroupInput } from "@/components/ui/input-group"
 import { Textarea } from "@/components/ui/textarea"
 import {
-    BriefcaseBusiness, Network, PaintRoller, Warehouse, Wrench
+    BriefcaseBusiness, Network, PaintRoller, Warehouse, Wrench, Hammer, Cog, Factory, Truck, Users, Shield, Database
 } from "lucide-react"
 
 // Valores aceitos pelo banco
 const ICONES = [
-    { valor: "Wrench",            label: "Ferramentas",  icone: <Wrench className="h-5 w-5" /> },
-    { valor: "PaintRoller",       label: "Pintura",      icone: <PaintRoller className="h-5 w-5" /> },
-    { valor: "BriefcaseBusiness", label: "Gestão",       icone: <BriefcaseBusiness className="h-5 w-5" /> },
-    { valor: "Network",           label: "Rede",         icone: <Network className="h-5 w-5" /> },
-    { valor: "default",           label: "Depósito",     icone: <Warehouse className="h-5 w-5" /> },
+    { valor: "Wrench", label: "Ferramentas", icone: <Wrench /> },
+    { valor: "Hammer", label: "Manutenção", icone: <Hammer /> },
+    { valor: "Cog", label: "Processos", icone: <Cog /> },
+    { valor: "Factory", label: "Produção", icone: <Factory /> },
+    { valor: "Truck", label: "Logística", icone: <Truck /> },
+    { valor: "Users", label: "Pessoas", icone: <Users /> },
+    { valor: "Shield", label: "Segurança", icone: <Shield /> },
+    { valor: "Database", label: "TI", icone: <Database /> },
 ]
 
 const CORES = [

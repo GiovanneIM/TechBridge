@@ -27,6 +27,7 @@ import {
 import { useSetores } from "@/hooks/hooks2/useSetores";
 import { useAuth } from "@/context/AuthContext";
 
+// ICONES
 const icones = {
   Wrench: <Wrench className="h-14 w-14 opacity-90" />,
   PaintRoller: <PaintRoller className="h-14 w-14 opacity-90" />,
@@ -52,16 +53,36 @@ export default function PageSetorId() {
   const params = useParams();
   const { user } = useAuth();
 
-  const { setorAtual, fetchSetorById, loadingSetores, errorSetores } =
-    useSetores();
+  const {
+    setorAtual,
+    fetchSetorById,
+    loadingSetores,
+    errorSetores,
+
+    maquinasSetor,
+    fetchMaquinasDoSetor,
+    loadingMaquinas,
+    errorMaquinas,
+  } = useSetores();
 
   useEffect(() => {
     if (params?.id && user?.id_empresa) {
       fetchSetorById(params.id, user.id_empresa);
+      fetchMaquinasDoSetor(user.id_empresa, params.id);
     }
   }, [params?.id, user?.id_empresa]);
 
+  // LOADING INICIAL
+  if (loadingSetores && !setorAtual) {
+    return (
+      <LoadingPage
+        loadingTitle="Carregando setor"
+        loadingSubtitle={["Aguarde alguns segundos"]}
+      />
+    );
+  }
 
+  // ERROR
   if (errorSetores.fetchOne) {
     return (
       <ErrorPage
@@ -89,7 +110,7 @@ export default function PageSetorId() {
   return (
     <div className="min-h-screen w-full bg-gray-50 dark:bg-sidebar flex flex-col">
 
-      {/* HEADER */}
+      {/* HEADER (mantido) */}
       <HeaderPage
         icon={Warehouse}
         title={setorAtual.nome}
@@ -104,7 +125,7 @@ export default function PageSetorId() {
 
       <div className="w-full max-w-screen-2xl mx-auto px-6 py-6 space-y-6">
 
-        {/* HERO */}
+        {/* HERO (igual ao seu original) */}
         <div className={`rounded-3xl p-8 text-white shadow-xl ${cor}`}>
           <div className="flex flex-col md:flex-row justify-between gap-8">
 
@@ -126,9 +147,8 @@ export default function PageSetorId() {
                   </span>
 
                   <span
-                    className={`px-3 py-1 rounded-full text-sm ${
-                      isAtivo ? "bg-emerald-500/30" : "bg-red-500/30"
-                    }`}
+                    className={`px-3 py-1 rounded-full text-sm ${isAtivo ? "bg-emerald-500/30" : "bg-red-500/30"
+                      }`}
                   >
                     {isAtivo ? "Ativo" : "Inativo"}
                   </span>
@@ -143,7 +163,7 @@ export default function PageSetorId() {
               </div>
             </div>
 
-            {/* ID CARD */}
+            {/* CARD ID (mantido) */}
             <div className="bg-white/10 border border-white/20 rounded-2xl p-5 min-w-[220px]">
               <div className="flex items-center gap-2 text-white/80 text-sm">
                 <Hash className="h-4 w-4" />
@@ -163,13 +183,13 @@ export default function PageSetorId() {
           </div>
         </div>
 
-        {/* GRID */}
+        {/* GRID (mantido) */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
           {/* MAIN */}
           <div className="lg:col-span-2 space-y-6">
 
-            {/* DESCRIÇÃO */}
+            {/* DESCRIÇÃO (mantido) */}
             <div className="bg-white dark:bg-sidebar p-6 rounded-2xl border shadow-sm">
               <div className="flex items-center gap-2 mb-3">
                 <Info className="text-blue-500" />
@@ -181,7 +201,7 @@ export default function PageSetorId() {
               </p>
             </div>
 
-            {/* METADADOS */}
+            {/* METADADOS (mantido) */}
             <div className="bg-white dark:bg-sidebar p-6 rounded-2xl border shadow-sm">
               <h2 className="font-bold text-lg mb-4">Metadados</h2>
 
@@ -219,21 +239,57 @@ export default function PageSetorId() {
               </div>
             </div>
 
+            {/* 🔥 NOVO: MÁQUINAS DO SETOR */}
+            <div className="bg-white dark:bg-sidebar p-6 rounded-2xl border shadow-sm">
+              <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
+                <Wrench className="h-5 w-5" />
+                Máquinas do setor
+              </h2>
+
+              {loadingMaquinas ? (
+                <p className="text-sm text-gray-500">Carregando máquinas...</p>
+              ) : errorMaquinas ? (
+                <p className="text-sm text-red-500">{errorMaquinas}</p>
+              ) : maquinasSetor.length === 0 ? (
+                <p className="text-sm text-gray-500">
+                  Nenhuma máquina cadastrada
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {maquinasSetor.map((m) => (
+                    <div
+                      key={m.id}
+                      className="p-3 rounded-xl border flex items-center justify-between"
+                    >
+                      <div>
+                        <p className="font-semibold">{m.nome}</p>
+                        <p className="text-xs text-gray-500">
+                          Código: {m.cod_maquina}
+                        </p>
+                      </div>
+
+                      <span className="text-xs px-2 py-1 bg-gray-100 rounded-full">
+                        #{m.id}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
           </div>
 
-          {/* SIDEBAR */}
+          {/* SIDEBAR (mantido) */}
           <div className="space-y-6">
 
-            {/* STATUS CARD */}
             <div className="bg-white dark:bg-sidebar p-6 rounded-2xl border shadow-sm">
               <h2 className="font-bold text-lg mb-4">Status</h2>
 
               <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  isAtivo
+                className={`px-3 py-1 rounded-full text-sm font-medium ${isAtivo
                     ? "bg-emerald-100 text-emerald-700"
                     : "bg-red-100 text-red-700"
-                }`}
+                  }`}
               >
                 {isAtivo ? "Ativo" : "Inativo"}
               </span>
@@ -247,25 +303,26 @@ export default function PageSetorId() {
             </div>
 
             {/* CONTROLE */}
-            <div className="bg-white dark:bg-sidebar p-6 rounded-2xl border shadow-sm">
-              <h2 className="font-bold text-lg mb-4">Controle</h2>
+            <div className="bg-white dark:bg-sidebar rounded-2xl p-6 border shadow-sm">
 
-              <div className="flex items-center gap-2 text-sm">
+              <h2 className="text-xl font-bold mb-4">
+                Controle
+              </h2>
+
+              <div className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-gray-500" />
-                Nível de acesso: {setorAtual.nivel_acesso || "Padrão"}
+                Nível: {setorAtual.nivel_acesso || "Não definido"}
               </div>
 
-              <div className="flex items-center gap-2 mt-3 text-sm">
+              <div className="flex items-center gap-2 mt-3">
                 <CalendarDays className="h-4 w-4 text-gray-500" />
-                {setorAtual.data_criacao
-                  ? new Date(setorAtual.data_criacao).toLocaleDateString(
-                      "pt-BR"
-                    )
-                  : "—"}
+                {new Date(setorAtual.data_criacao).toLocaleDateString("pt-BR")}
               </div>
+
             </div>
 
           </div>
+
         </div>
       </div>
     </div>

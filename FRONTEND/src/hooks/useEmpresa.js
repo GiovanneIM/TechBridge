@@ -46,6 +46,7 @@ export function useEmpresa() {
         editarChamado: null,
         excluirChamado: null,
         criarMembro: null,
+        obterMaquinasPorSetor: null,
     });
 
     // ERROS
@@ -65,6 +66,7 @@ export function useEmpresa() {
         editarChamado: null,
         excluirChamado: null,
         criarMembro: null,
+        obterMaquinasPorSetor: null,
     });
 
     // MENSAGENS
@@ -82,6 +84,7 @@ export function useEmpresa() {
         editarChamado: null,
         excluirChamado: null,
         criarMembro: null,
+        obterMaquinasPorSetor: null,
     });
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -607,6 +610,30 @@ export function useEmpresa() {
         }
     }, [membros, obterMembros]);
 
+    const obterMaquinasPorSetor = useCallback(async (id_setor) => {
+        setLoading((prev) => ({ ...prev, obterMaquinas: true }));
+        setError((prev) => ({ ...prev, obterMaquinas: null }));
+
+        try {
+            const data = await API_FETCH(`/setores/${id_setor}/maquinas`, {
+                method: 'GET'
+            });
+
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, obterMaquinas: data.mensagem }));
+            } else {
+                setMaquinas(data.dados.maquinas);
+            }
+        } catch (err) {
+            setError((prev) => ({
+                ...prev,
+                obterMaquinas: 'Erro ao obter máquinas.'
+            }));
+        } finally {
+            setLoading((prev) => ({ ...prev, obterMaquinas: false }));
+        }
+    }, []);
+
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     return {
@@ -626,5 +653,6 @@ export function useEmpresa() {
         editarChamado,
         excluirChamado,
         criarMembro,
+        obterMaquinasPorSetor,
     };
 }

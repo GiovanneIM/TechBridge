@@ -4,6 +4,12 @@ import { authMiddleware } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
+// DASHBOARD
+router.post(
+    '/dashboard',
+    ChamadosController.obterDashboard
+)
+
 // LISTAR POR ID
 router.get('/:id_chamado', ChamadosController.obterPorID);
 
@@ -25,11 +31,5 @@ router.patch(
 
 // EXCLUIR
 router.delete('/:id_chamado', authMiddleware, ChamadosController.excluir);
-
-// DASHBOARD
-router.post(
-    '/dashboard',
-    ChamadosController.obterDashboard
-)
 
 export default router;

@@ -207,26 +207,58 @@ class ChamadosController {
         }
     }
 
-    // CRIAR UM CHAMADO
     static async chamar(req, res) {
         const { id_maquina } = req.params;
 
         try {
-            const maquina = await MaquinasModel.buscarPorId(id_maquina)
-            const setor = await SetoresModel.buscarPorId(maquina.id_setor)
-            const empresa = await EmpresasModel.buscarPorId(req.id_empresa)
+            const maquina = await MaquinasModel.buscarPorId(id_maquina);
+
+            if (!maquina) {
+                return res.status(404).json({
+                    sucesso: false,
+                    mensagem: "Máquina não encontrada"
+                });
+            }
+
+            const setor = await SetoresModel.buscarPorId(maquina.id_setor);
+
+            if (!setor) {
+                return res.status(404).json({
+                    sucesso: false,
+                    mensagem: "Setor não encontrado"
+                });
+            }
+
+            const empresa = await EmpresasModel.buscarPorId(req.id_empresa);
+
+            if (!empresa) {
+                return res.status(404).json({
+                    sucesso: false,
+                    mensagem: "Empresa não encontrada"
+                });
+            }
 
             const chamado = {
                 id_empresa: empresa.id,
                 id_setor: setor.id,
-                id_maquina,
-            }
+                id_maquina: maquina.id,
+            };
 
             const id_chamado = await ChamadosModel.chamar(chamado);
 
-            return id_chamado;
+            return res.status(201).json({
+                sucesso: true,
+                mensagem: "Chamado criado com sucesso",
+                dados: { id_chamado }
+            });
+
         } catch (error) {
-            console.error('Erro ao criar chamado:', error);
+            console.error("Erro ao criar chamado:", error);
+
+            return res.status(500).json({
+                sucesso: false,
+                mensagem: "Erro interno ao criar chamado"
+            });
         }
     }
 
