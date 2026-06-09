@@ -48,7 +48,6 @@ app.use(
 app.use(cors({
     origin: [
         'http://localhost:3001',
-        'https://ubiquitous-happiness-r9jg6j747jj25p49-3000.app.github.dev',
     ],                                 // Permitindo acesso do Frontend
     credentials: true,                                               // Permitindo receber cookies do navegador
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],   // Metódos permitidos
