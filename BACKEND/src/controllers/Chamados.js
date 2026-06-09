@@ -2,18 +2,16 @@ import ChamadosModel from "../models/Chamados.js";
 import EmpresasModel from "../models/Empresas.js";
 import SetoresModel from "../models/Setores.js";
 import MaquinasModel from "../models/Maquinas.js";
+import UserModel from "../models/User.js";
 import { pertenceAEmpresa } from "../utils/validacoes.js";
-import { id_setor } from "../schemas/dados/maquina.js";
 
 class ChamadosController {
 
     // LISTAR CHAMADOS DE UMA EMPRESA
     static async listar(req, res) {
-        // OBTER O ID DA EMPRESA
         const { id_empresa } = req.params;
         const { estado } = req.query;
 
-        // VERIFICANDO SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
         if (!acesso) {
             return res.status(403).json({
@@ -25,13 +23,10 @@ class ChamadosController {
 
         try {
             const where = { "c.id_empresa": id_empresa };
-
             if (estado) { where.estado = estado }
 
-            // BUSCAR CHAMADOS
             const chamados = await ChamadosModel.listar(where);
 
-            // SUCESSO: ENVIAR SETORES
             res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Chamados listados com sucesso`,
@@ -39,10 +34,7 @@ class ChamadosController {
             });
         }
         catch (error) {
-            // ERROS:
             console.error('Erro ao obter os chamados da empresa:', error);
-
-            // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
@@ -53,10 +45,8 @@ class ChamadosController {
 
     // LISTAR CHAMADOS DE UM SETOR
     static async listarDoSetor(req, res) {
-        // OBTER O ID DA EMPRESA E O CÓDIGO DO SETOR
         const { id_empresa, cod_setor } = req.params;
 
-        // VERIFICANDO SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
         if (!acesso) {
             return res.status(403).json({
@@ -67,16 +57,13 @@ class ChamadosController {
         }
 
         try {
-            // OBTENDO O SETOR
             const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor)
 
-            // BUSCAR CHAMADOS
             const chamados = await ChamadosModel.listar({
                 id_empresa,
                 id_setor: setor.id
             });
 
-            // SUCESSO: ENVIAR SETORES
             res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Chamados listados com sucesso`,
@@ -84,10 +71,7 @@ class ChamadosController {
             });
         }
         catch (error) {
-            // ERROS:
             console.error('Erro ao obter os chamados do setor:', error);
-
-            // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
@@ -98,10 +82,8 @@ class ChamadosController {
 
     // LISTAR CHAMADOS DE UMA MAQUINA
     static async listarDaMaquina(req, res) {
-        // OBTER O ID DA EMPRESA, O CÓDIGO DO SETOR E O CÓDIGO DA MÁQUINA
         const { id_empresa, cod_setor, cod_maquina } = req.params;
 
-        // VERIFICANDO SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
         if (!acesso) {
             return res.status(403).json({
@@ -115,14 +97,12 @@ class ChamadosController {
             const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor)
             const maquina = await MaquinasModel.buscarCodigo(setor.id, cod_maquina)
 
-            // BUSCAR CHAMADOS
             const chamados = await ChamadosModel.listar({
                 id_empresa,
                 id_setor: setor.id,
                 id_maquina: maquina.id
             });
 
-            // SUCESSO: ENVIAR SETORES
             res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Chamados listados com sucesso`,
@@ -130,10 +110,7 @@ class ChamadosController {
             });
         }
         catch (error) {
-            // ERROS:
             console.error('Erro ao obter os chamados da maquina:', error);
-
-            // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
@@ -144,10 +121,8 @@ class ChamadosController {
 
     // OBTER CHAMADO POR CÓDIGO
     static async obterPorCodigo(req, res) {
-        // OBTER O ID DA EMPRESA, O CÓDIGO DO SETOR, O CÓDIGO DA MÁQUINA E O CÓDIGO DO CHAMADO
         const { id_empresa, cod_setor, cod_maquina, cod_chamado } = req.params;
 
-        // VERIFICAR SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
         if (!acesso) {
             return res.status(403).json({
@@ -161,7 +136,6 @@ class ChamadosController {
             const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor)
             const maquina = await MaquinasModel.buscarCodigo(setor.id, cod_maquina)
 
-            // BUSCAR CHAMADOS
             const chamado = await ChamadosModel.buscarPorCodigo({
                 "c.id_empresa": id_empresa,
                 "c.id_setor": setor.id,
@@ -169,7 +143,6 @@ class ChamadosController {
                 "c.cod_chamado": cod_chamado
             });
 
-            // VERIFICAR SE O CHAMADO FOI ENCONTRADO
             if (!chamado) {
                 return res.status(404).json({
                     sucesso: false,
@@ -178,7 +151,6 @@ class ChamadosController {
                 });
             }
 
-            // SUCESSO: ENVIAR SETORES
             res.status(200).json({
                 sucesso: true,
                 mensagem: `Chamado listado com sucesso`,
@@ -186,10 +158,7 @@ class ChamadosController {
             });
         }
         catch (error) {
-            // ERROS:
             console.error('Erro ao obter o chamado da empresa:', error);
-
-            // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
@@ -200,14 +169,11 @@ class ChamadosController {
 
     // OBTER CHAMADO POR ID
     static async obterPorID(req, res) {
-        // OBTER O ID DA EMPRESA
         const { id_chamado } = req.params;
 
         try {
-            // BUSCAR CHAMADOS
             const chamado = await ChamadosModel.buscarPorId(id_chamado);
 
-            // VERIFICAR SE O CHAMADO FOI ENCONTRADO
             if (!chamado) {
                 return res.status(404).json({
                     sucesso: false,
@@ -216,7 +182,6 @@ class ChamadosController {
                 });
             }
 
-            // VERIFICAR SE O USUÁRIO TEM ACESSO
             const acesso = pertenceAEmpresa(req, chamado.id_empresa);
             if (!acesso) {
                 return res.status(403).json({
@@ -226,7 +191,6 @@ class ChamadosController {
                 });
             }
 
-            // SUCESSO: ENVIAR SETORES
             res.status(200).json({
                 sucesso: true,
                 mensagem: `Chamado listado com sucesso`,
@@ -234,10 +198,7 @@ class ChamadosController {
             });
         }
         catch (error) {
-            // ERROS:
             console.error('Erro ao obter o chamado da empresa:', error);
-
-            // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
@@ -248,11 +209,6 @@ class ChamadosController {
 
     // CRIAR UM CHAMADO
     static async chamar(req, res) {
-        /**
-         * RECEBER:
-         * id_maquina
-         */
-
         const { id_maquina } = req.params;
 
         try {
@@ -270,11 +226,11 @@ class ChamadosController {
 
             return id_chamado;
         } catch (error) {
-
+            console.error('Erro ao criar chamado:', error);
         }
     }
 
-    // ATENDER UM CHAMADOS
+    // ATENDER UM CHAMADO
     static async atender(req, res) {
         const { id_chamado } = req.params;
         const { id_tecnico } = req.body;
@@ -283,10 +239,7 @@ class ChamadosController {
 
         const affectedRows = await ChamadosModel.atualizar(
             id_chamado,
-            {
-                id_tecnico,
-                datahora_atendimento
-            }
+            { id_tecnico, datahora_atendimento }
         );
 
         if (!affectedRows) {
@@ -305,7 +258,6 @@ class ChamadosController {
     // CONCLUIR UM CHAMADO
     static async concluir(req, res) {
         const { id_chamado } = req.params;
-
     }
 
     static async obterDashboard(req, res) {
@@ -316,14 +268,11 @@ class ChamadosController {
 
             return res.status(200).json({
                 sucesso: true,
-                dados: {
-                    dashboard
-                }
+                dados: { dashboard }
             });
 
         } catch (error) {
             console.error(error);
-
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
@@ -339,7 +288,7 @@ class ChamadosController {
         const {
             descricao_problema,
             estado,
-            id_tecnico,
+            id_tecnico,       // pode chegar como cod_usuario (string) ou id (number)
             solucao_aplicada,
             comentario_tecnico,
             operador
@@ -368,9 +317,6 @@ class ChamadosController {
             if (descricao_problema !== undefined)
                 novosDados.descricao_problema = descricao_problema;
 
-            if (id_tecnico !== undefined)
-                novosDados.id_tecnico = id_tecnico;
-
             if (solucao_aplicada !== undefined)
                 novosDados.solucao_aplicada = solucao_aplicada;
 
@@ -380,11 +326,29 @@ class ChamadosController {
             if (operador !== undefined)
                 novosDados.operador = operador;
 
-            /**
-             * =========================
-             * REGRA AUTOMÁTICA DE STATUS
-             * =========================
-             */
+            // RESOLVER id_tecnico: aceita cod_usuario (string) ou id (number)
+            if (id_tecnico !== undefined) {
+                const idNumerico = Number(id_tecnico);
+
+                if (!isNaN(idNumerico) && Number.isInteger(idNumerico)) {
+                    // JÁ É UM ID NUMÉRICO — USA DIRETO
+                    novosDados.id_tecnico = idNumerico;
+                } else {
+                    // É UM cod_usuario — BUSCA O ID REAL
+                    const tecnico = await UserModel.buscarPorCodigo(id_tecnico);
+
+                    if (!tecnico) {
+                        return res.status(404).json({
+                            sucesso: false,
+                            mensagem: `Técnico com código '${id_tecnico}' não encontrado`
+                        });
+                    }
+
+                    novosDados.id_tecnico = tecnico.id;
+                }
+            }
+
+            // REGRA AUTOMÁTICA DE STATUS
             if (estado !== undefined && estado !== chamado.estado) {
                 novosDados.estado = estado;
 
@@ -412,7 +376,6 @@ class ChamadosController {
 
         } catch (error) {
             console.error("Erro ao editar chamado:", error);
-
             return res.status(500).json({
                 sucesso: false,
                 mensagem: "Erro interno do servidor"
@@ -457,17 +420,14 @@ class ChamadosController {
             });
 
         } catch (error) {
-            console.error("❌ ERRO DELETE CHAMADO:", error);
-
+            console.error("Erro ao excluir chamado:", error);
             return res.status(500).json({
                 sucesso: false,
-                mensagem: error.message, // 🔥 AGORA MOSTRA O ERRO REAL
+                mensagem: error.message,
             });
         }
     }
-
 }
-
 
 function ajustarIntervalo(data) {
     if (!data) return undefined;

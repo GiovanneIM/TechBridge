@@ -37,6 +37,7 @@ export function useEmpresa() {
         obterMembros: null,
         obterMembro: null,
         obterSetores: null,
+        criarSetor: null,
         obterMaquinas: null,
         obterChamados: null,
         atualizarEmpresa: null,
@@ -44,6 +45,7 @@ export function useEmpresa() {
         obterInfosGerais: null,
         editarChamado: null,
         excluirChamado: null,
+        criarMembro: null,
     });
 
     // ERROS
@@ -54,6 +56,7 @@ export function useEmpresa() {
         obterMembros: null,
         obterMembro: null,
         obterSetores: null,
+        criarSetor: null,
         obterMaquinas: null,
         obterChamados: null,
         atualizarEmpresa: null,
@@ -61,6 +64,7 @@ export function useEmpresa() {
         obterInfosGerais: null,
         editarChamado: null,
         excluirChamado: null,
+        criarMembro: null,
     });
 
     // MENSAGENS
@@ -71,11 +75,13 @@ export function useEmpresa() {
         obterMembros: null,
         obterMembro: null,
         obterSetores: null,
+        criarSetor: null,
         obterMaquinas: null,
         atualizarEmpresa: null,
         obterInfosGerais: null,
         editarChamado: null,
         excluirChamado: null,
+        criarMembro: null,
     });
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -282,6 +288,46 @@ export function useEmpresa() {
         }
     }, []);
 
+    // CRIAR SETOR
+    const criarSetor = useCallback(async (id_empresa, novoSetor) => {
+        setLoading((prev) => ({ ...prev, criarSetor: true }));
+        setError((prev) => ({ ...prev, criarSetor: null }));
+
+        try {
+            const data = await API_FETCH(`/empresas/${id_empresa}/setores`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(novoSetor),
+            });
+
+            if (!data.sucesso) {
+                if (data.erros_zod) {
+                    const nestedErrors = nestErrors(data.erros_zod);
+                    setError((prev) => ({ ...prev, criarSetor: { zod: nestedErrors } }));
+                } else {
+                    setError((prev) => ({ ...prev, criarSetor: { mensagem: data.mensagem } }));
+                }
+                return false;
+            }
+
+            // ADICIONA O SETOR COMPLETO (RETORNADO PELO SERVIDOR) À LISTA
+            setSetores((prev) => [...(prev || []), data.dados.setor]);
+            setMensagem((prev) => ({ ...prev, criarSetor: data.mensagem }));
+            return true;
+
+        } catch (err) {
+            if (err.message === 'Sessão expirada') return false;
+
+            setError((prev) => ({
+                ...prev,
+                criarSetor: { mensagem: 'Erro ao criar setor, tente novamente mais tarde.' }
+            }));
+            return false;
+        } finally {
+            setLoading((prev) => ({ ...prev, criarSetor: false }));
+        }
+    }, []);
+
     // OBTER MÁQUINAS
     const obterMaquinas = useCallback(async (id_empresa) => {
         setLoading((prev) => ({ ...prev, obterMaquinas: true }));
@@ -310,8 +356,6 @@ export function useEmpresa() {
             setLoading((prev) => ({ ...prev, obterMaquinas: false }));
         }
     }, []);
-
-    // useEmpresa.js (APENAS PARTE DE CHAMADOS CORRIGIDA)
 
     const obterChamados = useCallback(async (id_empresa, filtro = {}) => {
         setLoading((prev) => ({ ...prev, obterChamados: true }));
@@ -446,7 +490,7 @@ export function useEmpresa() {
             setLoading((prev) => ({ ...prev, obterInfosGerais: false }));
         }
     }, []);
-    
+
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     // ATUALIZAR EMPRESA (GERENTE PRINCIPAL)
@@ -521,6 +565,48 @@ export function useEmpresa() {
         }
     }, [])
 
+    const criarMembro = useCallback(async (id_empresa, novoMembro) => {
+        setLoading((prev) => ({ ...prev, criarMembro: true }));
+        setError((prev) => ({ ...prev, criarMembro: null }));
+
+        try {
+            const data = await API_FETCH(`/empresas/${id_empresa}/membros`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(novoMembro),
+            });
+
+            if (!data.sucesso) {
+                if (data.erros_zod) {
+                    const nestedErrors = nestErrors(data.erros_zod);
+                    setError((prev) => ({ ...prev, criarMembro: { zod: nestedErrors } }));
+                } else {
+                    setError((prev) => ({ ...prev, criarMembro: { mensagem: data.mensagem } }));
+                }
+                return false;
+            }
+
+            // RECARREGA A LISTA SE JÁ ESTAVA CARREGADA
+            if (membros !== null) {
+                await obterMembros(id_empresa);
+            }
+
+            setMensagem((prev) => ({ ...prev, criarMembro: data.mensagem }));
+            return true;
+
+        } catch (err) {
+            if (err.message === 'Sessão expirada') return false;
+
+            setError((prev) => ({
+                ...prev,
+                criarMembro: { mensagem: 'Erro ao criar técnico, tente novamente mais tarde.' }
+            }));
+            return false;
+        } finally {
+            setLoading((prev) => ({ ...prev, criarMembro: false }));
+        }
+    }, [membros, obterMembros]);
+
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
     return {
@@ -533,10 +619,12 @@ export function useEmpresa() {
         maquinas, obterMaquinas,
         chamados, obterChamados,
         criarEmpresa,
+        criarSetor,
         atualizarEmpresa,
         atualizarLogo,
         obterInfosGerais,
         editarChamado,
         excluirChamado,
+        criarMembro,
     };
 }

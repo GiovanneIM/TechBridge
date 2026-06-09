@@ -1,90 +1,134 @@
+'use client'
+
 import { useState } from "react"
+import { Plus, Mail, User } from "lucide-react"
+import { useEmpresa } from "@/hooks/useEmpresa"
+import { useAuth } from "@/context/AuthContext"
 
 import {
-    Mail,
-    Plus,
-    User
-} from "lucide-react"
-
-import {
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-    DialogFooter,
-    DialogClose,
-    Dialog,
+    Dialog, DialogContent, DialogHeader,
+    DialogTitle, DialogFooter, DialogClose,
 } from "@/components/ui/dialog"
+
 import { Button } from "@/components/ui/button"
-import {
-    Field,
-    FieldGroup,
-    FieldLabel
-} from "@/components/ui/field"
-import {
-    InputGroup,
-    InputGroupAddon,
-    InputGroupInput
-} from "@/components/ui/input-group"
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { InputGroup, InputGroupInput, InputGroupAddon } from "@/components/ui/input-group"
 
 export default function ModalNovoTecnico() {
-    const [isOpen, setIsOpen] = useState(false);
+    const { user } = useAuth()
+    const { criarMembro, loading } = useEmpresa()
 
+    const [isOpen, setIsOpen] = useState(false)
 
-    const [nome, setNome] = useState("")
-    const [email, setEmail] = useState("")
+    const [form, setForm] = useState({
+        nome: "",
+        email: "",
+        senha: "123456",
+        cod_usuario: "",
+        telefone: ""
+    })
 
+    function handleChange(field, value) {
+        setForm(prev => ({ ...prev, [field]: value }))
+    }
 
-    return (<>
-        <Button
-            onClick={() => setIsOpen(true)}
-            className="bg-techbridge text-md cursor-pointer"
-            size='lg'
-        >
-            <Plus className='inline' /> Novo tecnico
-        </Button>
+    async function handleSubmit() {
+        const payload = {
+            ...form,
+            tipo_usuario: 4,
+            telefone: form.telefone.replace(/\D/g, "") // 🔥 obrigatório
+        }
 
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogContent className="sm:max-w-sm">
-                <DialogHeader>
-                    <DialogTitle className="font-genty font-normal text-2xl">Registrar Técnico</DialogTitle>
-                </DialogHeader>
+        const ok = await criarMembro(user.id_empresa, payload)
 
-                <FieldGroup className='flex items-center gap-4'>
-                    <Field>
-                        <FieldLabel className="font-genty text-muted-foreground">Nome</FieldLabel>
-                        <InputGroup>
-                            <InputGroupInput placeholder="Nome"
-                                value={nome} onChange={(e) => { setNome(e.target.value) }}
-                            />
-                            <InputGroupAddon>
-                                <User />
-                            </InputGroupAddon>
-                        </InputGroup>
-                    </Field>
+        if (ok) {
+            setIsOpen(false)
+            setForm({
+                nome: "",
+                email: "",
+                senha: "123456",
+                cod_usuario: "",
+                telefone: ""
+            })
+        }
+    }
 
-                    <Field>
-                        <FieldLabel className="font-genty text-muted-foreground">E-mail</FieldLabel>
-                        <InputGroup>
-                            <InputGroupInput placeholder="E-mail para contato"
-                                value={email} onChange={(e) => { setEmail(e.target.value) }}
-                            />
-                            <InputGroupAddon>
-                                <Mail />
-                            </InputGroupAddon>
-                        </InputGroup>
-                    </Field>
-                </FieldGroup>
+    return (
+        <>
+            <Button onClick={() => setIsOpen(true)} className="bg-techbridge">
+                <Plus className="inline" /> Novo técnico
+            </Button>
 
-                <DialogFooter>
-                    <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button className="bg-techbridge">Registrar</Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogContent>
 
+                    <DialogHeader>
+                        <DialogTitle>Registrar Técnico</DialogTitle>
+                    </DialogHeader>
 
-    </>)
+                    <FieldGroup className="space-y-4">
+
+                        <Field>
+                            <FieldLabel>Nome</FieldLabel>
+                            <InputGroup>
+                                <InputGroupInput
+                                    value={form.nome}
+                                    onChange={(e) => handleChange("nome", e.target.value)}
+                                />
+                                <InputGroupAddon><User /></InputGroupAddon>
+                            </InputGroup>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>Email</FieldLabel>
+                            <InputGroup>
+                                <InputGroupInput
+                                    value={form.email}
+                                    onChange={(e) => handleChange("email", e.target.value)}
+                                />
+                                <InputGroupAddon><Mail /></InputGroupAddon>
+                            </InputGroup>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>Código</FieldLabel>
+                            <InputGroup>
+                                <InputGroupInput
+                                    value={form.cod_usuario}
+                                    onChange={(e) => handleChange("cod_usuario", e.target.value.toUpperCase())}
+                                />
+                            </InputGroup>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>Telefone</FieldLabel>
+                            <InputGroup>
+                                <InputGroupInput
+                                    value={form.telefone}
+                                    onChange={(e) => handleChange("telefone", e.target.value)}
+                                    placeholder="11999999999"
+                                />
+                            </InputGroup>
+                        </Field>
+
+                    </FieldGroup>
+
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button variant="outline">Cancelar</Button>
+                        </DialogClose>
+
+                        <Button
+                            onClick={handleSubmit}
+                            disabled={loading.criarMembro}
+                            className="bg-techbridge"
+                        >
+                            Registrar
+                        </Button>
+                    </DialogFooter>
+
+                </DialogContent>
+            </Dialog>
+        </>
+    )
 }

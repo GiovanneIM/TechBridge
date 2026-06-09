@@ -16,13 +16,13 @@ class SetoresController {
             return res.status(403).json({
                 sucesso: false,
                 erro: 'Permissão insuficiente',
-                mensagem: 'Você não pertence a esssa empresa'
+                mensagem: 'Você não pertence a essa empresa'
             });
         }
 
         try {
             // CÓDIGO EM USO NA EMPRESA
-            const setorCod = await SetoresModel.buscarCodigo(id_empresa, dados.codigo);
+            const setorCod = await SetoresModel.buscarCodigo(id_empresa, dados.cod_setor);
             if (setorCod) {
                 return res.status(409).json({
                     sucesso: false,
@@ -31,14 +31,17 @@ class SetoresController {
                 });
             }
 
-            // REGISTRAR A EMPRESA
+            // REGISTRAR O SETOR
             const resultado = await SetoresModel.criar(id_empresa, dados);
 
-            // SUCESSO: ENVIAR ID DO SETOR
+            // SUCESSO: ENVIAR SETOR COMPLETO
             res.status(201).json({
                 sucesso: true,
                 mensagem: `Setor registrado com sucesso - ID ${resultado.id_setor}`,
-                dados: resultado
+                dados: {
+                    id_setor: resultado.id_setor,
+                    setor: resultado.setor,
+                }
             });
 
         } catch (error) {
@@ -52,7 +55,6 @@ class SetoresController {
                 mensagem: 'Não foi possível registrar o setor na empresa'
             });
         }
-
     }
 
     // LISTAR SETORES DE UMA EMPRESA

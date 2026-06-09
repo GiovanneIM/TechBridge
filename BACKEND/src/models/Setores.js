@@ -10,8 +10,11 @@ class SetoresModel {
                 id_empresa
             });
 
-            // RETORNANDO O ID DA EMPRESA E DO SETOR
-            return { id_empresa, id_setor }
+            // BUSCAR O SETOR RECÉM-CRIADO PARA RETORNAR OS DADOS COMPLETOS
+            const setor = await SetoresModel.buscarCodigo(id_empresa, dados.cod_setor);
+
+            // RETORNANDO O ID DA EMPRESA, ID DO SETOR E O SETOR COMPLETO
+            return { id_empresa, id_setor, setor }
         } catch (error) {
             // ERRO
             console.error('Erro ao registrar setor:', error);
