@@ -7,35 +7,31 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-import HeaderPage from "../../Header/HeaderPage";
-
 import { ArrowRightCircle, Building2, Calendar, CheckCircle2, Cpu, Factory, MinusCircle, Pencil, Siren, User2, Warehouse } from "lucide-react";
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import ButtonNav from "@/components/Sidebar/btn/ButtonNav";
 import { useHeader } from "@/context/HeaderContext";
 
 export default function PageEmpresa() {
     const params = useParams();
     const id_empresa = params.id;
 
+    // OBTENDO EMPRESA
     const {
         loading, error,
         empresa, obterEmpresa,
         obterInfosGerais
     } = useEmpresa()
 
-    const [infosGerais, setInfosGerais] = useState(null)
-
     useEffect(() => {
         if (!empresa) obterEmpresa(id_empresa)
     }, [empresa, obterEmpresa])
+
+    // OBTENDO INFORMAÇÕES GERAIS
+    const [infosGerais, setInfosGerais] = useState(null)
 
     useEffect(() => {
         async function carregarInfos() {
@@ -48,12 +44,15 @@ export default function PageEmpresa() {
         }
     }, [empresa, infosGerais, obterInfosGerais])
 
+    
+
+    // CONTEÚDO
     let content;
 
-
+    // EMPRESA CARREGADA
     if (empresa) {
         content = (<>
-            <div className="w-full p-2 md:p-4 flex-1 flex flex-col gap-4">
+            <div className="w-full p-4 flex-1 flex flex-col gap-4">
                 <Card className="
                     w-full border p-4
                     flex justify-between flex-col 2xl:flex-row
@@ -825,50 +824,17 @@ export default function PageEmpresa() {
         </>)
     }
 
-    // return (
-    //     <div className="flex-1 flex flex-col">
-    //         {/* HEADER DA PÁGINA */}
-    //         <div className="z-50 sticky top-[61px]">
-    //             <HeaderPage
-    //                 icon={Factory}
-    //                 title={`Empresa (#${id_empresa}) - ${empresa?.nome_fantasia}`}
-    //             />
-    //         </div>
 
-    //         {/* CONTEÚDO */}
-    //         <div className="flex flex-1 flex-col md:flex-row">
-                
-    //             <div className="
-    //                 z-50 sticky top-[110px] bg-background
-    //                 h-fit md:h-[calc(100vh-110px)] 
-    //                 w-full md:w-fit
-    //                 flex flex-row md:flex-col
-    //                 justify-between md:justify-start
-    //                 border-e-0 border-b md:border-e md:border-b-0
-    //                 p-1 gap-1 
-    //             ">
-    //                 <ButtonNav icon={Factory} label={'Empresa'} href={`/admin/empresas/${id_empresa}`} />
-    //                 <ButtonNav icon={User2} label={'Membros'} href={`/admin/empresas/${id_empresa}/membros`} />
-    //                 <ButtonNav icon={Warehouse} label={'Setores'} href={`/admin/empresas/${id_empresa}/setores`} />
-    //                 <ButtonNav icon={Cpu} label={'Máquina'} href={`/admin/empresas/${id_empresa}/maquinas`} />
-    //                 <ButtonNav icon={Siren} label={'Chamados'} href={`/admin/empresas/${id_empresa}/chamados`} />
-    //             </div>
 
-    //             <div className="flex-1 flex">
-    //                 {content}
-    //             </div>
-    //         </div>
-    //     </div>
-    // );
-
+    // HEADER
     const { setHeader } = useHeader();
 
     useEffect(() => {
         setHeader({
             icon: Factory,
-            title: `Empresa (#${id_empresa}) - ${empresa?.nome_fantasia}`
+            title: `[#${id_empresa}] ${empresa?.nome_fantasia} - Dados`
         });
-    }, [setHeader]);
+    }, [setHeader, empresa]);
 
     return content;
 }

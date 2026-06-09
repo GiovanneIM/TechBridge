@@ -1,14 +1,12 @@
 'use client'
 
-import { Cpu, Factory, Siren, User2, Warehouse } from "lucide-react";
-import HeaderPage from "../../Header/HeaderPage";
+import { User2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useEmpresa } from "@/hooks/useEmpresa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
     Pagination,
     PaginationContent,
@@ -19,10 +17,9 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination"
 import Image from "next/image";
-import CardEmpresas from "@/components/Cards/CardEmpresa/page";
 import { useParams } from "next/navigation";
 import { CardUsuario } from "@/components/Cards/CardUsuario/page";
-import ButtonNav from "@/components/Sidebar/btn/ButtonNav";
+import { useHeader } from "@/context/HeaderContext";
 
 export default function PageMembros() {
     const params = useParams();
@@ -118,7 +115,12 @@ export default function PageMembros() {
         setFiltro((prev) => ({ ...prev, page }))
     }
 
-    let content = (
+
+
+    // CONTEÚDO
+    let content;
+
+    content = (
         <div className="p-4 flex-1 flex flex-col gap-4">
             {/* FILTRO */}
             <Field
@@ -341,39 +343,17 @@ export default function PageMembros() {
         </div>
     )
 
-    return (
-        <div className="flex-1 flex flex-col">
-            {/* HEADER DA PÁGINA */}
-            <div className="z-50 sticky top-[61px]">
-                <HeaderPage
-                    icon={User2}
-                    title={`Procurar Usuário (#${id_empresa}) - ${empresa?.nome_fantasia}`}
-                />
-            </div>
 
-            {/* CONTEÚDO */}
-            <div className="flex flex-1 flex-col md:flex-row">
 
-                <div className="
-                    z-50 sticky top-[110px] bg-background
-                    h-fit md:h-[calc(100vh-110px)] 
-                    w-full md:w-fit
-                    flex flex-row md:flex-col
-                    justify-between md:justify-start
-                    border-e-0 border-b md:border-e md:border-b-0
-                    p-1 gap-1 
-                ">
-                    <ButtonNav icon={Factory} label={'Empresa'} href={`/admin/empresas/${id_empresa}`} />
-                    <ButtonNav icon={User2} label={'Membros'} href={`/admin/empresas/${id_empresa}/membros`} />
-                    <ButtonNav icon={Warehouse} label={'Setores'} href={`/admin/empresas/${id_empresa}/setores`} />
-                    <ButtonNav icon={Cpu} label={'Máquina'} href={`/admin/empresas/${id_empresa}/maquinas`} />
-                    <ButtonNav icon={Siren} label={'Chamados'} href={`/admin/empresas/${id_empresa}/chamados`} />
-                </div>
+    // HEADER
+    const { setHeader } = useHeader();
 
-                <div className="flex-1 flex">
-                    {content}
-                </div>
-            </div>
-        </div>
-    );
+    useEffect(() => {
+        setHeader({
+            icon: User2,
+            title: `[#${id_empresa}] ${empresa?.nome_fantasia} - Procurar Usuário`
+        });
+    }, [setHeader, empresa]);
+
+    return content;
 }

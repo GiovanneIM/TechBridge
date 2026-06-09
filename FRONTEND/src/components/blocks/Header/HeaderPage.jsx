@@ -9,16 +9,13 @@ export default function HeaderPage({
     return (<>
         <div
             className="
-						flex h-12 shrink-0 items-center gap-2  
-						transition-[width,height] ease-linear 
-						group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 bg-sidebar
+						flex h-[46px] shrink-0 items-center gap-2  
+						transition-[width,height] ease-linear bg-sidebar border-b
 					"
         >
             <div className="w-full flex items-center justify-between gap-3 px-3">
                 <div className='flex gap-4'>
                     <Icon size={24}/>
-
-                    {/* <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-6" /> */}
 
                     <h1 className="text-base font-genty">{title}</h1>
                 </div>
@@ -40,7 +37,5 @@ export default function HeaderPage({
                 </div>
             </div>
         </div>
-
-        <Separator/>
     </>)
 }

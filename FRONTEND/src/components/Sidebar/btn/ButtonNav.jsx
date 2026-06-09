@@ -11,13 +11,9 @@ export default function ButtonNav({ icon: Icon, label, href }) {
             variant="ghost"
             asChild
             className={`
-                w-fit h-10 gap-2 px-3 text-md
-                flex items-center justify-start 
-                
-                group-data-[collapsible=icon]:gap-0
-                group-data-[collapsible=icon]:px-3
-                group-data-[collapsible=icon]:aspect-square
-                
+                flex-1 md:flex-initial h-12 md:w-12 gap-2 px-3 text-md
+                md:border-b rounded-none
+                flex items-center justify-center 
 
                 ${pathname.endsWith(href) && "bg-techbridge font-semibold text-white"}
             `}

@@ -1,4 +1,6 @@
 // URL base da API
+// PC DO ARTHUT -> localhost
+// OUTROS -> 10.84.7.5
 // export const API_URL = 'http://localhost:3000/techbridge';
 export const API_URL = 'https://techbridge-api.up.railway.app/techbridge';
 // export const API_URL = 'https://symmetrical-cod-44x7vxqjg67fjqvp-3000.app.github.dev/techbridge';
@@ -64,6 +66,52 @@ async function API_FETCH(ENDPOINT, options = {}) {
     console.log('- - - - - - - - - - - - -');
 
     // RETORNAR A RESPOSTA
+    return data;
+}
+
+
+
+// Função para padronizar as requisições à API (Sempre envia os cookies)
+export async function apiFetch(endpoint, options = {}) {
+    const token = sessionStorage.getItem('token');
+
+    const { ignoreAuthError, ...fetchOptions } = options;
+
+    const response = await fetch(API_URL + endpoint, {
+        ...fetchOptions,
+        credentials: 'include',
+        headers: {
+            'authorization': `bearer ${token}`,
+            'Content-Type': 'application/json',
+            ...fetchOptions.headers
+        },
+    });
+
+    let data;
+
+    try {
+        data = await response.json();
+    } catch {
+        data = null;
+    }
+
+
+    // Sessão expirada
+    if (response.status === 401 && !ignoreAuthError) {
+        if (typeof window !== "undefined") {
+            window.dispatchEvent(new Event('sessionExpired'));
+        }
+        throw new Error('Sessão expirada');
+    }
+
+
+    // Outros erros HTTP
+    // if (!response.ok) {
+    //     const message = await response.text();
+    //     throw new Error(message || 'Erro na requisição');
+    // }
+
+
     return data;
 }
 
