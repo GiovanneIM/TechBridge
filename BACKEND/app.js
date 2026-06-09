@@ -48,6 +48,7 @@ app.use(
 app.use(cors({
     origin: [
         'http://localhost:3001',
+        'https://symmetrical-cod-44x7vxqjg67fjqvp-3001.app.github.dev'
     ],                                 // Permitindo acesso do Frontend
     credentials: true,                                               // Permitindo receber cookies do navegador
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],   // Metódos permitidos

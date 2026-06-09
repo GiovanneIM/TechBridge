@@ -21,8 +21,9 @@ const swaggerOptions = {
 
 		servers: [
 			{
-				url: `http://localhost:${PORT}/techbridge`
+				// url: `http://localhost:${PORT}/techbridge`
 				// url: "https://techbridge-api.up.railway.app/techbridge"
+				url: "https://symmetrical-cod-44x7vxqjg67fjqvp-3000.app.github.dev/techbridge"
 			}
 		],
 
