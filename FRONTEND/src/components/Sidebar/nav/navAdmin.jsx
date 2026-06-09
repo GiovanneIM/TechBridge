@@ -6,6 +6,7 @@ import {
     SquarePlus,
     MessageCircle,
     Search,
+    Factory,
 } from "lucide-react";
 import ItemSidebar from "../items/itemSidebar";
 import ItemColapsavel from "../items/ItemColapsavel";
@@ -15,7 +16,7 @@ export default function SidebarNavAdmin() {
     return (<>
         <ItemSidebar icon={Grid2X2} label={"Dashboard"} href={"/admin/dashboard"} />
 
-        <ItemColapsavel icon={Warehouse} label={"Clientes"} lista={listaClientes} />
+        <ItemColapsavel icon={Factory} label={"Clientes"} lista={listaClientes} />
     </>);
 }
 

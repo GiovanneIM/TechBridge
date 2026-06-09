@@ -9,7 +9,7 @@ import { ptBR } from "date-fns/locale";
 
 import HeaderPage from "../../Header/HeaderPage";
 
-import { ArrowRightCircle, Building2, Calendar, CheckCircle2, Cpu, MinusCircle, Pencil, Siren, User2, Warehouse } from "lucide-react";
+import { ArrowRightCircle, Building2, Calendar, CheckCircle2, Cpu, Factory, MinusCircle, Pencil, Siren, User2, Warehouse } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
@@ -18,6 +18,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import ButtonNav from "@/components/Sidebar/btn/ButtonNav";
 
 export default function PageEmpresa() {
     const params = useParams();
@@ -51,7 +52,7 @@ export default function PageEmpresa() {
 
     if (empresa) {
         content = (<>
-            <div className="p-4 flex-1 flex flex-col gap-4">
+            <div className="w-full p-2 md:p-4 flex-1 flex flex-col gap-4">
                 <Card className="
                     w-full border p-4
                     flex justify-between flex-col 2xl:flex-row
@@ -64,7 +65,7 @@ export default function PageEmpresa() {
                                 Status
                             </p>
 
-                            <div className="flex items-center gap-2 font-semibold break-words">
+                            <div className="flex flex-wrap items-center gap-2 font-semibold">
                                 {empresa.status
                                     ? (<p className="text-green-700">Ativa</p>)
                                     : (<p className="text-red-700">Inativa</p>)
@@ -98,18 +99,18 @@ export default function PageEmpresa() {
                     </div>
 
                     <div className="
-                        flex justify-between gap-3 items-center
+                        flex flex-wrap justify-between gap-3 items-center
                         rounded-xl border bg-muted/30 p-3
                     ">
-                        <Button className="bg-techbridge hover:bg-techbridge/85 w-42 sm:w-50" asChild>
+                        <Button className="bg-techbridge hover:bg-techbridge/85 w-full sm:w-50" asChild>
                             <Link href={`http://localhost:3001/admin/empresas/${empresa.id}/editar`}>
                                 <Pencil /> Editar empresa
                             </Link>
                         </Button>
 
                         {empresa.status
-                            ? (<Button className="bg-green-700 hover:bg-green-600 w-42 sm:w-50"><CheckCircle2 /> Reativar empresa</Button>)
-                            : (<Button className="bg-red-700 hover:bg-red-600 w-42 sm:w-50"><MinusCircle /> Desativar empresa</Button>)
+                            ? (<Button className="bg-green-700 hover:bg-green-600 w-full sm:w-50"><CheckCircle2 /> Reativar empresa</Button>)
+                            : (<Button className="bg-red-700 hover:bg-red-600 w-full sm:w-50"><MinusCircle /> Desativar empresa</Button>)
                         }
                     </div>
                 </Card>
@@ -826,13 +827,36 @@ export default function PageEmpresa() {
     return (
         <div className="flex-1 flex flex-col">
             {/* HEADER DA PÁGINA */}
-            <HeaderPage
-                icon={Warehouse}
-                title="Empresa"
-            />
+            <div className="z-50 sticky top-[61px]">
+                <HeaderPage
+                    icon={Factory}
+                    title={`Empresa (#${id_empresa}) - ${empresa?.nome_fantasia}`}
+                />
+            </div>
 
             {/* CONTEÚDO */}
-            {content}
+            <div className="flex flex-1 flex-col md:flex-row">
+                
+                <div className="
+                    z-50 sticky top-[110px] bg-background
+                    h-fit md:h-[calc(100vh-110px)] 
+                    w-full md:w-fit
+                    flex flex-row md:flex-col
+                    justify-between md:justify-start
+                    border-e-0 border-b md:border-e md:border-b-0
+                    p-1 gap-1 
+                ">
+                    <ButtonNav icon={Factory} label={'Empresa'} href={`/admin/empresas/${id_empresa}`} />
+                    <ButtonNav icon={User2} label={'Membros'} href={`/admin/empresas/${id_empresa}/membros`} />
+                    <ButtonNav icon={Warehouse} label={'Setores'} href={`/admin/empresas/${id_empresa}/setores`} />
+                    <ButtonNav icon={Cpu} label={'Máquina'} href={`/admin/empresas/${id_empresa}/maquinas`} />
+                    <ButtonNav icon={Siren} label={'Chamados'} href={`/admin/empresas/${id_empresa}/chamados`} />
+                </div>
+
+                <div className="flex-1 flex">
+                    {content}
+                </div>
+            </div>
         </div>
     );
 }

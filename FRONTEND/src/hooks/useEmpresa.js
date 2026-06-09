@@ -205,7 +205,7 @@ export function useEmpresa() {
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterMembros: data.mensagem }))
             } else {
-                setMembros(data.dados.lista || data.dados)
+                setMembros(data.dados)
             }
         } catch (err) {
             if (err.message === 'Sessão expirada') return;

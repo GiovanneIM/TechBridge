@@ -14,16 +14,16 @@ export default function HeaderPage({
 						group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 bg-sidebar
 					"
         >
-            <div className="w-full flex items-center justify-between gap-3 px-4 lg:px-6">
-                <div className='flex gap-1 lg:gap-2'>
-                    <Icon/>
+            <div className="w-full flex items-center justify-between gap-3 px-3">
+                <div className='flex gap-4'>
+                    <Icon size={24}/>
 
-                    <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-6" />
+                    {/* <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-6" /> */}
 
                     <h1 className="text-base font-genty">{title}</h1>
                 </div>
 
-                {/* Botão para buscar os chamados novamente */}
+                {/* Botão */}
                 <div className="flex items-center gap-2">
                     {actions && actions.map((ac, i) => (
                         <Button
