@@ -131,10 +131,6 @@ class ChamadosModel {
             throw error;
         }
     }
-
-    static async excluir(id) {
-        return await deleteRecord("chamados", { id });
-    }
 }
 
 export default ChamadosModel;

@@ -1,52 +1,37 @@
 import express from 'express';
-import { authMiddleware, adminMiddleware } from '../middlewares/authMiddleware.js';
+import { adminMiddleware, authMiddleware } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-// =========================
-// ROTAS PRINCIPAIS
-// =========================
+// IMPORTAR AS ROTAS
 import criptografiaRotas from './criptografia/rotasCripto.js';
 import authRotas from './rotasAuth.js';
-import adminRotas from './rotasAdmin.js';
+import adminRotas from './rotasAdmin.js'
 import empresasRotas from './rotasEmpresas.js';
+
 import chamadosRotas from './rotasChamados.js';
 
-// =========================
-// ROTAS AUXILIARES / TESTE
-// =========================
-import testeRotas from './rotas_consertar/rotasTeste.js';
+import testeRotas from './rotas_consertar/rotasTeste.js'
+
+// ROTAS PARA CONSERTAR
+
 import userRotas from './rotas_consertar/rotasUser.js';
 import chamadosRotas2 from './rotas_consertar/rotasChamados.js';
 import painelRotas from './rotas_consertar/rotasPainel.js';
 
-// =========================
-// ATIVAÇÃO DAS ROTAS
-// =========================
-
-// AUTENTICAÇÃO
-router.use('/auth', authRotas);
-
-// CRIPTOGRAFIA
+// ATIVAR AS ROTAS
 router.use('/criptografia', criptografiaRotas);
-
-// ADMIN (protegido)
+router.use('/auth', authRotas);
 router.use('/admin', authMiddleware, adminMiddleware, adminRotas);
 
-// EMPRESAS (protegido)
+// ROTAS PARA FINALIZAR
 router.use('/empresas', authMiddleware, empresasRotas);
-
-// CHAMADOS (PRODUÇÃO)
 router.use('/chamados', authMiddleware, chamadosRotas);
 
-// =========================
 // ROTAS DE TESTE
-// =========================
 router.use('/teste', testeRotas);
 
-// =========================
-// ROTAS EM CONSERTO (DEV)
-// =========================
+// ROTAS PARA CONSERTAR
 router.use('/user', userRotas);
 router.use('/chamados2', chamadosRotas2);
 router.use('/painel', painelRotas);
