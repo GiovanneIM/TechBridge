@@ -717,5 +717,11 @@ router.delete(
     ChamadosController.excluir
 );
 
+// CORREÇÃO: Removido o '/empresas' do início e adicionado proteção
+router.delete(
+    '/:id_empresa/maquinas/:id_maquina', 
+    gerenteMiddleware, 
+    MaquinaController.deletar
+);
 
 export default router;

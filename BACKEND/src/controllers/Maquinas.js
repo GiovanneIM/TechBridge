@@ -5,27 +5,21 @@ import { pertenceAEmpresa } from "../utils/validacoes.js";
 class MaquinaController {
     // REGISTRAR UMA NOVA MÁQUINA
     static async criar(req, res) {
-        // OBTER O ID DA EMPRESA E CÓDIGO DO SETOR
         const { id_empresa, cod_setor } = req.params;
-
-        // OBTER DADOS DA MÁQUINA
         const dados = req.body;
 
-        // VERIFICANDO SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
         if (!acesso) {
             return res.status(403).json({
                 sucesso: false,
                 erro: 'Permissão insuficiente',
-                mensagem: 'Você não pertence a esssa empresa'
+                mensagem: 'Você não pertence a essa empresa'
             });
         }
 
         try {
-            // PROCURAR PELO SETOR PARA OBTER O ID
             const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor);
 
-            // SETOR NAO ENCONTRADO
             if (!setor) {
                 return res.status(404).json({
                     sucesso: false,
@@ -34,10 +28,8 @@ class MaquinaController {
                 });
             }
 
-            // REGISTRAR A MÁQUINA
             const resultado = await MaquinasModel.criar(setor.id, dados);
 
-            // SUCESSO: ENVIAR ID DA MAQUINA
             res.status(201).json({
                 sucesso: true,
                 mensagem: `Máquina registrada com sucesso - ID ${resultado.id_setor}`,
@@ -45,25 +37,19 @@ class MaquinaController {
             });
 
         } catch (error) {
-            // ERROS:
             console.error('Erro ao registrar uma máquina:', error);
-
-            // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
                 mensagem: 'Não foi possível registrar a máquina na empresa'
             });
         }
-
     }
 
     // LISTAR MAQUINAS DE UMA EMPRESA
     static async listarDaEmpresa(req, res) {
-        // OBTER O ID DA EMPRESA
         const { id_empresa } = req.params;
 
-        // VERIFICANDO SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
         if (!acesso) {
             return res.status(403).json({
@@ -73,21 +59,14 @@ class MaquinaController {
         }
 
         try {
-            // REQUISIÇÃO
             const maquinas = await MaquinasModel.listarDaEmpresa(id_empresa);
-
-            // SUCESSO: ENVIAR MÁQUINAS
             return res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Máquinas listadas com sucesso`,
                 dados: { maquinas },
             });
-        }
-        catch (error) {
-            // ERROS:
+        } catch (error) {
             console.error('Erro ao obter as máquinas da empresa:', error);
-
-            // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
@@ -98,10 +77,8 @@ class MaquinaController {
 
     // LISTAR MAQUINAS DE UM SETOR
     static async listarDoSetor(req, res) {
-        // OBTER O ID DA EMPRESA E CÓDIGO DO SETOR
         const { id_empresa, cod_setor } = req.params;
 
-        // VERIFICANDO SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
         if (!acesso) {
             return res.status(403).json({
@@ -111,10 +88,8 @@ class MaquinaController {
         }
 
         try {
-            // PROCURAR PELO SETOR PARA OBTER O ID
             const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor);
 
-            // SETOR NAO ENCONTRADO
             if (!setor) {
                 return res.status(404).json({
                     sucesso: false,
@@ -123,21 +98,15 @@ class MaquinaController {
                 });
             }
 
-            // REQUISIÇÃO
             const maquinas = await MaquinasModel.listarDoSetor(setor.id);
 
-            // SUCESSO: ENVIAR MÁQUINAS
             return res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Máquinas listadas com sucesso`,
                 dados: { maquinas },
             });
-        }
-        catch (error) {
-            // ERROS:
+        } catch (error) {
             console.error('Erro ao obter as máquinas da empresa:', error);
-
-            // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
@@ -148,10 +117,8 @@ class MaquinaController {
 
     // OBTER UMA MÁQUINA DA EMPRESA
     static async obter(req, res) {
-        // OBTER O ID DA EMPRESA, CÓDIGO DO SETOR E CÓDIGO DA MÁQUINA
         const { id_empresa, cod_setor, cod_maquina } = req.params;
 
-        // VERIFICANDO SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
         if (!acesso) {
             return res.status(403).json({
@@ -161,10 +128,8 @@ class MaquinaController {
         }
 
         try {
-            // PROCURAR PELO SETOR PARA OBTER O ID
             const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor);
 
-            // SETOR NAO ENCONTRADO
             if (!setor) {
                 return res.status(404).json({
                     sucesso: false,
@@ -173,21 +138,15 @@ class MaquinaController {
                 });
             }
 
-            // REQUISIÇÃO
             const maquina = await MaquinasModel.buscarCodigo(setor.id, cod_maquina);
 
-            // SUCESSO: ENVIAR MÁQUINAS
             return res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Máquina listada com sucesso`,
                 dados: { maquina },
             });
-        }
-        catch (error) {
-            // ERROS:
+        } catch (error) {
             console.error('Erro ao obter a máquina da empresa:', error);
-
-            // ERRO DO SERVIDOR
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
@@ -198,6 +157,36 @@ class MaquinaController {
 
     // ATUALIZAR UMA MÁQUINA
     static async atualizar(req, res) { }
+
+    // DELETAR UMA MÁQUINA (Adicionado)
+    static async deletar(req, res) {
+        const { id_empresa, id_maquina } = req.params;
+
+        const acesso = pertenceAEmpresa(req, id_empresa);
+        if (!acesso) {
+            return res.status(403).json({
+                sucesso: false,
+                mensagem: 'Você não tem acesso a essa rota'
+            });
+        }
+
+        try {
+            // Assumindo que seu MaquinasModel possui o método deletar/excluir por ID
+            await MaquinasModel.deletar(id_maquina); 
+
+            return res.status(200).json({
+                sucesso: true,
+                mensagem: 'Máquina deletada com sucesso do banco de dados'
+            });
+        } catch (error) {
+            console.error('Erro ao deletar máquina:', error);
+            return res.status(500).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Não foi possível deletar a máquina'
+            });
+        }
+    }
 }
 
 export default MaquinaController;

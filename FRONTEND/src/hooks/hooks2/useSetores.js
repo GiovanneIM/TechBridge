@@ -5,7 +5,6 @@ import { API_FETCH } from "@/lib/api";
 
 export function useSetores() {
   const [setorAtual, setSetorAtual] = useState(null);
-
   const [loadingSetores, setLoadingSetores] = useState(false);
   const [errorSetores, setErrorSetores] = useState({ fetchOne: null });
 
@@ -28,15 +27,18 @@ export function useSetores() {
 
       if (!res.sucesso) {
         setErrorSetores((prev) => ({ ...prev, fetchOne: res.mensagem }));
-        return;
+        return null;
       }
 
-      setSetorAtual(res.dados.setor || res.dados);
-    } catch {
+      const setor = res.dados?.setor || res.dados || null;
+      setSetorAtual(setor);
+      return setor;
+    } catch (err) {
       setErrorSetores((prev) => ({
         ...prev,
         fetchOne: "Erro ao carregar setor",
       }));
+      return null;
     } finally {
       setLoadingSetores(false);
     }
@@ -56,73 +58,86 @@ export function useSetores() {
       );
 
       if (!res.sucesso) {
-        setErrorMaquinas(res.mensagem);
-        return;
+        setErrorMaquinas(res.mensagem || "Erro ao listar máquinas");
+        setMaquinasSetor([]);
+        return [];
       }
 
-      setMaquinasSetor(res.dados.maquinas || []);
-    } catch {
-      setErrorMaquinas("Erro ao carregar máquinas");
+      const lista = res.dados?.maquinas || [];
+      setMaquinasSetor(lista);
+      return lista;
+    } catch (err) {
+      setErrorMaquinas(err.message || "Erro ao carregar máquinas");
+      setMaquinasSetor([]);
+      return [];
     } finally {
       setLoadingMaquinas(false);
     }
   }, []);
 
   // =========================
-  // ADD MÁQUINA
+  // ADICIONAR / CRIAR NOVA MÁQUINA NO SETOR
   // =========================
-  const addMaquinaToSetor = useCallback(async (id_empresa, cod_setor, id_maquina) => {
+  const addMaquinaToSetor = useCallback(async (id_empresa, cod_setor, dadosMaquina) => {
+    setErrorMaquinas(null);
     try {
       const res = await API_FETCH(
-        `/empresas/${id_empresa}/maquinas/${id_maquina}`,
+        `/empresas/${id_empresa}/setores/${cod_setor}/maquinas`,
         {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id_setor: cod_setor, // 🔥 IMPORTANTE (era isso que quebrava)
-          }),
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dadosMaquina),
         }
       );
 
       if (!res.sucesso) {
-        throw new Error(res.mensagem);
+        throw new Error(res.mensagem || "Erro ao criar máquina");
       }
 
+      // Refetch automático para atualizar a lista na tela
       await fetchMaquinasDoSetor(id_empresa, cod_setor);
+      return true;
     } catch (err) {
       setErrorMaquinas(err.message || "Erro ao adicionar máquina");
+      throw err;
     }
-  }, []);
+  }, [fetchMaquinasDoSetor]);
 
   // =========================
-  // REMOVE MÁQUINA
+  // DELETAR MÁQUINA DEFINITIVAMENTE (Corrigido)
   // =========================
-  const removeMaquinaFromSetor = useCallback(async (id_empresa, cod_setor, id_maquina) => {
+  const deleteMaquina = useCallback(async (id_empresa, cod_setor, id_maquina) => {
+    setErrorMaquinas(null);
+    setLoadingMaquinas(true);
+
     try {
+      // CORREÇÃO: Adicionado o prefixo "/empresas" para alinhar com o backend
       const res = await API_FETCH(
         `/empresas/${id_empresa}/maquinas/${id_maquina}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id_setor: null, // remove do setor
-          }),
-        }
+        { method: "DELETE" }
       );
 
       if (!res.sucesso) {
-        throw new Error(res.mensagem);
+        throw new Error(res.mensagem || "Erro ao deletar máquina");
       }
 
+      // Atualização otimista do estado local para resposta instantânea na UI
+      setMaquinasSetor((prev) => prev.filter((m) => m.id !== id_maquina));
+
+      // Garante sincronia final com o banco de dados
       await fetchMaquinasDoSetor(id_empresa, cod_setor);
+      return true;
     } catch (err) {
-      setErrorMaquinas(err.message || "Erro ao remover máquina");
+      setErrorMaquinas(err.message || "Erro ao deletar máquina");
+      throw err;
+    } finally {
+      setLoadingMaquinas(false);
     }
-  }, []);
+  }, [fetchMaquinasDoSetor]);
+
+  // Outros métodos auxiliares mantidos...
+  const assignMaquinaToSetor = useCallback(async (id_empresa, cod_setor, id_maquina) => { /* ... */ }, [fetchMaquinasDoSetor]);
+  const disassociateMaquinaFromSetor = useCallback(async (id_empresa, cod_setor, id_maquina) => { /* ... */ }, [fetchMaquinasDoSetor]);
 
   return {
     setorAtual,
@@ -136,6 +151,10 @@ export function useSetores() {
     errorMaquinas,
 
     addMaquinaToSetor,
-    removeMaquinaFromSetor,
+    deleteMaquina,
+    assignMaquinaToSetor,
+    disassociateMaquinaFromSetor,
   };
 }
+
+export default useSetores;

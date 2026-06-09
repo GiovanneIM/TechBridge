@@ -81,13 +81,33 @@ class MaquinasModel {
         try {
             // FAZER A CONSULTA
             const setor = await read("maquinas", {
-                where: { id:id_maquina }
+                where: { id: id_maquina }
             })
 
             // RETORNANDO O SETOR
             return setor[0] || null
         } catch (error) {
             console.error('Erro ao buscar maquina por id:', error);
+            throw error;
+        }
+    }
+
+    // DELETAR MÁQUINA POR ID (Com limpeza de chamados)
+    static async deletar(id_maquina) {
+        try {
+            // 1. Apaga primeiro todos os chamados que apontam para essa máquina
+            await deleteRecord("chamados", {
+                id_maquina: id_maquina
+            });
+
+            // 2. Agora que a máquina está "livre", podemos apagá-la
+            const resultado = await deleteRecord("maquinas", {
+                id: id_maquina
+            });
+
+            return resultado;
+        } catch (error) {
+            console.error('Erro ao deletar máquina e seus chamados:', error);
             throw error;
         }
     }
