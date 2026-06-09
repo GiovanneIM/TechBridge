@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ButtonNav from "@/components/Sidebar/btn/ButtonNav";
+import { useHeader } from "@/context/HeaderContext";
 
 export default function PageEmpresa() {
     const params = useParams();
@@ -824,39 +825,50 @@ export default function PageEmpresa() {
         </>)
     }
 
-    return (
-        <div className="flex-1 flex flex-col">
-            {/* HEADER DA PÁGINA */}
-            <div className="z-50 sticky top-[61px]">
-                <HeaderPage
-                    icon={Factory}
-                    title={`Empresa (#${id_empresa}) - ${empresa?.nome_fantasia}`}
-                />
-            </div>
+    // return (
+    //     <div className="flex-1 flex flex-col">
+    //         {/* HEADER DA PÁGINA */}
+    //         <div className="z-50 sticky top-[61px]">
+    //             <HeaderPage
+    //                 icon={Factory}
+    //                 title={`Empresa (#${id_empresa}) - ${empresa?.nome_fantasia}`}
+    //             />
+    //         </div>
 
-            {/* CONTEÚDO */}
-            <div className="flex flex-1 flex-col md:flex-row">
+    //         {/* CONTEÚDO */}
+    //         <div className="flex flex-1 flex-col md:flex-row">
                 
-                <div className="
-                    z-50 sticky top-[110px] bg-background
-                    h-fit md:h-[calc(100vh-110px)] 
-                    w-full md:w-fit
-                    flex flex-row md:flex-col
-                    justify-between md:justify-start
-                    border-e-0 border-b md:border-e md:border-b-0
-                    p-1 gap-1 
-                ">
-                    <ButtonNav icon={Factory} label={'Empresa'} href={`/admin/empresas/${id_empresa}`} />
-                    <ButtonNav icon={User2} label={'Membros'} href={`/admin/empresas/${id_empresa}/membros`} />
-                    <ButtonNav icon={Warehouse} label={'Setores'} href={`/admin/empresas/${id_empresa}/setores`} />
-                    <ButtonNav icon={Cpu} label={'Máquina'} href={`/admin/empresas/${id_empresa}/maquinas`} />
-                    <ButtonNav icon={Siren} label={'Chamados'} href={`/admin/empresas/${id_empresa}/chamados`} />
-                </div>
+    //             <div className="
+    //                 z-50 sticky top-[110px] bg-background
+    //                 h-fit md:h-[calc(100vh-110px)] 
+    //                 w-full md:w-fit
+    //                 flex flex-row md:flex-col
+    //                 justify-between md:justify-start
+    //                 border-e-0 border-b md:border-e md:border-b-0
+    //                 p-1 gap-1 
+    //             ">
+    //                 <ButtonNav icon={Factory} label={'Empresa'} href={`/admin/empresas/${id_empresa}`} />
+    //                 <ButtonNav icon={User2} label={'Membros'} href={`/admin/empresas/${id_empresa}/membros`} />
+    //                 <ButtonNav icon={Warehouse} label={'Setores'} href={`/admin/empresas/${id_empresa}/setores`} />
+    //                 <ButtonNav icon={Cpu} label={'Máquina'} href={`/admin/empresas/${id_empresa}/maquinas`} />
+    //                 <ButtonNav icon={Siren} label={'Chamados'} href={`/admin/empresas/${id_empresa}/chamados`} />
+    //             </div>
 
-                <div className="flex-1 flex">
-                    {content}
-                </div>
-            </div>
-        </div>
-    );
+    //             <div className="flex-1 flex">
+    //                 {content}
+    //             </div>
+    //         </div>
+    //     </div>
+    // );
+
+    const { setHeader } = useHeader();
+
+    useEffect(() => {
+        setHeader({
+            icon: Factory,
+            title: `Empresa (#${id_empresa}) - ${empresa?.nome_fantasia}`
+        });
+    }, [setHeader]);
+
+    return content;
 }
