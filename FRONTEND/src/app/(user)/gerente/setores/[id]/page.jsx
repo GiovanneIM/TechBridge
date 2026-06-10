@@ -125,7 +125,7 @@ export default function PageSetorId() {
       const payload = {
         nome: novaMaquinaNome.trim(),
         cod_maquina: novaMaquinaCodigo ? novaMaquinaCodigo.trim() : undefined,
-        descricao: "", 
+        descricao: `${novaMaquinaNome.trim()} do setor ${setorAtual.id}`,  // ← automático
       };
 
       await addMaquinaToSetor(user.id_empresa, setorAtual.cod_setor, payload);

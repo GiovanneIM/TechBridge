@@ -4,7 +4,7 @@ import { cod_maquina, descricao, nome } from '../../dados/maquina.js';
 // ESQUEMA DE CRIAÇÃO DE MÁQUINA
 export const createMaquinaSchema = z.object({
     nome: nome,
-    cod_setor: cod_maquina,
+    cod_maquina: cod_maquina,
     descricao: descricao
 })
     .strict()

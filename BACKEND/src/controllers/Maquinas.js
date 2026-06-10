@@ -156,7 +156,50 @@ class MaquinaController {
     }
 
     // ATUALIZAR UMA MÁQUINA
-    static async atualizar(req, res) { }
+    static async atualizar(req, res) {
+        const { id_empresa, cod_setor, cod_maquina } = req.params;
+        const dados = req.body;
+
+        const acesso = pertenceAEmpresa(req, id_empresa);
+        if (!acesso) {
+            return res.status(403).json({
+                sucesso: false,
+                mensagem: 'Você não tem acesso a essa rota'
+            });
+        }
+
+        try {
+            const setor = await SetoresModel.buscarCodigo(id_empresa, cod_setor);
+            if (!setor) {
+                return res.status(404).json({
+                    sucesso: false,
+                    mensagem: 'Setor não encontrado'
+                });
+            }
+
+            const maquina = await MaquinasModel.buscarCodigo(setor.id, cod_maquina);
+            if (!maquina) {
+                return res.status(404).json({
+                    sucesso: false,
+                    mensagem: 'Máquina não encontrada'
+                });
+            }
+
+            await MaquinasModel.atualizar(maquina.id, dados);
+
+            return res.status(200).json({
+                sucesso: true,
+                mensagem: 'Máquina atualizada com sucesso'
+            });
+
+        } catch (error) {
+            console.error('Erro ao atualizar máquina:', error);
+            return res.status(500).json({
+                sucesso: false,
+                mensagem: 'Não foi possível atualizar a máquina'
+            });
+        }
+    }
 
     // DELETAR UMA MÁQUINA (Adicionado)
     static async deletar(req, res) {
@@ -172,7 +215,7 @@ class MaquinaController {
 
         try {
             // Assumindo que seu MaquinasModel possui o método deletar/excluir por ID
-            await MaquinasModel.deletar(id_maquina); 
+            await MaquinasModel.deletar(id_maquina);
 
             return res.status(200).json({
                 sucesso: true,

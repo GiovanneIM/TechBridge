@@ -10,10 +10,7 @@ export default function PagePerfil() {
     const [preview, setPreview] = useState(null);
 
     const { user } = useAuth()
-
     const tecnico = user;
-    console.log(tecnico);
-    
 
     const openModal = () => {
         setForm({
@@ -35,7 +32,7 @@ export default function PagePerfil() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                credentials: "include", // se usar cookie
+                credentials: "include",
                 body: JSON.stringify({
                     nome: form.nome,
                     email: form.email,
@@ -53,13 +50,9 @@ export default function PagePerfil() {
 
             if (data.sucesso) {
                 alert("Perfil atualizado com sucesso!");
-
             }
 
-
-            // atualiza UI sem reload
             window.location.reload();
-
             setIsModalOpen(false);
 
         } catch (error) {
@@ -69,9 +62,9 @@ export default function PagePerfil() {
     };
 
     return (
-        <div className="dark:bg-sidebar min-h-scree bg-gray-50">
+        <div className="dark:bg-sidebar min-h-screen bg-gray-50">
 
-            {/* HEADER PREMIUM */}
+            {/* HEADER */}
             <div className="relative h-37 bg-linear-to-r mt-10 rounded from-indigo-600 to-blue-500">
                 <div className="absolute mt-2.5 left-10 flex items-end gap-6">
                     <div className="relative">
@@ -107,7 +100,7 @@ export default function PagePerfil() {
 
                 {/* TABS */}
                 <div className="flex gap-6 border-b mb-6">
-                    <p className="pb-1 font-semibold">Perfil</p>
+                    <p className="pb-1 font-semibold dark:text-white">Perfil</p>
                 </div>
 
                 {/* TAB CONTENT */}
@@ -131,14 +124,13 @@ export default function PagePerfil() {
 
                         {/* BIO */}
                         <div className="md:col-span-3 dark:bg-sidebar dark:border bg-white p-6 rounded-2xl shadow-sm">
-                            <h3 className="font-semibold mb-2">Sobre</h3>
+                            <h3 className="font-semibold mb-2 dark:text-white">Sobre</h3>
                             <p className="text-gray-600 dark:text-white">{tecnico.bio}</p>
                         </div>
 
                         {/* SKILLS */}
                         <div className="md:col-span-3 dark:bg-sidebar dark:border bg-white p-6 rounded-2xl shadow-sm">
-                            <h3 className="font-semibold mb-3">Habilidades</h3>
-
+                            <h3 className="font-semibold mb-3 dark:text-white">Habilidades</h3>
                             <div className="flex flex-wrap gap-2">
                                 {["React", "Node", "UI/UX", "SQL"].map(skill => (
                                     <span
@@ -156,39 +148,42 @@ export default function PagePerfil() {
 
             {/* MODAL */}
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center">
-                    <div className="bg-white p-6 rounded-2xl w-full max-w-xl shadow-xl animate-scaleIn">
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50">
+                    <div className="bg-white dark:bg-sidebar dark:border dark:border-gray-700 p-6 rounded-2xl w-full max-w-xl shadow-xl animate-scaleIn">
 
-                        <h2 className="text-xl font-semibold mb-4">
+                        <h2 className="text-xl font-semibold mb-4 dark:text-white">
                             Editar Perfil
                         </h2>
 
                         {/* FOTO */}
                         <div className="mb-4">
-                            <label className="text-sm">Foto</label>
+                            <label className="text-sm dark:text-white">Foto</label>
                             <input
                                 type="file"
+                                className="dark:text-white mt-1"
                                 onChange={(e) => {
                                     const file = e.target.files[0];
-                                    if (file) {
-                                        setPreview(URL.createObjectURL(file));
-                                    }
+                                    if (file) setPreview(URL.createObjectURL(file));
                                 }}
                             />
                         </div>
 
-                        <Input label="Nome" value={form.nome} onChange={(v) => handleChange("nome", v)} />
-                        <Input label="Email" value={form.email} onChange={(v) => handleChange("email", v)} />
+                        <Input label="Nome"     value={form.nome}     onChange={(v) => handleChange("nome", v)} />
+                        <Input label="Email"    value={form.email}    onChange={(v) => handleChange("email", v)} />
                         <Input label="Telefone" value={form.telefone} onChange={(v) => handleChange("telefone", v)} />
-
-                        <Textarea label="Bio" value={form.bio} onChange={(v) => handleChange("bio", v)} />
+                        <Textarea label="Bio"   value={form.bio}      onChange={(v) => handleChange("bio", v)} />
 
                         <div className="flex justify-end mt-4 gap-2">
-                            <button onClick={() => setIsModalOpen(false)}>
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="px-4 py-2 rounded dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                            >
                                 Cancelar
                             </button>
-
-                            <button onClick={salvarPerfil} className="bg-blue-600 text-white px-4 py-2 rounded">
+                            <button
+                                onClick={salvarPerfil}
+                                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                            >
                                 Salvar
                             </button>
                         </div>
@@ -202,14 +197,18 @@ export default function PagePerfil() {
 /* COMPONENTES */
 
 function Card({ children }) {
-    return <div className="bg-white dark:bg-sidebar dark:border p-5 rounded-2xl shadow-sm">{children}</div>;
+    return (
+        <div className="bg-white dark:bg-sidebar dark:border p-5 rounded-2xl shadow-sm">
+            {children}
+        </div>
+    );
 }
 
 function Info({ label, value }) {
     return (
         <div className="flex justify-between text-sm mb-2">
-            <span className="text-gray-500 dark:text-white">{label}</span>
-            <span>{value}</span>
+            <span className="text-gray-500 dark:text-gray-400">{label}</span>
+            <span className="dark:text-white">{value}</span>
         </div>
     );
 }
@@ -217,11 +216,14 @@ function Info({ label, value }) {
 function Input({ label, value, onChange }) {
     return (
         <div className="mb-3">
-            <label className="text-xs text-gray-500">{label}</label>
+            <label className="text-xs text-gray-500 dark:text-gray-400">{label}</label>
             <input
                 value={value || ""}
                 onChange={(e) => onChange(e.target.value)}
-                className="w-full border p-2 rounded mt-1 focus:ring-2 focus:ring-blue-500"
+                className="w-full border dark:border-gray-600 p-2 rounded mt-1 
+                           bg-white dark:bg-gray-800 
+                           text-gray-900 dark:text-white
+                           focus:ring-2 focus:ring-blue-500 outline-none"
             />
         </div>
     );
@@ -229,12 +231,15 @@ function Input({ label, value, onChange }) {
 
 function Textarea({ label, value, onChange }) {
     return (
-        <div>
-            <label className="text-xs text-gray-500">{label}</label>
+        <div className="mb-3">
+            <label className="text-xs text-gray-500 dark:text-gray-400">{label}</label>
             <textarea
                 value={value || ""}
                 onChange={(e) => onChange(e.target.value)}
-                className="w-full border p-2 rounded mt-1 focus:ring-2 focus:ring-blue-500"
+                className="w-full border dark:border-gray-600 p-2 rounded mt-1 
+                           bg-white dark:bg-gray-800 
+                           text-gray-900 dark:text-white
+                           focus:ring-2 focus:ring-blue-500 outline-none"
             />
         </div>
     );
@@ -243,8 +248,8 @@ function Textarea({ label, value, onChange }) {
 function Stat({ label, value }) {
     return (
         <div className="bg-white dark:bg-sidebar dark:border p-4 rounded-xl shadow-sm text-center">
-            <p className="text-xl font-bold">{value}</p>
-            <p className="text-gray-500 text-sm dark:text-white">{label}</p>
+            <p className="text-xl font-bold dark:text-white">{value}</p>
+            <p className="text-gray-500 text-sm dark:text-gray-400">{label}</p>
         </div>
     );
 }
