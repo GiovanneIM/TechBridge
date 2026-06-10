@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useHeader } from "@/context/HeaderContext";
+import { API_URL } from "@/lib/api";
 
 export default function PageEmpresa() {
     const params = useParams();
@@ -53,6 +54,7 @@ export default function PageEmpresa() {
     if (empresa) {
         content = (<>
             <div className="w-full p-4 flex-1 flex flex-col gap-4">
+                {/* CONTROLE */}
                 <Card className="
                     w-full border p-4
                     flex justify-between flex-col 2xl:flex-row
@@ -67,8 +69,8 @@ export default function PageEmpresa() {
 
                             <div className="flex flex-wrap items-center gap-2 font-semibold">
                                 {empresa.status
-                                    ? (<p className="text-green-700">Ativa</p>)
-                                    : (<p className="text-red-700">Inativa</p>)
+                                    ? (<p className="text-green-700 dark:text-green-500">Ativa</p>)
+                                    : (<p className="text-red-700 dark:text-red-500">Inativa</p>)
                                 }
                             </div>
                         </div>
@@ -90,7 +92,7 @@ export default function PageEmpresa() {
                                     Empresa desativada em
                                 </p>
 
-                                <p className="flex items-center gap-2 font-semibold break-words text-red-500">
+                                <p className="flex items-center gap-2 font-semibold break-words text-red-700 dark:text-red-500">
                                     <Calendar size={14} />
                                     <span>{format(new Date(empresa.data_desativacao), 'dd/MM/yyyy', { locale: ptBR })} </span>
                                 </p>
@@ -99,18 +101,32 @@ export default function PageEmpresa() {
                     </div>
 
                     <div className="
-                        flex flex-wrap justify-between gap-3 items-center
-                        rounded-xl border bg-muted/30 p-3
+                        flex flex-wrap gap-3 items-center
+                        rounded-xl
                     ">
-                        <Button className="bg-techbridge hover:bg-techbridge/85 w-full sm:w-50" asChild>
-                            <Link href={`http://localhost:3001/admin/empresas/${empresa.id}/editar`}>
+                        <Button className="button-background border w-full sm:w-50" asChild>
+                            <Link href={`/admin/empresas/${empresa.id}/editar`}>
                                 <Pencil /> Editar empresa
                             </Link>
                         </Button>
 
-                        {empresa.status
-                            ? (<Button className="bg-green-700 hover:bg-green-600 w-full sm:w-50"><CheckCircle2 /> Reativar empresa</Button>)
-                            : (<Button className="bg-red-700 hover:bg-red-600 w-full sm:w-50"><MinusCircle /> Desativar empresa</Button>)
+                        {!empresa.status
+                            ? (<Button className="
+                                    bg-green-700 hover:bg-green-600
+                                    dark:bg-green-600 dark:hover:bg-green-700
+                                    text-white
+                                    w-full sm:w-50"
+                                >
+                                    <CheckCircle2 /> Reativar empresa
+                                </Button>)
+                            : (<Button className="
+                                    bg-red-700 hover:bg-red-600 
+                                    dark:bg-red-600 dark:hover:bg-red-700
+                                    text-white
+                                    w-full sm:w-50"
+                                >
+                                    <MinusCircle /> Desativar empresa
+                                </Button>)
                         }
                     </div>
                 </Card>
@@ -132,7 +148,7 @@ export default function PageEmpresa() {
                     ">
                         {empresa?.logo
                             ? (<img
-                                src={`http://localhost:3000/uploads/imagens/empresas/${empresa.id}/logo/${empresa.logo}`}
+                                src={API_URL + `/uploads/imagens/empresas/${empresa.id}/logo/${empresa.logo}`}
                                 className="object-cover w-full h-full"
                                 alt={empresa.nome_fantasia}
                             />)
@@ -278,7 +294,7 @@ export default function PageEmpresa() {
                                 <p className="font-genty text-xl border-b sm:border-0 pb-1 mb-2 sm:mb-0">Integrantes da empresa</p>
 
                                 <Button variant="outline" className="w-full sm:w-50" asChild>
-                                    <Link href={`http://localhost:3001/admin/empresas/${empresa.id}/membros`}>
+                                    <Link href={`/admin/empresas/${empresa.id}/membros`}>
                                         Ver Integrantes <ArrowRightCircle className="inline" />
                                     </Link>
                                 </Button>
@@ -466,7 +482,7 @@ export default function PageEmpresa() {
                                     <p className="font-genty text-xl border-b sm:border-0 pb-1 mb-2 sm:mb-0">Setores da empresa</p>
 
                                     <Button variant="outline" className="w-full sm:w-50" asChild>
-                                        <Link href={`http://localhost:3001/admin/empresas/${empresa.id}/setores`}>
+                                        <Link href={`/admin/empresas/${empresa.id}/setores`}>
                                             Ver Setores <ArrowRightCircle className="inline" />
                                         </Link>
                                     </Button>
@@ -625,7 +641,7 @@ export default function PageEmpresa() {
                             <p className="font-genty text-xl border-b sm:border-0 pb-1 mb-2 sm:mb-0">Chamados da empresa</p>
 
                             <Button variant="outline" className="w-full sm:w-50">
-                                <Link href={`http://localhost:3001/admin/empresas/${empresa.id}/chamados`}>
+                                <Link href={`/admin/empresas/${empresa.id}/chamados`}>
                                     Ver Chamados <ArrowRightCircle className="inline" />
                                 </Link>
                             </Button>
@@ -836,5 +852,6 @@ export default function PageEmpresa() {
         });
     }, [setHeader, empresa]);
 
+    // RETORNO
     return content;
 }

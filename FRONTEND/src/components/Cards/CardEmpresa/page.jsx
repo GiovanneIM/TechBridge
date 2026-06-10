@@ -6,6 +6,7 @@ import { ptBR } from "date-fns/locale";
 import { ArrowRight, Building2, Calendar, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { API_URL } from "@/lib/api";
 
 
 export default function CardEmpresas({
@@ -15,23 +16,25 @@ export default function CardEmpresas({
         <div
             className="
                 flex flex-col gap-2
-                min-h-[180px]
-                p-2
+                min-h-[180px] p-2 text-sm
                 border bg-card rounded
                 shadow-md hover:shadow-xl
                 transition-all duration-300
-                text-sm
             "
         >
             <div className="flex-1 flex gap-2">
                 {/* LOGO */}
-                <div className=" 
-                    relative w-28 h-28 shrink-0 
-                    border rounded-xl bg-muted 
-                    flex items-center justify-center overflow-hidden 
+                <div className="
+                    relative w-28 h-28 shrink-0
+                    border rounded-xl bg-muted
+                    flex items-center justify-center overflow-hidden
                 " >
                     {empresa?.logo
-                        ? (<img src={`http://localhost:3000/uploads/imagens/empresas/${empresa.id}/logo/${empresa.logo}`} alt={empresa.nome_fantasia} className="w-full h-full object-cover" />)
+                        ? (<img
+                            src={API_URL + `/uploads/imagens/empresas/${empresa.id}/logo/${empresa.logo}`}
+                            alt={empresa.nome_fantasia}
+                            className="w-full h-full object-cover"
+                        />)
                         : (<Building2 size={40} className="text-muted-foreground" />)
                     }
 
@@ -46,44 +49,51 @@ export default function CardEmpresas({
 
                 {/* INFORMAÇÕES DA EMPRESA */}
                 <div className="flex flex-col flex-1 min-w-0 gap-2">
+                    {/* NOMES */}
                     <div>
-                        <div className="font-genty text-xl">
+                        <div className="truncate font-genty text-xl">
                             {empresa.nome_fantasia}
                         </div>
-                        <div className="font-genty text-muted-foreground text-md">
+
+                        <div className="h-[43px] line-clamp-2 font-genty text-muted-foreground text-xs">
                             {empresa.razao_social}
                         </div>
                     </div>
 
-                    <div className="flex gap-2 font-semibold">
-                        <div className="flex items-center gap-1">
-                            <Calendar size={14} />
-                            <span>{format(new Date(empresa.data_criacao), 'dd/MM/yyyy', { locale: ptBR })} </span>
-                        </div>
-
-                        {!empresa.status && (
-                            <div className="flex items-center gap-1 text-red-500">
-                                <Calendar size={14} />
-                                <span>{format(new Date(empresa.data_desativacao), 'dd/MM/yyyy', { locale: ptBR })} </span>
-                            </div>
-                        )}
-                    </div>
-
+                    {/* ENDEREÇO */}
                     <div className="flex items-center gap-2">
                         <MapPin size={14} />
-                        <span> {empresa.cidade} - {empresa.estado} </span>
+                        <span className="truncate">
+                            {empresa.estado} - {empresa.cidade}
+                        </span>
                     </div>
 
                 </div>
 
             </div>
 
+            {/* DATAS */}
+            <div className="flex gap-2 font-semibold">
+                {/* REGISTRO */}
+                <div className="w-28 flex items-center gap-1">
+                    <Calendar size={14} />
+                    <span>{format(new Date(empresa.data_criacao), 'dd/MM/yyyy', { locale: ptBR })} </span>
+                </div>
+
+                {/* DESATIVAÇÃO */}
+                {!empresa.status && (
+                    <div className="w-28 flex items-center gap-1 text-red-500">
+                        <Calendar size={14} />
+                        <span>{format(new Date(empresa.data_desativacao), 'dd/MM/yyyy', { locale: ptBR })} </span>
+                    </div>
+                )}
+            </div>
+
 
             <Button asChild className="
-                    text-white bg-techbridge/85
-                    w-full
+                    button-background
+                    w-full border
                 "
-                // variant="outline"
             >
                 <Link href={`/admin/empresas/${empresa.id}`} className="flex justify-center items-center">
                     Ver empresa <ArrowRight className="inline" />

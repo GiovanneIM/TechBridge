@@ -19,6 +19,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { API_URL } from "@/lib/api";
+import { useHeader } from "@/context/HeaderContext";
 
 export default function PageEmpresaEdit() {
     const params = useParams();
@@ -84,7 +86,7 @@ export default function PageEmpresaEdit() {
             })
 
             setIMGLogo(empresa.logo
-                ? `http://localhost:3000/uploads/imagens/empresas/${empresa.id}/logo/${empresa.logo}`
+                ? API_URL + `/uploads/imagens/empresas/${empresa.id}/logo/${empresa.logo}`
                 : ''
             )
         }
@@ -160,9 +162,10 @@ export default function PageEmpresaEdit() {
         }
     }
 
+
+
     // CONTEÚDO
     let content;
-
 
     if (empresa) {
         content = (<>
@@ -176,15 +179,18 @@ export default function PageEmpresaEdit() {
                     gap-6
                     overflow-hidden
                 ">
-                    <div>
+                    {/* LOGO */}
+                    <div
+                        className="flex flex-col justify-center items-center"
+                    >
                         <div className="
-                        w-full sm:w-100 aspect-square
-                        border rounded-t-xl bg-muted
-                        shrink-0
-                        mx-auto
-                        flex items-center justify-center
-                        overflow-hidden
-                    ">
+                            w-full sm:w-100 aspect-square
+                            border rounded-t-xl bg-muted
+                            shrink-0
+                            mx-auto
+                            flex items-center justify-center
+                            overflow-hidden
+                        ">
                             {imgLogo
                                 ? (<img
                                     src={imgLogo}
@@ -195,16 +201,16 @@ export default function PageEmpresaEdit() {
                             }
                         </div>
                         <Input
-                            className="rounded-t-0"
+                            className="rounded-t-none w-full sm:w-100"
                             type="file" onChange={handleChangeLogo}
                         />
                     </div>
 
-
+                    {/* DADO */}
                     <div className="
                         flex-1
                         min-w-0
-                        grid sm:grid-cols-2 xl:grid-cols-1 xl:grid-rows-4
+                        grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 2xl:grid-rows-4
                         gap-4
                     ">
                         <div className="rounded-xl border bg-muted/30 p-3">
@@ -247,6 +253,7 @@ export default function PageEmpresaEdit() {
                         </div>
                     </div>
 
+                    {/* ENDEREÇO */}
                     <div className="
                         flex-2
                         min-w-0
@@ -371,7 +378,7 @@ export default function PageEmpresaEdit() {
                         rounded-xl border bg-muted/30 p-3
                     ">
                         <Button className="bg-techbridge hover:bg-techbridge/85 w-42 sm:w-50" asChild>
-                            <Link href={`http://localhost:3001/admin/empresas/2`}>
+                            <Link href={`/admin/empresas/${id_empresa}`}>
                                 <ArrowLeftCircle /> Voltar para a empresa
                             </Link>
                         </Button>
@@ -388,16 +395,17 @@ export default function PageEmpresaEdit() {
         </>)
     }
 
-    return (
-        <div className="flex-1 flex flex-col">
-            {/* HEADER DA PÁGINA */}
-            <HeaderPage
-                icon={Pencil}
-                title="Editar Empresa"
-            />
 
-            {/* CONTEÚDO */}
-            {content}
-        </div>
-    );
+    // HEADER
+    const { setHeader } = useHeader();
+
+    useEffect(() => {
+        setHeader({
+            icon: Pencil,
+            title: `[#${id_empresa}] ${empresa?.nome_fantasia} - Editar`
+        });
+    }, [setHeader, empresa]);
+
+    // RETORNO
+    return content;
 }

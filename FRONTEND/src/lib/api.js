@@ -2,14 +2,14 @@
 // PC DO ARTHUT -> localhost
 // OUTROS -> 10.84.7.5
 // export const API_URL = 'http://localhost:3000/techbridge';
-export const API_URL = 'https://techbridge-api.up.railway.app/techbridge';
+export const API_URL = 'https://techbridge-api.up.railway.app';
 // export const API_URL = 'https://symmetrical-cod-44x7vxqjg67fjqvp-3000.app.github.dev/techbridge';
 
 // REALIZAR LOGIN
 async function API_LOGIN(user) {
 
     // FAZER A REQUISIÇÃO
-    const response = await fetch(API_URL + '/auth/login', {
+    const response = await fetch(API_URL + '/techbridge' + '/auth/login', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -38,7 +38,7 @@ async function API_FETCH(ENDPOINT, options = {}) {
 
     const isFormData = options.body instanceof FormData;
 
-    const response = await fetch(API_URL + ENDPOINT, {
+    const response = await fetch(API_URL + '/techbridge' + ENDPOINT, {
         ...options,
         credentials: 'include',
         headers: {
