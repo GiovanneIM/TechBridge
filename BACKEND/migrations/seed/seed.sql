@@ -84,13 +84,22 @@ VALUES
 ;
 
 -- Inserindo setores de exemplo
-INSERT INTO setores 
-    (nome, descricao, cod_setor, id_empresa, icone, cor)
+INSERT INTO setores
+    (nome, descricao, cod_setor, id_empresa, icone, cor_fundo, cor_texto)
 VALUES 
-    ('Pintura', 'Acabamento', 'PIN', 2, 'PaintRoller', 'Vermelho'),
-    ('Montagem', 'Setor de montagem', 'MON', 2, 'Wrench', 'Verde'),
-    ('Recursos Humanos', 'Gestão de pessoas', 'RH', 2, 'BriefcaseBusiness', 'Amarelo'),
-    ('GA', 'Logística', 'GA', 2, 'Network', 'Azul')
+    (
+        'Pintura', 'Responsável pelo acabamento superficial e aplicação de revestimentos nas peças e produtos',
+        'PIN', 2, 'PaintRoller', 'FF5733', 'FDFEFE'),
+    (
+        'Montagem', 'Realiza a montagem de componentes e integração final dos produtos conforme especificações técnicas',
+        'MON', 2, 'Wrench', '3498DB', 'EBF5FB'),
+    (
+        'Recursos Humanos', 'Gerencia os processos relacionados a pessoas, incluindo recrutamento, desenvolvimento e clima organizacional',
+        'RH', 2, 'BriefcaseBusiness', '2ECC71', '145A32'),
+    (
+        'GA', 'Responsável pela gestão de armazenagem, movimentação de materiais e fluxo logístico interno',
+        'GA', 2, 'Network', '9B59B6', 'F5EEF8'
+    )
 ;
 
 -- Inserindo maquinas de exemplo

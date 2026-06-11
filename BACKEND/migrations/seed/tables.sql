@@ -7,7 +7,7 @@ CREATE DATABASE TECHBRIDGE;
 USE TECHBRIDGE;
 
 -- Criando a tabela de tipos de usuários
-CREATE TABLE IF NOT EXISTS tipos_usuarios (
+CREATE TABLE tipos_usuarios (
     id 				INT 				AUTO_INCREMENT PRIMARY KEY,
     descricao 		VARCHAR(100) 		NOT NULL UNIQUE
 );
@@ -39,7 +39,7 @@ CREATE TABLE empresas (
 ); 
 
 -- Criando a tabela de usuários
-CREATE TABLE IF NOT EXISTS usuarios (
+CREATE TABLE usuarios (
     id 				    INT 			AUTO_INCREMENT PRIMARY KEY,
 	data_criacao 	    DATETIME 		DEFAULT CURRENT_TIMESTAMP,		-- Data em que o usuário foi registrado
     data_desativacao    DATETIME,                                       -- Data em que o usuário foi desativado
@@ -80,7 +80,8 @@ CREATE TABLE setores (
 
     -- Estilização do setor
     icone			VARCHAR(50)		NOT NULL,
-    cor		        VARCHAR(50)		NOT NULL,
+    cor_fundo		VARCHAR(6)		NOT NULL,
+    cor_texto		VARCHAR(6)		NOT NULL,
     
     -- Chaves estrangeiras
     id_empresa		INT				NOT NULL,			-- ID da empresa à qual o setor pertence
