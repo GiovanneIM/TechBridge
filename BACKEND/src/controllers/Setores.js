@@ -58,7 +58,7 @@ class SetoresController {
     // LISTAR SETORES DE UMA EMPRESA
     static async listar(req, res) {
         // OBTER PAGINAÇÃO
-        const { page, limit, texto, status } = req.query;
+        const { page, limit, texto, status } = req.validated.query;
 
         // OBTER O ID DA EMPRESA
         const { id_empresa } = req.params;

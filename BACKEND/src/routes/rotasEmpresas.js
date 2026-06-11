@@ -335,6 +335,7 @@ router.patch(
 router.get(
     '/:id_empresa/setores',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    validateZod(paginacaoSchema, 'query'),      // Query - Paginação
     SetoresController.listar                    // Controller setores - listar
 );
 
