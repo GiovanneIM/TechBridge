@@ -48,58 +48,56 @@ export const cor = z
 
 
 const iconesValidos = [
-    // Genéricos / Organizacionais
-    'Album',
-    'Archive',
-    'Folder',
-    'Layers',
-    'LayoutGrid',
-    'Building',
-    'Building2',
+  'Album',
+  'Archive',
+  'Folder',
+  'Layers',
+  'LayoutGrid',
+  'Building',
+  'Building2',
 
-    // Produção / Operação
-    'Factory',
-    'Cog',
-    'Cogs',
-    'Wrench',
-    'Hammer',
-    'Tool',
+  'Factory',
+  'Cog',
+  'Cogs',
+  'Wrench',
+  'Hammer',
+  'Tool',
 
-    // Tecnologia / TI
-    'Cpu',
-    'Server',
-    'Database',
-    'HardDrive',
-    'Monitor',
+  'Cpu',
+  'Server',
+  'Database',
+  'HardDrive',
+  'Monitor',
 
-    // Logística / Estoque
-    'Boxes',
-    'Box',
-    'Package',
-    'Truck',
-    'Clipboard',
+  'Boxes',
+  'Box',
+  'Package',
+  'Truck',
+  'Clipboard',
 
-    // Pessoas / Administrativo
-    'Users',
-    'User',
-    'Briefcase',
-    'IdCard',
-    'FileText',
+  'Users',
+  'User',
+  'Briefcase',
+  'IdCard',
+  'FileText',
 
-    // Qualidade / Inspeção
-    'CheckCircle',
-    'ClipboardCheck',
-    'ShieldCheck',
+  'CheckCircle',
+  'ClipboardCheck',
+  'ShieldCheck',
 
-    // Energia / Infraestrutura
-    'Zap',
-    'Plug',
-    'Power',
+  'Zap',
+  'Plug',
+  'Power',
 
-    // Segurança / Controle
-    'Shield',
-    'Lock',
-    'Eye'
+  'Shield',
+  'Lock',
+  'Eye',
+
+  // NOVOS
+  'PaintRoller',
+  'BriefcaseBusiness',
+  'Network',
+  'Warehouse'
 ];
 
 const coresValidas = [

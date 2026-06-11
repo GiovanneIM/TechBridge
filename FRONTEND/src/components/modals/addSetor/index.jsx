@@ -14,28 +14,33 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { InputGroup, InputGroupInput } from "@/components/ui/input-group"
 import { Textarea } from "@/components/ui/textarea"
 import {
-    BriefcaseBusiness, Network, PaintRoller, Warehouse, Wrench, Hammer, Cog, Factory, Truck, Users, Shield, Database
+    Wrench, Hammer, Cog, Factory, Truck, Users, Shield, Database,
+    PaintRoller, BriefcaseBusiness, Network, Warehouse,
 } from "lucide-react"
 
-// Valores aceitos pelo banco
+// Valores aceitos pelo banco — deve ser idêntico ao mapa nas páginas
 const ICONES = [
-    { valor: "Wrench", label: "Ferramentas", icone: <Wrench /> },
-    { valor: "Hammer", label: "Manutenção", icone: <Hammer /> },
-    { valor: "Cog", label: "Processos", icone: <Cog /> },
-    { valor: "Factory", label: "Produção", icone: <Factory /> },
-    { valor: "Truck", label: "Logística", icone: <Truck /> },
-    { valor: "Users", label: "Pessoas", icone: <Users /> },
-    { valor: "Shield", label: "Segurança", icone: <Shield /> },
-    { valor: "Database", label: "TI", icone: <Database /> },
+    { valor: "Wrench",           label: "Ferramentas", icone: <Wrench /> },
+    { valor: "Hammer",           label: "Manutenção",  icone: <Hammer /> },
+    { valor: "Cog",              label: "Processos",   icone: <Cog /> },
+    { valor: "Factory",          label: "Produção",    icone: <Factory /> },
+    { valor: "Truck",            label: "Logística",   icone: <Truck /> },
+    { valor: "Users",            label: "Pessoas",     icone: <Users /> },
+    { valor: "Shield",           label: "Segurança",   icone: <Shield /> },
+    { valor: "Database",         label: "TI",          icone: <Database /> },
+    { valor: "PaintRoller",      label: "Pintura",     icone: <PaintRoller /> },
+    { valor: "BriefcaseBusiness",label: "Negócios",    icone: <BriefcaseBusiness /> },
+    { valor: "Network",          label: "Redes",       icone: <Network /> },
+    { valor: "Warehouse",        label: "Armazém",     icone: <Warehouse /> },
 ]
 
+// Deve ser idêntico ao objeto `cores` nas páginas de listagem e detalhe
 const CORES = [
-    { valor: "Vermelho", classe: "bg-red-500" },
     { valor: "Azul",     classe: "bg-blue-500" },
     { valor: "Verde",    classe: "bg-emerald-500" },
     { valor: "Amarelo",  classe: "bg-amber-400" },
+    { valor: "Vermelho", classe: "bg-red-500" },
     { valor: "Roxo",     classe: "bg-purple-500" },
-    { valor: "Cinza",    classe: "bg-slate-500" },
 ]
 
 export default function ModalAddSetor() {
