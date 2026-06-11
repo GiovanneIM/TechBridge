@@ -7,6 +7,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { API_URL } from "@/lib/api"
 import { ArrowRightCircle, User2 } from "lucide-react"
 import Link from "next/link"
 
@@ -20,9 +21,8 @@ export function CardUsuario({ user }) {
             gap-3
             transition hover:border-primary/30 hover:shadow-sm
         ">
-            {/* FOTO */}
-
             <div className="flex gap-3">
+                {/* FOTO */}
                 <div className="
                         relative w-30 h-30
                         shrink-0
@@ -35,7 +35,7 @@ export function CardUsuario({ user }) {
                     ">
                     {user?.foto_perfil ? (
                         <img
-                            src={`http://localhost:3000/uploads/imagens/usuarios/${user.id}/${user.foto_perfil}`}
+                            src={API_URL + `/uploads/imagens/usuarios/${user.id}/${user.foto_perfil}`}
                             alt={`${user.nome} perfil`}
                             className="w-full h-full object-cover"
                         />
@@ -105,7 +105,7 @@ export function CardUsuario({ user }) {
             </div>
 
             <Button className="button-background border" asChild>
-                <Link href={`http://localhost:3001/admin/empresas/${user.id_empresa}/membros/${user.cod_usuario}`}>Ver usuario <ArrowRightCircle /></Link>
+                <Link href={`/admin/empresas/${user.id_empresa}/membros/${user.cod_usuario}`}>Ver usuario <ArrowRightCircle /></Link>
             </Button>
         </div>
     )

@@ -7,45 +7,18 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { ArrowRightCircle, Icon, User2 } from "lucide-react"
+import { Separator } from "@/components/ui/separator";
+import { icons, ArrowRightCircle, User2, ArrowRight } from "lucide-react"
 import Link from "next/link"
 
-// ===============================
-// ÍCONES
-// ===============================
-// const icones = {
-//     Wrench: <Wrench className="h-14 w-14 opacity-90" />,
-//     PaintRoller: <PaintRoller className="h-14 w-14 opacity-90" />,
-//     BriefcaseBusiness: (
-//         <BriefcaseBusiness className="h-14 w-14 opacity-90" />
-//     ),
-//     Network: <Network className="h-14 w-14 opacity-90" />,
-//     default: <Warehouse className="h-14 w-14 opacity-90" />,
-// };
 
-// ===============================
-// CORES FIXAS
-// ===============================
-const coresFixas = [
-    "bg-gradient-to-r from-blue-600 to-indigo-600",
-    "bg-gradient-to-r from-emerald-600 to-teal-600",
-    "bg-gradient-to-r from-rose-600 to-red-600",
-    "bg-gradient-to-r from-amber-500 to-orange-500",
-    "bg-gradient-to-r from-purple-600 to-pink-600",
-    "bg-gradient-to-r from-slate-600 to-slate-800",
-];
-
-// ===============================
-// PEGA COR PELO ÍNDICE
-// ===============================
-function getCor(index) {
-    return coresFixas[index % coresFixas.length];
-}
-
-const cor = getCor(1);
 
 export function CardSetor({ setor }) {
+    const Icon = icons[setor.icone];
 
+    const cor_fundo = `#5C94FF`;
+    const cor_texto = `#021B4C`;
+    
     return (
         <div
             key={
@@ -61,62 +34,62 @@ export function CardSetor({ setor }) {
                 }
             }}
             className="
-                group cursor-pointer rounded-2xl overflow-hidden
-                bg-white dark:bg-sidebar
-                border border-gray-200 dark:border-slate-800
-                shadow-sm hover:shadow-xl
-                transition-all duration-300
-                hover:-translate-y-1
+                cursor-pointer rounded-2xl overflow-hidden
+                shadow-sm hover:shadow-xl 
+                hover:-translate-y-1 transition-all duration-300
             "
         >
             {/* HEADER */}
             <div
                 className={`
-                    p-6 flex flex-col justify-between
-                    min-h-[170px]
-                    text-white
-                    relative
-                    ${cor}
+                    relative px-4 h-[80px]
+                    flex justify-center items-center gap-4
+                    text-[${cor_texto}] bg-[${cor_fundo}]
                 `}
             >
-                {/* overlay */}
-                <div className="absolute inset-0 bg-black/10"></div>
+                {/* <div className="relative flex gap-4 items-center"> */}
+                {/* ICONE */}
+                <Icon />
 
-                <div className="relative">
-                    <div className="">
-                        <Icon />
-                    </div>
+                {/* NOME */}
+                <h2 className="flex-1 text-xl font-genty">
+                    {setor?.nome}
+                </h2>
 
-                    <h2 className="text-xl font-bold mt-3">
-                        {
-                            setor?.nome
-                        }
-                    </h2>
-
-                    {setor?.badge && (
-                        <span className="inline-block mt-2 text-xs bg-white/20 px-3 py-1 rounded-full">
-                            {
-                                setor.badge
-                            }
-                        </span>
-                    )}
-                </div>
+                {/* STATUS */}
+                <div className={`
+                        top-2 right-2 w-5 h-5 rounded-full border-2 border-white 
+                        ${setor.status ? "bg-green-500" : "bg-red-500"} `}
+                />
+                {/* </div> */}
             </div>
 
             {/* DESCRIÇÃO */}
-            <div className="p-5">
-                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+            <div className="p-4 flex flex-col gap-4 border rounded-b-2xl">
+                <p className="text-secondary-foreground font-genty text-sm">
+                    # {setor?.cod_setor}
+                </p>
+
+                <p className="text-secondary-foreground text-sm line-clamp-2">
                     {
                         setor?.descricao
                     }
                 </p>
-            </div>
 
-            {/* FOOTER */}
-            <div className="px-5 pb-4">
-                <span className="text-sm text-blue-600 dark:text-white font-medium opacity-0 group-hover:opacity-100 transition">
-                    Ver detalhes →
-                </span>
+                <Separator />
+
+                <Button asChild className="
+                    button-background
+                    w-full border
+                "
+                >
+                    <Link
+                        href={`/admin/empresas/${setor.id_empresa}/setor${setor.id}`}
+                        className="flex justify-center items-center"
+                    >
+                        Ver empresa <ArrowRight className="inline" />
+                    </Link>
+                </Button>
             </div>
         </div>
     )
