@@ -151,18 +151,18 @@ class UserModel {
                     { type: 'INNER', table: 'tipos_usuarios tu', on: 'tu.id = u.tipo_usuario' },
                     { type: 'INNER', table: 'empresas e', on: 'e.id = u.id_empresa' }
                 ],
-                limit,
-                offset,
                 where,
                 like,
-                likeOr
+                likeOr,
+                limit,
+                offset,
             })
 
             // REMOVER AS SENHAS DOS USUÁRIOS
             const usuariosSemSenha = usuarios.map(({ senha, ...user }) => user);
             const usuariosFormatados = usuarios.map((prev) => ({ ...prev, cargo: CARGOS_FORMATADOS[prev.cargo] }));
 
-            // TOTAL DE MEMBROS DA EMPRESA
+            // TOTAL DE MEMBROS DA BUSCA
             const [{ total }] = await read('usuarios u', {
                 columns: ['COUNT(*) as total'],
                 join: [

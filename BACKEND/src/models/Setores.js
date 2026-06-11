@@ -22,13 +22,36 @@ class SetoresModel {
     // LISTAR SETORES DE UMA EMPRESA
     static async listar(id_empresa, limit, offset, page, where, like, likeOr) {
         try {
-            // FAZER A CONSULTA
+            // OBTER OS SETORES
             const setores = await read("setores", {
-                where: { id_empresa }
+                where,
+                like,
+                likeOr,
+                limit,
+                offset,
             })
 
-            // RETORNANDO OS SETORES
-            return setores
+            // TOTAL DE SETORES DA BUSCA
+            const [{ total }] = await read('usuarios u', {
+                columns: ['COUNT(*) as total'],
+                where,
+                like,
+                likeOr
+            });
+
+            // TOTAL DE PAGINAS
+            const total_paginas = Math.ceil(total / limit)
+
+            // RETORNANDO OS SETORES E INFORMAÇÕES DE PAGINAÇÃO
+            return {
+                lista: setores,
+                paginacao: {
+                    total,
+                    page,
+                    limit,
+                    total_paginas,
+                }
+            }
         } catch (error) {
             console.error('Erro ao listar setores:', error);
             throw error;
