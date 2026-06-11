@@ -20,7 +20,7 @@ class SetoresModel {
     }
 
     // LISTAR SETORES DE UMA EMPRESA
-    static async listar(id_empresa) {
+    static async listar(id_empresa, limit, offset, page, where, like, likeOr) {
         try {
             // FAZER A CONSULTA
             const setores = await read("setores", {

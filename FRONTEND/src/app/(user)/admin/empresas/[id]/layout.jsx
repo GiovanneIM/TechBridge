@@ -21,7 +21,8 @@ export default function LayoutAdminEmpresa({ children }) {
 
     const [header, setHeader] = useState({
         icon: Square,
-        title: ''
+        title: '',
+        actions: null
     });
 
     return (<>
@@ -38,6 +39,7 @@ export default function LayoutAdminEmpresa({ children }) {
                         <HeaderPage
                             icon={header.icon}
                             title={header.title}
+                            actions={header.actions}
                         />
                     </div>
 

@@ -104,7 +104,7 @@ export function CardUsuario({ user }) {
                 </div>
             </div>
 
-            <Button className="bg-techbridge" asChild>
+            <Button className="button-background border" asChild>
                 <Link href={`http://localhost:3001/admin/empresas/${user.id_empresa}/membros/${user.cod_usuario}`}>Ver usuario <ArrowRightCircle /></Link>
             </Button>
         </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { User2 } from "lucide-react";
+import { PlusCircle, Search, User2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useEmpresa } from "@/hooks/useEmpresa";
 import { Button } from "@/components/ui/button";
@@ -220,14 +220,14 @@ export default function PageMembros() {
                 </FieldContent>
 
                 <div className="w-full h-full flex items-end">
-                    {/* BOTÃO */}
+                    {/* BOTÃO DE PROCURA*/}
                     <Button className="text-white w-full h-10 px-6 bg-techbridge" onClick={filtrar}>
-                        Procurar
+                        <Search /> Procurar
                     </Button>
                 </div>
             </Field>
 
-            {/* PAGINAÇÃO SUPERIOR */}
+            {/* PAGINAÇÃO */}
             <Pagination className="flex-col items-center gap-2">
                 <PaginationContent>
 
@@ -308,8 +308,14 @@ export default function PageMembros() {
                 }
 
                 {/* MEMBROS CARREGADAS COM SUCESSO */}
-                {!loading.obterMembros && !error.obterMembros && (
-                    membros?.lista.length > 0
+                {!loading.obterMembros && !error.obterMembros && (<>
+                    <div className="border-b pb-3 mb-3">
+                        <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => {}}>
+                            <PlusCircle /> Adicionar usuário
+                        </Button>
+                    </div>
+
+                    {membros?.lista.length > 0
                         ? <div
                             className="
                                     grid gap-4 items-start
@@ -337,7 +343,8 @@ export default function PageMembros() {
 
                             <p>Nenhum resultado encontrado para a busca</p>
                         </div>
-                )
+                    }
+                </>)
                 }
             </div>
         </div>
@@ -351,7 +358,8 @@ export default function PageMembros() {
     useEffect(() => {
         setHeader({
             icon: User2,
-            title: `[#${id_empresa}] ${empresa?.nome_fantasia} - Procurar Usuário`
+            title: `[#${id_empresa}] ${empresa?.nome_fantasia} - Membros da empresa`,
+
         });
     }, [setHeader, empresa]);
 

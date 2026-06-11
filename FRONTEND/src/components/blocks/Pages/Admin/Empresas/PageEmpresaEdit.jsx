@@ -6,9 +6,6 @@ import { useEffect, useState } from "react";
 
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-
-import HeaderPage from "../../Header/HeaderPage";
-
 import { ArrowLeftCircle, ArrowRightCircle, Building2, Calendar, CheckCircle2, Cpu, MinusCircle, Pencil, Siren, User2, Warehouse, XCircle } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";

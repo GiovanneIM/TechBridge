@@ -248,12 +248,22 @@ export function useEmpresa() {
     }, []);
 
     // OBTER SETORES
-    const obterSetores = useCallback(async (id_empresa) => {
+    const obterSetores = useCallback(async (id_empresa, filtro = {}) => {
         setLoading((prev) => ({ ...prev, obterSetores: true }));
         setError((prev) => ({ ...prev, obterSetores: null }));
 
         try {
-            const data = await API_FETCH(`/empresas/${id_empresa}/setores`, {
+            const params = new URLSearchParams();
+
+            Object.entries(filtro).forEach(([key, value]) => {
+                if (value !== null && value !== undefined && value !== '') {
+                    params.append(key, value);
+                }
+            });
+
+            const query = params.toString();
+            
+            const data = await API_FETCH(`/empresas/${id_empresa}/setores?${query}`, {
                 method: 'GET'
             });
 

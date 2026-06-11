@@ -94,12 +94,7 @@ class UserController {
         }
 
         try {
-            console.log();
-            ({
-                id_empresa, limit, offset, page, where, like, likeOr
-            })
-
-            // REQUISIÇÃO
+            // BUSCAR USUÁRIOS
             const resultado = await UserModel.listarUsuarios(id_empresa, limit, offset, page, where, like, likeOr);
 
             // SUCESSO: ENVIAR USUÁRIOS

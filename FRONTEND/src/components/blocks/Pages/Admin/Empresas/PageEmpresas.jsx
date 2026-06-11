@@ -1,7 +1,6 @@
 'use client'
 
 import { Warehouse } from "lucide-react";
-import HeaderPage from "../../Header/HeaderPage";
 import { useEffect, useState } from "react";
 import { useEmpresa } from "@/hooks/useEmpresa";
 import { Button } from "@/components/ui/button";
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/pagination"
 import Image from "next/image";
 import CardEmpresas from "@/components/Cards/CardEmpresa/page";
+import HeaderPage from "@/components/blocks/Header/HeaderPage";
 
 export default function PageEmpresas() {
 

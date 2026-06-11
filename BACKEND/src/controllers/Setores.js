@@ -57,6 +57,9 @@ class SetoresController {
 
     // LISTAR SETORES DE UMA EMPRESA
     static async listar(req, res) {
+        // OBTER PAGINAÇÃO
+        const { page, limit, texto, status } = req.query;
+
         // OBTER O ID DA EMPRESA
         const { id_empresa } = req.params;
 
@@ -70,15 +73,35 @@ class SetoresController {
             });
         }
 
+        // CALCULANDO OFFSET
+        const offset = (page - 1) * limit;
+
+        // FILTROS
+        const where = { "id_empresa": id_empresa };
+        const like = {};
+        const likeOr = {};
+
+        if (status && status !== 'all') {
+            status === 'ativa'
+                ? where["status"] = true
+                : where["status"] = false
+        }
+
+        if (texto) {
+            likeOr["nome"] = texto;
+            likeOr["cod_setor"] = texto;
+            likeOr["descricao"] = texto;
+        }
+
         try {
             // BUSCAR SETORES
-            const setores = await SetoresModel.listar(id_empresa);
+            const resultado = await SetoresModel.listar(id_empresa, limit, offset, page, where, like, likeOr);
 
             // SUCESSO: ENVIAR SETORES
             res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Setores listados com sucesso`,
-                dados: { setores },
+                dados: resultado,
             });
         }
         catch (error) {
