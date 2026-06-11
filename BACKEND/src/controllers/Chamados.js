@@ -289,8 +289,51 @@ class ChamadosController {
 
     // CONCLUIR UM CHAMADO
     static async concluir(req, res) {
-        const { id_chamado } = req.params;
+    const { id_chamado } = req.params;
+    const { solucao_aplicada, comentario_tecnico, operador, id_causa } = req.body;
+
+    try {
+        const chamado = await ChamadosModel.buscarPorId(id_chamado);
+
+        if (!chamado) {
+            return res.status(404).json({
+                sucesso: false,
+                mensagem: "Chamado não encontrado"
+            });
+        }
+
+        const novosDados = {
+            estado: "concluido",
+            datahora_conclusao: new Date()
+        };
+
+        if (solucao_aplicada !== undefined) novosDados.solucao_aplicada = solucao_aplicada;
+        if (comentario_tecnico !== undefined) novosDados.comentario_tecnico = comentario_tecnico;
+        if (operador !== undefined) novosDados.operador = operador;
+        if (id_causa !== undefined) novosDados.id_causa = id_causa;
+
+        const affectedRows = await ChamadosModel.atualizar(id_chamado, novosDados);
+
+        if (!affectedRows) {
+            return res.status(400).json({
+                sucesso: false,
+                mensagem: "Não foi possível concluir o chamado"
+            });
+        }
+
+        return res.status(200).json({
+            sucesso: true,
+            mensagem: "Chamado concluído com sucesso"
+        });
+
+    } catch (error) {
+        console.error("Erro ao concluir chamado:", error);
+        return res.status(500).json({
+            sucesso: false,
+            mensagem: "Erro interno do servidor"
+        });
     }
+}
 
     static async obterDashboard(req, res) {
         try {

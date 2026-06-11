@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     // URL DA API
-    private static final String BASE_URL = "http://10.84.7.2:3000";
+    private static final String BASE_URL = "http://10.84.7.5:3000/";
 
     // INSTÂNCIA DO BANCO DE DADOS
     private static Retrofit retrofit = null;
@@ -25,5 +25,8 @@ public class RetrofitClient {
 
         // RETORNA A INSTÂNCIA
         return retrofit;
+    }
+
+    public static void resetInstance() {
     }
 }

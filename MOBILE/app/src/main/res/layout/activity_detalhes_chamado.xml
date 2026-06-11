@@ -1,26 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="24dp">
 
     <TextView
         android:id="@+id/txtIdDetalhe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ID"
-        android:textSize="24sp"
-        android:textStyle="bold"/>
+        android:textSize="14sp"
+        android:textColor="#888"
+        android:fontFamily="@font/poppins_regular" />
 
     <TextView
-        android:id="@+id/txtEstadoDetalhe"
+        android:id="@+id/txtCodigo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Estado"
-        android:textSize="20sp"/>
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:fontFamily="@font/poppins_regular"
+        android:layout_marginBottom="24dp" />
+
+    <!-- DESCRIÇÃO DO PROBLEMA -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/techbridge"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        android:layout_marginBottom="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtDescricao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Descrição do problema *"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:gravity="top"
+            android:fontFamily="@font/poppins_regular" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- SOLUÇÃO APLICADA -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/techbridge"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        android:layout_marginBottom="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtSolucao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Solução aplicada *"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top"
+            android:fontFamily="@font/poppins_regular" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- COMENTÁRIO TÉCNICO -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/techbridge"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        android:layout_marginBottom="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtComentario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Comentário técnico (opcional)"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:gravity="top"
+            android:fontFamily="@font/poppins_regular" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- OPERADOR -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/techbridge"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        android:layout_marginBottom="24dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtOperador"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Operador (opcional)"
+            android:inputType="text"
+            android:fontFamily="@font/poppins_regular" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnConcluir"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Concluir Chamado"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins_regular"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        app:cornerRadius="12dp"
+        app:backgroundTint="@color/techbridge" />
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.senai.techbridgemobile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     // USUÁRIO
     Usuario usuario;
 
+    FloatingActionButton btnLogout;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,16 @@ public class MainActivity extends AppCompatActivity {
         btnRecarregar = findViewById(R.id.btnRecarregar);
         // AO CLICAR NO BOTÃO
         btnRecarregar.setOnClickListener(v -> carregarChamados());
+
+        // No onCreate, após o btnRecarregar:
+        btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            // LIMPA A INSTÂNCIA DO RETROFIT E VOLTA PARA O LOGIN
+            RetrofitClient.resetInstance();
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        });
 
 
 
