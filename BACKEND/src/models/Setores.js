@@ -32,7 +32,7 @@ class SetoresModel {
             })
 
             // TOTAL DE SETORES DA BUSCA
-            const [{ total }] = await read('usuarios u', {
+            const [{ total }] = await read('setores', {
                 columns: ['COUNT(*) as total'],
                 where,
                 like,
