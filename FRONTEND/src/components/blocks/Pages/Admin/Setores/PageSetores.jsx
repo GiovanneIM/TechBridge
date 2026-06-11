@@ -134,7 +134,7 @@ export default function PageMembros() {
 
                 {/* NOME, DESCRIÇÃO OU CÓDIGO*/}
                 <FieldContent>
-                    <FieldLabel>Procurar usuário</FieldLabel>
+                    <FieldLabel>Procurar setor</FieldLabel>
                     <Input
                         className="w-full h-11"
                         value={filtro.texto}
@@ -295,9 +295,9 @@ export default function PageMembros() {
                     {setores?.lista.length > 0
                         ? <div
                             className="
-                                    grid gap-4 items-start
-                                    [grid-template-columns:repeat(auto-fill,minmax(320px,1fr))]
-                                "
+                                grid gap-4 items-start
+                                [grid-template-columns:repeat(auto-fill,minmax(320px,1fr))]
+                            "
                         >
                             {/* LISTANDO EMPRESAS */}
                             {setores?.lista?.map((setor) => (
