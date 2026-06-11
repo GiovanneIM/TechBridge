@@ -150,7 +150,7 @@ export default function PageMembros() {
 
                 {/* LIMIT */}
                 <FieldContent>
-                    <FieldLabel>Empresas por página</FieldLabel>
+                    <FieldLabel>Usuários por página</FieldLabel>
 
                     <Tabs
                         value={String(filtro.limit)}
@@ -219,8 +219,8 @@ export default function PageMembros() {
                     </Tabs>
                 </FieldContent>
 
+                {/* BOTÃO DE PROCURA*/}
                 <div className="w-full h-full flex items-end">
-                    {/* BOTÃO DE PROCURA*/}
                     <Button className="text-white w-full h-10 px-6 bg-techbridge" onClick={filtrar}>
                         <Search /> Procurar
                     </Button>
@@ -310,7 +310,7 @@ export default function PageMembros() {
                 {/* MEMBROS CARREGADAS COM SUCESSO */}
                 {!loading.obterMembros && !error.obterMembros && (<>
                     <div className="border-b pb-3 mb-3">
-                        <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => {}}>
+                        <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => { }}>
                             <PlusCircle /> Adicionar usuário
                         </Button>
                     </div>

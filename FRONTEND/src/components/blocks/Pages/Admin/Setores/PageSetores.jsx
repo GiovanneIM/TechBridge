@@ -20,6 +20,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { CardUsuario } from "@/components/Cards/CardUsuario/page";
 import { useHeader } from "@/context/HeaderContext";
+import { CardSetor } from "@/components/Cards/CardSetores/page";
 
 export default function PageMembros() {
     const params = useParams();
@@ -50,7 +51,6 @@ export default function PageMembros() {
     const [filtro, setFiltro] = useState({
         texto: "",
         status: null,
-        cargo: null,
         limit: 10,
         page: 1,
     })
@@ -58,9 +58,9 @@ export default function PageMembros() {
     // FETCH AUTOMÁTICO PARA FILTRAGEM
     useEffect(() => {
         obterSetores(id_empresa, filtro)
-    }, [filtro.page, filtro.limit, filtro.status, filtro.cargo])
+    }, [filtro.page, filtro.limit, filtro.status])
 
-    // FILTRO MANUAL (Busca por nome ou email)
+    // FILTRO MANUAL (Busca por descrição, nome ou código)
     const filtrar = () => {
         setFiltro((prev) => ({
             ...prev,
@@ -132,7 +132,7 @@ export default function PageMembros() {
                     "
             >
 
-                {/* NOME OU EMAIL*/}
+                {/* NOME, DESCRIÇÃO OU CÓDIGO*/}
                 <FieldContent>
                     <FieldLabel>Procurar usuário</FieldLabel>
                     <Input
@@ -144,13 +144,13 @@ export default function PageMembros() {
                                 texto: e.target.value
                             }))
                         }
-                        placeholder="Nome ou email"
+                        placeholder="Nome, descrição ou código"
                     />
                 </FieldContent>
 
                 {/* LIMIT */}
                 <FieldContent>
-                    <FieldLabel>Empresas por página</FieldLabel>
+                    <FieldLabel>Setores por página</FieldLabel>
 
                     <Tabs
                         value={String(filtro.limit)}
@@ -196,31 +196,8 @@ export default function PageMembros() {
                     </Tabs>
                 </FieldContent>
 
-                {/* CARGO */}
-                <FieldContent>
-                    <FieldLabel>Cargo</FieldLabel>
-
-                    <Tabs
-                        value={filtro.cargo ?? 'all'}
-                        onValueChange={(value) =>
-                            setFiltro((prev) => ({
-                                ...prev,
-                                cargo: value === 'all' ? null : value,
-                                page: 1
-                            }))
-                        }
-                        className="w-full bg-muted p-1 rounded-md"
-                    >
-                        <TabsList className="w-full">
-                            <TabsTrigger value="all" className="flex-1">Todos</TabsTrigger>
-                            <TabsTrigger value="gerente" className="flex-1">Gerente</TabsTrigger>
-                            <TabsTrigger value="tecnico" className="flex-1">Tecnico</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-                </FieldContent>
-
+                {/* BOTÃO DE PROCURA*/}
                 <div className="w-full h-full flex items-end">
-                    {/* BOTÃO DE PROCURA*/}
                     <Button className="text-white w-full h-10 px-6 bg-techbridge" onClick={filtrar}>
                         <Search /> Procurar
                     </Button>
@@ -310,7 +287,7 @@ export default function PageMembros() {
                 {/* SETORES CARREGADAS COM SUCESSO */}
                 {!loading.obterSetores && !error.obterSetores && (<>
                     <div className="border-b pb-3 mb-3">
-                        <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => {}}>
+                        <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => { }}>
                             <PlusCircle /> Adicionar setor
                         </Button>
                     </div>
@@ -324,8 +301,7 @@ export default function PageMembros() {
                         >
                             {/* LISTANDO EMPRESAS */}
                             {setores?.lista?.map((setor) => (
-                                <></>
-                                // <CardUsuario key={setor.id} user={setor} />
+                                <CardSetor key={setor.id} setor={setor} />
                             ))}
                         </div>
 

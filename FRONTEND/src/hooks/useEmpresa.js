@@ -200,8 +200,6 @@ export function useEmpresa() {
                 method: 'GET'
             });
 
-            console.log(data)
-
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterMembros: data.mensagem }))
             } else {
@@ -225,7 +223,6 @@ export function useEmpresa() {
         setError((prev) => ({ ...prev, obterMembro: null }));
 
         try {
-
             const data = await API_FETCH(`/empresas/${id_empresa}/membros/${cod_usuario}`, {
                 method: 'GET'
             });
@@ -267,12 +264,10 @@ export function useEmpresa() {
                 method: 'GET'
             });
 
-            console.log(data);
-
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterSetores: data.mensagem }))
             } else {
-                setSetores(data.dados.setores)
+                setSetores(data.dados)
             }
         } catch (err) {
             if (err.message === 'Sessão expirada') return;
@@ -295,8 +290,6 @@ export function useEmpresa() {
             const data = await API_FETCH(`/empresas/${id_empresa}/maquinas`, {
                 method: 'GET'
             });
-
-            console.log(data);
 
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterMaquinas: data.mensagem }))
@@ -363,8 +356,6 @@ export function useEmpresa() {
                 method: 'GET'
             });
 
-            console.log(data);
-
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterInfosGerais: data.mensagem }));
             } else {
@@ -398,8 +389,6 @@ export function useEmpresa() {
                 body: JSON.stringify(novosDados),
                 credentials: 'include'
             });
-
-            console.log(data);
 
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, atualizarEmpresa: data.mensagem }))
@@ -436,8 +425,6 @@ export function useEmpresa() {
                 body: formData,
                 credentials: 'include'
             });
-
-            console.log(data);
 
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, atualizarLogo: data.mensagem }))
