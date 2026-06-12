@@ -60,6 +60,9 @@ class MaquinaController {
 
     // LISTAR MAQUINAS DE UMA EMPRESA
     static async listarDaEmpresa(req, res) {
+        // OBTER PAGINAÇÃO
+        const { page, limit, texto, status } = req.validated.query;
+
         // OBTER O ID DA EMPRESA
         const { id_empresa } = req.params;
 
@@ -72,15 +75,35 @@ class MaquinaController {
             });
         }
 
+        // CALCULANDO OFFSET
+        const offset = (page - 1) * limit;
+
+        // FILTROS
+        const where = {};
+        const like = {};
+        const likeOr = {};
+
+        if (status && status !== 'all') {
+            status === 'ativa'
+                ? where["status"] = true
+                : where["status"] = false
+        }
+
+        if (texto) {
+            likeOr["nome"] = texto;
+            likeOr["cod_setor"] = texto;
+            likeOr["descricao"] = texto;
+        }
+
         try {
-            // REQUISIÇÃO
-            const maquinas = await MaquinasModel.listarDaEmpresa(id_empresa);
+            // BUSCANDO MAQUINAS
+            const resultado = await MaquinasModel.listarDaEmpresa(id_empresa, limit, offset, page, where, like, likeOr);
 
             // SUCESSO: ENVIAR MÁQUINAS
             return res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Máquinas listadas com sucesso`,
-                dados: { maquinas },
+                dados: resultado,
             });
         }
         catch (error) {

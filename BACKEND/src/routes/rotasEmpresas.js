@@ -488,6 +488,7 @@ router.patch(
 router.get(
     '/:id_empresa/maquinas',
     validateZod(params_Empresa, 'params'),          // Params - ID da empresa
+    validateZod(paginacaoSchema, 'query'),          // Query - Paginação
     MaquinaController.listarDaEmpresa               // Controller Maquinas - Listar máquinas da empresa
 );
 

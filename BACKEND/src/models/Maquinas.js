@@ -20,20 +20,53 @@ class MaquinasModel {
     }
 
     // LISTAR MÁQUINAS DE UMA EMPRESA
-    static async listarDaEmpresa(id_empresa) {
+    static async listarDaEmpresa(id_empresa, limit, offset, page, where, like, likeOr) {
         try {
             // FAZER A CONSULTA
             const maquinas = await read("maquinas m", {
-                columns: ['m.*'],
-                where: { 'e.id': id_empresa },
+                columns: ['m.*', s.cod_setor],
                 join: [
                     { type: "INNER", table: "setores s", on: "s.id = m.id_setor" },
                     { type: "INNER", table: "empresas e", on: "e.id = s.id_empresa" }
-                ]
+                ],
+                where: {
+                    'e.id': id_empresa,
+                    ...where
+                },
+                like,
+                likeOr,
+                limit,
+                offset,
             })
 
-            // RETORNANDO AS MÁQUINAS
-            return maquinas
+            // TOTAL DE SETORES DA BUSCA
+            const [{ total }] = await read('setores', {
+                columns: ['COUNT(*) as total'],
+                join: [
+                    { type: "INNER", table: "setores s", on: "s.id = m.id_setor" },
+                    { type: "INNER", table: "empresas e", on: "e.id = s.id_empresa" }
+                ],
+                where: {
+                    'e.id': id_empresa,
+                    ...where
+                },
+                like,
+                likeOr
+            });
+            
+            // TOTAL DE PAGINAS
+            const total_paginas = Math.ceil(total / limit)
+
+            // RETORNANDO AS MÁQUINAS E INFORMAÇÕES DE PAGINAÇÃO
+            return {
+                lista: maquinas,
+                paginacao: {
+                    total,
+                    page,
+                    limit,
+                    total_paginas,
+                }
+            }
         } catch (error) {
             console.error('Erro ao listar máquinas:', error);
             throw error;
