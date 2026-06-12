@@ -85,14 +85,16 @@ class MaquinaController {
 
         if (status && status !== 'all') {
             status === 'ativa'
-                ? where["status"] = true
-                : where["status"] = false
+                ? where["m.status"] = true
+                : where["m.status"] = false
         }
 
         if (texto) {
-            likeOr["nome"] = texto;
-            likeOr["cod_setor"] = texto;
-            likeOr["descricao"] = texto;
+            likeOr["m.nome"] = texto;
+            likeOr["nome_setor"] = texto;
+            likeOr["s.cod_setor"] = texto;
+            likeOr["m.cod_maquina"] = texto;
+            likeOr["m.descricao"] = texto;
         }
 
         try {
