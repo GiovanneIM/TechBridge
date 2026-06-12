@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { cod_setor } from '../dados/setor';
 
 const PAGINACAO_LIMITE_MAXIMO = Number(process.env.PAGINACAO_LIMITE_MAXIMO) || 100;
 const PAGINACAO_LIMITE_PADRAO = Number(process.env.PAGINACAO_LIMITE_PADRAO) || 10;
@@ -20,4 +21,5 @@ export const paginacaoSchema = z.object({
     estado: z.string().optional(),
     texto: z.string().optional(),
     cargo: z.string().optional(),
+    cod_setor: cod_setor.optional(),
 }).strict();

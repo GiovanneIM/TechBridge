@@ -61,7 +61,7 @@ class MaquinaController {
     // LISTAR MAQUINAS DE UMA EMPRESA
     static async listarDaEmpresa(req, res) {
         // OBTER PAGINAÇÃO
-        const { page, limit, texto, status } = req.validated.query;
+        const { page, limit, texto, status, cod_setor } = req.validated.query;
 
         // OBTER O ID DA EMPRESA
         const { id_empresa } = req.params;
@@ -89,10 +89,13 @@ class MaquinaController {
                 : where["m.status"] = false
         }
 
+        if (cod_setor) {
+            where["s.cod_setor"] = cod_setor
+        }
+
         if (texto) {
             likeOr["m.nome"] = texto;
-            likeOr["nome_setor"] = texto;
-            likeOr["s.cod_setor"] = texto;
+            likeOr["s.nome"] = texto;
             likeOr["m.cod_maquina"] = texto;
             likeOr["m.descricao"] = texto;
         }
