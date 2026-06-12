@@ -24,7 +24,7 @@ class MaquinasModel {
         try {
             // FAZER A CONSULTA
             const maquinas = await read("maquinas m", {
-                columns: ['m.*', s.cod_setor],
+                columns: ['m.*', 's.cod_setor'],
                 join: [
                     { type: "INNER", table: "setores s", on: "s.id = m.id_setor" },
                     { type: "INNER", table: "empresas e", on: "e.id = s.id_empresa" }
@@ -40,7 +40,7 @@ class MaquinasModel {
             })
 
             // TOTAL DE SETORES DA BUSCA
-            const [{ total }] = await read('setores', {
+            const [{ total }] = await read('maquinas m', {
                 columns: ['COUNT(*) as total'],
                 join: [
                     { type: "INNER", table: "setores s", on: "s.id = m.id_setor" },
@@ -53,7 +53,7 @@ class MaquinasModel {
                 like,
                 likeOr
             });
-            
+
             // TOTAL DE PAGINAS
             const total_paginas = Math.ceil(total / limit)
 
