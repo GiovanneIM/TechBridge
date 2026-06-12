@@ -411,7 +411,7 @@ export default function PageEmpresa() {
                                     ">
                                         {infosGerais?.gerente?.foto_perfil ? (
                                             <img
-                                                src={`http://localhost:3000/uploads/imagens/usuarios/${infosGerais.gerente.id}/${infosGerais.gerente.foto_perfil}`}
+                                                src={API_URL + `/uploads/imagens/usuarios/${infosGerais.gerente.id}/${infosGerais.gerente.foto_perfil}`}
                                                 alt={`${infosGerais?.gerente?.nome} perfil`}
                                                 className="w-full h-full object-cover"
                                             />
@@ -561,7 +561,7 @@ export default function PageEmpresa() {
                                     <p className="font-genty text-xl border-b sm:border-0 pb-1 mb-2 sm:mb-0">Máquinas da empresa</p>
 
                                     <Button variant="outline" className="w-full sm:w-50" asChild>
-                                        <Link href={`http://localhost:3001/admin/empresas/${empresa.id}/maquinas`}>
+                                        <Link href={`/admin/empresas/${empresa.id}/maquinas`}>
                                             Ver Máquinas <ArrowRightCircle className="inline" />
                                         </Link>
                                     </Button>

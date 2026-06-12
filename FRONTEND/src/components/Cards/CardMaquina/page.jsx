@@ -6,9 +6,7 @@ import { useRouter } from "next/navigation";
 
 
 
-export function CardSetor({ setor }) {
-    const router = useRouter()
-    const Icon = icons[setor.icone];
+export function CardMaquina({ maquina }) {
 
     return (
         <div
@@ -21,28 +19,26 @@ export function CardSetor({ setor }) {
             {/* HEADER */}
             <div
                 className={`
-                    relative px-4 h-[80px]
+                    relative px-4 h-[80px] bg-techbridge
                     flex justify-center items-center gap-4
                 `}
-
-                style={{
-                    backgroundColor: `#${setor.cor_fundo}`,
-                    color: `#${setor.cor_texto}`,
-                }}
             >
-                {/* ICONE */}
-                <Icon />
-
                 {/* NOME */}
-                <h2 className="flex-1 text-xl font-genty">
-                    {setor?.nome}
-                </h2>
+                <div className="flex-1">
+                    <h2 className="text-xl font-genty text-white">
+                        {maquina?.nome}
+                    </h2>
+
+                    <h2 className="text-sm font-genty text-slate-700">
+                        Setor: {maquina?.nome_setor}
+                    </h2>
+                </div>
 
                 {/* STATUS */}
                 <div
                     className={`
                         top-2 right-2 w-4 h-4 rounded-full border-2 border-white 
-                        ${setor.status ? "bg-green-500" : "bg-red-500"}
+                        ${maquina.status ? "bg-green-500" : "bg-red-500"}
                     `}
                 />
             </div>
@@ -54,13 +50,13 @@ export function CardSetor({ setor }) {
                     text-secondary-foreground font-genty 
                     text-sm border rounded p-2
                 ">
-                    # {setor?.cod_setor}
+                    # {maquina.cod_setor} - {maquina?.cod_maquina}
                 </p>
 
                 {/* DESCRIÇÃO */}
                 <p className="text-secondary-foreground text-sm line-clamp-2">
                     {
-                        setor?.descricao
+                        maquina?.descricao
                     }
                 </p>
 
@@ -72,7 +68,7 @@ export function CardSetor({ setor }) {
                 "
                 >
                     <Link
-                        href={`/admin/empresas/${setor.id_empresa}/setores/${setor.cod_setor}`}
+                        href={`/admin/empresas/${maquina.id_empresa}/setores/${maquina.cod_setor}/maquina/${maquina.cod_maquina}`}
                         className="flex justify-center items-center"
                     >
                         Ver empresa <ArrowRightCircle className="inline" />

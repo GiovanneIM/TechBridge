@@ -1,12 +1,19 @@
 'use client'
 
-import { PlusCircle, Search, User2 } from "lucide-react";
+import { Cpu, PlusCircle, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useEmpresa } from "@/hooks/useEmpresa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@/components/ui/select";
 import {
     Pagination,
     PaginationContent,
@@ -18,11 +25,10 @@ import {
 } from "@/components/ui/pagination"
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { CardUsuario } from "@/components/Cards/CardUsuario/page";
 import { useHeader } from "@/context/HeaderContext";
-import { CardSetor } from "@/components/Cards/CardSetores/page";
+import { CardMaquina } from "@/components/Cards/CardMaquina/page";
 
-export default function PageSetores() {
+export default function PageMaquinas() {
     const params = useParams();
     const id_empresa = params.id;
 
@@ -31,6 +37,7 @@ export default function PageSetores() {
         loading, error, mensagem,
         empresa, obterEmpresa,
         setores, obterSetores,
+        maquinas, obterMaquinas,
     } = useEmpresa()
 
     // OBTER EMPRESA
@@ -47,18 +54,26 @@ export default function PageSetores() {
         }
     }, [setores, obterSetores])
 
+    // OBTER MAQUINAS
+    useEffect(() => {
+        if (!maquinas) {
+            obterMaquinas(id_empresa)
+        }
+    }, [maquinas, obterMaquinas])
+
     // ESTADO PARA FILTROS E PAGINAÇÃO
     const [filtro, setFiltro] = useState({
         texto: "",
         status: null,
         limit: 10,
         page: 1,
+        cod_setor: null,
     })
 
     // FETCH AUTOMÁTICO PARA FILTRAGEM
     useEffect(() => {
-        obterSetores(id_empresa, filtro)
-    }, [filtro.page, filtro.limit, filtro.status])
+        obterMaquinas(id_empresa, filtro)
+    }, [filtro.page, filtro.limit, filtro.status, filtro.cod_setor])
 
     // FILTRO MANUAL (Busca por descrição, nome ou código)
     const filtrar = () => {
@@ -67,14 +82,14 @@ export default function PageSetores() {
             page: 1
         }))
 
-        obterSetores(id_empresa, {
+        obterMaquinas(id_empresa, {
             ...filtro,
             page: 1
         })
     }
 
     // TOTAL DE PÁGINAS
-    const totalPages = setores?.paginacao?.total_paginas || 1
+    const totalPages = maquinas?.paginacao?.total_paginas || 1
 
     // GERA VETOR COM O NÚMERO DAS PÁGINAS NA PAGINAÇÃO
     function gerarPaginas(page, total) {
@@ -134,7 +149,7 @@ export default function PageSetores() {
 
                 {/* NOME, DESCRIÇÃO OU CÓDIGO*/}
                 <FieldContent>
-                    <FieldLabel>Procurar setor</FieldLabel>
+                    <FieldLabel>Procurar máquina</FieldLabel>
                     <Input
                         className="w-full h-11"
                         value={filtro.texto}
@@ -144,13 +159,13 @@ export default function PageSetores() {
                                 texto: e.target.value
                             }))
                         }
-                        placeholder="Nome, descrição ou código"
+                        placeholder="Nome, descrição ou código da máquina"
                     />
                 </FieldContent>
 
                 {/* LIMIT */}
                 <FieldContent>
-                    <FieldLabel>Setores por página</FieldLabel>
+                    <FieldLabel>Máquinas por página</FieldLabel>
 
                     <Tabs
                         value={String(filtro.limit)}
@@ -194,6 +209,38 @@ export default function PageSetores() {
                             <TabsTrigger value="inativa" className="flex-1">Inativo</TabsTrigger>
                         </TabsList>
                     </Tabs>
+                </FieldContent>
+
+                {/* Setor */}
+                <FieldContent className="h-full">
+                    <FieldLabel>Setor</FieldLabel>
+
+                    <Select
+                        value={filtro.cod_setor ?? 'all'}
+                        onValueChange={(value) =>
+                            setFiltro((prev) => ({
+                                ...prev,
+                                cod_setor: value === 'all' ? null : value,
+                                page: 1
+                            }))
+                        }
+                    >
+                        <SelectTrigger className="w-full h-full">
+                            <SelectValue placeholder="Selecione um setor" />
+                        </SelectTrigger>
+
+                        <SelectContent className="" position="popper">
+                            <SelectItem value="all" className="border">Todos</SelectItem>
+
+                            <div>
+                                {setores?.lista.map((s) => (
+                                    <SelectItem key={s.id} value={s.cod_setor}>
+                                        {s.cod_setor} - {s.nome}
+                                    </SelectItem>
+                                ))}
+                            </div>
+                        </SelectContent>
+                    </Select>
                 </FieldContent>
 
                 {/* BOTÃO DE PROCURA*/}
@@ -240,7 +287,7 @@ export default function PageSetores() {
                 </PaginationContent>
 
                 <p className="text-muted-foreground font-semibold text-xs">
-                    Exibindo {setores?.lista?.length ?? 0} de {setores?.paginacao?.total ?? 0} resultados
+                    Exibindo {maquinas?.lista?.length ?? 0} de {maquinas?.paginacao?.total ?? 0} resultados
                 </p>
             </Pagination>
 
@@ -248,7 +295,7 @@ export default function PageSetores() {
             <div className="h-full border bg-card p-3 rounded gap-3 items-start overflow-y-auto">
 
                 {/* CARREGANDO EMPRESAS */}
-                {loading.obterSetores &&
+                {loading.obterMaquinas &&
                     <div className="
                             h-full w-full 
                             flex flex-col items-center justify-center gap-4
@@ -262,12 +309,12 @@ export default function PageSetores() {
                             className="animate-pulse"
                         />
 
-                        <p>Obtendo setores</p>
+                        <p>Obtendo maquinas</p>
                     </div>
                 }
 
                 {/* ERRO AO OBTER EMPRESAS */}
-                {error.obterSetores &&
+                {error.obterMaquinas &&
                     <div className="
                             h-full w-full 
                             flex flex-col items-center justify-center gap-4
@@ -280,19 +327,19 @@ export default function PageSetores() {
                             src="/TechBridge/LogoError.svg"
                         />
 
-                        <p>{error.obterSetores}</p>
+                        <p>{error.obterMaquinas}</p>
                     </div>
                 }
 
-                {/* SETORES CARREGADAS COM SUCESSO */}
-                {!loading.obterSetores && !error.obterSetores && (<>
+                {/* MAQUINAS CARREGADAS COM SUCESSO */}
+                {!loading.obterMaquinas && !error.obterMaquinas && (<>
                     <div className="border-b pb-3 mb-3">
                         <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => { }}>
-                            <PlusCircle /> Adicionar setor
+                            <PlusCircle /> Adicionar máquina
                         </Button>
                     </div>
 
-                    {setores?.lista.length > 0
+                    {maquinas?.lista.length > 0
                         ? <div
                             className="
                                 grid gap-4 items-start
@@ -300,12 +347,12 @@ export default function PageSetores() {
                             "
                         >
                             {/* LISTANDO EMPRESAS */}
-                            {setores?.lista?.map((setor) => (
-                                <CardSetor key={setor.id} setor={setor} />
+                            {maquinas?.lista?.map((maquina) => (
+                                <CardMaquina key={maquina.id} maquina={maquina} />
                             ))}
                         </div>
 
-                        // SEM SETORES
+                        // SEM MAQUINAS
                         : <div className="
                                     h-full w-full 
                                     flex flex-col items-center justify-center gap-4
@@ -334,8 +381,8 @@ export default function PageSetores() {
 
     useEffect(() => {
         setHeader({
-            icon: User2,
-            title: `[#${id_empresa}] ${empresa?.nome_fantasia} - Membros da empresa`,
+            icon: Cpu,
+            title: `[#${id_empresa}] ${empresa?.nome_fantasia} - Máquinas da empresa`,
 
         });
     }, [setHeader, empresa]);

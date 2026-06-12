@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { cod_setor } from '../dados/setor';
+import { cod_setor } from '../dados/setor.js';
 
 const PAGINACAO_LIMITE_MAXIMO = Number(process.env.PAGINACAO_LIMITE_MAXIMO) || 100;
 const PAGINACAO_LIMITE_PADRAO = Number(process.env.PAGINACAO_LIMITE_PADRAO) || 10;

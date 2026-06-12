@@ -282,19 +282,29 @@ export function useEmpresa() {
     }, []);
 
     // OBTER MÁQUINAS
-    const obterMaquinas = useCallback(async (id_empresa) => {
+    const obterMaquinas = useCallback(async (id_empresa, filtro = {}) => {
         setLoading((prev) => ({ ...prev, obterMaquinas: true }));
         setError((prev) => ({ ...prev, obterMaquinas: null }));
 
         try {
-            const data = await API_FETCH(`/empresas/${id_empresa}/maquinas`, {
+            const params = new URLSearchParams();
+
+            Object.entries(filtro).forEach(([key, value]) => {
+                if (value !== null && value !== undefined && value !== '') {
+                    params.append(key, value);
+                }
+            });
+
+            const query = params.toString();
+
+            const data = await API_FETCH(`/empresas/${id_empresa}/maquinas?${query}`, {
                 method: 'GET'
             });
 
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterMaquinas: data.mensagem }))
             } else {
-                setMaquinas(data.dados.maquinas)
+                setMaquinas(data.dados)
             }
         } catch (err) {
             if (err.message === 'Sessão expirada') return;
