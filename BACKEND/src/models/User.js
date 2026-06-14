@@ -13,7 +13,10 @@ class UserModel {
                 id_empresa
             };
 
-            return await create('usuarios', dadosComHash);
+            // INSERINDO USUÁRIO
+            const id_usuario = await create('usuarios', dadosComHash);
+
+            return await this.buscarPorId(id_usuario);
         } catch (error) {
             console.error('Erro ao criar usuário:', error);
             throw error;
