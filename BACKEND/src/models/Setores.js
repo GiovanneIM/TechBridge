@@ -79,7 +79,7 @@ class SetoresModel {
         try {
             // FAZER A CONSULTA
             const setor = await read("setores", {
-                where: { id_setor }
+                where: { id: id_setor }
             })
 
             // RETORNANDO O SETOR
