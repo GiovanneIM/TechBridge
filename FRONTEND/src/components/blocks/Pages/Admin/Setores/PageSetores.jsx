@@ -22,31 +22,44 @@ import { CardUsuario } from "@/components/Cards/CardUsuario/page";
 import { useHeader } from "@/context/HeaderContext";
 import { CardSetor } from "@/components/Cards/CardSetores/page";
 import ModalAddSetor from "@/components/modals/addSetor";
+import { useEmpresas } from "@/hooks/useEmpresas";
+import { useSetores } from "@/hooks/useSetores";
 
 export default function PageSetores() {
     const params = useParams();
     const id_empresa = params.id;
 
-    // HOOK
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // HOOKS
+
+    // EMPRESAS
     const {
-        loading, error, mensagem,
+        loading: loadingEmpresas, error: errorEmpresas, mensagem: mensagemEmpresas,
         empresa, obterEmpresa,
+    } = useEmpresas();
+
+    // SETORES
+    const {
+        loading: loadingSetores, error: errorSetores, mensagem: mensagemSetores,
         setores, obterSetores,
-    } = useEmpresa()
+    } = useSetores();
 
     // OBTER EMPRESA
     useEffect(() => {
         if (!empresa) {
             obterEmpresa(id_empresa)
         }
-    }, [empresa, obterEmpresa])
+    }, [id_empresa, empresa, obterEmpresa]);
 
     // OBTER SETORES
     useEffect(() => {
         if (!setores) {
             obterSetores(id_empresa)
         }
-    }, [setores, obterSetores])
+    }, [id_empresa, setores, obterSetores]);
+
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // FILTRAGEM
 
     // ESTADO PARA FILTROS E PAGINAÇÃO
     const [filtro, setFiltro] = useState({
@@ -54,30 +67,26 @@ export default function PageSetores() {
         status: null,
         limit: 10,
         page: 1,
-    })
+    });
 
     // FETCH AUTOMÁTICO PARA FILTRAGEM
-    useEffect(() => {
-        obterSetores(id_empresa, filtro)
-    }, [filtro.page, filtro.limit, filtro.status])
+    useEffect(() => { 
+        obterSetores(id_empresa, filtro) 
+    }, [filtro.page, filtro.limit, filtro.status]);
 
-    // FILTRO MANUAL (Busca por descrição, nome ou código)
+    // FILTRO MANUAL (Busca por texto)
     const filtrar = () => {
-        setFiltro((prev) => ({
-            ...prev,
-            page: 1
-        }))
-
-        obterSetores(id_empresa, {
-            ...filtro,
-            page: 1
-        })
+        setFiltro((prev) => ({ ...prev, page: 1 }));
+        obterSetores(id_empresa, { ...filtro, page: 1 });
     }
 
-    // TOTAL DE PÁGINAS
-    const totalPages = setores?.paginacao?.total_paginas || 1
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // PAGINAÇÃO
 
-    // GERA VETOR COM O NÚMERO DAS PÁGINAS NA PAGINAÇÃO
+    // TOTAL DE PÁGINAS
+    const totalPages = setores?.paginacao?.total_paginas || 1;
+
+    // GERA ARRAY COM O NÚMERO DAS PÁGINAS NA PAGINAÇÃO
     function gerarPaginas(page, total) {
         const pages = []
         const delta = 2     // DISTÂNCIA DE EXIBIÇÃO (Mostra delta páginas antes da atual e delta páginas depois da atual)
@@ -105,7 +114,7 @@ export default function PageSetores() {
     }
 
     // ARRAY COM O NÚMERO DAS PÁGINAS
-    const pages = gerarPaginas(filtro.page, totalPages)
+    const pages = gerarPaginas(filtro.page, totalPages);
 
     // FUNÇÃO PARA MUDAR A PÁGINA
     const changePage = (page) => {
@@ -113,11 +122,10 @@ export default function PageSetores() {
         if (page < 1 || page > totalPages) return
 
         // ALTERA O FILTRO
-        setFiltro((prev) => ({ ...prev, page }))
+        setFiltro((prev) => ({ ...prev, page }));
     }
 
-
-
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     // CONTEÚDO
     let content;
 
@@ -249,7 +257,7 @@ export default function PageSetores() {
             <div className="h-full border bg-card p-3 rounded gap-3 items-start overflow-y-auto">
 
                 {/* CARREGANDO EMPRESAS */}
-                {loading.obterSetores &&
+                {loadingSetores.obterSetores &&
                     <div className="
                             h-full w-full 
                             flex flex-col items-center justify-center gap-4
@@ -268,7 +276,7 @@ export default function PageSetores() {
                 }
 
                 {/* ERRO AO OBTER EMPRESAS */}
-                {error.obterSetores &&
+                {errorSetores.obterSetores &&
                     <div className="
                             h-full w-full 
                             flex flex-col items-center justify-center gap-4
@@ -286,10 +294,10 @@ export default function PageSetores() {
                 }
 
                 {/* SETORES CARREGADAS COM SUCESSO */}
-                {!loading.obterSetores && !error.obterSetores && (<>
+                {!loadingSetores.obterSetores && !errorSetores.obterSetores && (<>
                     {/* ADIONAR SETOR */}
                     <div className="border-b pb-3 mb-3">
-                        <ModalAddSetor>
+                        <ModalAddSetor id_empresa={id_empresa}>
                             <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => { }}>
                                 <PlusCircle /> Adicionar setor
                             </Button>
@@ -333,10 +341,8 @@ export default function PageSetores() {
     )
 
 
-
     // HEADER
     const { setHeader } = useHeader();
-
     useEffect(() => {
         setHeader({
             icon: User2,

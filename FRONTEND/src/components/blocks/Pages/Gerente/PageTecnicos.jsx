@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { useEmpresa } from "@/hooks/useEmpresa";
 
 import { CardTecnico } from "../../../Cards/cardTecnicos/page";
-import ModalNovoTecnico from '@/components/modals/addTecnico';
+import ModalNovoTecnico from '@/components/modals/addUser';
 
 import { UserCog2, RotateCw } from 'lucide-react';
 

@@ -1,8 +1,9 @@
 'use client'
 
+import { useMembros } from "@/hooks/useMembros";
+import { useEmpresas } from "@/hooks/useEmpresas";
 import { PlusCircle, Search, User2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useEmpresa } from "@/hooks/useEmpresa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
@@ -20,31 +21,44 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { CardUsuario } from "@/components/Cards/CardUsuario/page";
 import { useHeader } from "@/context/HeaderContext";
+import ModalAddUser from "@/components/modals/addUser";
+
 
 export default function PageMembros() {
     const params = useParams();
     const id_empresa = params.id;
 
-    // HOOK
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // HOOKS
+
+    // EMPRESAS
     const {
-        loading, error, mensagem,
+        loading: loadingEmpresas, error: errorEmpresas, mensagem: mensagemEmpresas,
         empresa, obterEmpresa,
+    } = useEmpresas();
+
+    // MEMBROS
+    const {
+        loading: loadingMembros, error: errorMembros, mensagem: mensagemMembros,
         membros, obterMembros,
-    } = useEmpresa()
+    } = useMembros();
 
     // OBTER EMPRESA
     useEffect(() => {
         if (!empresa) {
-            obterEmpresa(id_empresa)
+            obterEmpresa(id_empresa);
         }
-    }, [empresa, obterEmpresa])
+    }, [empresa, obterEmpresa]);
 
     // OBTER MEMBROS
     useEffect(() => {
         if (!membros) {
-            obterMembros(id_empresa)
+            obterMembros(id_empresa);
         }
-    }, [membros, obterMembros])
+    }, [membros, obterMembros]);
+
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // FILTRAGEM
 
     // ESTADO PARA FILTROS E PAGINAÇÃO
     const [filtro, setFiltro] = useState({
@@ -53,25 +67,21 @@ export default function PageMembros() {
         cargo: null,
         limit: 10,
         page: 1,
-    })
+    });
 
     // FETCH AUTOMÁTICO PARA FILTRAGEM
     useEffect(() => {
         obterMembros(id_empresa, filtro)
-    }, [filtro.page, filtro.limit, filtro.status, filtro.cargo])
+    }, [filtro.page, filtro.limit, filtro.status, filtro.cargo]);
 
-    // FILTRO MANUAL (Busca por nome ou email)
+    // FILTRO MANUAL (Busca por texto)
     const filtrar = () => {
-        setFiltro((prev) => ({
-            ...prev,
-            page: 1
-        }))
-
-        obterMembros(id_empresa, {
-            ...filtro,
-            page: 1
-        })
+        setFiltro((prev) => ({ ...prev, page: 1 }));
+        obterMembros(id_empresa, { ...filtro, page: 1 });
     }
+
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // PAGINAÇÃO
 
     // TOTAL DE PÁGINAS
     const totalPages = membros?.paginacao?.total_paginas || 1
@@ -115,8 +125,7 @@ export default function PageMembros() {
         setFiltro((prev) => ({ ...prev, page }))
     }
 
-
-
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     // CONTEÚDO
     let content;
 
@@ -271,7 +280,7 @@ export default function PageMembros() {
             <div className="h-full border bg-card p-3 rounded gap-3 items-start overflow-y-auto">
 
                 {/* CARREGANDO EMPRESAS */}
-                {loading.obterMembros &&
+                {loadingMembros.obterMembros &&
                     <div className="
                             h-full w-full 
                             flex flex-col items-center justify-center gap-4
@@ -290,7 +299,7 @@ export default function PageMembros() {
                 }
 
                 {/* ERRO AO OBTER EMPRESAS */}
-                {error.obterMembros &&
+                {errorMembros.obterMembros &&
                     <div className="
                             h-full w-full 
                             flex flex-col items-center justify-center gap-4
@@ -303,19 +312,23 @@ export default function PageMembros() {
                             src="/TechBridge/LogoError.svg"
                         />
 
-                        <p>{error.obterMembros}</p>
+                        <p>{errorMembros.obterMembros}</p>
                     </div>
                 }
 
                 {/* MEMBROS CARREGADAS COM SUCESSO */}
-                {!loading.obterMembros && !error.obterMembros && (<>
+                {!loadingMembros.obterMembros && !errorMembros.obterMembros && (<>
+                    {/* ADIONAR USER */}
                     <div className="border-b pb-3 mb-3">
-                        <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => { }}>
-                            <PlusCircle /> Adicionar usuário
-                        </Button>
+                        <ModalAddUser id_empresa={id_empresa}>
+                            <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => { }}>
+                                <PlusCircle /> Adicionar usuário
+                            </Button>
+                        </ModalAddUser>
                     </div>
 
                     {membros?.lista.length > 0
+                        // LISTAR MEMBROS
                         ? <div
                             className="
                                     grid gap-4 items-start

@@ -111,7 +111,6 @@ export function useSetores() {
 
 
         try {
-
             const data = await API_FETCH(`/empresas/${id_empresa}/setores`, {
                 method: 'POST',
                 headers: {

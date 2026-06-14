@@ -2,12 +2,10 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator";
 import { icons, ArrowRightCircle } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation";
 
 
 
 export function CardSetor({ setor, botao }) {
-    const router = useRouter()
     const Icon = icons[setor.icone];
 
     return (
@@ -58,7 +56,7 @@ export function CardSetor({ setor, botao }) {
                 </p>
 
                 {/* DESCRIÇÃO */}
-                <p className="text-secondary-foreground text-sm line-clamp-2">
+                <p className="min-h-[40px] text-secondary-foreground text-sm line-clamp-2">
                     {
                         setor?.descricao
                     }

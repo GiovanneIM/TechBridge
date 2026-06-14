@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { useSetores } from "@/hooks/useSetores"
+import { useState } from "react"
+import { useMembros } from "@/hooks/useMembros"
 import {
     DialogContent,
     DialogHeader,
@@ -25,30 +25,26 @@ import { SelectIconSetor } from "@/components/Form/IconSetor"
 import { CardSetor } from "@/components/Cards/CardSetores/page"
 import { Separator } from "@/components/ui/separator"
 
-export default function ModalAddSetor({ children, id_empresa }) {
+export default function ModalAddUser({ children, id_empresa }) {
     const [isOpen, setIsOpen] = useState(false);
 
-    const [setor, setSetor] = useState({
+    const [membro, setMembro] = useState({
         nome: '',
-        cod_setor: '',
-        descricao: '',
-        cor_fundo: '5170ff',
-        cor_texto: 'FFFFFF',
-        icone: 'Warehouse',
+        cargo: '',
+        email: '',
+        cod_usuario: '',
     })
 
     // HOOK
-    const { loading, error, mensagem, criarSetor } = useSetores();
+    const { loading, error, mensagem, criarMembro } = useMembros();
 
     // LIMPANDO OS DADOS CASO O MODAL SEJA FECHADO
     useEffect(() => {
         setSetor({
             nome: '',
-            cod_setor: '',
-            descricao: '',
-            cor_fundo: '5170ff',
-            cor_texto: 'FFFFFF',
-            icone: 'Warehouse',
+            cargo: '',
+            email: '',
+            cod_usuario: '',
         })
     }, [isOpen])
 
@@ -62,7 +58,7 @@ export default function ModalAddSetor({ children, id_empresa }) {
             <DialogContent className="max-h-svh overflow-y-scroll">
                 <DialogHeader>
                     <DialogTitle className="font-genty font-normal text-2xl">
-                        Registrar Setor
+                        Registrar Membro
                     </DialogTitle>
                 </DialogHeader>
 
@@ -76,7 +72,7 @@ export default function ModalAddSetor({ children, id_empresa }) {
                                 onChange={(e) => { setSetor(prev => ({ ...prev, nome: e.target.value })) }}
                             />
                         </InputGroup>
-                        <FieldError>{error.criarSetor?.zod?.nome}</FieldError>
+                        <FieldError>{error.criarMembro?.zod?.nome}</FieldError>
                     </Field>
 
                     <Field>

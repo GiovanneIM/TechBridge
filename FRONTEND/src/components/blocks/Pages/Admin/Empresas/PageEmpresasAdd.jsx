@@ -1,7 +1,7 @@
 'use client'
 
 import { BriefcaseBusiness, Mail, MapPin, PlusCircle, User2, Warehouse } from "lucide-react";
-import HeaderPage from "../../Header/HeaderPage";
+import HeaderPage from "../../../Header/HeaderPage";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
