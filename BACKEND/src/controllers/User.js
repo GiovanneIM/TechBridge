@@ -11,6 +11,9 @@ class UserController {
         // OBTER DADOS DO USUARIO
         const dados = req.body;
 
+        // DEFININDO SENHA
+        dados.senha = '123456';
+
         // VERIFICANDO SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
         if (!acesso) {
@@ -33,7 +36,7 @@ class UserController {
 
             const id_usuario = await UserModel.criar(dados, id_empresa)
 
-            return res.status(500).json({
+            return res.status(201).json({
                 sucesso: false,
                 mensagem: `Empresa ${id_empresa} - Usuário registrado com sucesso`,
                 dados: { id_empresa, id_usuario }
