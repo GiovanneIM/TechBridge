@@ -22,7 +22,7 @@ class UserController {
 
         try {
             // E-MAIL EM USO
-            const usuarioEmail = UserModel.buscarPorEmail(dados.email)
+            const usuarioEmail = await UserModel.buscarPorEmail(dados.email)
             if (usuarioEmail) {
                 res.status(409).json({
                     sucesso: false,
@@ -31,7 +31,7 @@ class UserController {
                 });
             }
 
-            const id_usuario = UserModel.criar(dados, id_empresa)
+            const id_usuario = await UserModel.criar(dados, id_empresa)
 
             return res.status(500).json({
                 sucesso: false,
