@@ -38,6 +38,7 @@ export const cor_fundo = z
         invalid_type_error: 'Cor deve ser um texto'
     })
     .min(1, 'A cor deve ter ao menos 1 caráctere')
+    .max(6, 'A cor deve ter no máximo 6 caráctere')
 
 // COR DE TEXTO
 export const cor_texto = z
@@ -46,4 +47,5 @@ export const cor_texto = z
         invalid_type_error: 'Cor deve ser um texto'
     })
     .min(1, 'A cor deve ter ao menos 1 caráctere')
+    .max(6, 'A cor deve ter no máximo 6 caráctere')
 
