@@ -5,13 +5,13 @@ class SetoresModel {
     static async criar(id_empresa, dados) {
         try {
             // REGISTRAR SETOR
-            const id_setor = await create('setores', {
+            const setor = await create('setores', {
                 ...dados,
                 id_empresa
             });
 
             // RETORNANDO O ID DA EMPRESA E DO SETOR
-            return { id_empresa, id_setor }
+            return setor;
         } catch (error) {
             // ERRO
             console.error('Erro ao registrar setor:', error);

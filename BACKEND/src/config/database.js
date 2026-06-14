@@ -231,9 +231,14 @@ async function create(table, data) {
         // Executando o comando
         const [result] = await connection.execute(sql, values);
         
-        // Retornando o id do novo registro
-        return result;
-        return result.insertId;
+        // Lendo o novo registro
+        const [rows] = await connection.execute(
+            `SELECT * FROM ${table} WHERE id = ?`,
+            [result.insertId]
+        );
+
+        // Retornando o novo registro
+        return rows[0];
     } finally {
         // Encerrando a conexão
         connection.release();

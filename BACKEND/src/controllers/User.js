@@ -34,12 +34,12 @@ class UserController {
                 });
             }
 
-            const id_usuario = await UserModel.criar(dados, id_empresa)
+            const usuario = await UserModel.criar(dados, id_empresa)
 
             return res.status(201).json({
                 sucesso: true,
-                mensagem: `Empresa ${id_empresa} - Usuário registrado com sucesso`,
-                dados: { id_empresa, id_usuario }
+                mensagem: `Usuário registrado com sucesso`,
+                dados: usuario
             });
 
         } catch (error) {
@@ -53,7 +53,6 @@ class UserController {
                 mensagem: 'Não foi possível registrar o membros na empresa'
             });
         }
-
     }
 
     // LISTAR MEMBROS DE UMA EMPRESA

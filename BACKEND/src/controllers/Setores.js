@@ -31,14 +31,14 @@ class SetoresController {
                 });
             }
 
-            // REGISTRAR A EMPRESA
-            const resultado = await SetoresModel.criar(id_empresa, dados);
+            // REGISTRAR O SETOR
+            const setor = await SetoresModel.criar(id_empresa, dados);
 
             // SUCESSO: ENVIAR ID DO SETOR
             res.status(201).json({
                 sucesso: true,
-                mensagem: `Setor registrado com sucesso - ID ${resultado.id_setor}`,
-                dados: resultado
+                mensagem: `Setor registrado com sucesso`,
+                dados: setor
             });
 
         } catch (error) {
