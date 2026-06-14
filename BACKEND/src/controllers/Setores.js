@@ -22,7 +22,7 @@ class SetoresController {
 
         try {
             // CÓDIGO EM USO NA EMPRESA
-            const setorCod = await SetoresModel.buscarCodigo(id_empresa, dados.codigo);
+            const setorCod = await SetoresModel.buscarCodigo(id_empresa, dados.cod_setor);
             if (setorCod) {
                 return res.status(409).json({
                     sucesso: false,
