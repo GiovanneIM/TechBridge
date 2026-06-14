@@ -25,7 +25,7 @@ import { SelectIconSetor } from "@/components/Form/IconSetor"
 import { CardSetor } from "@/components/Cards/CardSetores/page"
 import { Separator } from "@/components/ui/separator"
 
-export default function ModalAddSetor({ children, id_empresa }) {
+export default function ModalAddSetor({ children, id_empresa, setFiltro }) {
     const [isOpen, setIsOpen] = useState(false);
 
     const [setor, setSetor] = useState({
@@ -167,7 +167,18 @@ export default function ModalAddSetor({ children, id_empresa }) {
                     </DialogClose>
 
                     <Button className="bg-techbridge text-white"
-                        onClick={() => { criarSetor(id_empresa, setor) }}
+                        onClick={async () => {
+                            const sucesso = await criarSetor(id_empresa, setor)
+
+                            if (sucesso) {
+                                setFiltro((prev) => ({
+                                    ...prev,
+                                    texto: setor.cod_setor,
+                                    status: 'ativa',
+                                    page: 1,
+                                }))
+                            }
+                        }}
                         disabled={loading.criarSetor}
                     >
                         Registrar

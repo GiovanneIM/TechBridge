@@ -297,7 +297,7 @@ export default function PageSetores() {
                 {!loadingSetores.obterSetores && !errorSetores.obterSetores && (<>
                     {/* ADIONAR SETOR */}
                     <div className="border-b pb-3 mb-3">
-                        <ModalAddSetor id_empresa={id_empresa}>
+                        <ModalAddSetor id_empresa={id_empresa} setFiltro={setFiltro}>
                             <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => { }}>
                                 <PlusCircle /> Adicionar setor
                             </Button>

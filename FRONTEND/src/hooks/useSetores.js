@@ -128,7 +128,9 @@ export function useSetores() {
                 }
             } else {
                 setMensagem((prev) => ({ ...prev, criarSetor: data.mensagem }))
-                setSetor(data.dados)
+                setSetor(data.dados);
+
+                return true;
             }
         } catch (err) {
             if (err.message === 'Sessão expirada') return;

@@ -71,7 +71,7 @@ export function CardUsuario({ user }) {
 
             <div className="flex-1 flex flex-col gap-2">
                 {/* CÓDIGO */}
-                <div className="flex-1">
+                {/* <div className="flex-1">
                     <p className="text-sm text-muted-foreground">
                         Código de identificação
                     </p>
@@ -79,7 +79,7 @@ export function CardUsuario({ user }) {
                     <p className="font-semibold break-all border py-1 px-2 rounded bg-muted">
                         # {user.cod_usuario ?? '- - - - -'}
                     </p>
-                </div>
+                </div> */}
 
                 {/* EMAIL */}
                 <div className="flex-1">

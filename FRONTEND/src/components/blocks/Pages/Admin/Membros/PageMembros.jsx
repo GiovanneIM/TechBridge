@@ -320,7 +320,7 @@ export default function PageMembros() {
                 {!loadingMembros.obterMembros && !errorMembros.obterMembros && (<>
                     {/* ADIONAR USER */}
                     <div className="border-b pb-3 mb-3">
-                        <ModalAddUser id_empresa={id_empresa}>
+                        <ModalAddUser id_empresa={id_empresa} setFiltro={setFiltro}>
                             <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => { }}>
                                 <PlusCircle /> Adicionar usuário
                             </Button>

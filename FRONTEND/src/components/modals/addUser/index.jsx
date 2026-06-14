@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMembros } from "@/hooks/useMembros"
 import {
     DialogContent,
@@ -24,15 +24,15 @@ import { Input } from "@/components/ui/input"
 import { SelectIconSetor } from "@/components/Form/IconSetor"
 import { CardSetor } from "@/components/Cards/CardSetores/page"
 import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-export default function ModalAddUser({ children, id_empresa }) {
+export default function ModalAddUser({ children, id_empresa, setFiltro }) {
     const [isOpen, setIsOpen] = useState(false);
 
-    const [membro, setMembro] = useState({
+    const [user, setUser] = useState({
         nome: '',
-        cargo: '',
+        tipo_usuario: 4,
         email: '',
-        cod_usuario: '',
     })
 
     // HOOK
@@ -40,11 +40,10 @@ export default function ModalAddUser({ children, id_empresa }) {
 
     // LIMPANDO OS DADOS CASO O MODAL SEJA FECHADO
     useEffect(() => {
-        setSetor({
+        setUser({
             nome: '',
-            cargo: '',
+            tipo_usuario: 4,
             email: '',
-            cod_usuario: '',
         })
     }, [isOpen])
 
@@ -68,103 +67,67 @@ export default function ModalAddUser({ children, id_empresa }) {
                     <Field>
                         <FieldLabel className="font-semibold text-secondary-foreground">Nome</FieldLabel>
                         <InputGroup>
-                            <InputGroupInput placeholder="Nome" value={setor.nome}
-                                onChange={(e) => { setSetor(prev => ({ ...prev, nome: e.target.value })) }}
+                            <InputGroupInput placeholder="Nome" value={user.nome}
+                                onChange={(e) => { setUser(prev => ({ ...prev, nome: e.target.value })) }}
                             />
                         </InputGroup>
                         <FieldError>{error.criarMembro?.zod?.nome}</FieldError>
                     </Field>
 
+                    {/* CARGO */}
                     <Field>
-                        <FieldLabel className="font-semibold text-secondary-foreground">Código</FieldLabel>
+                        <FieldLabel>Cargo</FieldLabel>
+
+                        <Tabs
+                            value={String(user.tipo_usuario)}
+                            onValueChange={(value) =>
+                                setUser((prev) => ({ ...prev, tipo_usuario: Number(value) }))
+                            }
+                            className="w-full bg-muted p-1 rounded-md"
+                        >
+                            <TabsList className="w-full">
+                                <TabsTrigger value="2" className="flex-1">Gerente Principal</TabsTrigger>
+                                <TabsTrigger value="3" className="flex-1">Gerente</TabsTrigger>
+                                <TabsTrigger value="4" className="flex-1">Tecnico</TabsTrigger>
+                            </TabsList>
+                        </Tabs>
+                    </Field>
+
+                    <Field>
+                        <FieldLabel className="font-semibold text-secondary-foreground">E-mail</FieldLabel>
                         <InputGroup>
-                            <InputGroupInput placeholder="Código" value={setor.cod_setor}
-                                onChange={(e) => {
-                                    const codigo = e.target.value.replace(' ', '_').toUpperCase()
-                                    setSetor(prev => ({ ...prev, cod_setor: codigo }))
-                                }}
+                            <InputGroupInput placeholder="E-mail" value={user.email}
+                                onChange={(e) => { setUser(prev => ({ ...prev, email: e.target.value })) }}
                             />
                         </InputGroup>
-                        <FieldError>{error.criarSetor?.zod?.cod_setor}</FieldError>
+                        <FieldError>{error.criarMembro?.zod?.email}</FieldError>
                     </Field>
-
-                    <Field>
-                        <FieldLabel className="font-semibold text-secondary-foreground">Descrição</FieldLabel>
-                        <Textarea placeholder="Descrição do setor" className='h-24'
-                            value={setor.descricao}
-                            onChange={(e) => { setSetor(prev => ({ ...prev, descricao: e.target.value })) }}
-                        />
-                        <FieldError>{error.criarSetor?.zod?.descricao}</FieldError>
-                    </Field>
-
-                    <Field className="grid grid-cols-3">
-                        <div className="flex flex-col gap-2">
-                            <FieldLabel className="font-semibold text-secondary-foreground">Fundo</FieldLabel>
-                            <Input
-                                type="color" className="w-full p-1"
-                                value={'#' + setor.cor_fundo}
-                                onChange={(e) => {
-                                    const novaCor = e.target.value.replace('#', '');
-
-                                    setSetor(prev => ({
-                                        ...prev,
-                                        cor_fundo: novaCor
-                                    }));
-                                }}
-                            />
-                        </div>
-
-                        <div className="flex flex-col gap-2">
-                            <FieldLabel className="font-semibold text-secondary-foreground">Texto</FieldLabel>
-                            <Input
-                                type="color" className="w-full p-1"
-                                value={'#' + setor.cor_texto}
-                                onChange={(e) => {
-                                    const novaCor = e.target.value.replace('#', '');
-
-                                    setSetor(prev => ({
-                                        ...prev,
-                                        cor_texto: novaCor
-                                    }));
-                                }}
-                            />
-                        </div>
-
-                        <div className="flex flex-col gap-2">
-                            <FieldLabel className="font-semibold text-secondary-foreground">Ícone</FieldLabel>
-                            <SelectIconSetor alterarIcone={(icon) => { setSetor(prev => ({ ...prev, icone: icon })) }} />
-                        </div>
-                    </Field>
-
-                    <FieldError>{error.criarSetor?.zod?.cor_fundo}</FieldError>
-                    <FieldError>{error.criarSetor?.zod?.cor_texto}</FieldError>
-                    <FieldError>{error.criarSetor?.zod?.icone}</FieldError>
-
                 </FieldGroup>
 
                 <Separator />
 
-                <div className="bg-secondary p-2 border rounded">
-                    <p className="text-lg font-semibold text-secondary-foreground mb-3">
-                        Setor
-                    </p>
-                    <CardSetor setor={{ ...setor, status: true }} botao={false} />
-                </div>
-
-                <Separator />
-
-                {error.criarSetor && <FieldError>{error.criarSetor.mensagem}</FieldError>}
-                {mensagem.criarSetor && <div className="text-green-600 font-semibold">{mensagem.criarSetor}</div>}
+                {error.criarMembro && <FieldError>{error.criarMembro.mensagem}</FieldError>}
+                {mensagem.criarMembro && <div className="text-green-600 font-semibold">{mensagem.criarMembro}</div>}
 
                 <DialogFooter>
-
                     <DialogClose asChild>
                         <Button variant="outline">Cancel</Button>
                     </DialogClose>
 
                     <Button className="bg-techbridge text-white"
-                        onClick={() => { criarSetor(id_empresa, setor) }}
-                        disabled={loading.criarSetor}
+                        onClick={async () => {
+                            const sucesso = await criarMembro(id_empresa, user);
+
+                            if (sucesso) {
+                                setFiltro((prev) => ({
+                                    ...prev,
+                                    texto: user.email,
+                                    status: 'ativa',
+                                    page: 1,
+                                }))
+                            }
+                        }}
+                        disabled={loading.criarMembro}
                     >
                         Registrar
                     </Button>

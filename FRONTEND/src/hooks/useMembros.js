@@ -133,6 +133,8 @@ export function useMembros() {
             } else {
                 setMensagem((prev) => ({ ...prev, criarMembro: data.mensagem }))
                 setMembro(data.dados)
+                
+                return true;
             }
         } catch (err) {
             if (err.message === 'Sessão expirada') return;
