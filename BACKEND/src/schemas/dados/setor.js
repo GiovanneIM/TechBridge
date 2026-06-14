@@ -30,83 +30,20 @@ export const icone = z
         invalid_type_error: 'Icone deve ser um texto'
     })
     .min(1, 'O Icone deve ter ao menos 1 caráctere')
-    .refine(val => iconesValidos.includes(val), {
-        message: 'Icone inválido'
-    });
 
-// COR
-export const cor = z
+// COR DE FUNDO
+export const cor_fundo = z
     .string({
         required_error: 'Cor é obrigatório',
         invalid_type_error: 'Cor deve ser um texto'
     })
     .min(1, 'A cor deve ter ao menos 1 caráctere')
-    .refine(val => coresValidas.includes(val), {
-        message: 'Cor inválida'
-    });
 
+// COR DE TEXTO
+export const cor_texto = z
+    .string({
+        required_error: 'Cor é obrigatório',
+        invalid_type_error: 'Cor deve ser um texto'
+    })
+    .min(1, 'A cor deve ter ao menos 1 caráctere')
 
-
-const iconesValidos = [
-    // Genéricos / Organizacionais
-    'Album',
-    'Archive',
-    'Folder',
-    'Layers',
-    'LayoutGrid',
-    'Building',
-    'Building2',
-
-    // Produção / Operação
-    'Factory',
-    'Cog',
-    'Cogs',
-    'Wrench',
-    'Hammer',
-    'Tool',
-
-    // Tecnologia / TI
-    'Cpu',
-    'Server',
-    'Database',
-    'HardDrive',
-    'Monitor',
-
-    // Logística / Estoque
-    'Boxes',
-    'Box',
-    'Package',
-    'Truck',
-    'Clipboard',
-
-    // Pessoas / Administrativo
-    'Users',
-    'User',
-    'Briefcase',
-    'IdCard',
-    'FileText',
-
-    // Qualidade / Inspeção
-    'CheckCircle',
-    'ClipboardCheck',
-    'ShieldCheck',
-
-    // Energia / Infraestrutura
-    'Zap',
-    'Plug',
-    'Power',
-
-    // Segurança / Controle
-    'Shield',
-    'Lock',
-    'Eye'
-];
-
-const coresValidas = [
-    'Azul',
-    'Verde',
-    'Amarelo',
-    'Vermelho',
-    'Roxo',
-    'Laranja'
-];

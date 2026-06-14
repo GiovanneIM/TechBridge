@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { cod_setor, cor, descricao, icone, nome } from '../../dados/setor.js';
+import { cod_setor, cor, cor_fundo, cor_texto, descricao, icone, nome } from '../../dados/setor.js';
 
 // ESQUEMA DE CRIAÇÃO DE SETOR
 export const updateSetorSchema = z.object({
@@ -8,7 +8,8 @@ export const updateSetorSchema = z.object({
     descricao: descricao.optional(),
 
     icone: icone.optional(),
-    cor: cor.optional()
+    cor_fundo: cor_fundo.optional(),
+    cor_texto: cor_texto.optional(),
 })
     .strict()
     .refine(data => Object.keys(data).length > 0, {
