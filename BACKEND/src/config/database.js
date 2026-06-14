@@ -230,8 +230,9 @@ async function create(table, data) {
 
         // Executando o comando
         const [result] = await connection.execute(sql, values);
-
+        
         // Retornando o id do novo registro
+        return result;
         return result.insertId;
     } finally {
         // Encerrando a conexão

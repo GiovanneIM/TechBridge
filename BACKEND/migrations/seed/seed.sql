@@ -11,35 +11,33 @@ VALUES
 ;
 
 
--- Inserindo empresa cliente de exemplo
-INSERT INTO empresas (cnpj, razao_social, nome_fantasia, logo)
-VALUES 
-    ('00000000000000', 'TechBridge - Softwares e Hardwares para Andons', 'TechBridge', 'Logo.png')
-;
-
-INSERT INTO empresas (cnpj, razao_social, nome_fantasia)
-VALUES 
-	('00000000000001', 'Empresa Cliente 01', 'EC 01'),
-    ('00000000000002', 'Empresa Cliente 02', 'EC 02'),
-    ('00000000000003', 'Empresa Cliente 03', 'EC 03'),
-	('00000000000004', 'Empresa Cliente 04', 'EC 04'),
-    ('00000000000005', 'Empresa Cliente 05', 'EC 05'),
-    ('00000000000006', 'Empresa Cliente 06', 'EC 06'),
-	('00000000000007', 'Empresa Cliente 07', 'EC 07'),
-    ('00000000000008', 'Empresa Cliente 08', 'EC 08'),
-    ('00000000000009', 'Empresa Cliente 09', 'EC 09'),
-	('00000000000010', 'Empresa Cliente 10', 'EC 10'),
-    ('00000000000011', 'Empresa Cliente 11', 'EC 11'),
-    ('00000000000012', 'Empresa Cliente 12', 'EC 12'),
-    ('00000000000013', 'Empresa Cliente 13', 'EC 13'),
-    ('00000000000014', 'Empresa Cliente 14', 'EC 14'),
-    ('00000000000015', 'Empresa Cliente 15', 'EC 15')
+-- Inserindo empresas de exemplo
+INSERT INTO empresas 
+    (cnpj, razao_social, nome_fantasia,cep, rua, numero, complemento, bairro, cidade, estado)
+VALUES
+    ('00000000000000', 'TechBridge - Softwares e Hardwares para Andons', 'TechBridge', '09050000', 'Rua das Indústrias', '1500', 'Bloco A', 'Centro', 'Santo André', 'SP'),
+    ('12345678000102', 'Metalúrgica São Paulo Industrial LTDA', 'MSP Industrial', '09530000', 'Avenida Industrial', '850', NULL, 'Campestre', 'São Caetano do Sul', 'SP'),
+    ('12345678000103', 'Logística Express Brasil LTDA', 'ExpressLog', '07180000', 'Rodovia Presidente Dutra', '1200', 'Galpão 5', 'Cumbica', 'Guarulhos', 'SP'),
+    ('12345678000104', 'Rede de Farmácias Vida Plena LTDA', 'Vida Plena', '30130000', 'Rua da Bahia', '450', 'Loja 03', 'Centro', 'Belo Horizonte', 'MG'),
+    ('12345678000105', 'Construtora Horizonte Engenharia LTDA', 'Horizonte Engenharia', '80010000', 'Rua Marechal Deodoro', '980', '8º Andar', 'Centro', 'Curitiba', 'PR'),
+    ('12345678000106', 'Alimentos Sabor da Terra LTDA', 'Sabor da Terra', '14020000', 'Avenida Presidente Vargas', '2500', NULL, 'Jardim América', 'Ribeirão Preto', 'SP'),
+    ('12345678000107', 'Auto Peças Rodovia LTDA', 'Rodovia Auto Peças', '13050000', 'Avenida John Boyd Dunlop', '3100', NULL, 'Jardim Ipaussurama', 'Campinas', 'SP'),
+    ('12345678000108', 'Grupo Educacional Alfa LTDA', 'Colégio Alfa', '70040900', 'Setor Bancário Norte', '100', 'Bloco B', 'Asa Norte', 'Brasília', 'DF'),
+    ('12345678000109', 'Clínica Médica Bem Estar LTDA', 'Bem Estar Saúde', '90620000', 'Rua Anita Garibaldi', '745', 'Sala 402', 'Mont Serrat', 'Porto Alegre', 'RS'),
+    ('12345678000110', 'Comercial Oliveira Distribuição LTDA', 'Oliveira Distribuição', '69050000', 'Avenida Djalma Batista', '1200', NULL, 'Chapada', 'Manaus', 'AM'),
+    ('12345678000111', 'Indústria Têxtil Primavera LTDA', 'Primavera Têxtil', '89010000', 'Rua XV de Novembro', '210', NULL, 'Centro', 'Blumenau', 'SC'),
+    ('12345678000112', 'Transportadora Vale Verde LTDA', 'Vale Verde Transportes', '29100000', 'Rodovia do Sol', '5400', 'Km 12', 'Praia de Itaparica', 'Vila Velha', 'ES'),
+    ('12345678000113', 'Mercado Central Paulista LTDA', 'Mercado Central', '15010000', 'Rua Bernardino de Campos', '620', NULL, 'Centro', 'São José do Rio Preto', 'SP'),
+    ('12345678000114', 'Solar Energia Renovável LTDA', 'Solar Energia', '59020000', 'Avenida Senador Salgado Filho', '1800', 'Sala 901', 'Lagoa Nova', 'Natal', 'RN'),
+    ('12345678000115', 'Segurança Total Serviços LTDA', 'Segurança Total', '40015000', 'Avenida Sete de Setembro', '1350', NULL, 'Dois de Julho', 'Salvador', 'BA')
 ;
 UPDATE empresas SET status = 0, data_desativacao = now() WHERE id = 3;
+UPDATE empresas SET status = 0, data_desativacao = now() WHERE id = 7;
+UPDATE empresas SET status = 0, data_desativacao = now() WHERE id = 10;
 
 -- Inserindo os usuários de exemplo
 INSERT INTO usuarios 
-(nome, email, senha, tipo_usuario, id_empresa, telefone, bio, cod_usuario)
+    (nome, email, senha, tipo_usuario, id_empresa, telefone, bio, cod_usuario)
 VALUES 
     (
     'Kim Minji', 

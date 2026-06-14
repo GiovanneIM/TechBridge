@@ -37,7 +37,7 @@ class UserController {
             const id_usuario = await UserModel.criar(dados, id_empresa)
 
             return res.status(201).json({
-                sucesso: false,
+                sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Usuário registrado com sucesso`,
                 dados: { id_empresa, id_usuario }
             });
