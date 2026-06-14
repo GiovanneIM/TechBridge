@@ -29,7 +29,7 @@ export function CardMaquina({ maquina }) {
                         {maquina?.nome}
                     </h2>
 
-                    <h2 className="text-sm font-genty text-slate-700">
+                    <h2 className="text-sm font-genty text-slate-800">
                         Setor: {maquina?.nome_setor}
                     </h2>
                 </div>
@@ -71,7 +71,7 @@ export function CardMaquina({ maquina }) {
                         href={`/admin/empresas/${maquina.id_empresa}/setores/${maquina.cod_setor}/maquina/${maquina.cod_maquina}`}
                         className="flex justify-center items-center"
                     >
-                        Ver empresa <ArrowRightCircle className="inline" />
+                        Ver máquina <ArrowRightCircle className="inline" />
                     </Link>
                 </Button>
             </div>

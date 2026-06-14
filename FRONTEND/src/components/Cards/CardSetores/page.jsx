@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 
 
-export function CardSetor({ setor }) {
+export function CardSetor({ setor, botao }) {
     const router = useRouter()
     const Icon = icons[setor.icone];
 
@@ -34,7 +34,7 @@ export function CardSetor({ setor }) {
                 <Icon />
 
                 {/* NOME */}
-                <h2 className="flex-1 text-xl font-genty">
+                <h2 className="flex-1 text-xl font-genty line-clamp-2">
                     {setor?.nome}
                 </h2>
 
@@ -64,20 +64,23 @@ export function CardSetor({ setor }) {
                     }
                 </p>
 
-                <Separator />
 
-                <Button asChild className="
-                    button-background
-                    w-full border
-                "
-                >
-                    <Link
-                        href={`/admin/empresas/${setor.id_empresa}/setores/${setor.cod_setor}`}
-                        className="flex justify-center items-center"
+                {botao && (<>
+                    <Separator />
+
+                    <Button asChild className="
+                        button-background
+                        w-full border
+                    "
                     >
-                        Ver empresa <ArrowRightCircle className="inline" />
-                    </Link>
-                </Button>
+                        <Link
+                            href={`/admin/empresas/${setor.id_empresa}/setores/${setor.cod_setor}`}
+                            className="flex justify-center items-center"
+                        >
+                            Ver setor <ArrowRightCircle className="inline"/>
+                        </Link>
+                    </Button>
+                </>)}
             </div>
         </div>
     )

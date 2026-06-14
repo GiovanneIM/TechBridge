@@ -21,6 +21,7 @@ import { useParams } from "next/navigation";
 import { CardUsuario } from "@/components/Cards/CardUsuario/page";
 import { useHeader } from "@/context/HeaderContext";
 import { CardSetor } from "@/components/Cards/CardSetores/page";
+import ModalAddSetor from "@/components/modals/addSetor";
 
 export default function PageSetores() {
     const params = useParams();
@@ -126,10 +127,10 @@ export default function PageSetores() {
             <Field
                 orientation="horizontal"
                 className="
-                        border bg-card p-4 rounded-lg gap-4
-                        grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5
-                        items-end
-                    "
+                    border bg-card p-4 rounded-lg gap-4
+                    grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5
+                    items-end
+                "
             >
 
                 {/* NOME, DESCRIÇÃO OU CÓDIGO*/}
@@ -286,13 +287,17 @@ export default function PageSetores() {
 
                 {/* SETORES CARREGADAS COM SUCESSO */}
                 {!loading.obterSetores && !error.obterSetores && (<>
+                    {/* ADIONAR SETOR */}
                     <div className="border-b pb-3 mb-3">
-                        <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => { }}>
-                            <PlusCircle /> Adicionar setor
-                        </Button>
+                        <ModalAddSetor>
+                            <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => { }}>
+                                <PlusCircle /> Adicionar setor
+                            </Button>
+                        </ModalAddSetor>
                     </div>
 
                     {setores?.lista.length > 0
+                        // LISTAR SETORES
                         ? <div
                             className="
                                 grid gap-4 items-start
@@ -301,7 +306,7 @@ export default function PageSetores() {
                         >
                             {/* LISTANDO EMPRESAS */}
                             {setores?.lista?.map((setor) => (
-                                <CardSetor key={setor.id} setor={setor} />
+                                <CardSetor key={setor.id} setor={setor} botao={true} />
                             ))}
                         </div>
 

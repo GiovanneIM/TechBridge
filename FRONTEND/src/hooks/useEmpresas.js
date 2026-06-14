@@ -2,38 +2,19 @@ import { useEffect, useState, useCallback } from 'react';
 import { API_FETCH } from '@/lib/api';
 import { nestErrors } from '@/lib/zodErrors';
 
-export function useEmpresa() {
-    // LISTA DE EMPRESAS
+export function useEmpresas() {
+
+    // EMPRESAS
     const [empresas, setEmpresas] = useState(null);
 
-    // EMPRESA
+    // EMPRESA ESPECÍFICA
     const [empresa, setEmpresa] = useState(null);
-
-    // MEMBROS DE UMA EMPRESA
-    const [membros, setMembros] = useState(null);
-
-    // MEMBRO DE UMA EMPRESA
-    const [membro, setMembro] = useState(null);
-
-    // SETORES DE UMA EMPRESA
-    const [setores, setSetores] = useState(null);
-
-    // MAQUINAS DE UMA EMPRESA
-    const [maquinas, setMaquinas] = useState(null);
-
-    // CHAMADOS DE UMA EMPRESA
-    const [chamados, setChamados] = useState(null);
 
     // LOADING
     const [loading, setLoading] = useState({
         obterEmpresas: null,
         criarEmpresa: null,
         obterEmpresa: null,
-        obterMembros: null,
-        obterMembro: null,
-        obterSetores: null,
-        obterMaquinas: null,
-        obterChamados: null,
         atualizarEmpresa: null,
         atualizarLogo: null,
         obterInfosGerais: null,
@@ -44,11 +25,6 @@ export function useEmpresa() {
         obterEmpresas: null,
         criarEmpresa: null,
         obterEmpresa: null,
-        obterMembros: null,
-        obterMembro: null,
-        obterSetores: null,
-        obterMaquinas: null,
-        obterChamados: null,
         atualizarEmpresa: null,
         atualizarLogo: null,
         obterInfosGerais: null,
@@ -59,11 +35,8 @@ export function useEmpresa() {
         obterEmpresas: null,
         criarEmpresa: null,
         obterEmpresa: null,
-        obterMembros: null,
-        obterMembro: null,
-        obterSetores: null,
-        obterMaquinas: null,
         atualizarEmpresa: null,
+        atualizarLogo: null,
         obterInfosGerais: null,
     });
 
@@ -113,7 +86,6 @@ export function useEmpresa() {
         setError((prev) => ({ ...prev, criarEmpresa: null }));
 
         try {
-            console.log(novaEmpresa);
 
             const data = await API_FETCH(`/admin/empresas`, {
                 method: 'POST',
@@ -175,182 +147,6 @@ export function useEmpresa() {
         }
     }, []);
 
-    // OBTER MEMBROS (Gerente)
-    const obterMembros = useCallback(async (id_empresa, filtro = {}) => {
-        setLoading((prev) => ({ ...prev, obterMembros: true }));
-        setError((prev) => ({ ...prev, obterMembros: null }));
-
-        try {
-            const params = new URLSearchParams();
-
-            Object.entries(filtro).forEach(([key, value]) => {
-                if (value !== null && value !== undefined && value !== '') {
-                    params.append(key, value);
-                }
-            });
-
-            const query = params.toString();
-
-            const data = await API_FETCH(`/empresas/${id_empresa}/membros?${query}`, {
-                method: 'GET'
-            });
-
-            if (!data.sucesso) {
-                setError((prev) => ({ ...prev, obterMembros: data.mensagem }))
-            } else {
-                setMembros(data.dados)
-            }
-        } catch (err) {
-            if (err.message === 'Sessão expirada') return;
-
-            setError((prev) => ({
-                ...prev,
-                obterMembros: 'Erro ao obter membros, tente novamente mais tarde.'
-            }));
-        } finally {
-            setLoading((prev) => ({ ...prev, obterMembros: false }));
-        }
-    }, []);
-
-    // OBTER MEMBRO (Gerente)
-    const obterMembro = useCallback(async (id_empresa, cod_usuario) => {
-        setLoading((prev) => ({ ...prev, obterMembro: true }));
-        setError((prev) => ({ ...prev, obterMembro: null }));
-
-        try {
-            const data = await API_FETCH(`/empresas/${id_empresa}/membros/${cod_usuario}`, {
-                method: 'GET'
-            });
-
-            if (!data.sucesso) {
-                setError((prev) => ({ ...prev, obterMembro: data.mensagem }))
-            } else {
-                setMembro(data.dados.membro)
-            }
-        } catch (err) {
-            if (err.message === 'Sessão expirada') return;
-
-            setError((prev) => ({
-                ...prev,
-                obterMembro: 'Erro ao obter membro, tente novamente mais tarde.'
-            }));
-        } finally {
-            setLoading((prev) => ({ ...prev, obterMembro: false }));
-        }
-    }, []);
-
-    // OBTER SETORES
-    const obterSetores = useCallback(async (id_empresa, filtro = {}) => {
-        setLoading((prev) => ({ ...prev, obterSetores: true }));
-        setError((prev) => ({ ...prev, obterSetores: null }));
-
-        try {
-            const params = new URLSearchParams();
-
-            Object.entries(filtro).forEach(([key, value]) => {
-                if (value !== null && value !== undefined && value !== '') {
-                    params.append(key, value);
-                }
-            });
-
-            const query = params.toString();
-            
-            const data = await API_FETCH(`/empresas/${id_empresa}/setores?${query}`, {
-                method: 'GET'
-            });
-
-            if (!data.sucesso) {
-                setError((prev) => ({ ...prev, obterSetores: data.mensagem }))
-            } else {
-                setSetores(data.dados)
-            }
-        } catch (err) {
-            if (err.message === 'Sessão expirada') return;
-
-            setError((prev) => ({
-                ...prev,
-                obterSetores: 'Erro ao obter membros, tente novamente mais tarde.'
-            }));
-        } finally {
-            setLoading((prev) => ({ ...prev, obterSetores: false }));
-        }
-    }, []);
-
-    // OBTER MÁQUINAS
-    const obterMaquinas = useCallback(async (id_empresa, filtro = {}) => {
-        setLoading((prev) => ({ ...prev, obterMaquinas: true }));
-        setError((prev) => ({ ...prev, obterMaquinas: null }));
-
-        try {
-            const params = new URLSearchParams();
-
-            Object.entries(filtro).forEach(([key, value]) => {
-                if (value !== null && value !== undefined && value !== '') {
-                    params.append(key, value);
-                }
-            });
-
-            const query = params.toString();
-
-            const data = await API_FETCH(`/empresas/${id_empresa}/maquinas?${query}`, {
-                method: 'GET'
-            });
-
-            if (!data.sucesso) {
-                setError((prev) => ({ ...prev, obterMaquinas: data.mensagem }))
-            } else {
-                setMaquinas(data.dados)
-            }
-        } catch (err) {
-            if (err.message === 'Sessão expirada') return;
-
-            setError((prev) => ({
-                ...prev,
-                obterMaquinas: 'Erro ao obter membros, tente novamente mais tarde.'
-            }));
-        } finally {
-            setLoading((prev) => ({ ...prev, obterMaquinas: false }));
-        }
-    }, []);
-
-    // OBTER CHAMADOS
-    const obterChamados = useCallback(async (id_empresa, filtro = {}) => {
-        setLoading((prev) => ({ ...prev, obterChamados: true }));
-        setError((prev) => ({ ...prev, obterChamados: null }));
-
-        try {
-            const params = new URLSearchParams();
-
-            Object.entries(filtro).forEach(([key, value]) => {
-                if (value !== null && value !== undefined && value !== '') {
-                    params.append(key, value);
-                }
-            });
-
-            const query = params.toString();
-
-            const data = await API_FETCH(
-                `/empresas/${id_empresa}/chamados?${query}`,
-                { method: 'GET' }
-            );
-
-            if (!data.sucesso) {
-                setError((prev) => ({ ...prev, obterChamados: data.mensagem }));
-            } else {
-                setChamados(data.dados.chamados);
-            }
-        } catch (err) {
-            if (err.message === 'Sessão expirada') return;
-
-            setError((prev) => ({
-                ...prev,
-                obterChamados: 'Erro ao obter chamados, tente novamente mais tarde.'
-            }));
-        } finally {
-            setLoading((prev) => ({ ...prev, obterChamados: false }));
-        }
-    }, []);
-
     // OBTER INFORMAÇÕES GERAIS
     const obterInfosGerais = useCallback(async (id_empresa) => {
         setLoading((prev) => ({ ...prev, obterInfosGerais: true }));
@@ -376,9 +172,7 @@ export function useEmpresa() {
         } finally {
             setLoading((prev) => ({ ...prev, obterInfosGerais: false }));
         }
-    }, []);  
-
-    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    }, []);
 
     // ATUALIZAR EMPRESA (GERENTE PRINCIPAL)
     const atualizarEmpresa = useCallback(async (id_empresa, novosDados) => {
@@ -454,11 +248,6 @@ export function useEmpresa() {
         loading, error, mensagem,
         empresas, obterEmpresas,
         empresa, obterEmpresa,
-        membros, obterMembros,
-        membro, obterMembro,
-        setores, obterSetores,
-        maquinas, obterMaquinas,
-        chamados, obterChamados,
         criarEmpresa,
         atualizarEmpresa,
         atualizarLogo,

@@ -1,9 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { API_FETCH, API_LOGIN, apiFetch } from '@/lib/api';
-
-
-// URL base da API
-const API_BASE_URL = '/auth';
+import { API_FETCH, API_LOGIN } from '@/lib/api';
 
 export function useAuth({
     initialUser = null,
@@ -68,7 +64,7 @@ export function useAuth({
 
         try {
             // REQUISIÇÃO
-            const data = await API_FETCH(`${API_BASE_URL}/perfil`, {
+            const data = await API_FETCH(`/auth/perfil`, {
                 method: 'GET'
             });
 
@@ -100,7 +96,7 @@ export function useAuth({
 
         try {
             // REQUISIÇÃO
-            await API_FETCH(`${API_BASE_URL}/logout`, {
+            await API_FETCH(`/auth/logout`, {
                 method: 'POST',
                 credentials: 'include'
             });
@@ -126,11 +122,9 @@ export function useAuth({
     }, [fetchOnMount, perfil]);
 
     return {
-        user,
-        isAuthenticated,
-        loading,
-        setLoading,
-        error,
+        user, isAuthenticated,
+        loading, setLoading,
+        error, setError,
         login,
         perfil,
         logout,

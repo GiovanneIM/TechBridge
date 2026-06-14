@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import * as LucideIcons from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const iconesValidos = [
     // Genéricos / Organizacionais
@@ -60,15 +60,18 @@ const iconesValidos = [
     'Eye'
 ];
 
-export function SelectIconSetor() {
+export function SelectIconSetor({alterarIcone}) {
     const [icone, setIcone] = useState('Warehouse')
+
+    useEffect(() => {
+        alterarIcone(icone);
+    }, [icone])
 
     return (
         <>
             <IconPicker value={icone} onChange={setIcone} />
 
-            <p className="text-center py-4">
-            </p>
+            {/* <p className="text-center py-4"></p> */}
         </>
     )
 }
