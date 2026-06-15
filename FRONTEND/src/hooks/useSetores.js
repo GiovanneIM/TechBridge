@@ -9,6 +9,7 @@ export function useSetores() {
 
     // SETOR ESPECÌFICO
     const [setor, setSetor] = useState(null);
+    const [infosSetor, setInfosSetor] = useState(null)
 
     // LOADING
     const [loading, setLoading] = useState({
@@ -195,7 +196,7 @@ export function useSetores() {
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterInfosSetor: data.mensagem }));
             } else {
-                return data.dados.infosGerais;
+                setInfosSetor(data.dados.infosGerais);
             }
         } catch (err) {
             if (err.message === 'Sessão expirada') return;
@@ -217,6 +218,6 @@ export function useSetores() {
         setor, obterSetor,
         criarSetor,
         atualizarSetor,
-        obterInfosSetor,
+        infosSetor, obterInfosSetor,
     };
 }

@@ -142,7 +142,7 @@ class SetoresModel {
 
         // INFORMAÇÕES SOBRE TEMPO (Em minutos)
         // • tempo_medio_espera
-        const tempo_medio_espera = await read("chamados c", {
+        const { tempo_medio_espera } = await read("chamados c", {
             columns: [
                 `
                 AVG(
@@ -214,11 +214,11 @@ class SetoresModel {
         return {
             maquinas: maquinas[0] || null,
             chamados: chamados[0] || null,
-            tempo_medio_espera: tempo_medio_espera[0] || null,
-            tempo_medio_atendimento: tempo_medio_atendimento[0] || null,
-            tempo_medio_maquina_parada: tempo_medio_maquina_parada[0] || null,
+            tempo_medio_espera: tempo_medio_espera || null,
+            tempo_medio_atendimento: tempo_medio_atendimento || null,
+            tempo_medio_maquina_parada: tempo_medio_maquina_parada || null,
         }
     }
 }
- 
+
 export default SetoresModel;

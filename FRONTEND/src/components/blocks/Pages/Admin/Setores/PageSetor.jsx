@@ -17,6 +17,7 @@ import Link from "next/link";
 
 export default function PageMembro() {
     const { id: id_empresa, cod_setor } = useParams();
+
     const [Icon, setIcon] = useState(icons['Warehouse']);
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -31,7 +32,8 @@ export default function PageMembro() {
     // SETORES
     const {
         loading: loadingSetores, error: errorSetores, mensagem: mensagemSetores,
-        setor, obterSetor
+        setor, obterSetor,
+        infosSetor, obterInfosSetor,
     } = useSetores();
 
     // OBTER EMPRESA
@@ -45,6 +47,7 @@ export default function PageMembro() {
     useEffect(() => {
         if (!setor) {
             obterSetor(id_empresa, cod_setor)
+            obterInfosSetor(id_empresa, cod_setor)
         }
     }, [setor, obterSetor]);
 
@@ -52,7 +55,7 @@ export default function PageMembro() {
         if (setor) {
             setIcon(icons[setor.icone]);
         }
-    }, [setor?.icone]);
+    }, [setor]);
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     // CONTEÚDO
@@ -202,6 +205,7 @@ export default function PageMembro() {
                     </div>
                 </Card>
 
+                {/* DESCRIÇÃO */}
                 <Card
                     className="
                         w-full border p-5
@@ -243,7 +247,7 @@ export default function PageMembro() {
                                         flex flex-col gap-2
                                         transition hover:bg-muted/40
                                     ">
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex-1 flex items-center justify-between">
                                         <p className="text-sm text-muted-foreground font-medium">
                                             Total de Máquinas
                                         </p>
@@ -252,18 +256,18 @@ export default function PageMembro() {
                                     </div>
 
                                     <p className="text-3xl font-bold leading-none">
-                                        0
+                                        {infosSetor?.maquinas.total ?? 0}
                                     </p>
                                 </div>
 
                                 {/* ATIVAS */}
                                 <div className="
-                                        rounded-xl border bg-green-500/10
-                                        p-4
-                                        flex flex-col gap-2
-                                        transition hover:bg-green-500/15
-                                    ">
-                                    <div className="flex items-center justify-between">
+                                    rounded-xl border bg-green-500/10
+                                    p-4
+                                    flex flex-col gap-2
+                                    transition hover:bg-green-500/15
+                                ">
+                                    <div className="flex-1 flex items-center justify-between">
                                         <p className="text-sm text-muted-foreground font-medium">
                                             Máquinas ativas
                                         </p>
@@ -272,7 +276,7 @@ export default function PageMembro() {
                                     </div>
 
                                     <p className="text-3xl font-bold leading-none text-green-600">
-                                        0
+                                        {infosSetor?.maquinas.ativas ?? 0}
                                     </p>
                                 </div>
 
@@ -283,7 +287,7 @@ export default function PageMembro() {
                                         flex flex-col gap-2
                                         transition hover:bg-orange-500/15
                                     ">
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex-1 flex items-center justify-between">
                                         <p className="text-sm text-muted-foreground font-medium">
                                             Máquinas inativas
                                         </p>
@@ -292,7 +296,7 @@ export default function PageMembro() {
                                     </div>
 
                                     <p className="text-3xl font-bold leading-none text-orange-600">
-                                        0
+                                        {infosSetor?.maquinas.inativas ?? 0}
                                     </p>
                                 </div>
                             </div>
@@ -328,7 +332,7 @@ export default function PageMembro() {
                                     </div>
 
                                     <p className="text-3xl font-bold leading-none">
-                                        {0}
+                                        {infosSetor?.chamados.total ?? 0}
                                     </p>
                                 </div>
 
@@ -339,7 +343,7 @@ export default function PageMembro() {
                                     flex flex-col gap-2
                                     transition hover:bg-blue-500/15
                                 ">
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex-1 flex items-center justify-between">
                                         <p className="text-sm text-muted-foreground font-medium">
                                             Aguardando
                                         </p>
@@ -348,7 +352,7 @@ export default function PageMembro() {
                                     </div>
 
                                     <p className="text-3xl font-bold leading-none text-blue-600">
-                                        {0}
+                                        {infosSetor?.chamados.aguardando ?? 0}
                                     </p>
                                 </div>
 
@@ -359,7 +363,7 @@ export default function PageMembro() {
                                     flex flex-col gap-2
                                     transition hover:bg-yellow-500/15
                                 ">
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex-1 flex items-center justify-between">
                                         <p className="text-sm text-muted-foreground font-medium">
                                             Em andamento
                                         </p>
@@ -368,7 +372,7 @@ export default function PageMembro() {
                                     </div>
 
                                     <p className="text-3xl font-bold leading-none text-yellow-600">
-                                        {0}
+                                        {infosSetor?.chamados.andamento ?? 0}
                                     </p>
                                 </div>
 
@@ -379,7 +383,7 @@ export default function PageMembro() {
                                     flex flex-col gap-2
                                     transition hover:bg-green-500/15
                                 ">
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex-1 flex items-center justify-between">
                                         <p className="text-sm text-muted-foreground font-medium">
                                             Concluídos
                                         </p>
@@ -388,7 +392,92 @@ export default function PageMembro() {
                                     </div>
 
                                     <p className="text-3xl font-bold leading-none text-green-600">
-                                        {0}
+                                        {infosSetor?.chamados.concluidos ?? 0}
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            {/* TEMPOS */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+
+                                {/* TEMPO MÉDIO DE ESPERA */}
+                                <div className="
+                                    rounded-xl border bg-muted/20
+                                    p-4
+                                    flex flex-col gap-2
+                                    transition hover:bg-muted/40
+                                ">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Total de Chamados
+                                        </p>
+
+                                        <Siren size={18} className="text-muted-foreground" />
+                                    </div>
+
+                                    <p className="text-3xl font-bold leading-none">
+                                        {infosSetor?.tempo_medio_espera ?? 0}
+                                    </p>
+                                </div>
+
+                                {/* AGUARDANDO */}
+                                <div className="
+                                    rounded-xl border bg-blue-500/10
+                                    p-4
+                                    flex flex-col gap-2
+                                    transition hover:bg-blue-500/15
+                                ">
+                                    <div className="flex-1 flex items-center justify-between">
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Aguardando
+                                        </p>
+
+                                        <Siren size={18} className="text-blue-600" />
+                                    </div>
+
+                                    <p className="text-3xl font-bold leading-none text-blue-600">
+                                        {infosSetor?.chamados.aguardando ?? 0}
+                                    </p>
+                                </div>
+
+                                {/* EM ANDAMENTO */}
+                                <div className="
+                                    rounded-xl border bg-yellow-500/10
+                                    p-4
+                                    flex flex-col gap-2
+                                    transition hover:bg-yellow-500/15
+                                ">
+                                    <div className="flex-1 flex items-center justify-between">
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Em andamento
+                                        </p>
+
+                                        <Siren size={18} className="text-yellow-600" />
+                                    </div>
+
+                                    <p className="text-3xl font-bold leading-none text-yellow-600">
+                                        {infosSetor?.chamados.andamento ?? 0}
+                                    </p>
+                                </div>
+
+                                {/* CONCLUÍDOS */}
+                                <div className="
+                                    rounded-xl border bg-green-500/10
+                                    p-4
+                                    flex flex-col gap-2
+                                    transition hover:bg-green-500/15
+                                ">
+                                    <div className="flex-1 flex items-center justify-between">
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Concluídos
+                                        </p>
+
+                                        <Siren size={18} className="text-green-600" />
+                                    </div>
+
+                                    <p className="text-3xl font-bold leading-none text-green-600">
+                                        {infosSetor?.chamados.concluidos ?? 0}
                                     </p>
                                 </div>
 
@@ -415,6 +504,7 @@ export default function PageMembro() {
 
                 {/* DEBUG (opcional) */}
                 {/* <pre>{JSON.stringify(setor, null, 2)}</pre> */}
+                <pre>{JSON.stringify(infosSetor, null, 2)}</pre>
 
             </div>
         )
