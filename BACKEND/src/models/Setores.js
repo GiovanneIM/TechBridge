@@ -89,6 +89,136 @@ class SetoresModel {
             throw error;
         }
     }
-}
 
+    static async infosGerais(id_empresa, cod_setor) {
+
+        // INFORMAÇÕES DAS MÁQUINAS DO SETOR
+        // • total
+        // • ativas
+        // • inativas
+        const maquinas = await read("maquinas m", {
+            columns: [
+                "COUNT(*) AS total",
+                "COUNT(CASE WHEN m.status = 'ativa' THEN 1 END) AS ativas",
+                "COUNT(CASE WHEN m.status = 'inativa' THEN 1 END) AS inativas"
+            ],
+            join: [
+                {
+                    type: "INNER",
+                    table: "setores s",
+                    on: "s.id = m.id_setor"
+                }
+            ],
+            where: {
+                "s.id_empresa": id_empresa,
+                "s.cod_setor": cod_setor
+            }
+        });
+
+        // INFORMAÇÕES DOS CHAMADOS DO SETOR
+        // • total
+        // • aguardando
+        // • andamento
+        // • concluidos
+        const chamados = await read("chamados c", {
+            columns: [
+                "COUNT(*) AS total",
+                "COUNT(CASE WHEN estado = 'aberto' THEN 1 END) AS aguardando",
+                "COUNT(CASE WHEN estado = 'andamento' THEN 1 END) AS andamento",
+                "COUNT(CASE WHEN estado = 'concluido' THEN 1 END) AS concluidos"
+            ],
+            join: [
+                {
+                    type: "INNER",
+                    table: "setores s",
+                    on: "s.id = c.id_setor"
+                }
+            ],
+            where: {
+                "c.id_empresa": id_empresa,
+                "s.cod_setor": cod_setor
+            }
+        });
+
+        // INFORMAÇÕES SOBRE TEMPO
+        // • tempo_medio_espera
+        const tempo_medio_espera = await read("chamados c", {
+            columns: [
+                `
+                AVG(
+                    TIMESTAMPDIFF(MINUTE, datahora_abertura, datahora_atendimento)
+                ) AS tempo_medio_espera
+                `
+            ],
+            join: [
+                {
+                    type: "INNER",
+                    table: "setores s",
+                    on: "s.id = c.id_setor"
+                }
+            ],
+            where: {
+                "c.datahora_atendimento": "NOT_NULL",
+                "c.id_empresa": id_empresa,
+                "s.cod_setor": cod_setor,
+            }
+        });
+
+        // • tempo_medio_atendimento
+        const tempo_medio_atendimento = await read("chamados c", {
+            columns: [
+                `
+                AVG(
+                    TIMESTAMPDIFF(MINUTE, datahora_atendimento, datahora_conclusao)
+                ) AS tempo_medio_atendimento
+                `
+            ],
+            join: [
+                {
+                    type: "INNER",
+                    table: "setores s",
+                    on: "s.id = c.id_setor"
+                }
+            ],
+            where: {
+                "c.datahora_atendimento": "NOT_NULL",
+                "c.datahora_conclusao": "NOT_NULL",
+                "c.id_empresa": id_empresa,
+                "s.cod_setor": cod_setor,
+            }
+        });
+
+        // • tempo_medio_maquina_parada
+        const tempo_medio_maquina_parada = await read("chamados c", {
+            columns: [
+                `
+                AVG(
+                    TIMESTAMPDIFF(MINUTE, datahora_abertura, datahora_conclusao)
+                ) AS tempo_medio_maquina_parada
+                `
+            ],
+            join: [
+                {
+                    type: "INNER",
+                    table: "setores s",
+                    on: "s.id = c.id_setor"
+                }
+            ],
+            where: {
+                "c.datahora_conclusao": "NOT_NULL",
+                "c.id_empresa": id_empresa,
+                "s.cod_setor": cod_setor,
+            }
+        });
+
+        return {
+            maquinas: maquinas[0] || null,
+            chamados: chamados[0] || null,
+            tempo_medio_espera: tempo_medio_espera[0] || null,
+            tempo_medio_atendimento: tempo_medio_atendimento[0] || null,
+            tempo_medio_maquina_parada: tempo_medio_maquina_parada[0] || null,
+        }
+    }
+}
+ 
 export default SetoresModel;

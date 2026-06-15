@@ -705,6 +705,10 @@ router.get(
     EmpresasController.infosGerais
 )
 
+router.get(
+    '/:id_empresa/setores/:cod_setor/infosGerais',
+    SetoresController.infosGerais
+)
 
 
 

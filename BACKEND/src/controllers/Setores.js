@@ -167,6 +167,47 @@ class SetoresController {
 
     // ATUALIZAR UM SETOR
     static async atualizar(req, res) { }
+
+    // OBTER DADOS GERAIS DA EMPRESA
+    static async infosGerais(req, res) {
+        // OBTER O ID DA EMPRESA E CÓDIGO DO SETOR
+        const { id_empresa, cod_setor } = req.params;
+
+        try {
+            // VERIFICANDO SE O USUÁRIO TEM ACESSO
+            const acesso = pertenceAEmpresa(req, id_empresa);
+            if (!acesso) {
+                return res.status(403).json({
+                    sucesso: false,
+                    mensagem: 'Você não tem acesso a essa rota'
+                });
+            }
+
+            // FAZER A CONSULTA
+            const infosGerais = await SetoresModel.infosGerais(id_empresa, cod_setor);
+
+            // SUCESSO: ENVIAR EMPRESA
+            return res.status(200).json({
+                sucesso: true,
+                mensagem: 'Informações gerais do setor obtidas com sucesso',
+                dados: {
+                    infosGerais
+                }
+            });
+
+        }
+        catch (error) {
+            // ERROS:
+            console.error('Erro ao obter as informações gerais do setor:', error);
+
+            // ERRO DO SERVIDOR
+            return res.status(500).json({
+                sucesso: false,
+                erro: 'Erro interno do servidor',
+                mensagem: 'Não foi possível obter as informações gerais do setor'
+            });
+        }
+    }
 }
 
 export default SetoresController;

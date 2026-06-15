@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useEmpresas } from "@/hooks/useEmpresas";
 import { useSetores } from "@/hooks/useSetores";
@@ -8,7 +8,7 @@ import { useHeader } from "@/context/HeaderContext";
 import LoadingPage from "../../../Holders/LoadingPage";
 import ErrorPage from "../../../Holders/ErrorPage";
 import { API_URL } from "@/lib/api";
-import { User2, Mail, Phone, Building2, BadgeCheck, icons, Calendar, Pencil, CheckCircle2, MinusCircle } from "lucide-react";
+import { User2, Mail, Phone, Building2, BadgeCheck, icons, Calendar, Pencil, CheckCircle2, MinusCircle, Warehouse, Cpu, Siren } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -17,7 +17,7 @@ import Link from "next/link";
 
 export default function PageMembro() {
     const { id: id_empresa, cod_setor } = useParams();
-    let Icon = icons['Warehouse'];
+    const [Icon, setIcon] = useState(icons['Warehouse']);
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     // HOOKS
@@ -50,9 +50,9 @@ export default function PageMembro() {
 
     useEffect(() => {
         if (setor) {
-            Icon = icons[setor.icone]
+            setIcon(icons[setor.icone]);
         }
-    }, [setor]);
+    }, [setor?.icone]);
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     // CONTEÚDO
@@ -157,12 +157,11 @@ export default function PageMembro() {
                     </div>
                 </Card>
 
+                {/* ICONE, NOME E CÓDIGO */}
                 <Card
                     className="
-                        w-full border p-5
-                        flex flex-col
-                        gap-4
-                        overflow-hidden
+                        w-full p-5 border-0
+                        flex flex-col gap-4 overflow-hidden
                     "
                     style={{
                         backgroundColor: `#${setor.cor_fundo}`,
@@ -184,17 +183,16 @@ export default function PageMembro() {
 
                         {/* NOME E CÓDIGO */}
                         <div className="flex-1 min-w-0">
-                            <div className="flex flex-col gap-2 font-genty">
-                                <h1 className="text-2xl font-bold truncate">
+                            <div className="flex flex-col font-genty">
+                                <h1 className="text-3xl truncate">
                                     {setor?.nome}
                                 </h1>
 
                                 <span
                                     className="
-                                    text-xs font-medium
+                                    w-fit text-xs
                                     px-2 py-1 rounded-full
                                     bg-black/10
-                                    w-fit
                                 "
                                 >
                                     # {setor?.cod_setor}
@@ -202,14 +200,217 @@ export default function PageMembro() {
                             </div>
                         </div>
                     </div>
+                </Card>
 
-                    {/* <div>
-                        {setor?.descricao && (
-                            <p className="mt-2 text-md opacity-90 leading-relaxed">
-                                {setor.descricao}
-                            </p>
-                        )}
-                    </div> */}
+                <Card
+                    className="
+                        w-full border p-5
+                        flex flex-col gap-4 overflow-hidden
+                    "
+                >
+                    <div className="w-full sm:flex justify-between items-end sm:border-b sm:pb-1">
+                        <p className="font-genty text-xl border-b sm:border-0 pb-1 mb-2 sm:mb-0">
+                            Descrição
+                        </p>
+                    </div>
+
+                    {setor.descricao}
+                </Card>
+
+                {/* INFORMAÇÕES GERAIS */}
+                <div className="
+                    grid grid-cols-1
+                    2xl:grid-cols-2
+                    gap-4
+                ">
+                    {/* MAQUINAS */}
+                    <Card className="border p-4 gap-4">
+                        <div className="flex flex-col gap-4">
+                            {/* TITULO */}
+                            <div className="w-full sm:flex justify-between items-end sm:border-b sm:pb-1">
+                                <p className="font-genty text-xl border-b sm:border-0 pb-1 mb-2 sm:mb-0">
+                                    Máquinas do setor
+                                </p>
+                            </div>
+
+                            {/* INFOS */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+
+                                {/* TOTAL */}
+                                <div className="
+                                        rounded-xl border bg-muted/20
+                                        p-4
+                                        flex flex-col gap-2
+                                        transition hover:bg-muted/40
+                                    ">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Total de Máquinas
+                                        </p>
+
+                                        <Cpu size={18} className="text-muted-foreground" />
+                                    </div>
+
+                                    <p className="text-3xl font-bold leading-none">
+                                        0
+                                    </p>
+                                </div>
+
+                                {/* ATIVAS */}
+                                <div className="
+                                        rounded-xl border bg-green-500/10
+                                        p-4
+                                        flex flex-col gap-2
+                                        transition hover:bg-green-500/15
+                                    ">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Máquinas ativas
+                                        </p>
+
+                                        <Cpu size={18} className="text-green-600" />
+                                    </div>
+
+                                    <p className="text-3xl font-bold leading-none text-green-600">
+                                        0
+                                    </p>
+                                </div>
+
+                                {/* INATIVAS */}
+                                <div className="
+                                        rounded-xl border bg-orange-500/10
+                                        p-4
+                                        flex flex-col gap-2
+                                        transition hover:bg-orange-500/15
+                                    ">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Máquinas inativas
+                                        </p>
+
+                                        <Cpu size={18} className="text-orange-600" />
+                                    </div>
+
+                                    <p className="text-3xl font-bold leading-none text-orange-600">
+                                        0
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </Card>
+
+                    {/* CHAMADOS */}
+                    <Card className="border p-4 gap-4">
+                        <div className="flex flex-col gap-4">
+                            {/* TITULO */}
+                            <div className="w-full sm:flex justify-between items-end sm:border-b sm:pb-1">
+                                <p className="font-genty text-xl border-b sm:border-0 pb-1 mb-2 sm:mb-0">
+                                    Chamados do setor
+                                </p>
+                            </div>
+
+                            {/* INFOS */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+
+                                {/* TOTAL */}
+                                <div className="
+                                    rounded-xl border bg-muted/20
+                                    p-4
+                                    flex flex-col gap-2
+                                    transition hover:bg-muted/40
+                                ">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Total de Chamados
+                                        </p>
+
+                                        <Siren size={18} className="text-muted-foreground" />
+                                    </div>
+
+                                    <p className="text-3xl font-bold leading-none">
+                                        {0}
+                                    </p>
+                                </div>
+
+                                {/* AGUARDANDO */}
+                                <div className="
+                                    rounded-xl border bg-blue-500/10
+                                    p-4
+                                    flex flex-col gap-2
+                                    transition hover:bg-blue-500/15
+                                ">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Aguardando
+                                        </p>
+
+                                        <Siren size={18} className="text-blue-600" />
+                                    </div>
+
+                                    <p className="text-3xl font-bold leading-none text-blue-600">
+                                        {0}
+                                    </p>
+                                </div>
+
+                                {/* EM ANDAMENTO */}
+                                <div className="
+                                    rounded-xl border bg-yellow-500/10
+                                    p-4
+                                    flex flex-col gap-2
+                                    transition hover:bg-yellow-500/15
+                                ">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Em andamento
+                                        </p>
+
+                                        <Siren size={18} className="text-yellow-600" />
+                                    </div>
+
+                                    <p className="text-3xl font-bold leading-none text-yellow-600">
+                                        {0}
+                                    </p>
+                                </div>
+
+                                {/* CONCLUÍDOS */}
+                                <div className="
+                                    rounded-xl border bg-green-500/10
+                                    p-4
+                                    flex flex-col gap-2
+                                    transition hover:bg-green-500/15
+                                ">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Concluídos
+                                        </p>
+
+                                        <Siren size={18} className="text-green-600" />
+                                    </div>
+
+                                    <p className="text-3xl font-bold leading-none text-green-600">
+                                        {0}
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+
+                {/* GRÁFICOS */}
+                <Card
+                    className="
+                        w-full border p-5
+                        flex flex-col gap-4 overflow-hidden
+                    "
+                >
+                    <div className="w-full sm:flex justify-between items-end sm:border-b sm:pb-1">
+                        <p className="font-genty text-xl border-b sm:border-0 pb-1 mb-2 sm:mb-0">
+                            Gráficos
+                        </p>
+                    </div>
+
+                    {setor.descricao}
                 </Card>
 
                 {/* DEBUG (opcional) */}

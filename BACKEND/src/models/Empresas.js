@@ -171,7 +171,7 @@ class EmpresasModel {
                 }
             ],
             where: {
-                "s.id_empresa": 2
+                "s.id_empresa": id
             }
         });
 
@@ -210,7 +210,7 @@ class EmpresasModel {
             setores: setores[0] || null,
             maquinas: maquinas[0] || null,
             chamados: chamados[0] || null,
-            ultimosChamados
+            ultimosChamados,
         }
     }
 }
