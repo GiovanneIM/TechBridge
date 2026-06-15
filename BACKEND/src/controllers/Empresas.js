@@ -50,12 +50,12 @@ class EmpresasController {
         }
         catch (error) {
             // ERROS:
-            console.error('Erro ao listar as empresas:', error);
+            console.error('Erro ao criar as empresas:', error);
 
             // ERRO DO SERVIDOR
             res.status(500).json({
                 sucesso: false,
-                erro: 'Erro interno do servidor',
+                erro: error,
                 mensagem: 'Não foi possível registrar a empresa'
             });
         }
