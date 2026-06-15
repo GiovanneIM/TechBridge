@@ -142,7 +142,7 @@ class SetoresModel {
 
         // INFORMAÇÕES SOBRE TEMPO (Em minutos)
         // • tempo_medio_espera
-        const { tempo_medio_espera } = await read("chamados c", {
+        const [{tempo_medio_espera}] = await read("chamados c", {
             columns: [
                 `
                 AVG(
@@ -165,7 +165,7 @@ class SetoresModel {
         });
 
         // • tempo_medio_atendimento
-        const tempo_medio_atendimento = await read("chamados c", {
+        const [{tempo_medio_atendimento}] = await read("chamados c", {
             columns: [
                 `
                 AVG(
@@ -189,7 +189,7 @@ class SetoresModel {
         });
 
         // • tempo_medio_maquina_parada
-        const tempo_medio_maquina_parada = await read("chamados c", {
+        const [{tempo_medio_maquina_parada}] = await read("chamados c", {
             columns: [
                 `
                 AVG(
@@ -214,9 +214,9 @@ class SetoresModel {
         return {
             maquinas: maquinas[0] || null,
             chamados: chamados[0] || null,
-            tempo_medio_espera: tempo_medio_espera || null,
-            tempo_medio_atendimento: tempo_medio_atendimento || null,
-            tempo_medio_maquina_parada: tempo_medio_maquina_parada || null,
+            tempo_medio_espera: Number(tempo_medio_espera) || null,
+            tempo_medio_atendimento: Number(tempo_medio_atendimento) || null,
+            tempo_medio_maquina_parada: Number(tempo_medio_maquina_parada) || null,
         }
     }
 }

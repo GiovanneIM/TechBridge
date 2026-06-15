@@ -417,7 +417,7 @@ export default function PageMembro() {
                                     </div>
 
                                     <p className="text-3xl font-bold leading-none">
-                                        {infosSetor?.tempo_medio_espera ?? 0}
+                                        {/* {infosSetor?.tempo_medio_espera ?? 0} */}
                                     </p>
                                 </div>
 
