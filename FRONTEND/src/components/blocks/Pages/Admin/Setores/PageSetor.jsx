@@ -58,6 +58,23 @@ export default function PageMembro() {
     }, [setor]);
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // FUNÇÕES AUXILIARES
+
+    function minutosParaHoras(minutos) {
+        const d = Math.floor(minutos / (60 * 24));
+        minutos = minutos % (60 * 24);
+
+        const h = Math.floor(minutos / 60);
+        minutos = minutos % (60);
+
+        const min = minutos % 60;
+
+        if (d > 0) { return `${d} dias`}
+        if (h > 0) { return `${h}h ${min}min`}
+        else { return `${min}min`}
+    }
+
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     // CONTEÚDO
     let content;
 
@@ -399,85 +416,65 @@ export default function PageMembro() {
                             </div>
 
                             {/* TEMPOS */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
 
                                 {/* TEMPO MÉDIO DE ESPERA */}
                                 <div className="
-                                    rounded-xl border bg-muted/20
+                                    rounded-xl border bg-slate-500/10
                                     p-4
                                     flex flex-col gap-2
-                                    transition hover:bg-muted/40
+                                    transition hover:bg-slate-500/15
                                 ">
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex-1 flex items-center justify-between">
                                         <p className="text-sm text-muted-foreground font-medium">
-                                            Total de Chamados
+                                            Espera
                                         </p>
 
-                                        <Siren size={18} className="text-muted-foreground" />
+                                        <Siren size={18} className="text-slate-600" />
                                     </div>
 
-                                    <p className="text-3xl font-bold leading-none">
-                                        {/* {infosSetor?.tempo_medio_espera ?? 0} */}
+                                    <p className="text-2xl font-bold leading-none text-slate-600">
+                                        {minutosParaHoras(infosSetor?.tempo_medio_espera) ?? 0}
                                     </p>
                                 </div>
 
                                 {/* AGUARDANDO */}
                                 <div className="
-                                    rounded-xl border bg-blue-500/10
+                                    rounded-xl border bg-slate-500/10
                                     p-4
                                     flex flex-col gap-2
-                                    transition hover:bg-blue-500/15
+                                    transition hover:bg-slate-500/15
                                 ">
                                     <div className="flex-1 flex items-center justify-between">
                                         <p className="text-sm text-muted-foreground font-medium">
-                                            Aguardando
+                                            Atendimento
                                         </p>
 
-                                        <Siren size={18} className="text-blue-600" />
+                                        <Siren size={18} className="text-slate-600" />
                                     </div>
 
-                                    <p className="text-3xl font-bold leading-none text-blue-600">
-                                        {infosSetor?.chamados.aguardando ?? 0}
+                                    <p className="text-2xl font-bold leading-none text-slate-600">
+                                        {minutosParaHoras(infosSetor?.tempo_medio_atendimento) ?? 0}
                                     </p>
                                 </div>
 
                                 {/* EM ANDAMENTO */}
                                 <div className="
-                                    rounded-xl border bg-yellow-500/10
+                                    rounded-xl border bg-slate-500/10
                                     p-4
                                     flex flex-col gap-2
-                                    transition hover:bg-yellow-500/15
+                                    transition hover:bg-slate-500/15
                                 ">
                                     <div className="flex-1 flex items-center justify-between">
                                         <p className="text-sm text-muted-foreground font-medium">
-                                            Em andamento
+                                            Paralisação
                                         </p>
 
-                                        <Siren size={18} className="text-yellow-600" />
+                                        <Siren size={18} className="text-slate-600" />
                                     </div>
 
-                                    <p className="text-3xl font-bold leading-none text-yellow-600">
-                                        {infosSetor?.chamados.andamento ?? 0}
-                                    </p>
-                                </div>
-
-                                {/* CONCLUÍDOS */}
-                                <div className="
-                                    rounded-xl border bg-green-500/10
-                                    p-4
-                                    flex flex-col gap-2
-                                    transition hover:bg-green-500/15
-                                ">
-                                    <div className="flex-1 flex items-center justify-between">
-                                        <p className="text-sm text-muted-foreground font-medium">
-                                            Concluídos
-                                        </p>
-
-                                        <Siren size={18} className="text-green-600" />
-                                    </div>
-
-                                    <p className="text-3xl font-bold leading-none text-green-600">
-                                        {infosSetor?.chamados.concluidos ?? 0}
+                                    <p className="text-2xl font-bold leading-none text-slate-600">
+                                        {minutosParaHoras(infosSetor?.tempo_medio_maquina_parada) ?? 0}
                                     </p>
                                 </div>
 
