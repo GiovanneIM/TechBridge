@@ -149,7 +149,7 @@ class SetoresController {
             res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Setor ${cod_setor} obtido com sucesso`,
-                dados: { setor },
+                dados: setor,
             });
         }
         catch (error) {
