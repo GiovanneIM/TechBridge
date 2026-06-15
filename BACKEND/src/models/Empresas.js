@@ -7,14 +7,14 @@ class EmpresasModel {
     static async criar(empresa, gerente) {
         try {
             // REGISTRAR NOVA EMPRESA
-            const empresa = await create('empresas', empresa);
+            const id_empresa = await create('empresas', empresa);
 
             gerente.senha = '123456'
             // REGISTRAR O 1º GERENTE PRINCIPAL DA EMPRESA
-            const gerente = await UserModel.criar(gerente, id_empresa);
+            const id_gerente = await UserModel.criar(gerente, id_empresa);
 
             // RETORNANDO O ID DA EMPRESA E DO GERENTE
-            return { id_empresa: empresa.id, id_gerente: gerente.id }
+            return { id_empresa, id_gerente }
         } catch (error) {
             // ERRO
             console.error('Erro ao registrar empresa:', error);
