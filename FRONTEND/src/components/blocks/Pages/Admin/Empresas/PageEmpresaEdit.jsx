@@ -1,6 +1,6 @@
 'use client'
 
-import { useEmpresa } from "@/hooks/useEmpresa";
+import { useEmpresas } from "@/hooks/useEmpresas";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -28,7 +28,7 @@ export default function PageEmpresaEdit() {
         loading, error, mensagem,
         empresa, obterEmpresa,
         atualizarEmpresa, atualizarLogo
-    } = useEmpresa()
+    } = useEmpresas()
 
     useEffect(() => {
         if (!empresa) obterEmpresa(id_empresa)
@@ -160,7 +160,7 @@ export default function PageEmpresaEdit() {
     }
 
 
-
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     // CONTEÚDO
     let content;
 

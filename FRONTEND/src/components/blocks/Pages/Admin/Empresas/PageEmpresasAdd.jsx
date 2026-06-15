@@ -1,18 +1,18 @@
 'use client'
 
+import { useEmpresas } from "@/hooks/useEmpresas";
+import { useState } from "react";
 import { BriefcaseBusiness, Mail, MapPin, PlusCircle, User2, Warehouse } from "lucide-react";
 import HeaderPage from "../../../Header/HeaderPage";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { InputGroup, InputGroupInput } from "@/components/ui/input-group";
-import { useEmpresa } from "@/hooks/useEmpresa";
 import { Separator } from "@/components/ui/separator";
 
 export default function PageEmpresasAdd() {
     // HOOK EMPRESA
-    const { criarEmpresa, loading, error, mensagem } = useEmpresa();
+    const { loading, error, mensagem, criarEmpresa } = useEmpresas();
 
     // ESTADO DE EMPRESA
     const [empresa, setEmpresa] = useState({
@@ -37,9 +37,6 @@ export default function PageEmpresasAdd() {
         tipo_usuario: 2
     })
 
-    // LOADING - CEP
-    const [loadingCep, setLoadingCep] = useState(false)
-
     // BUSCAR ENDEREÇO VIA CEP
     async function buscarCEP(cep) {
         const cepLimpo = cep.replace(/\D/g, '')
@@ -47,8 +44,6 @@ export default function PageEmpresasAdd() {
         if (cepLimpo.length !== 8) return
 
         try {
-            setLoadingCep(true)
-
             const res = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`)
             const data = await res.json()
 
@@ -68,10 +63,11 @@ export default function PageEmpresasAdd() {
         } catch (err) {
             console.error("Erro ao buscar CEP:", err)
         } finally {
-            setLoadingCep(false)
         }
     }
 
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // CONTEÚDO
     let content;
 
     content = (<>
@@ -330,9 +326,7 @@ export default function PageEmpresasAdd() {
                 <div className="text-emerald-600 font-semibold">{mensagem?.criarEmpresa}</div>
 
                 <Button className="px-6 bg-techbridge text-white"
-                    onClick={() => {
-                        criarEmpresa({ empresa, gerente })
-                    }}
+                    onClick={() => { criarEmpresa({ empresa, gerente }) }}
                     disabled={loading.criarEmpresa}
                 >
                     <PlusCircle className="inline" />

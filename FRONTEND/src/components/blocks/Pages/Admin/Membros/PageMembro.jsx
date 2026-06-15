@@ -1,6 +1,5 @@
 "use client"
 
-import { useEmpresa } from "@/hooks/useEmpresa";
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { User2, Mail, Phone, Building2, BadgeCheck, PlusCircle } from "lucide-react";
@@ -8,15 +7,26 @@ import LoadingPage from "../../../Holders/LoadingPage";
 import ErrorPage from "../../../Holders/ErrorPage";
 import { useHeader } from "@/context/HeaderContext";
 import { API_URL } from "@/lib/api";
+import { useEmpresas } from "@/hooks/useEmpresas";
+import { useMembros } from "@/hooks/useMembros";
 
 export default function PageMembro() {
     const { id: id_empresa, cod_user } = useParams();
 
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // HOOKS
+
+    // EMPRESAS
     const {
-        loading, error,
+        loading: loadingEmpresas, error: errorEmpresas, mensagem: mensagemEmpresas,
         empresa, obterEmpresa,
+    } = useEmpresas();
+
+    // MEMBROS
+    const {
+        loading: loadingMembros, error: errorMembros, mensagem: mensagemMembros,
         membro, obterMembro
-    } = useEmpresa();
+    } = useMembros();
 
     // OBTER EMPRESA
     useEffect(() => {
@@ -32,15 +42,17 @@ export default function PageMembro() {
         }
     }, [membro, obterMembro]);
 
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // CONTEÚDO
     let content;
 
     // CARREGANDO MEMBRO
-    if (loading.obterMembro && !membro) {
+    if (loadingMembros.obterMembro && !membro) {
         content = <LoadingPage loadingTitle="Carregando usuário..." loadingSubtitle={[]} />;
     }
 
     // ERRO AO CARREGAR USUÁRIO
-    else if (error.obterMembro) {
+    else if (errorMembros.obterMembro) {
         content = (
             <ErrorPage
                 errorTitle="Erro ao carregar usuário"
@@ -147,7 +159,6 @@ export default function PageMembro() {
         setHeader({
             icon: User2,
             title: `[#${id_empresa}] ${empresa?.nome_fantasia} - Membros da empresa`,
-            
         });
     }, [setHeader, empresa]);
 

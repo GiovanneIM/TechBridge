@@ -27,18 +27,30 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useHeader } from "@/context/HeaderContext";
 import { CardMaquina } from "@/components/Cards/CardMaquina/page";
+import { useMaquinas } from "@/hooks/useMaquinas";
+import { useSetores } from "@/hooks/useSetores";
+import { useEmpresas } from "@/hooks/useEmpresas";
 
 export default function PageMaquinas() {
     const params = useParams();
     const id_empresa = params.id;
 
-    // HOOK
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // HOOKS
     const {
-        loading, error, mensagem,
+        loading: loadingEmpresas, error: errorEmpresas, mensagem: mensagemEmpresas,
         empresa, obterEmpresa,
+    } = useEmpresas()
+
+    const {
+        loading: loadingSetores, error: errorSetores, mensagem: mensagemSetores,
         setores, obterSetores,
+    } = useSetores()
+
+    const {
+        loading: loadingMaquinas, error: errorMaquinas, mensagem: mensagemMaquinas,
         maquinas, obterMaquinas,
-    } = useEmpresa()
+    } = useMaquinas()
 
     // OBTER EMPRESA
     useEffect(() => {
@@ -60,6 +72,9 @@ export default function PageMaquinas() {
             obterMaquinas(id_empresa)
         }
     }, [maquinas, obterMaquinas])
+
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // FILTRAGEM
 
     // ESTADO PARA FILTROS E PAGINAÇÃO
     const [filtro, setFiltro] = useState({
@@ -87,6 +102,9 @@ export default function PageMaquinas() {
             page: 1
         })
     }
+
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // PAGINAÇÃO
 
     // TOTAL DE PÁGINAS
     const totalPages = maquinas?.paginacao?.total_paginas || 1
@@ -130,8 +148,7 @@ export default function PageMaquinas() {
         setFiltro((prev) => ({ ...prev, page }))
     }
 
-
-
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     // CONTEÚDO
     let content;
 
@@ -295,7 +312,7 @@ export default function PageMaquinas() {
             <div className="h-full border bg-card p-3 rounded gap-3 items-start overflow-y-auto">
 
                 {/* CARREGANDO EMPRESAS */}
-                {loading.obterMaquinas &&
+                {loadingMaquinas.obterMaquinas &&
                     <div className="
                             h-full w-full 
                             flex flex-col items-center justify-center gap-4
@@ -314,7 +331,7 @@ export default function PageMaquinas() {
                 }
 
                 {/* ERRO AO OBTER EMPRESAS */}
-                {error.obterMaquinas &&
+                {errorMaquinas.obterMaquinas &&
                     <div className="
                             h-full w-full 
                             flex flex-col items-center justify-center gap-4
@@ -327,17 +344,17 @@ export default function PageMaquinas() {
                             src="/TechBridge/LogoError.svg"
                         />
 
-                        <p>{error.obterMaquinas}</p>
+                        <p>{errorMaquinas.obterMaquinas}</p>
                     </div>
                 }
 
                 {/* MAQUINAS CARREGADAS COM SUCESSO */}
-                {!loading.obterMaquinas && !error.obterMaquinas && (<>
-                    <div className="border-b pb-3 mb-3">
+                {!loadingMaquinas.obterMaquinas && !errorMaquinas.obterMaquinas && (<>
+                    {/* <div className="border-b pb-3 mb-3">
                         <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => { }}>
                             <PlusCircle /> Adicionar máquina
                         </Button>
-                    </div>
+                    </div> */}
 
                     {maquinas?.lista.length > 0
                         ? <div

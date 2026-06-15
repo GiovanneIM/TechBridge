@@ -1,6 +1,5 @@
 'use client'
 
-import { useEmpresa } from "@/hooks/useEmpresa";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -15,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useHeader } from "@/context/HeaderContext";
 import { API_URL } from "@/lib/api";
+import { useEmpresas } from "@/hooks/useEmpresas";
 
 export default function PageEmpresa() {
     const params = useParams();
@@ -22,10 +22,10 @@ export default function PageEmpresa() {
 
     // OBTENDO EMPRESA
     const {
-        loading, error,
+        loading, error, mensagem,
         empresa, obterEmpresa,
         obterInfosGerais
-    } = useEmpresa()
+    } = useEmpresas()
 
     useEffect(() => {
         if (!empresa) obterEmpresa(id_empresa)

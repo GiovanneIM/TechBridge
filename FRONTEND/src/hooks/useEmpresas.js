@@ -79,7 +79,6 @@ export function useEmpresas() {
         }
     }, []);
 
-
     // REGISTRAR EMPRESA (Admin)
     const criarEmpresa = useCallback(async (novaEmpresa) => {
         setLoading((prev) => ({ ...prev, criarEmpresa: true }));

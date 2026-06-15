@@ -55,7 +55,7 @@ class EmpresasController {
             // ERRO DO SERVIDOR
             res.status(500).json({
                 sucesso: false,
-                erro: error,
+                erro: 'Erro interno do servidor',
                 mensagem: 'Não foi possível registrar a empresa'
             });
         }

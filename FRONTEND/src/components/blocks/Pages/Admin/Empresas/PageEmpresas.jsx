@@ -2,7 +2,7 @@
 
 import { Warehouse } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useEmpresa } from "@/hooks/useEmpresa";
+import { useEmpresas } from "@/hooks/useEmpresas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
@@ -36,13 +36,13 @@ export default function PageEmpresas() {
     const {
         loading, error, mensagem,
         empresas, obterEmpresas
-    } = useEmpresa()
+    } = useEmpresas()
 
     // OBTENDO EMPRESAS INICIAIS
     useEffect(() => {
         if (!empresas) {
             obterEmpresas({
-                limit: 12,
+                limit: 10,
                 page: 1
             })
         }
@@ -52,7 +52,7 @@ export default function PageEmpresas() {
     const [filtro, setFiltro] = useState({
         nome_empresa: "",
         status: null,
-        limit: 12,
+        limit: 10,
         page: 1,
         estado: null,
     })
@@ -170,10 +170,10 @@ export default function PageEmpresas() {
                             className="w-full bg-muted p-1 rounded-md"
                         >
                             <TabsList className="w-full">
-                                <TabsTrigger value="8" className="flex-1">8</TabsTrigger>
-                                <TabsTrigger value="12" className="flex-1">12</TabsTrigger>
-                                <TabsTrigger value="24" className="flex-1">24</TabsTrigger>
-                                <TabsTrigger value="48" className="flex-1">48</TabsTrigger>
+                                <TabsTrigger value="5" className="flex-1">5</TabsTrigger>
+                                <TabsTrigger value="10" className="flex-1">10</TabsTrigger>
+                                <TabsTrigger value="25" className="flex-1">25</TabsTrigger>
+                                <TabsTrigger value="50" className="flex-1">50</TabsTrigger>
                             </TabsList>
                         </Tabs>
                     </FieldContent>
