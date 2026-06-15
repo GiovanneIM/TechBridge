@@ -140,7 +140,7 @@ class SetoresModel {
             }
         });
 
-        // INFORMAÇÕES SOBRE TEMPO
+        // INFORMAÇÕES SOBRE TEMPO (Em minutos)
         // • tempo_medio_espera
         const tempo_medio_espera = await read("chamados c", {
             columns: [

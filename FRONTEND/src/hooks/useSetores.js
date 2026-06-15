@@ -183,7 +183,31 @@ export function useSetores() {
     }, []);
 
     // OBTER INFORMAÇÕES GERAIS DO SETOR
-    const obterInfosGerais = useCallback(async (id_empresa, cod_setor) => { }, []);
+    const obterInfosSetor = useCallback(async (id_empresa, cod_setor) => {
+        setLoading((prev) => ({ ...prev, obterInfosSetor: true }));
+        setError((prev) => ({ ...prev, obterInfosSetor: null }));
+
+        try {
+            const data = await API_FETCH(`/empresas/${id_empresa}/setores/${cod_setor}/infosGerais`, {
+                method: 'GET'
+            });
+
+            if (!data.sucesso) {
+                setError((prev) => ({ ...prev, obterInfosSetor: data.mensagem }));
+            } else {
+                return data.dados.infosGerais;
+            }
+        } catch (err) {
+            if (err.message === 'Sessão expirada') return;
+
+            setError((prev) => ({
+                ...prev,
+                obterInfosSetor: 'Erro ao obter informações gerais, tente novamente mais tarde.'
+            }));
+        } finally {
+            setLoading((prev) => ({ ...prev, obterInfosSetor: false }));
+        }
+    }, []);
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
@@ -193,6 +217,6 @@ export function useSetores() {
         setor, obterSetor,
         criarSetor,
         atualizarSetor,
-        obterInfosGerais,
+        obterInfosSetor,
     };
 }
