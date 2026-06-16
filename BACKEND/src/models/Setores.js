@@ -212,8 +212,8 @@ class SetoresModel {
             }
         });
 
-        // CHAMADOS POR ESTADOS NOS ÚLTIMOS 6 MESES
-        const ultimosMeses = await read("chamados c", {
+        // ESTADOS DOS CHAMADOS CRIADOS NOS ÚLTIMOS 6 MESES
+        const estadoUltimosMeses = await read("chamados c", {
             columns: [
                 "DATE_FORMAT(c.datahora_abertura, '%Y-%m') AS mes",
                 "SUM(CASE WHEN c.estado = 'aberto' THEN 1 ELSE 0 END) AS aberto",
@@ -236,6 +236,70 @@ class SetoresModel {
             orderBy: ["mes ASC"]
         })
 
+        // NÚMERO DE CHAMADOS CRIADOS, ATENDIDOS OU CONCLUIDOS NOS ÚLTIMOS 6 MESES POR MES E ESTADO
+        const abertosUltimosMeses = await read("chamados c", {
+            columns: [
+                "DATE_FORMAT(c.datahora_abertura, '%Y-%m') AS mes",
+                "COUNT(*) as abertos"
+            ],
+            join: [
+                {
+                    type: "INNER",
+                    table: "setores s",
+                    on: "s.id = c.id_setor"
+                }
+            ],
+            where: {
+                "c.datahora_abertura": { raw: ">= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)" },
+                "c.id_empresa": id_empresa,
+                "s.cod_setor": cod_setor,
+            },
+            groupBy: ["mes"],
+            orderBy: ["mes ASC"]
+        })
+
+        const atendidosUltimosMeses = await read("chamados c", {
+            columns: [
+                "DATE_FORMAT(c.datahora_atendimento, '%Y-%m') AS mes",
+                "COUNT(*) as atendidos"
+            ],
+            join: [
+                {
+                    type: "INNER",
+                    table: "setores s",
+                    on: "s.id = c.id_setor"
+                }
+            ],
+            where: {
+                "c.datahora_atendimento": { raw: "IS NOT NULL AND >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)" },
+                "c.id_empresa": id_empresa,
+                "s.cod_setor": cod_setor,
+            },
+            groupBy: ["mes"],
+            orderBy: ["mes ASC"]
+        })
+
+        const concluidosUltimosMeses = await read("chamados c", {
+            columns: [
+                "DATE_FORMAT(c.datahora_conclusao, '%Y-%m') AS mes",
+                "COUNT(*) as concluidos"
+            ],
+            join: [
+                {
+                    type: "INNER",
+                    table: "setores s",
+                    on: "s.id = c.id_setor"
+                }
+            ],
+            where: {
+                "c.datahora_conclusao": { raw: "IS NOT NULL AND >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)" },
+                "c.id_empresa": id_empresa,
+                "s.cod_setor": cod_setor,
+            },
+            groupBy: ["mes"],
+            orderBy: ["mes ASC"]
+        })
+
         return {
             maquinas: maquinas[0] || null,
             chamados: chamados[0] || null,
@@ -244,7 +308,12 @@ class SetoresModel {
                 atendimento: Number(tempo_medio_atendimento) || null,
                 maquina_parada: Number(tempo_medio_maquina_parada) || null,
             },
-            ultimosMeses: ultimosMeses
+            estadoUltimosMeses: estadoUltimosMeses || null,
+            ultimosMeses: {
+                criadosUltimosMeses: criadosUltimosMeses || null,
+                atendidosUltimosMeses: atendidosUltimosMeses || null,
+                concluidosUltimosMeses: concluidosUltimosMeses || null,
+            }
         }
     }
 }
