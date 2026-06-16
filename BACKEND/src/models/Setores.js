@@ -271,8 +271,7 @@ class SetoresModel {
                 }
             ],
             where: {
-                "c.datahora_atendimento": "NOT_NULL",
-                "c.datahora_atendimento_2": { raw: "c.datahora_atendimento >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)" },
+                "c.datahora_atendimento": { raw: "IS NOT NULL AND c.datahora_atendimento >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)" },
                 "c.id_empresa": id_empresa,
                 "s.cod_setor": cod_setor,
             },
@@ -293,9 +292,7 @@ class SetoresModel {
                 }
             ],
             where: {
-
-                "c.datahora_conclusao": "NOT_NULL",
-                "c.datahora_conclusao_2": { raw: "c.datahora_conclusao >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)" },
+                "c.datahora_conclusao": { raw: "IS NOT NULL AND c.datahora_conclusao >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)" },
                 "c.id_empresa": id_empresa,
                 "s.cod_setor": cod_setor,
             },
