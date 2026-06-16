@@ -423,10 +423,10 @@ export default function PageMembro() {
                                 </p>
                             </div>
 
-                            {/* TEMPOS */}
+                            {/* TEMPOS MÉDIOS */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
 
-                                {/* TEMPO MÉDIO DE ESPERA */}
+                                {/* ESPERA */}
                                 <div className="
                                     rounded-xl border bg-slate-500/10
                                     p-4
@@ -442,7 +442,7 @@ export default function PageMembro() {
                                     </div>
 
                                     <p className="text-2xl font-bold leading-none text-slate-600">
-                                        {minutosParaHoras(infosSetor?.tempo_medio_espera) ?? 0}
+                                        {minutosParaHoras(infosSetor?.tempo_medio?.espera) ?? 0}
                                     </p>
                                 </div>
 
@@ -462,7 +462,7 @@ export default function PageMembro() {
                                     </div>
 
                                     <p className="text-2xl font-bold leading-none text-slate-600">
-                                        {minutosParaHoras(infosSetor?.tempo_medio_atendimento) ?? 0}
+                                        {minutosParaHoras(infosSetor?.tempo_medio?.atendimento) ?? 0}
                                     </p>
                                 </div>
 
@@ -482,7 +482,7 @@ export default function PageMembro() {
                                     </div>
 
                                     <p className="text-2xl font-bold leading-none text-slate-600">
-                                        {minutosParaHoras(infosSetor?.tempo_medio_maquina_parada) ?? 0}
+                                        {minutosParaHoras(infosSetor?.tempo_medio?.maquina_parada) ?? 0}
                                     </p>
                                 </div>
 

@@ -233,7 +233,8 @@ class SetoresModel {
             where: {
                 "c.id_empresa": id_empresa,
                 "s.cod_setor": cod_setor,
-            }
+            },
+            groupBy: ["c.datahora_abertura"]
         })
 
         return {
