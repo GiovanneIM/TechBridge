@@ -213,9 +213,10 @@ class SetoresModel {
         });
 
         // CHAMADOS POR ESTADOS NOS ÚLTIMOS 6 MESES
+        // • Abertos
         const chamadosAbertos = await read("chamados c", {
             columns: [
-                "DATE_FORMAT(c.datahora_abertura, ' % Y -% m') AS mes",
+                "DATE_FORMAT(c.datahora_abertura, ' %Y-%m') AS mes",
 
                 "SUM(CASE WHEN c.estado = 'aberto' THEN 1 ELSE 0 END) AS aberto",
 
