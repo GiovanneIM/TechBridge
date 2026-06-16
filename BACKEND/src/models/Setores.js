@@ -239,9 +239,11 @@ class SetoresModel {
         return {
             maquinas: maquinas[0] || null,
             chamados: chamados[0] || null,
-            tempo_medio_espera: Number(tempo_medio_espera) || null,
-            tempo_medio_atendimento: Number(tempo_medio_atendimento) || null,
-            tempo_medio_maquina_parada: Number(tempo_medio_maquina_parada) || null,
+            tempo_medio: {
+                espera: Number(tempo_medio_espera) || null,
+                atendimento: Number(tempo_medio_atendimento) || null,
+                maquina_parada: Number(tempo_medio_maquina_parada) || null,
+            },
             ultimosMeses: {
                 chamadosAbertos: chamadosAbertos || null,
             }
