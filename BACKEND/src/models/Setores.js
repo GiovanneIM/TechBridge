@@ -215,12 +215,9 @@ class SetoresModel {
         // CHAMADOS POR ESTADOS NOS ÚLTIMOS 6 MESES
         const ultimosMeses = await read("chamados c", {
             columns: [
-                "DATE_FORMAT(c.datahora_abertura, ' %Y-%m') AS mes",
-
+                "DATE_FORMAT(c.datahora_abertura, '%Y-%m') AS mes",
                 "SUM(CASE WHEN c.estado = 'aberto' THEN 1 ELSE 0 END) AS aberto",
-
                 "SUM(CASE WHEN c.estado = 'andamento' THEN 1 ELSE 0 END) AS andamento",
-
                 "SUM(CASE WHEN c.estado = 'concluido' THEN 1 ELSE 0 END) AS concluido"
             ],
             join: [
@@ -231,10 +228,12 @@ class SetoresModel {
                 }
             ],
             where: {
+                "c.datahora_abertura": { raw: ">= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)" },
                 "c.id_empresa": id_empresa,
                 "s.cod_setor": cod_setor,
             },
-            groupBy: ["c.datahora_abertura"]
+            groupBy: ["mes"],
+            orderBy: ["mes ASC"]
         })
 
         return {

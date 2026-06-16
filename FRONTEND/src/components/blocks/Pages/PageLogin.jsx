@@ -110,7 +110,7 @@ export default function PageLogin() {
 							<FieldGroup className="px-4">
 								{/* INPUT EMAIL */}
 								<Field >
-									<FieldLabel htmlFor="email" className="font-semibold text-muted-foreground">
+									<FieldLabel htmlFor="email" className="font-semibold text-secondary-foreground">
 										E-mail
 									</FieldLabel>
 
@@ -134,7 +134,7 @@ export default function PageLogin() {
 
 								{/* INPUT SENHA */}
 								<Field>
-									<FieldLabel htmlFor="senha" className="font-semibold text-muted-foreground">
+									<FieldLabel htmlFor="senha" className="font-semibold text-secondary-foreground">
 										Senha
 									</FieldLabel>
 

@@ -95,21 +95,35 @@ async function read(table, options = {}) {
             const conditions = [];
 
             for (const [key, value] of Object.entries(options.where)) {
+                // NULL
                 if (value === null) {
                     conditions.push(`${key} IS NULL`);
-                } else if (value === 'NOT_NULL') {
+                } 
+                // NOT NULL
+                else if (value === 'NOT_NULL') {
                     conditions.push(`${key} IS NOT NULL`);
-                } else if (Array.isArray(value)) {
+                }
+                // ARRAY
+                else if (Array.isArray(value)) {
                     const placeholders = value.map(() => "?").join(", ");
                     conditions.push(`${key} IN (${placeholders})`);
                     values.push(...value);
-                } else if (typeof value === "string" && value[0] === '>') {
+                } 
+                // MAIOR QUE
+                else if (typeof value === "string" && value[0] === '>') {
                     conditions.push(`${key} > ?`);
                     values.push(value.slice(2));
-                } else if (typeof value === "string" && value[0] === '<') {
+                } 
+                // MENOR QUE
+                else if (typeof value === "string" && value[0] === '<') {
                     conditions.push(`${key} < ?`);
                     values.push(value.slice(2));
                 }
+                // SQL PURO em .raw
+                else if (value && typeof value === "object" && value.raw) {
+                    conditions.push(`${key} ${value.raw}`);
+                }
+                // IGUAL
                 else {
                     conditions.push(`${key} = ?`);
                     values.push(value);
@@ -230,7 +244,7 @@ async function create(table, data) {
 
         // Executando o comando
         const [result] = await connection.execute(sql, values);
-        
+
         // Retornando o id do novo registro
         return result.insertId;
     } finally {
