@@ -15,10 +15,8 @@ export default function CardsPorSetor() {
 
   const {
     loading,
-    setores,
-    obterSetores,
-    chamados,
-    obterChamados,
+    setores, obterSetores,
+    chamados, obterChamados,
   } = useEmpresa();
 
   // =====================================================
@@ -26,13 +24,17 @@ export default function CardsPorSetor() {
   // =====================================================
 
   useEffect(() => {
+    async function carregar() {
+      if (!setores) console.log(await obterSetores(user.id_empresa));
+      if (!chamados) obterChamados(user.id_empresa);
+    }
+
     if (!user?.id_empresa) return;
-    if (!setores)  obterSetores(user.id_empresa);
-    if (!chamados) obterChamados(user.id_empresa);
+    carregar()
   }, [user?.id_empresa]);
 
   const isLoading =
-    (loading.obterSetores  && (setores  ?? []).length === 0) ||
+    (loading.obterSetores && (setores?.lista ?? []).length === 0) ||
     (loading.obterChamados && (chamados ?? []).length === 0);
 
   // =====================================================
@@ -44,7 +46,7 @@ export default function CardsPorSetor() {
 
     for (const c of chamados ?? []) {
       const setorId = Number(c.id_setor);
-      const estado  = String(c.estado || "").toLowerCase();
+      const estado = String(c.estado || "").toLowerCase();
 
       if (!setorId) continue;
 
@@ -53,7 +55,7 @@ export default function CardsPorSetor() {
       }
 
       switch (estado) {
-        case "aberto":    map[setorId].aberto++;    break;
+        case "aberto": map[setorId].aberto++; break;
         case "andamento": map[setorId].andamento++; break;
         case "concluido": map[setorId].concluido++; break;
         default: break;
@@ -74,7 +76,7 @@ export default function CardsPorSetor() {
       <div className="col-span-full flex items-center justify-between">
         <h3 className="text-lg font-semibold">Chamados por Setor</h3>
         <span className="text-sm text-muted-foreground">
-          Total setores: {setores?.length ?? 0}
+          Total setores: {setores?.lista?.length ?? 0}
         </span>
       </div>
 
@@ -86,7 +88,7 @@ export default function CardsPorSetor() {
       )}
 
       {/* CARDS */}
-      {!isLoading && setores?.map((setor) => {
+      {!isLoading && setores?.lista?.map((setor) => {
         const cont = contadoresBySetor[Number(setor.id)] ?? {
           aberto: 0,
           andamento: 0,
@@ -127,7 +129,7 @@ export default function CardsPorSetor() {
       })}
 
       {/* EMPTY STATE */}
-      {!isLoading && (setores ?? []).length === 0 && (
+      {!isLoading && (setores?.lista ?? []).length === 0 && (
         <div className="col-span-full text-sm text-muted-foreground">
           Nenhum setor encontrado.
         </div>

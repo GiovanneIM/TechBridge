@@ -1,6 +1,6 @@
 'use client'
 
-import { PlusCircle, Search, User2 } from "lucide-react";
+import { PlusCircle, Search, User2, Warehouse } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useEmpresa } from "@/hooks/useEmpresa";
 import { Button } from "@/components/ui/button";
@@ -345,8 +345,8 @@ export default function PageSetores() {
     const { setHeader } = useHeader();
     useEffect(() => {
         setHeader({
-            icon: User2,
-            title: `[#${id_empresa}] ${empresa?.nome_fantasia} - Membros da empresa`,
+            icon: Warehouse,
+            title: `[#${id_empresa}] ${empresa?.nome_fantasia} - Setores da empresa`,
 
         });
     }, [setHeader, empresa]);

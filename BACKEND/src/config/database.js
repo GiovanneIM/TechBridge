@@ -311,7 +311,6 @@ async function deleteRecord(table, where) {
     }
 }
 
-
 // Função para comparar senha com hash
 async function comparePassword(password, hash) {
     try {

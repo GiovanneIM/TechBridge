@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import GraficoLinha from "@/components/Graficos/GraficoLinha";
 
 export default function PageMembro() {
     const { id: id_empresa, cod_setor } = useParams();
@@ -69,9 +70,9 @@ export default function PageMembro() {
 
         const min = minutos % 60;
 
-        if (d > 0) { return `${d} dias`}
-        if (h > 0) { return `${h}h ${min}min`}
-        else { return `${min}min`}
+        if (d > 0) { return `${d} dias` }
+        if (h > 0) { return `${h}h ${min}min` }
+        else { return `${min}min` }
     }
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -415,6 +416,13 @@ export default function PageMembro() {
 
                             </div>
 
+                            {/* TITULO TEMPO */}
+                            <div className="w-full sm:flex justify-between items-end sm:border-b sm:pb-1">
+                                <p className="font-genty text-xl border-b sm:border-0 pb-1 mb-2 sm:mb-0">
+                                    Tempo médio
+                                </p>
+                            </div>
+
                             {/* TEMPOS */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
 
@@ -496,7 +504,26 @@ export default function PageMembro() {
                         </p>
                     </div>
 
-                    {setor.descricao}
+                    <GraficoLinha
+                        data={[
+                            { mes: "Jan", receita: 15000, despesa: 10000 },
+                            { mes: "Fev", receita: 18000, despesa: 12000 },
+                            { mes: "Mar", receita: 22000, despesa: 14000 },
+                        ]}
+                        xDataKey="mes"
+                        linhas={[
+                            {
+                                dataKey: "receita",
+                                name: "Receita",
+                                color: "#22c55e",
+                            },
+                            {
+                                dataKey: "despesa",
+                                name: "Despesa",
+                                color: "#ef4444",
+                            },
+                        ]}
+                    />
                 </Card>
 
                 {/* DEBUG (opcional) */}

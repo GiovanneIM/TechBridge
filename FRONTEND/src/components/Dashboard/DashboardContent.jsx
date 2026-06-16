@@ -68,40 +68,40 @@ export default function DashboardContent({ dashboard }) {
     // LOADING STATES
     // =====================================================
 
-    const isLoadingMaquinas = loading.obterMaquinas && (maquinas ?? []).length === 0
-    const isLoadingSetores = loading.obterSetores && (setores ?? []).length === 0
+    const isLoadingMaquinas = loading.obterMaquinas && (maquinas?.lista ?? []).length === 0
+    const isLoadingSetores = loading.obterSetores && (setores?.lista ?? []).length === 0
 
     // =====================================================
     // KPIs DERIVADOS
     // =====================================================
 
     const maquinasParadas = useMemo(
-        () => (maquinas ?? []).filter(m => m.status === "inativa" || m.status === "em_manutencao").length,
+        () => (maquinas?.lista ?? []).filter(m => m.status === "inativa" || m.status === "em_manutencao").length,
         [maquinas]
     )
 
     const maquinasAtivas = useMemo(
-        () => (maquinas ?? []).filter(m => m.status === "ativa").length,
+        () => (maquinas?.lista ?? []).filter(m => m.status === "ativa").length,
         [maquinas]
     )
 
-    const setoresAtivos = (setores ?? []).length
+    const setoresAtivos = (setores?.lista ?? []).length
 
     // Chamados vêm via prop `dashboard` (igual ao código original)
     const chamadosPorEstado = dashboard?.porEstado ?? []
 
     const chamadosAbertos = useMemo(
-        () => chamadosPorEstado.find(e => e.estado === "aberto")?.total ?? 0,
+        () => chamadosPorEstado?.aberto ?? 0,
         [chamadosPorEstado]
     )
 
     const chamadosAndamento = useMemo(
-        () => chamadosPorEstado.find(e => e.estado === "andamento")?.total ?? 0,
+        () => chamadosPorEstado.andamento ?? 0,
         [chamadosPorEstado]
     )
 
     const chamadosConcluidos = useMemo(
-        () => chamadosPorEstado.find(e => e.estado === "concluido")?.total ?? 0,
+        () => chamadosPorEstado.concluido ?? 0,
         [chamadosPorEstado]
     )
 

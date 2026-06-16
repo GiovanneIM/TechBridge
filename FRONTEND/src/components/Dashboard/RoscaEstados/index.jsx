@@ -33,12 +33,13 @@ const chartConfig = {
     },
 }
 
-export default function RoscaEstados({ chamadosPorEstados = [] }) {
+export default function RoscaEstados({ chamadosPorEstados = {} }) {
+    console.log(chamadosPorEstados);
     // API retorna array: [{estado: "aberto", total: 3}, ...]
-    const chartData = chamadosPorEstados.map((item) => ({
-        estado: item.estado,
-        total: Number(item.total),
-        fill: chartConfig[item.estado]?.color ?? "#94a3b8",
+    const chartData = Object.keys(chamadosPorEstados).map((item) => ({
+        estado: item,
+        total: chamadosPorEstados[item],
+        fill: chartConfig[item]?.color ?? "#94a3b8",
     }))
 
     const temDados = chartData.some((d) => d.total > 0)

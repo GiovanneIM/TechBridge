@@ -90,6 +90,7 @@ class SetoresModel {
         }
     }
 
+    // INFOS GERAIS DO SETOR
     static async infosGerais(id_empresa, cod_setor) {
 
         // INFORMAÇÕES DAS MÁQUINAS DO SETOR
@@ -142,7 +143,7 @@ class SetoresModel {
 
         // INFORMAÇÕES SOBRE TEMPO (Em minutos)
         // • tempo_medio_espera
-        const [{tempo_medio_espera}] = await read("chamados c", {
+        const [{ tempo_medio_espera }] = await read("chamados c", {
             columns: [
                 `
                 AVG(
@@ -165,7 +166,7 @@ class SetoresModel {
         });
 
         // • tempo_medio_atendimento
-        const [{tempo_medio_atendimento}] = await read("chamados c", {
+        const [{ tempo_medio_atendimento }] = await read("chamados c", {
             columns: [
                 `
                 AVG(
@@ -189,7 +190,7 @@ class SetoresModel {
         });
 
         // • tempo_medio_maquina_parada
-        const [{tempo_medio_maquina_parada}] = await read("chamados c", {
+        const [{ tempo_medio_maquina_parada }] = await read("chamados c", {
             columns: [
                 `
                 AVG(
@@ -211,12 +212,39 @@ class SetoresModel {
             }
         });
 
+        // CHAMADOS POR ESTADOS NOS ÚLTIMOS 6 MESES
+        const chamadosAbertos = await read("chamados c", {
+            columns: [
+                "DATE_FORMAT(c.datahora_abertura, ' % Y -% m') AS mes",
+
+                "SUM(CASE WHEN c.estado = 'aberto' THEN 1 ELSE 0 END) AS aberto",
+
+                "SUM(CASE WHEN c.estado = 'andamento' THEN 1 ELSE 0 END) AS andamento",
+
+                "SUM(CASE WHEN c.estado = 'concluido' THEN 1 ELSE 0 END) AS concluido"
+            ],
+            join: [
+                {
+                    type: "INNER",
+                    table: "setores s",
+                    on: "s.id = c.id_setor"
+                }
+            ],
+            where: {
+                "c.id_empresa": id_empresa,
+                "s.cod_setor": cod_setor,
+            }
+        })
+
         return {
             maquinas: maquinas[0] || null,
             chamados: chamados[0] || null,
             tempo_medio_espera: Number(tempo_medio_espera) || null,
             tempo_medio_atendimento: Number(tempo_medio_atendimento) || null,
             tempo_medio_maquina_parada: Number(tempo_medio_maquina_parada) || null,
+            ultimosMeses: {
+                chamadosAbertos: chamadosAbertos || null,
+            }
         }
     }
 }
