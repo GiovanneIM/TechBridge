@@ -310,7 +310,7 @@ class SetoresModel {
             },
             estadoUltimosMeses: estadoUltimosMeses || null,
             ultimosMeses: {
-                criadosUltimosMeses: criadosUltimosMeses || null,
+                abertosUltimosMeses: abertosUltimosMeses || null,
                 atendidosUltimosMeses: atendidosUltimosMeses || null,
                 concluidosUltimosMeses: concluidosUltimosMeses || null,
             }
