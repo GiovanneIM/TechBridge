@@ -505,17 +505,22 @@ export default function PageMembro() {
                     </div>
 
                     <GraficoLinha
-                        data={infosSetor?.ultimosMeses}
+                        data={infosSetor?.ultimosMeses?.abertosUltimosMeses}
                         xDataKey="mes"
                         linhas={[
                             {
-                                dataKey: "receita",
-                                name: "Receita",
+                                dataKey: "abertos",
+                                name: "Abertos",
                                 color: "#22c55e",
                             },
                             {
-                                dataKey: "despesa",
-                                name: "Despesa",
+                                dataKey: "atendidos",
+                                name: "Atendidos",
+                                color: "#ef4444",
+                            },
+                            {
+                                dataKey: "concluidos",
+                                name: "Concluidos",
                                 color: "#ef4444",
                             },
                         ]}

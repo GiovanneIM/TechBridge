@@ -257,7 +257,6 @@ class SetoresModel {
             groupBy: ["mes"],
             orderBy: ["mes ASC"]
         })
-
         const atendidosUltimosMeses = await read("chamados c", {
             columns: [
                 "DATE_FORMAT(c.datahora_atendimento, '%Y-%m') AS mes",
@@ -278,7 +277,6 @@ class SetoresModel {
             groupBy: ["mes"],
             orderBy: ["mes ASC"]
         })
-
         const concluidosUltimosMeses = await read("chamados c", {
             columns: [
                 "DATE_FORMAT(c.datahora_conclusao, '%Y-%m') AS mes",
@@ -300,6 +298,25 @@ class SetoresModel {
             orderBy: ["mes ASC"]
         })
 
+        const map = {};
+
+        const add = (arr, key) => {
+            for (const item of arr || []) {
+                if (!map[item.mes]) {
+                    map[item.mes] = { mes: item.mes, abertos: 0, atendidos: 0, concluidos: 0 };
+                }
+                map[item.mes][key] = item[key];
+            }
+        };
+
+        add(abertosUltimosMeses, "abertos");
+        add(atendidosUltimosMeses, "atendidos");
+        add(concluidosUltimosMeses, "concluidos");
+
+        const ultimosMeses = Object.values(map).sort((a, b) =>
+            a.mes.localeCompare(b.mes)
+        );
+
         return {
             maquinas: maquinas[0] || null,
             chamados: chamados[0] || null,
@@ -309,11 +326,7 @@ class SetoresModel {
                 maquina_parada: Number(tempo_medio_maquina_parada) || null,
             },
             estadoUltimosMeses: estadoUltimosMeses || null,
-            ultimosMeses: {
-                abertosUltimosMeses: abertosUltimosMeses || null,
-                atendidosUltimosMeses: atendidosUltimosMeses || null,
-                concluidosUltimosMeses: concluidosUltimosMeses || null,
-            }
+            ultimosMeses: ultimosMeses
         }
     }
 }
