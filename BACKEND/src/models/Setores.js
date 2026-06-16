@@ -213,8 +213,7 @@ class SetoresModel {
         });
 
         // CHAMADOS POR ESTADOS NOS ÚLTIMOS 6 MESES
-        // • Abertos
-        const chamadosAbertos = await read("chamados c", {
+        const ultimosMeses = await read("chamados c", {
             columns: [
                 "DATE_FORMAT(c.datahora_abertura, ' %Y-%m') AS mes",
 
@@ -246,9 +245,7 @@ class SetoresModel {
                 atendimento: Number(tempo_medio_atendimento) || null,
                 maquina_parada: Number(tempo_medio_maquina_parada) || null,
             },
-            ultimosMeses: {
-                chamadosAbertos: chamadosAbertos || null,
-            }
+            ultimosMeses: ultimosMeses
         }
     }
 }
