@@ -125,7 +125,7 @@ class MaquinaController {
     // LISTAR MAQUINAS DE UM SETOR
     static async listarDoSetor(req, res) {
         // OBTER PAGINAÇÃO
-        const { page, limit, texto, status, cod_setor } = req.validated.query;
+        const { page, limit, texto, status } = req.validated.query;
 
         // OBTER O ID DA EMPRESA E CÓDIGO DO SETOR
         const { id_empresa, cod_setor } = req.params;
@@ -149,10 +149,6 @@ class MaquinaController {
 
         if (status && status !== 'all') {
             where["m.status"] = status
-        }
-
-        if (cod_setor) {
-            where["s.cod_setor"] = cod_setor
         }
 
         if (texto) {
