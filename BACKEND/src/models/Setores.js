@@ -314,7 +314,7 @@ class SetoresModel {
         const add = (arr, key) => {
             for (const item of arr || []) {
                 if (!map[item.mes]) {
-                    map[item.mes] = { mes: item.mes, abertos: 0, atendidos: 0, concluidos: 0 };
+                    map[item.mes] = { mes: formatarMes(item.mes), abertos: 0, atendidos: 0, concluidos: 0 };
                 }
                 map[item.mes][key] = item[key];
             }
