@@ -312,12 +312,31 @@ class SetoresModel {
 
         const map = {};
 
+        // Criando a estrutura com valores zerados
+        for (let i = 5; i >= 0; i--) {
+            const data = new Date(
+                new Date().getFullYear(),
+                new Date().getMonth() - i,
+                1
+            );
+
+            const mesKey = `${data.getFullYear()}-${String(
+                data.getMonth() + 1
+            ).padStart(2, "0")}`;
+
+            map[mesKey] = {
+                mes: formatarMes(mesKey),
+                abertos: 0,
+                atendidos: 0,
+                concluidos: 0,
+            };
+        }
+
         const add = (arr, key) => {
             for (const item of arr || []) {
-                if (!map[item.mes]) {
-                    map[item.mes] = { mes: formatarMes(item.mes), abertos: 0, atendidos: 0, concluidos: 0 };
+                if (map[item.mes]) {
+                    map[item.mes][key] = Number(item[key]);
                 }
-                map[item.mes][key] = item[key];
             }
         };
 
@@ -325,7 +344,7 @@ class SetoresModel {
         add(atendidosUltimosMeses, "atendidos");
         add(concluidosUltimosMeses, "concluidos");
 
-        const ultimosMeses = Object.values(map).sort((a, b) => a.mes.localeCompare(b.mes));
+        const ultimosMeses = Object.values(map);
 
         // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 

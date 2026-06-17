@@ -104,7 +104,7 @@ export default function PageMembro() {
     useEffect(() => {
         if (infosSetor?.chamadosPorEstadoMes?.length > 0) {
             setMesSelecionado(
-                infosSetor.chamadosPorEstadoMes[0].mes
+                infosSetor.chamadosPorEstadoMes[infosSetor?.chamadosPorEstadoMes?.length - 1].mes
             )
         }
     }, [infosSetor?.chamadosPorEstadoMes])
