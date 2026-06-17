@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 
 export default function HeaderPage({
     icon: Icon,
@@ -9,7 +8,7 @@ export default function HeaderPage({
     return (<>
         <div
             className="
-						flex h-[46px] shrink-0 items-center gap-2  
+						flex h-[49px] shrink-0 items-center gap-2  
 						transition-[width,height] ease-linear bg-sidebar border-b
 					"
         >

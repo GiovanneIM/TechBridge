@@ -35,7 +35,7 @@ export default function LayoutAdminEmpresa({ children }) {
 
                 <div className="flex-1 flex flex-col">
                     {/* HEADER DA PÁGINA */}
-                    <div className="z-50 sticky top-[64px]">
+                    <div className="z-50 sticky top-[61px]">
                         <HeaderPage
                             icon={header.icon}
                             title={header.title}
