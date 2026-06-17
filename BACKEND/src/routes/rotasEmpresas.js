@@ -567,6 +567,7 @@ router.post(
 router.get(
     '/:id_empresa/setores/:cod_setor/maquinas',
     validateZod(params_EmpresaSetor, 'params'),     // Params - ID da empresa, Código do setor
+    validateZod(paginacaoSchema, 'query'),          // Query - Paginação
     MaquinaController.listarDoSetor                 // Controller Maquinas - Listar máquinas do setores
 );
 
