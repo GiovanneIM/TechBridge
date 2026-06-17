@@ -219,7 +219,7 @@ class SetoresModel {
         // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
         // ESTADOS DOS CHAMADOS CRIADOS NOS ÚLTIMOS 6 MESES
-        const chamadosPorEstadoMes = await read("chamados c", {
+        let chamadosPorEstadoMes = await read("chamados c", {
             columns: [
                 "DATE_FORMAT(c.datahora_abertura, '%Y-%m') AS mes",
                 "SUM(CASE WHEN c.estado = 'aberto' THEN 1 ELSE 0 END) AS aberto",
