@@ -7,14 +7,15 @@ import { useSetores } from "@/hooks/useSetores";
 import { useHeader } from "@/context/HeaderContext";
 import LoadingPage from "../../../Holders/LoadingPage";
 import ErrorPage from "../../../Holders/ErrorPage";
-import { API_URL } from "@/lib/api";
-import { User2, Mail, Phone, Building2, BadgeCheck, icons, Calendar, Pencil, CheckCircle2, MinusCircle, Warehouse, Cpu, Siren } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { User2, icons, Calendar, Pencil, CheckCircle2, MinusCircle, Warehouse, Cpu, Siren } from "lucide-react";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import GraficoLinha from "@/components/Graficos/GraficoLinha";
+import GraficoRosca from "@/components/Graficos/GraficoRosca";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function PageMembro() {
     const { id: id_empresa, cod_setor } = useParams();
@@ -61,6 +62,7 @@ export default function PageMembro() {
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     // FUNÇÕES AUXILIARES
 
+    // TRANSFORMAR MINUTOS EM HORAS OU DIAS
     function minutosParaHoras(minutos) {
         const d = Math.floor(minutos / (60 * 24));
         minutos = minutos % (60 * 24);
@@ -74,6 +76,16 @@ export default function PageMembro() {
         if (h > 0) { return `${h}h ${min}min` }
         else { return `${min}min` }
     }
+
+    // SÉRIE DO GRÁFICO DE ROSCA - Chamados por estado no mês
+    const [chamadosPorEstadoNoMes, setChamadosPorEstadoNoMes] = useState({
+        mes: null,
+        serie: [
+            { estado: "aberto", total: 0 },
+            { estado: "andamento", total: 0 },
+            { estado: "concluido", total: 0 }
+        ]
+    })
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     // CONTEÚDO
@@ -466,7 +478,7 @@ export default function PageMembro() {
                                     </p>
                                 </div>
 
-                                {/* EM ANDAMENTO */}
+                                {/* PARADO */}
                                 <div className="
                                     rounded-xl border bg-slate-500/10
                                     p-4
@@ -504,48 +516,75 @@ export default function PageMembro() {
                         </p>
                     </div>
 
-                    <GraficoLinha
-                        data={infosSetor?.ultimosMeses?.abertosUltimosMeses}
-                        xDataKey="mes"
-                        linhas={[
-                            {
-                                dataKey: "abertos",
-                                name: "Abertos",
-                                color: "#22c55e",
-                            },
-                            {
-                                dataKey: "atendidos",
-                                name: "Atendidos",
-                                color: "#ef4444",
-                            },
-                            {
-                                dataKey: "concluidos",
-                                name: "Concluidos",
-                                color: "#ef4444",
-                            },
-                        ]}
-                    />
+                    <div className="grid xl:grid-cols-2 gap-3">
 
-                    <GraficoLinha
-                        data={[
-                            { mes: "Jan", receita: 15000, despesa: 10000 },
-                            { mes: "Fev", receita: 18000, despesa: 12000 },
-                            { mes: "Mar", receita: 22000, despesa: 14000 },
-                        ]}
-                        xDataKey="mes"
-                        linhas={[
-                            {
-                                dataKey: "receita",
-                                name: "Receita",
-                                color: "#22c55e",
-                            },
-                            {
-                                dataKey: "despesa",
-                                name: "Despesa",
-                                color: "#ef4444",
-                            },
-                        ]}
-                    />
+                        {/* LINHA - CHAMADOS POR MÊS */}
+                        <Card className="flex flex-col gap-2 border rounded p-4">
+                            <CardTitle>Volume de Chamados por Mês</CardTitle>
+                            <CardDescription>
+                                Quantidade de chamados criados, atendidos e concluídos ao longo dos últimos meses
+                            </CardDescription>
+
+                            <GraficoLinha
+                                selects={true}
+                                data={infosSetor?.ultimosMeses}
+                                xDataKey="mes"
+                                linhas={[
+                                    {
+                                        dataKey: "abertos",
+                                        name: "Abertos",
+                                        color: "#155dfc",
+                                    },
+                                    {
+                                        dataKey: "atendidos",
+                                        name: "Atendidos",
+                                        color: "#d08700",
+                                    },
+                                    {
+                                        dataKey: "concluidos",
+                                        name: "Concluidos",
+                                        color: "#00a63e",
+                                    },
+                                ]}
+                            />
+                        </Card>
+
+                        {/* ROSCA - CHAMADOS POR ESTADO ATUALMENTE */}
+                        <Card className="flex flex-col gap-2 border rounded p-4">
+                            <CardTitle>Chamados por estado no mês</CardTitle>
+                            <CardDescription>
+                                Quantidade de chamados em cada estado no mês
+                            </CardDescription>
+
+                            <Select
+                                value={chamadosPorEstadoNoMes.mes}
+                                onValueChange={(value) => {
+                                    
+                                }}
+                            >
+                                <SelectTrigger className="w-full h-full">
+                                    <SelectValue placeholder="Selecione um mês" />
+                                </SelectTrigger>
+
+                                <SelectContent className="" position="popper">
+                                    { infosSetor.chamadosPorEstadoMes
+
+                                    }
+                                </SelectContent>
+                            </Select>
+
+                            <GraficoRosca
+                                selects={true}
+                                data={chamadosPorEstadoNoMes.serie}
+                                series={[
+                                    { dataKey: "aberto", name: "Abertos", color: "#155dfc" },
+                                    { dataKey: "andamento", name: "Atendidos", color: "#d08700" },
+                                    { dataKey: "concluido", name: "Concluídos", color: "#00a63e" },
+                                ]}
+                            />
+                        </Card>
+
+                    </div>
                 </Card>
 
                 {/* DEBUG (opcional) */}
@@ -568,3 +607,78 @@ export default function PageMembro() {
 
     return content;
 }
+
+/*
+✅ 1. 📊 Chamados por Estado (Atual)
+🎯 O que mostra
+Distribuição atual:
+
+aberto
+andamento
+concluído
+
+📈 Tipo
+👉 Pizza ou barra horizontal
+✅ SQL
+SQLSELECT estado, COUNT(*) as totalFROM chamadosWHERE id_empresa = ?AND id_setor = ?GROUP BY estado;Mostrar mais linhas
+
+💡 Valor
+👉 responde:
+
+“como está o sistema agora?”
+
+
+✅ 2. 📉 Backlog ao longo do tempo (🔥 MUITO IMPORTANTE)
+🎯 Ideia
+Mostrar:
+backlog = criados - concluídos (acumulado)
+
+📈 Tipo
+👉 linha
+
+💡 Valor
+👉 responde:
+
+“estamos acumulando chamados ou resolvendo?”
+
+👉 Esse é um dos KPIs mais importantes
+
+✅ 6. ⚠️ Chamados por máquina
+🎯 SQL
+SQLSELECT m.nome, COUNT(*) as totalFROM chamados cJOIN maquinas m ON m.id = c.id_maquinaGROUP BY m.nomeORDER BY total DESC;Mostrar mais linhas
+
+📈 Tipo
+👉 barras
+
+💡 Valor
+
+“qual máquina dá mais problema?”
+
+🔥 Esse é MUITO importante
+
+
+✅ 7. 🧠 Chamados por causa
+🎯 SQL
+SQLSELECT ca.descricao, COUNT(*) as totalFROM chamados cJOIN causas ca ON ca.id = c.id_causaGROUP BY ca.descricao;Mostrar mais linhas
+
+💡 Valor
+
+“quais são os principais problemas?”
+
+✅ 8. 📅 Distribuição por dia da semana
+🎯 SQL
+SQLSELECT DAYNAME(datahora_abertura) as dia, COUNT(*) as totalFROM chamadosGROUP BY dia;``Mostrar mais linhas
+
+💡 Valor
+
+“tem dias com mais problemas?”
+
+
+✅ 9. ⏳ Tempo parado (sem atendimento)
+👉 chamados abertos sem atendimento
+SQLSELECT COUNT(*) FROM chamadosWHERE estado = 'aberto'AND datahora_atendimento IS NULL;Mostrar mais linhas
+
+💡 Valor
+
+“quantos chamados estão esquecidos?”
+ */

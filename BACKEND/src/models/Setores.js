@@ -116,6 +116,8 @@ class SetoresModel {
             }
         });
 
+        // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
         // INFORMAÇÕES DOS CHAMADOS DO SETOR
         // • total
         // • aguardando
@@ -140,6 +142,8 @@ class SetoresModel {
                 "s.cod_setor": cod_setor
             }
         });
+
+        // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
         // INFORMAÇÕES SOBRE TEMPO (Em minutos)
         // • tempo_medio_espera
@@ -212,8 +216,10 @@ class SetoresModel {
             }
         });
 
+        // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
         // ESTADOS DOS CHAMADOS CRIADOS NOS ÚLTIMOS 6 MESES
-        const estadoUltimosMeses = await read("chamados c", {
+        const chamadosPorEstadoMes = await read("chamados c", {
             columns: [
                 "DATE_FORMAT(c.datahora_abertura, '%Y-%m') AS mes",
                 "SUM(CASE WHEN c.estado = 'aberto' THEN 1 ELSE 0 END) AS aberto",
@@ -235,6 +241,8 @@ class SetoresModel {
             groupBy: ["mes"],
             orderBy: ["mes ASC"]
         })
+
+        // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
         // NÚMERO DE CHAMADOS CRIADOS, ATENDIDOS OU CONCLUIDOS NOS ÚLTIMOS 6 MESES POR MES E ESTADO
         const abertosUltimosMeses = await read("chamados c", {
@@ -313,9 +321,9 @@ class SetoresModel {
         add(atendidosUltimosMeses, "atendidos");
         add(concluidosUltimosMeses, "concluidos");
 
-        const ultimosMeses = Object.values(map).sort((a, b) =>
-            a.mes.localeCompare(b.mes)
-        );
+        const ultimosMeses = Object.values(map).sort((a, b) => a.mes.localeCompare(b.mes));
+
+        // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
         return {
             maquinas: maquinas[0] || null,
@@ -325,7 +333,7 @@ class SetoresModel {
                 atendimento: Number(tempo_medio_atendimento) || null,
                 maquina_parada: Number(tempo_medio_maquina_parada) || null,
             },
-            estadoUltimosMeses: estadoUltimosMeses || null,
+            chamadosPorEstadoMes: chamadosPorEstadoMes || null,
             ultimosMeses: ultimosMeses
         }
     }
