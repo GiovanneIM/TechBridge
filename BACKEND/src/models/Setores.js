@@ -377,7 +377,7 @@ const meses = [
 function formatarMes(mes) {
     const [ano, numeroMes] = mes.split("-")
 
-    return `${meses[Number(numeroMes) - 1]}/${ano}`
+    return `${meses[Number(numeroMes) - 1]}/${ano.slice(2)}`
 }
 
 function preencherMesesFaltantes(dados, quantidadeMeses = 6) {
