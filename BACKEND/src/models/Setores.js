@@ -241,6 +241,7 @@ class SetoresModel {
             groupBy: ["mes"],
             orderBy: ["mes ASC"]
         })
+        chamadosPorEstadoMes = preencherMesesFaltantes(chamadosPorEstadoMes)
         chamadosPorEstadoMes.map((data) => {
             data.mes = formatarMes(data.mes)
         })
@@ -358,4 +359,35 @@ function formatarMes(mes) {
     const [ano, numeroMes] = mes.split("-")
 
     return `${meses[Number(numeroMes) - 1]}/${ano}`
+}
+
+function preencherMesesFaltantes(dados, quantidadeMeses = 6) {
+    const resultado = []
+
+    const hoje = new Date()
+
+    for (let i = quantidadeMeses - 1; i >= 0; i--) {
+        const data = new Date(
+            hoje.getFullYear(),
+            hoje.getMonth() - i,
+            1
+        )
+
+        const mes = `${data.getFullYear()}-${String(
+            data.getMonth() + 1
+        ).padStart(2, "0")}`
+
+        const registro = dados.find(item => item.mes === mes)
+
+        resultado.push(
+            registro ?? {
+                mes,
+                aberto: 0,
+                andamento: 0,
+                concluido: 0,
+            }
+        )
+    }
+
+    return resultado
 }
