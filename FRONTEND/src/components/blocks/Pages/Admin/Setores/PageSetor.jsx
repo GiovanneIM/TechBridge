@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { useEmpresas } from "@/hooks/useEmpresas";
 import { useSetores } from "@/hooks/useSetores";
@@ -78,14 +78,36 @@ export default function PageMembro() {
     }
 
     // SÉRIE DO GRÁFICO DE ROSCA - Chamados por estado no mês
-    const [chamadosPorEstadoNoMes, setChamadosPorEstadoNoMes] = useState({
-        mes: null,
-        serie: [
-            { estado: "aberto", total: 0 },
-            { estado: "andamento", total: 0 },
-            { estado: "concluido", total: 0 }
-        ]
-    })
+    const [mesSelecionado, setMesSelecionado] = useState("")
+
+    const serieSelecionada = useMemo(() => {
+        const data = infosSetor?.chamadosPorEstadoMes?.find(
+            item => item.mes === mesSelecionado
+        )
+
+        if (!data) {
+            return [
+                { estado: "aberto", total: 0 },
+                { estado: "andamento", total: 0 },
+                { estado: "concluido", total: 0 }
+            ]
+        }
+
+        return Object.entries(data)
+            .filter(([key]) => key !== "mes")
+            .map(([estado, total]) => ({
+                estado,
+                total: Number(total)
+            }))
+    }, [infosSetor?.chamadosPorEstadoMes, mesSelecionado])
+
+    useEffect(() => {
+        if (infosSetor?.chamadosPorEstadoMes?.length > 0) {
+            setMesSelecionado(
+                infosSetor.chamadosPorEstadoMes[0].mes
+            )
+        }
+    }, [infosSetor?.chamadosPorEstadoMes])
 
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     // CONTEÚDO
@@ -549,33 +571,38 @@ export default function PageMembro() {
                             />
                         </Card>
 
-                        {/* ROSCA - CHAMADOS POR ESTADO ATUALMENTE */}
+                        {/* ROSCA - CHAMADOS POR ESTADO NO MÊS */}
                         <Card className="flex flex-col gap-2 border rounded p-4">
                             <CardTitle>Chamados por estado no mês</CardTitle>
                             <CardDescription>
-                                Quantidade de chamados em cada estado no mês
+                                Estados dos chamados abertos no mês selecionado
                             </CardDescription>
 
                             <Select
-                                value={chamadosPorEstadoNoMes.mes}
-                                onValueChange={(value) => {
-                                    
-                                }}
+                                value={mesSelecionado}
+                                onValueChange={(mes) => setMesSelecionado(mes)}
                             >
                                 <SelectTrigger className="w-full h-full">
                                     <SelectValue placeholder="Selecione um mês" />
                                 </SelectTrigger>
 
                                 <SelectContent className="" position="popper">
-                                    { infosSetor.chamadosPorEstadoMes
-
-                                    }
+                                    {infosSetor?.chamadosPorEstadoMes.map((data, i) => {
+                                        return (
+                                            <SelectItem
+                                                key={data.mes}
+                                                value={data.mes}
+                                            >
+                                                {data.mes}
+                                            </SelectItem>
+                                        )
+                                    })}
                                 </SelectContent>
                             </Select>
 
                             <GraficoRosca
                                 selects={true}
-                                data={chamadosPorEstadoNoMes.serie}
+                                data={serieSelecionada}
                                 series={[
                                     { dataKey: "aberto", name: "Abertos", color: "#155dfc" },
                                     { dataKey: "andamento", name: "Atendidos", color: "#d08700" },

@@ -241,6 +241,9 @@ class SetoresModel {
             groupBy: ["mes"],
             orderBy: ["mes ASC"]
         })
+        chamadosPorEstadoMes.map((data) => {
+            data.mes = formatarMes(data.mes)
+        })
 
         // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
@@ -340,3 +343,19 @@ class SetoresModel {
 }
 
 export default SetoresModel;
+
+
+
+
+
+const meses = [
+    "Jan", "Fev", "Mar", "Abr",
+    "Mai", "Jun", "Jul", "Ago",
+    "Set", "Out", "Nov", "Dez"
+]
+
+function formatarMes(mes) {
+    const [ano, numeroMes] = mes.split("-")
+
+    return `${meses[Number(numeroMes) - 1]}/${ano}`
+}
