@@ -84,9 +84,7 @@ class MaquinaController {
         const likeOr = {};
 
         if (status && status !== 'all') {
-            status === 'ativa'
-                ? where["m.status"] = true
-                : where["m.status"] = false
+            where["m.status"] = status
         }
 
         if (cod_setor) {
@@ -126,6 +124,9 @@ class MaquinaController {
 
     // LISTAR MAQUINAS DE UM SETOR
     static async listarDoSetor(req, res) {
+        // OBTER PAGINAÇÃO
+        const { page, limit, texto, status, cod_setor } = req.validated.query;
+
         // OBTER O ID DA EMPRESA E CÓDIGO DO SETOR
         const { id_empresa, cod_setor } = req.params;
 
@@ -136,6 +137,29 @@ class MaquinaController {
                 sucesso: false,
                 mensagem: 'Você não tem acesso a essa rota'
             });
+        }
+
+        // CALCULANDO OFFSET
+        const offset = (page - 1) * limit;
+
+        // FILTROS
+        const where = {};
+        const like = {};
+        const likeOr = {};
+
+        if (status && status !== 'all') {
+            where["m.status"] = status
+        }
+
+        if (cod_setor) {
+            where["s.cod_setor"] = cod_setor
+        }
+
+        if (texto) {
+            likeOr["m.nome"] = texto;
+            likeOr["s.nome"] = texto;
+            likeOr["m.cod_maquina"] = texto;
+            likeOr["m.descricao"] = texto;
         }
 
         try {
@@ -152,13 +176,13 @@ class MaquinaController {
             }
 
             // REQUISIÇÃO
-            const maquinas = await MaquinasModel.listarDoSetor(setor.id);
+            const resultado = await MaquinasModel.listarDoSetor(setor.id, limit, offset, page, where, like, likeOr);
 
             // SUCESSO: ENVIAR MÁQUINAS
             return res.status(200).json({
                 sucesso: true,
-                mensagem: `Empresa ${id_empresa} - Máquinas listadas com sucesso`,
-                dados: { maquinas },
+                mensagem: `Setor ${id_empresa} - ${cod_setor} -> Máquinas listadas com sucesso`,
+                dados: resultado,
             });
         }
         catch (error) {
@@ -169,7 +193,7 @@ class MaquinaController {
             return res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível obter as máquinas da empresa'
+                mensagem: 'Não foi possível obter as máquinas do setor'
             });
         }
     }

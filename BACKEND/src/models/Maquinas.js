@@ -74,15 +74,51 @@ class MaquinasModel {
     }
 
     // LISTAR MÁQUINAS DE UM SETOR
-    static async listarDoSetor(id_setor) {
+    static async listarDoSetor(id_setor, limit, offset, page, where, like, likeOr) {
         try {
             // FAZER A CONSULTA
-            const maquinas = await read("maquinas", {
-                where: { id_setor },
+            const maquinas = await read("maquinas m", {
+                columns: ['m.*', 's.cod_setor', 's.nome as nome_setor'],
+                join: [
+                    { type: "INNER", table: "setores s", on: "s.id = m.id_setor" }
+                ],
+                where: {
+                    'm.id_setor': id_setor,
+                    ...where
+                },
+                like,
+                likeOr,
+                limit,
+                offset,
             })
 
-            // RETORNANDO AS MÁQUINAS
-            return maquinas
+            // TOTAL DE SETORES DA BUSCA
+            const [{ total }] = await read('maquinas m', {
+                columns: ['COUNT(*) as total'],
+                join: [
+                    { type: "INNER", table: "setores s", on: "s.id = m.id_setor" }
+                ],
+                where: {
+                    'm.id_setor': id_setor,
+                    ...where
+                },
+                like,
+                likeOr
+            });
+
+            // TOTAL DE PAGINAS
+            const total_paginas = Math.ceil(total / limit)
+
+            // RETORNANDO AS MÁQUINAS E INFORMAÇÕES DE PAGINAÇÃO
+            return {
+                lista: maquinas,
+                paginacao: {
+                    total,
+                    page,
+                    limit,
+                    total_paginas,
+                }
+            }
         } catch (error) {
             console.error('Erro ao listar máquinas:', error);
             throw error;

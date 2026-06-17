@@ -760,6 +760,13 @@ function MaquinasSetor({ setor }) {
         maquinas, obterMaquinasDoSetor,
     } = useMaquinas()
 
+    // OBTER MAQUINAS
+    useEffect(() => {
+        if (!maquinas) {
+            obterMaquinasDoSetor(setor.id_empresa, setor.cod_setor)
+        }
+    }, [maquinas, obterMaquinasDoSetor])
+
     // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     // RETORNO 
     if (loading.obterMaquinasDoSetor) return (<div className="
@@ -770,5 +777,7 @@ function MaquinasSetor({ setor }) {
         </p>
     </div>)
 
-    else if (maquinas) return (<></>)
+    else if (maquinas) return (<>
+        <pre>{JSON.stringify(maquinas, null, 2)}</pre>
+    </>)
 }
