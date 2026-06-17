@@ -97,11 +97,13 @@ class SetoresModel {
         // • total
         // • ativas
         // • inativas
+        // • em_manutencao
         const maquinas = await read("maquinas m", {
             columns: [
                 "COUNT(*) AS total",
                 "COUNT(CASE WHEN m.status = 'ativa' THEN 1 END) AS ativas",
-                "COUNT(CASE WHEN m.status = 'inativa' THEN 1 END) AS inativas"
+                "COUNT(CASE WHEN m.status = 'inativa' THEN 1 END) AS inativas",
+                "COUNT(CASE WHEN m.status = 'em_manutencao' THEN 1 END) AS em_manutencao",
             ],
             join: [
                 {
