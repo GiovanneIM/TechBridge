@@ -37,7 +37,7 @@ class ChamadosModel {
                     { type: "LEFT", table: "usuarios u", on: "u.id = c.id_tecnico" },
                 ],
                 where: {
-                    'c.id': id_empresa,
+                    'c.id_empresa': id_empresa,
                     ...where
                 },
                 like,
@@ -55,7 +55,7 @@ class ChamadosModel {
                     { type: "LEFT", table: "usuarios u", on: "u.id = c.id_tecnico" },
                 ],
                 where: {
-                    'c.id': id_empresa,
+                    'c.id_empresa': id_empresa,
                     ...where
                 },
                 like,

@@ -305,7 +305,7 @@ export default function PageChamados() {
                 {/* CHAMADOS CARREGADOS COM SUCESSO */}
                 {!loadingChamados.obterChamadosDaEmpresa && !errorChamados.obterChamadosDaEmpresa && (<>
 
-                    {chamados?.length > 0
+                    {chamados?.lista.length > 0
                         ? <div
                             className="
                                 flex-1
@@ -313,7 +313,7 @@ export default function PageChamados() {
                         >
                             {/* LISTANDO CHAMADOS */}
                             <TabelaChamados
-                                chamados={chamados}
+                                chamados={chamados?.lista}
                                 visualizarChamado={(chamado) => {
                                     console.log(chamado)
                                 }}
