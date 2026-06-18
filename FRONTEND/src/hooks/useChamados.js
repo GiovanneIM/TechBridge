@@ -56,7 +56,7 @@ export function useChamados() {
             if (!data.sucesso) {
                 setError((prev) => ({ ...prev, obterChamadosDaEmpresa: data.mensagem }))
             } else {
-                setChamados(data.dados.chamados)
+                setChamados(data.dados)
             }
         } catch (err) {
             if (err.message === 'Sessão expirada') return;

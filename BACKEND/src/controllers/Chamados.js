@@ -9,9 +9,11 @@ class ChamadosController {
 
     // LISTAR CHAMADOS DE UMA EMPRESA
     static async listar(req, res) {
+        // OBTER PAGINAÇÃO
+        const { page, limit, texto, status } = req.validated.query;
+
         // OBTER O ID DA EMPRESA
         const { id_empresa } = req.params;
-        const { estado } = req.query;
 
         // VERIFICANDO SE O USUÁRIO TEM ACESSO
         const acesso = pertenceAEmpresa(req, id_empresa);
@@ -23,19 +25,36 @@ class ChamadosController {
             });
         }
 
+        // CALCULANDO OFFSET
+        const offset = (page - 1) * limit;
+
+        // FILTROS
+        const where = {};
+        const like = {};
+        const likeOr = {};
+
+        if (status && status !== 'all') {
+            where["c.estado"] = status
+        }
+
+        if (texto) {
+            likeOr["c.cod_chamado"] = texto;
+            likeOr["m.cod_maquina"] = texto;
+            likeOr["s.cod_setor"] = texto;
+            likeOr["m.nome"] = texto;
+            likeOr["s.nome"] = texto;
+            likeOr["u.nome"] = texto;
+        }
+
         try {
-            const where = { "c.id_empresa": id_empresa };
-
-            if (estado) { where.estado = estado }
-
             // BUSCAR CHAMADOS
-            const chamados = await ChamadosModel.listar(where);
+            const resultado = await ChamadosModel.listar(id_empresa, limit, offset, page, where, like, likeOr);
 
             // SUCESSO: ENVIAR SETORES
             res.status(200).json({
                 sucesso: true,
                 mensagem: `Empresa ${id_empresa} - Chamados listados com sucesso`,
-                dados: { chamados },
+                dados: resultado,
             });
         }
         catch (error) {

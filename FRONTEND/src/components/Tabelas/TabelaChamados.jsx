@@ -94,7 +94,7 @@ export default function TabelaChamados({ chamados, visualizarChamado }) {
                                 </TableCell>
 
                                 <TableCell className="text-center">
-                                    {chamado.id_tecnico ?? '-'}
+                                    {chamado.tecnico_nome ?? '-'}
                                 </TableCell>
 
                                 <TableCell className="text-center">

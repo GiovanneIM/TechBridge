@@ -44,18 +44,6 @@ export default function PageChamados() {
         empresa, obterEmpresa,
     } = useEmpresas()
 
-    // SETORES
-    const {
-        loading: loadingSetores, error: errorSetores, mensagem: mensagemSetores,
-        setores, obterSetores,
-    } = useSetores()
-
-    // MAQUINAS
-    const {
-        loading: loadingMaquinas, error: errorMaquinas, mensagem: mensagemMaquinas,
-        maquinas, obterMaquinas,
-    } = useMaquinas()
-
     // CHAMADOS
     const {
         loading: loadingChamados, error: errorChamados, mensagem: mensagemChamados,
@@ -67,17 +55,7 @@ export default function PageChamados() {
         if (!empresa) obterEmpresa(id_empresa)
     }, [empresa, obterEmpresa])
 
-    // OBTER SETORES
-    useEffect(() => {
-        if (!setores) obterSetores(id_empresa)
-    }, [setores, obterSetores])
-
-    // OBTER MAQUINAS
-    useEffect(() => {
-        if (!maquinas) obterMaquinas(id_empresa)
-    }, [maquinas, obterMaquinas])
-
-    // OBTER INFOS DO SETOR
+    // OBTER CHAMADOS
     useEffect(() => {
         if (!chamados) obterChamadosDaEmpresa(id_empresa)
     }, [chamados, obterChamadosDaEmpresa]);
@@ -95,7 +73,7 @@ export default function PageChamados() {
 
     // FETCH AUTOMÁTICO PARA FILTRAGEM
     useEffect(() => {
-        obterMaquinas(id_empresa, filtro)
+        obterChamadosDaEmpresa(id_empresa, filtro)
     }, [filtro.page, filtro.limit, filtro.status, filtro.cod_setor])
 
     // FILTRO MANUAL (Busca por descrição, nome ou código)
@@ -105,7 +83,7 @@ export default function PageChamados() {
             page: 1
         }))
 
-        obterMaquinas(id_empresa, {
+        obterChamadosDaEmpresa(id_empresa, {
             ...filtro,
             page: 1
         })
@@ -115,7 +93,7 @@ export default function PageChamados() {
     // PAGINAÇÃO
 
     // TOTAL DE PÁGINAS
-    const totalPages = maquinas?.paginacao?.total_paginas || 1
+    const totalPages = chamados?.paginacao?.total_paginas || 1
 
     // GERA VETOR COM O NÚMERO DAS PÁGINAS NA PAGINAÇÃO
     function gerarPaginas(page, total) {
@@ -167,7 +145,7 @@ export default function PageChamados() {
                 orientation="horizontal"
                 className="
                         border bg-card p-4 rounded-lg gap-4
-                        grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5
+                        grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4
                         items-end
                     "
             >
@@ -184,7 +162,7 @@ export default function PageChamados() {
                                 texto: e.target.value
                             }))
                         }
-                        placeholder="Nome, descrição ou código da máquina"
+                        placeholder="Nome, descrição ou código"
                     />
                 </FieldContent>
 
@@ -205,10 +183,9 @@ export default function PageChamados() {
                         className="w-full bg-muted p-1 rounded-md"
                     >
                         <TabsList className="w-full">
-                            <TabsTrigger value="5" className="flex-1">5</TabsTrigger>
-                            <TabsTrigger value="10" className="flex-1">10</TabsTrigger>
-                            <TabsTrigger value="25" className="flex-1">25</TabsTrigger>
-                            <TabsTrigger value="50" className="flex-1">50</TabsTrigger>
+                            <TabsTrigger value="5" className="flex-1">10</TabsTrigger>
+                            <TabsTrigger value="10" className="flex-1">25</TabsTrigger>
+                            <TabsTrigger value="25" className="flex-1">50</TabsTrigger>
                         </TabsList>
                     </Tabs>
                 </FieldContent>
@@ -229,43 +206,12 @@ export default function PageChamados() {
                         className="w-full bg-muted p-1 rounded-md"
                     >
                         <TabsList className="w-full">
-                            <TabsTrigger value="all" className="flex-1">Todas</TabsTrigger>
-                            <TabsTrigger value="ativa" className="flex-1">Ativo</TabsTrigger>
-                            <TabsTrigger value="inativa" className="flex-1">Inativo</TabsTrigger>
+                            <TabsTrigger value="all" className="flex-1">Todos</TabsTrigger>
+                            <TabsTrigger value="aberto" className="flex-1">Abertos</TabsTrigger>
+                            <TabsTrigger value="andamento" className="flex-1">Em andamento</TabsTrigger>
+                            <TabsTrigger value="concluido" className="flex-1">Concluidos</TabsTrigger>
                         </TabsList>
                     </Tabs>
-                </FieldContent>
-
-                {/* Setor */}
-                <FieldContent className="h-full">
-                    <FieldLabel>Setor</FieldLabel>
-
-                    <Select
-                        value={filtro.cod_setor ?? 'all'}
-                        onValueChange={(value) =>
-                            setFiltro((prev) => ({
-                                ...prev,
-                                cod_setor: value === 'all' ? null : value,
-                                page: 1
-                            }))
-                        }
-                    >
-                        <SelectTrigger className="w-full h-full">
-                            <SelectValue placeholder="Selecione um setor" />
-                        </SelectTrigger>
-
-                        <SelectContent className="" position="popper">
-                            <SelectItem value="all" className="border">Todos</SelectItem>
-
-                            <div>
-                                {setores?.lista.map((s) => (
-                                    <SelectItem key={s.id} value={s.cod_setor}>
-                                        {s.cod_setor} - {s.nome}
-                                    </SelectItem>
-                                ))}
-                            </div>
-                        </SelectContent>
-                    </Select>
                 </FieldContent>
 
                 {/* BOTÃO DE PROCURA*/}
@@ -312,7 +258,7 @@ export default function PageChamados() {
                 </PaginationContent>
 
                 <p className="text-muted-foreground font-semibold text-xs">
-                    Exibindo {maquinas?.lista?.length ?? 0} de {maquinas?.paginacao?.total ?? 0} resultados
+                    Exibindo {chamados?.lista?.length ?? 0} de {chamados?.paginacao?.total ?? 0} resultados
                 </p>
             </Pagination>
 

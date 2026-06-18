@@ -22,23 +22,63 @@ class ChamadosModel {
     }
 
     // LISTAR CHAMADOS DE UMA EMPRESA
-    static async listar(where) {
-        const chamados = await read("chamados c", {
-            columns: [
-                "c.*",
-                "s.cod_setor as cod_setor",
-                "m.cod_maquina as cod_maquina",
-                "u.nome as tecnico_nome"
-            ],
-            join: [
-                { type: "INNER", table: "setores s", on: "s.id = c.id_setor" },
-                { type: "INNER", table: "maquinas m", on: "m.id = c.id_maquina" },
-                { type: "LEFT", table: "usuarios u", on: "u.id = c.id_tecnico" },
-            ],
-            where
-        })
+    static async listar(id_empresa, limit, offset, page, where, like, likeOr) {
+        try {
+            const chamados = await read("chamados c", {
+                columns: [
+                    "c.*",
+                    "s.cod_setor as cod_setor",
+                    "m.cod_maquina as cod_maquina",
+                    "u.nome as tecnico_nome"
+                ],
+                join: [
+                    { type: "INNER", table: "setores s", on: "s.id = c.id_setor" },
+                    { type: "INNER", table: "maquinas m", on: "m.id = c.id_maquina" },
+                    { type: "LEFT", table: "usuarios u", on: "u.id = c.id_tecnico" },
+                ],
+                where: {
+                    'c.id': id_empresa,
+                    ...where
+                },
+                like,
+                likeOr,
+                limit,
+                offset,
+            })
 
-        return chamados;
+            // TOTAL DE CHAMADOS DA BUSCA
+            const [{ total }] = await read('maquinas m', {
+                columns: ['COUNT(*) as total'],
+                join: [
+                    { type: "INNER", table: "setores s", on: "s.id = c.id_setor" },
+                    { type: "INNER", table: "maquinas m", on: "m.id = c.id_maquina" },
+                    { type: "LEFT", table: "usuarios u", on: "u.id = c.id_tecnico" },
+                ],
+                where: {
+                    'c.id': id_empresa,
+                    ...where
+                },
+                like,
+                likeOr,
+            });
+
+            // TOTAL DE PAGINAS
+            const total_paginas = Math.ceil(total / limit)
+
+            // RETORNANDO OS CHAMADOS E INFORMAÇÕES DE PAGINAÇÃO
+            return {
+                lista: chamados,
+                paginacao: {
+                    total,
+                    page,
+                    limit,
+                    total_paginas,
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao listar chamados:', error);
+            throw error;
+        }
     }
 
     // BUSCAR POR CODIGO
