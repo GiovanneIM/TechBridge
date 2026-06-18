@@ -7,7 +7,7 @@ import { useSetores } from "@/hooks/useSetores";
 import { useHeader } from "@/context/HeaderContext";
 import LoadingPage from "../../../Holders/LoadingPage";
 import ErrorPage from "../../../Holders/ErrorPage";
-import { User2, icons, Calendar, Pencil, CheckCircle2, MinusCircle, Warehouse, Cpu, Siren } from "lucide-react";
+import { User2, icons, Calendar, Pencil, CheckCircle2, MinusCircle, Warehouse, Cpu, Siren, Search } from "lucide-react";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -18,6 +18,11 @@ import GraficoRosca from "@/components/Graficos/GraficoRosca";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMaquinas } from "@/hooks/useMaquinas";
+import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import Image from "next/image";
+import { CardMaquina } from "@/components/Cards/CardMaquina/page";
 
 export default function PageMembro() {
     const { id: id_empresa, cod_setor } = useParams();
@@ -199,8 +204,8 @@ export default function PageMembro() {
                     </div>
                 </Card>
 
-                <Tabs defaultValue="dashboard" className="flex-1">
-                    <TabsList className="w-full">
+                <Tabs defaultValue="dashboard" className="flex-1 flex flex-col gap-4">
+                    <TabsList className="w-full border">
                         <TabsTrigger value="dashboard">DASHBOARD</TabsTrigger>
                         <TabsTrigger value="maquinas">MÁQUINAS</TabsTrigger>
                         <TabsTrigger value="chamados">CHAMADOS</TabsTrigger>
@@ -209,7 +214,7 @@ export default function PageMembro() {
                     <TabsContent value="dashboard" className="flex-1 flex flex-col gap-4">
                         <DashboardSetor setor={setor} />
                     </TabsContent>
-                    <TabsContent value="maquinas">
+                    <TabsContent value="maquinas" className="flex-1 flex flex-col gap-4">
                         <MaquinasSetor setor={setor} />
                     </TabsContent>
                     <TabsContent value="chamados">Change your password here.</TabsContent>
@@ -234,64 +239,6 @@ export default function PageMembro() {
 
     return content;
 }
-
-/*
-
-✅ 2. 📉 Backlog ao longo do tempo (🔥 MUITO IMPORTANTE)
-🎯 Ideia
-Mostrar:
-backlog = criados - concluídos (acumulado)
-
-📈 Tipo
-👉 linha
-
-💡 Valor
-👉 responde:
-
-“estamos acumulando chamados ou resolvendo?”
-
-👉 Esse é um dos KPIs mais importantes
-
-✅ 6. ⚠️ Chamados por máquina
-🎯 SQL
-SQLSELECT m.nome, COUNT(*) as totalFROM chamados cJOIN maquinas m ON m.id = c.id_maquinaGROUP BY m.nomeORDER BY total DESC;Mostrar mais linhas
-
-📈 Tipo
-👉 barras
-
-💡 Valor
-
-“qual máquina dá mais problema?”
-
-🔥 Esse é MUITO importante
-
-
-✅ 7. 🧠 Chamados por causa
-🎯 SQL
-SQLSELECT ca.descricao, COUNT(*) as totalFROM chamados cJOIN causas ca ON ca.id = c.id_causaGROUP BY ca.descricao;Mostrar mais linhas
-
-💡 Valor
-
-“quais são os principais problemas?”
-
-✅ 8. 📅 Distribuição por dia da semana
-🎯 SQL
-SQLSELECT DAYNAME(datahora_abertura) as dia, COUNT(*) as totalFROM chamadosGROUP BY dia;``Mostrar mais linhas
-
-💡 Valor
-
-“tem dias com mais problemas?”
-
-
-✅ 9. ⏳ Tempo parado (sem atendimento)
-👉 chamados abertos sem atendimento
-SQLSELECT COUNT(*) FROM chamadosWHERE estado = 'aberto'AND datahora_atendimento IS NULL;Mostrar mais linhas
-
-💡 Valor
-
-“quantos chamados estão esquecidos?”
- */
-
 
 
 
@@ -364,6 +311,14 @@ function DashboardSetor({ setor }) {
         flex-1 flex justify-center items-center
     ">
         <p className="text-muted-foreground font-semibold text-lg">Carregando dashboard do setor</p>
+    </div>)
+
+    if (error.obterInfosSetor) return (<div className="
+        flex-1 flex justify-center items-center
+    ">
+        <p className="text-muted-foreground font-semibold text-lg">
+            Erro ao obter dashboard do setor
+        </p>
     </div>)
 
     else if (infosSetor) return (<>
@@ -753,6 +708,8 @@ function DashboardSetor({ setor }) {
     </>)
 }
 
+
+
 function MaquinasSetor({ setor }) {
     // MAQUINAS
     const {
@@ -767,17 +724,292 @@ function MaquinasSetor({ setor }) {
         }
     }, [maquinas, obterMaquinasDoSetor])
 
-    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-    // RETORNO 
-    if (loading.obterMaquinasDoSetor) return (<div className="
-        flex-1 flex justify-center items-center
-    ">
-        <p className="text-muted-foreground font-semibold text-lg">
-            Carregando máquinas do setor
-        </p>
-    </div>)
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // FILTRAGEM
 
-    else if (maquinas) return (<>
+    // ESTADO PARA FILTROS E PAGINAÇÃO
+    const [filtro, setFiltro] = useState({
+        texto: "",
+        status: null,
+        limit: 10,
+        page: 1,
+        cod_setor: null,
+    })
+
+    // FETCH AUTOMÁTICO PARA FILTRAGEM
+    useEffect(() => {
+        obterMaquinasDoSetor(setor.id_empresa, setor.cod_setor, filtro)
+    }, [filtro.page, filtro.limit, filtro.status, filtro.cod_setor])
+
+    // FILTRO MANUAL (Busca por descrição, nome ou código)
+    const filtrar = () => {
+        setFiltro((prev) => ({
+            ...prev,
+            page: 1
+        }))
+
+        obterMaquinasDoSetor(setor.id_empresa, setor.cod_setor, {
+            ...filtro,
+            page: 1
+        })
+    }
+
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // PAGINAÇÃO
+
+    // TOTAL DE PÁGINAS
+    const totalPages = maquinas?.paginacao?.total_paginas || 1
+
+    // GERA VETOR COM O NÚMERO DAS PÁGINAS NA PAGINAÇÃO
+    function gerarPaginas(page, total) {
+        const pages = []
+        const delta = 2     // DISTÂNCIA DE EXIBIÇÃO (Mostra delta páginas antes da atual e delta páginas depois da atual)
+
+        const inicio = Math.max(1, page - delta)        // PÁGINA INICIAL DA PAGINAÇÃO
+        const fim = Math.min(total, page + delta)       // PÁGINA FINAL DA PAGINAÇÃO
+
+        // FORMANDO O ARRAY COM O NÚMERO DAS PÁGINAS
+        if (inicio > 1) {
+            pages.push(1)
+            if (inicio > 2) pages.push('...')
+        }
+
+        for (let i = inicio; i <= fim; i++) {
+            pages.push(i)
+        }
+
+        if (fim < total) {
+            if (fim < total - 1) pages.push('...')
+            pages.push(total)
+        }
+
+        // RETORNA O ARRAY
+        return pages
+    }
+
+    // ARRAY COM O NÚMERO DAS PÁGINAS
+    const pages = gerarPaginas(filtro.page, totalPages)
+
+    // FUNÇÃO PARA MUDAR A PÁGINA
+    const changePage = (page) => {
+        // SE O NÚMERO DA PÁGINA ESTIVER FORA DO ESCOPO
+        if (page < 1 || page > totalPages) return
+
+        // ALTERA O FILTRO
+        setFiltro((prev) => ({ ...prev, page }))
+    }
+
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // RETORNO
+
+    // CARREGADO
+    return (<>
+        <div className="flex-1 flex flex-col gap-4">
+            {/* FILTRO */}
+            <Field
+                orientation="horizontal"
+                className="
+                        border bg-card p-4 rounded-lg gap-4
+                        grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4
+                        items-end
+                    "
+            >
+
+                {/* NOME, DESCRIÇÃO OU CÓDIGO*/}
+                <FieldContent>
+                    <FieldLabel>Procurar máquina</FieldLabel>
+                    <Input
+                        className="w-full h-11"
+                        value={filtro.texto}
+                        onChange={(e) =>
+                            setFiltro((prev) => ({
+                                ...prev,
+                                texto: e.target.value
+                            }))
+                        }
+                        placeholder="Nome, descrição ou código da máquina"
+                    />
+                </FieldContent>
+
+                {/* LIMIT */}
+                <FieldContent>
+                    <FieldLabel>Máquinas por página</FieldLabel>
+
+                    <Tabs
+                        value={String(filtro.limit)}
+                        onValueChange={(value) =>
+                            setFiltro((prev) => ({
+                                ...prev,
+                                limit: Number(value),
+                                page: 1
+                            }))
+                        }
+
+                        className="w-full bg-muted p-1 rounded-md"
+                    >
+                        <TabsList className="w-full">
+                            <TabsTrigger value="5" className="flex-1">5</TabsTrigger>
+                            <TabsTrigger value="10" className="flex-1">10</TabsTrigger>
+                            <TabsTrigger value="25" className="flex-1">25</TabsTrigger>
+                            <TabsTrigger value="50" className="flex-1">50</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
+                </FieldContent>
+
+                {/* STATUS */}
+                <FieldContent>
+                    <FieldLabel>Status</FieldLabel>
+
+                    <Tabs
+                        value={filtro.status ?? 'all'}
+                        onValueChange={(value) =>
+                            setFiltro((prev) => ({
+                                ...prev,
+                                status: value === 'all' ? null : value,
+                                page: 1
+                            }))
+                        }
+                        className="w-full bg-muted p-1 rounded-md"
+                    >
+                        <TabsList className="w-full">
+                            <TabsTrigger value="all" className="flex-1">Todas</TabsTrigger>
+                            <TabsTrigger value="ativa" className="flex-1">Ativo</TabsTrigger>
+                            <TabsTrigger value="em_manutencao" className="flex-1">Em manutenção</TabsTrigger>
+                            <TabsTrigger value="inativa" className="flex-1">Inativo</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
+                </FieldContent>
+
+                {/* BOTÃO DE PROCURA*/}
+                <div className="w-full h-full flex items-end">
+                    <Button className="text-white w-full h-10 px-6 bg-techbridge" onClick={filtrar}>
+                        <Search /> Procurar
+                    </Button>
+                </div>
+            </Field>
+
+            {/* PAGINAÇÃO */}
+            <Pagination className="flex-col items-center gap-2">
+                <PaginationContent>
+
+                    <PaginationItem>
+                        <PaginationPrevious
+                            onClick={() => changePage(filtro.page - 1)}
+                            className={filtro.page === 1 ? "pointer-events-none opacity-50" : ""}
+                        />
+                    </PaginationItem>
+
+                    {pages.map((p, i) => (
+                        <PaginationItem key={i}>
+                            {p === '...' ? (
+                                <PaginationEllipsis />
+                            ) : (
+                                <PaginationLink
+                                    isActive={p === filtro.page}
+                                    onClick={() => changePage(p)}
+                                >
+                                    {p}
+                                </PaginationLink>
+                            )}
+                        </PaginationItem>
+                    ))}
+
+                    <PaginationItem>
+                        <PaginationNext
+                            onClick={() => changePage(filtro.page + 1)}
+                            className={filtro.page === totalPages ? "pointer-events-none opacity-50" : ""}
+                        />
+                    </PaginationItem>
+
+                </PaginationContent>
+
+                <p className="text-muted-foreground font-semibold text-xs">
+                    Exibindo {maquinas?.lista?.length ?? 0} de {maquinas?.paginacao?.total ?? 0} resultados
+                </p>
+            </Pagination>
+
+            {/* DISPLAY */}
+            <div className="h-full border bg-card p-3 rounded gap-3 items-start overflow-y-auto">
+
+                {/* CARREGANDO EMPRESAS */}
+                {loading.obterMaquinasDoSetor &&
+                    <div className="
+                            h-full w-full 
+                            flex flex-col items-center justify-center gap-4
+                            text-muted-foreground font-semibold text-center
+                        ">
+                        <Image
+                            height={128}
+                            width={128}
+                            alt="Logo Erro"
+                            src="/TechBridge/Logo.svg"
+                            className="animate-pulse"
+                        />
+
+                        <p>Obtendo maquinas</p>
+                    </div>
+                }
+
+                {/* ERRO AO OBTER EMPRESAS */}
+                {error.obterMaquinasDoSetor &&
+                    <div className="
+                            h-full w-full 
+                            flex flex-col items-center justify-center gap-4
+                            text-muted-foreground font-semibold text-center
+                        ">
+                        <Image
+                            height={128}
+                            width={128}
+                            alt="Logo Erro"
+                            src="/TechBridge/LogoError.svg"
+                        />
+
+                        <p>{error.obterMaquinasDoSetor}</p>
+                    </div>
+                }
+
+                {/* MAQUINAS CARREGADAS COM SUCESSO */}
+                {!loading.obterMaquinasDoSetor && !error.obterMaquinasDoSetor && (<>
+                    {/* <div className="border-b pb-3 mb-3">
+                        <Button className="text-white w-full h-10 px-6 button-background border" onClick={() => { }}>
+                            <PlusCircle /> Adicionar máquina
+                        </Button>
+                    </div> */}
+
+                    {maquinas?.lista.length > 0
+                        ? <div
+                            className="
+                                grid gap-4 items-start
+                                [grid-template-columns:repeat(auto-fill,minmax(320px,1fr))]
+                            "
+                        >
+                            {/* LISTANDO EMPRESAS */}
+                            {maquinas?.lista?.map((maquina) => (
+                                <CardMaquina key={maquina.id} maquina={maquina} />
+                            ))}
+                        </div>
+
+                        // SEM MAQUINAS
+                        : <div className="
+                            h-full w-full 
+                            flex flex-col items-center justify-center gap-4
+                            text-muted-foreground font-semibold text-center
+                        ">
+                            <Image
+                                height={128}
+                                width={128}
+                                alt="Logo Erro"
+                                src="/TechBridge/Logo.svg"
+                            />
+
+                            <p>Nenhum resultado encontrado para a busca</p>
+                        </div>
+                    }
+                </>)
+                }
+            </div>
+        </div>
+
         <pre>{JSON.stringify(maquinas, null, 2)}</pre>
     </>)
 }

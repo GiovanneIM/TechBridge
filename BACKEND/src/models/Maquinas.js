@@ -24,7 +24,7 @@ class MaquinasModel {
         try {
             // FAZER A CONSULTA
             const maquinas = await read("maquinas m", {
-                columns: ['m.*', 's.cod_setor', 's.nome as nome_setor'],
+                columns: ['m.*', 's.cod_setor', 's.nome as nome_setor', 'e.id_empresa'],
                 join: [
                     { type: "INNER", table: "setores s", on: "s.id = m.id_setor" },
                     { type: "INNER", table: "empresas e", on: "e.id = s.id_empresa" }
@@ -78,9 +78,10 @@ class MaquinasModel {
         try {
             // FAZER A CONSULTA
             const maquinas = await read("maquinas m", {
-                columns: ['m.*', 's.cod_setor', 's.nome as nome_setor'],
+                columns: ['m.*', 's.cod_setor', 's.nome as nome_setor', 'e.id_empresa'],
                 join: [
-                    { type: "INNER", table: "setores s", on: "s.id = m.id_setor" }
+                    { type: "INNER", table: "setores s", on: "s.id = m.id_setor" },
+                    { type: "INNER", table: "empresas e", on: "e.id = s.id_empresa" }
                 ],
                 where: {
                     'm.id_setor': id_setor,
