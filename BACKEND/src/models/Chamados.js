@@ -28,10 +28,12 @@ class ChamadosModel {
                 "c.*",
                 "s.cod_setor as cod_setor",
                 "m.cod_maquina as cod_maquina",
+                "u.nome as tecnico_nome"
             ],
             join: [
                 { type: "INNER", table: "setores s", on: "s.id = c.id_setor" },
-                { type: "INNER", table: "maquinas m", on: "m.id = c.id_maquina" }
+                { type: "INNER", table: "maquinas m", on: "m.id = c.id_maquina" },
+                { type: "LEFT", table: "usuarios u", on: "u.id = c.id_tecnico" },
             ],
             where
         })

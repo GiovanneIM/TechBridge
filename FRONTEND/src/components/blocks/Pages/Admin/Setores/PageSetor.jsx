@@ -7,7 +7,7 @@ import { useSetores } from "@/hooks/useSetores";
 import { useHeader } from "@/context/HeaderContext";
 import LoadingPage from "../../../Holders/LoadingPage";
 import ErrorPage from "../../../Holders/ErrorPage";
-import { User2, icons, Calendar, Pencil, CheckCircle2, MinusCircle, Warehouse, Cpu, Siren, Search } from "lucide-react";
+import { User2, icons, Calendar, Pencil, CheckCircle2, MinusCircle, Warehouse, Cpu, Siren, Search, PlusCircle } from "lucide-react";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import Image from "next/image";
 import { CardMaquina } from "@/components/Cards/CardMaquina/page";
+import { useChamados } from "@/hooks/useChamados";
 
 export default function PageMembro() {
     const { id: id_empresa, cod_setor } = useParams();
@@ -141,6 +142,13 @@ export default function PageMembro() {
 
                     {/* Botões */}
                     <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3 items-center rounded-xl">
+
+                        <Button className="button-background border w-full sm:w-50" asChild>
+                            <Link href={`/admin/empresas/${id_empresa}/setores/${cod_setor}/editar`}>
+                                <PlusCircle /> Adicionar máquina
+                            </Link>
+                        </Button>
+
                         <Button className="button-background border w-full sm:w-50" asChild>
                             <Link href={`/admin/empresas/${id_empresa}/setores/${cod_setor}/editar`}>
                                 <Pencil /> Editar setor
@@ -217,7 +225,9 @@ export default function PageMembro() {
                     <TabsContent value="maquinas" className="flex-1 flex flex-col gap-4">
                         <MaquinasSetor setor={setor} />
                     </TabsContent>
-                    <TabsContent value="chamados">Change your password here.</TabsContent>
+                    <TabsContent value="chamados" className="flex-1 flex flex-col gap-4">
+                        <ChamadosSetor setor={setor} />
+                    </TabsContent>
                 </Tabs>
 
 
@@ -243,7 +253,7 @@ export default function PageMembro() {
 
 
 function DashboardSetor({ setor }) {
-    // SETORES
+    // INFOS SETOR
     const {
         loading, error, mensagem,
         infosSetor, obterInfosSetor,
@@ -1010,6 +1020,26 @@ function MaquinasSetor({ setor }) {
             </div>
         </div>
 
-        <pre>{JSON.stringify(maquinas, null, 2)}</pre>
+        {/* <pre>{JSON.stringify(maquinas, null, 2)}</pre> */}
+    </>)
+}
+
+
+
+function ChamadosSetor({ setor }) { 
+    // CHAMADOS
+    const {
+        loading, error, mensagem,
+        chamados, obterChamadosDaEmpresa,
+    } = useChamados();
+
+    // OBTER INFOS DO SETOR
+    useEffect(() => {
+        obterChamadosDaEmpresa(setor.id_empresa)
+    }, [setor, obterChamadosDaEmpresa]);
+
+    // CARREGADO
+    return (<>
+        <pre>{JSON.stringify(chamados, null, 2)}</pre>
     </>)
 }

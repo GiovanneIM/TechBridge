@@ -675,14 +675,15 @@ router.patch(
 router.get(
     '/:id_empresa/chamados',
     validateZod(params_Empresa, 'params'),      // Params - ID da empresa
+    validateZod(paginacaoSchema, 'query'),          // Query - Paginação
     ChamadosController.listar
 )
-
 
 // LISTAR CHAMADOS DE UM SETOR
 router.get(
     '/:id_empresa/setores/:cod_setor/chamados',
     validateZod(params_EmpresaSetor, 'params'),      // Params - ID da empresa
+    validateZod(paginacaoSchema, 'query'),          // Query - Paginação
     ChamadosController.listarDoSetor
 )
 
@@ -690,6 +691,7 @@ router.get(
 router.get(
     '/:id_empresa/setores/:cod_setor/maquinas/:cod_maquina/chamados',
     validateZod(params_EmpresaMaquina, 'params'),      // Params - ID da empresa
+    validateZod(paginacaoSchema, 'query'),          // Query - Paginação
     ChamadosController.listarDaMaquina
 )
 
@@ -701,6 +703,7 @@ router.get(
 
 
 // INFORMAÇÕES GERAIS
+
 router.get(
     '/:id_empresa/infosGerais',
     EmpresasController.infosGerais
