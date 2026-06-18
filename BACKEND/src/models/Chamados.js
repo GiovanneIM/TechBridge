@@ -47,7 +47,7 @@ class ChamadosModel {
             })
 
             // TOTAL DE CHAMADOS DA BUSCA
-            const [{ total }] = await read('maquinas m', {
+            const [{ total }] = await read('chamados c', {
                 columns: ['COUNT(*) as total'],
                 join: [
                     { type: "INNER", table: "setores s", on: "s.id = c.id_setor" },
