@@ -17,7 +17,7 @@ export default function TabelaChamados({ chamados, visualizarChamado }) {
         switch (estado) {
             case "aberto":
                 return (
-                    <Badge className="bg-red-500 text-white w-full">
+                    <Badge className="bg-blue-500 text-white w-full">
                         Aberto
                     </Badge>
                 )

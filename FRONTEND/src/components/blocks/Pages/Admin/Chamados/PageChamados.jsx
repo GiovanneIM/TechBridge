@@ -183,9 +183,9 @@ export default function PageChamados() {
                         className="w-full bg-muted p-1 rounded-md"
                     >
                         <TabsList className="w-full">
-                            <TabsTrigger value="5" className="flex-1">10</TabsTrigger>
-                            <TabsTrigger value="10" className="flex-1">25</TabsTrigger>
-                            <TabsTrigger value="25" className="flex-1">50</TabsTrigger>
+                            <TabsTrigger value="10" className="flex-1">10</TabsTrigger>
+                            <TabsTrigger value="25" className="flex-1">25</TabsTrigger>
+                            <TabsTrigger value="50" className="flex-1">50</TabsTrigger>
                         </TabsList>
                     </Tabs>
                 </FieldContent>
@@ -318,7 +318,7 @@ export default function PageChamados() {
                                     console.log(chamado)
                                 }}
                             />
-                            <pre>{JSON.stringify(chamados, null, 2)}</pre>
+                            {/* <pre>{JSON.stringify(chamados, null, 2)}</pre> */}
                         </div>
 
                         // SEM CHAMADOS

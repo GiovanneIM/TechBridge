@@ -70,30 +70,40 @@ export function useChamados() {
         }
     }, []);
 
-    // OBTER SETOR ESPECÍFICO
-    const obterSetor = useCallback(async (id_empresa, cod_setor) => {
-        setLoading((prev) => ({ ...prev, obterSetor: true }));
-        setError((prev) => ({ ...prev, obterSetor: null }));
+    // OBTER CHAMADOS DE UM SETOR
+    const obterChamadosDoSetor = useCallback(async (id_empresa, cod_setor, filtro = {}) => {
+        setLoading((prev) => ({ ...prev, obterChamadosDoSetor: true }));
+        setError((prev) => ({ ...prev, obterChamadosDoSetor: null }));
 
         try {
-            const data = await API_FETCH(`/empresas/${id_empresa}/setores/${cod_setor}`, {
+            const params = new URLSearchParams();
+
+            Object.entries(filtro).forEach(([key, value]) => {
+                if (value !== null && value !== undefined && value !== '') {
+                    params.append(key, value);
+                }
+            });
+
+            const query = params.toString();
+
+            const data = await API_FETCH(`/empresas/${id_empresa}/setores/${cod_setor}/chamados?${query}`, {
                 method: 'GET'
             });
 
             if (!data.sucesso) {
-                setError((prev) => ({ ...prev, obterSetor: data.mensagem }))
+                setError((prev) => ({ ...prev, obterChamadosDoSetor: data.mensagem }))
             } else {
-                setSetor(data.dados)
+                setChamados(data.dados)
             }
         } catch (err) {
             if (err.message === 'Sessão expirada') return;
 
             setError((prev) => ({
                 ...prev,
-                obterSetor: 'Erro ao obter setor, tente novamente mais tarde.'
+                obterChamadosDoSetor: 'Erro ao obter chamados, tente novamente mais tarde.'
             }));
         } finally {
-            setLoading((prev) => ({ ...prev, obterSetor: false }));
+            setLoading((prev) => ({ ...prev, obterChamadosDoSetor: false }));
         }
     }, []);
 
@@ -103,6 +113,7 @@ export function useChamados() {
     return {
         loading, error, mensagem,
         chamados, obterChamadosDaEmpresa,
+        obterChamadosDoSetor, 
         chamado, obterSetor,
     };
 }
